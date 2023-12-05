@@ -1,0 +1,64 @@
+<!-- <mat-toolbar color="primary" class="flex justify-between items-center">
+    <header>
+        <a [routerLink]="['/result', 'home']">
+            <button mat-raised-button *ngIf="url == '/result/home'">{{ i10n('result.toolbar.overview') }}</button>
+            <button mat-flat-button color="primary" *ngIf="url != '/result/home'">{{ i10n('result.toolbar.overview')
+                }}</button>
+        </a>
+        <a [routerLink]="['/result', 'config']" class="md:ml-2">
+            <button mat-raised-button *ngIf="url.indexOf('/result/config') === 0">{{ i10n('result.toolbar.config',
+                [''+searchResult?.result?.config?.length]) }}</button>
+            <button mat-flat-button color="primary" *ngIf="url.indexOf('/result/config') !== 0">{{
+                i10n('result.toolbar.config',
+                [''+searchResult?.result?.config?.length]) }}</button>
+        </a>
+        <a [routerLink]="['/result', 'parameterset']" class="md:ml-2">
+            <button mat-raised-button *ngIf="url.indexOf('/result/parameterset') === 0">{{
+                i10n('result.toolbar.parameterset',
+                [''+searchResult?.result?.parameterset?.length]) }}</button>
+            <button mat-flat-button color="primary" *ngIf="url.indexOf('/result/parameterset') !== 0">{{
+                i10n('result.toolbar.parameterset', [''+searchResult?.result?.parameterset?.length]) }}</button>
+        </a>
+        <a [routerLink]="['/result', 'jobtypes']" class="md:ml-2">
+            <button mat-raised-button *ngIf="url.indexOf('/result/jobtypes') === 0">{{ i10n('result.toolbar.jobtypes',
+                [''+searchResult?.result?.jobtypes?.length]) }}</button>
+            <button mat-flat-button color="primary" *ngIf="url.indexOf('/result/jobtypes') !== 0">{{
+                i10n('result.toolbar.jobtypes',
+                [''+searchResult?.result?.jobtypes?.length]) }}</button>
+        </a>
+        <a [routerLink]="['/result', 'workflows']" class="md:ml-2">
+            <button mat-raised-button *ngIf="url == '/result/workflows'">{{ i10n('result.toolbar.workflows',
+                [''+searchResult?.result?.workflows?.length]) }}</button>
+            <button mat-flat-button color="primary" *ngIf="url != '/result/workflows'">{{
+                i10n('result.toolbar.workflows', [''+searchResult?.result?.workflows?.length]) }}</button>
+        </a>
+    </header>
+</mat-toolbar>
+
+<ng-container *ngIf="url == '/result/home' && searchResult != null && searchResult.result != undefined">
+    <app-result-home [searchPhrase]="searchResult.search.phrase" [searchResult]="searchResult"
+        [configItemSorter]="configItemSorter" [jobtypeItemSorter]="jobtypeItemSorter"
+        [jobtypeAttributesMatched]="jobtypeAttributesMatched"
+        [jobtypeCustomAttributesMatched]="jobtypeCustomAttributesMatched"
+        [parametersetItemSorter]="parametersetItemSorter" [workflowItemSorter]="workflowItemSorter"></app-result-home>
+</ng-container>
+
+<ng-container *ngIf="url.indexOf('/result/config') === 0 && searchResult != null && searchResult.result != undefined">
+    <app-result-config [searchPhrase]="searchResult.search.phrase" [searchResult]="searchResult"
+        [configItemSorter]="configItemSorter" [configItems]="configItems" (appcopy)="copyToClipboard($event)">
+    </app-result-config>
+</ng-container>
+
+<ng-container
+    *ngIf="url.indexOf('/result/parameterset') === 0 && searchResult != null && searchResult.result != undefined">
+    <app-result-parameterset [searchPhrase]="searchResult.search.phrase" [searchResult]="searchResult"
+        [parametersetItemSorter]="parametersetItemSorter" [parametersetItems]="parametersetItems"
+        (appcopy)="copyToClipboard($event)">
+    </app-result-parameterset>
+</ng-container>
+
+<ng-container *ngIf="url.indexOf('/result/jobtypes') === 0 && searchResult != null && searchResult.result != undefined">
+    <app-result-jobtypes [searchPhrase]="searchResult.search.phrase" [searchResult]="searchResult"
+        [jobtypeItemSorter]="jobtypeItemSorter" [jobtypeItems]="jobtypeItems" (appcopy)="copyToClipboard($event)">
+    </app-result-jobtypes>
+</ng-container> -->

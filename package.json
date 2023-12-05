@@ -1,0 +1,38 @@
+{
+  "name": "syshub-findr",
+  "version": "1.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve --open --ssl",
+    "build": "npm list>deps.txt & ng build",
+    "watch": "ng build --watch --configuration development"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "^16.2.12",
+    "@angular/cdk": "^16.2.12",
+    "@angular/common": "^16.2.12",
+    "@angular/compiler": "^16.2.12",
+    "@angular/core": "^16.2.12",
+    "@angular/forms": "^16.2.12",
+    "@angular/platform-browser": "^16.2.12",
+    "@angular/platform-browser-dynamic": "^16.2.12",
+    "@angular/router": "^16.2.12",
+    "@ng-bootstrap/ng-bootstrap": "15.1.2",
+    "@popperjs/core": "^2.11.6",
+    "bootstrap": "^5.2.3",
+    "bootstrap-icons": "^1.11.2",
+    "date-fns": "^2.29.3",
+    "rxjs": "~7.5.0",
+    "syshub-rest-module": "^2.4.2",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.13.3"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^16.2.10",
+    "@angular/cli": "~16.2.10",
+    "@angular/compiler-cli": "^16.2.12",
+    "@angular/localize": "^16.2.12",
+    "typescript": "~5.1.6"
+  }
+}

@@ -1,0 +1,4 @@
+<router-outlet *ngIf="isLoggedIn === false"></router-outlet>
+<app-main *ngIf="isLoggedIn === true"></app-main>
+
+<app-toasts></app-toasts>

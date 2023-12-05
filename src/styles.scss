@@ -1,0 +1,13 @@
+@import 'bootstrap/scss/bootstrap';
+
+app-toasts {
+    position: absolute;
+    bottom: 0;
+    left: calc(50% - 240px);
+    width: 480px;
+    z-index: 1020;
+
+    ngb-toast {
+        margin-bottom: .8rem;
+    }
+}
