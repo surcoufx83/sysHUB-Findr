@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { L10nService } from 'src/app/svc/i10n.service';
+import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
 import { SearchService } from 'src/app/svc/search.service';
 import { SearchConfig } from 'src/app/types';
 import { environment } from 'src/environments/environment';
@@ -23,13 +24,17 @@ export class NavbarComponent implements OnInit {
   searchProgress: number = 100;
 
   constructor(
-    private i10nService: L10nService,
+    private l10nService: L10nService,
     private searchService: SearchService,
     private router: Router
   ) { }
 
+  get l10nphrase(): L10nLocale {
+    return this.l10nService.locale;
+  }
+
   l10n(phrase: string, params: any[] = []) {
-    return this.i10nService.ln(phrase, params);
+    return this.l10nService.ln(phrase, params);
   }
 
   ngOnInit(): void {

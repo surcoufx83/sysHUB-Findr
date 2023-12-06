@@ -1,5 +1,5 @@
-@import "../node_modules/bootstrap/scss/functions";
-@import "../node_modules/bootstrap/scss/variables";
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
 
 $primary: #E12327;
 $secondary: $gray-600;
@@ -21,7 +21,12 @@ $theme-colors: (
     "dark": $dark
 );
 
-@import '../node_modules/bootstrap/scss/bootstrap.scss';
+@import 'bootstrap/scss/bootstrap.scss';
+@import '@fontsource/montserrat';
+
+body {
+    font-family: "Montserrat";
+}
 
 app-toasts {
     position: absolute;
@@ -33,4 +38,8 @@ app-toasts {
     ngb-toast {
         margin-bottom: .8rem;
     }
+}
+
+.cursor-pointer {
+    cursor: pointer;
 }

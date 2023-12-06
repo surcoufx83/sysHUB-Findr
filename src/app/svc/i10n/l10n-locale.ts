@@ -17,6 +17,7 @@ export type L10nLocale = {
     },
     app: {
         promotion: string,
+        title: string,
         titles: {
             home: string,
             searchOngoing: string,

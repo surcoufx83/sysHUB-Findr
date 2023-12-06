@@ -32,6 +32,9 @@ dependencies:
   '@angular/router':
     specifier: ^16.2.12
     version: 16.2.12(@angular/common@16.2.12)(@angular/core@16.2.12)(@angular/platform-browser@16.2.12)(rxjs@7.8.1)
+  '@fontsource/montserrat':
+    specifier: ^5.0.15
+    version: 5.0.15
   '@ng-bootstrap/ng-bootstrap':
     specifier: 15.1.2
     version: 15.1.2(@angular/common@16.2.12)(@angular/core@16.2.12)(@angular/forms@16.2.12)(@angular/localize@16.2.12)(@popperjs/core@2.11.8)(rxjs@7.8.1)
@@ -1903,6 +1906,10 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /@fontsource/montserrat@5.0.15:
+    resolution: {integrity: sha512-ZJbsCIJp6VHL1wYQUPpyBjXMzwGdfFedrmrw4r5sFi7WrMpnfJv+el1uVO6yDPIqnVqkPvjJ+xeKgJwnj2LuQQ==}
+    dev: false
 
   /@gar/promisify@1.1.3:
     resolution: {integrity: sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==}

@@ -13,6 +13,7 @@ export const L10nEn: L10nLocale = {
     },
     app: {
         promotion: 'Find the sysHUB Findr source code on Gitlab!',
+        title: 'Findr',
         titles: {
             home: 'sysHUB Findr',
             searchOngoing: 'Searching...',
