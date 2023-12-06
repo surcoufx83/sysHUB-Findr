@@ -8,9 +8,11 @@ export type FindrEnvironment = {
         promotionLink?: string,
         minPhraseLength?: number,
         useCache?: boolean,
+        webclientLink?: string
     },
     i10n?: {
         fallback?: 'de' | 'en',
+        locales?: string[],
     },
     storage?: {
         categoriesKey?: string,

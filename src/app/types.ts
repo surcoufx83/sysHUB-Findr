@@ -49,6 +49,7 @@ export interface UuidModifiedObject {
 export type UuidModifiedTypeObject = {
     uuid: string,
     modifiedtime: number | null,
+    path?: string,
     type: 'SyshubCategory' | 'SyshubConfigItem' | 'SyshubJobType' | 'SyshubPSetItem' | 'SyshubWorkflow',
 }
 

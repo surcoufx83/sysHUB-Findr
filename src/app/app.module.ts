@@ -12,13 +12,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './comp/home/home.component';
 import { NavbarComponent } from './comp/main/navbar/navbar.component';
-import { ResultConfigComponent } from './comp/result/config/config.component';
-import { ResultHomeComponent } from './comp/result/home/home.component';
-import { ResultJobtypeComponent } from './comp/result/jobtype/jobtype.component';
-import { ResultParametersetComponent } from './comp/result/parameterset/parameterset.component';
-import { PropertyTableItemComponent } from './comp/result/property-table-item/property-table-item.component';
-import { ResultComponent } from './comp/result/result.component';
-import { ResultWorkflowComponent } from './comp/result/workflow/workflow.component';
 import { SearchComponent } from './comp/search/search.component';
 import { ToolbarComponent } from './comp/main/toolbar/toolbar.component';
 import { L10nService } from './svc/i10n.service';
@@ -30,6 +23,9 @@ import { ToastsComponent } from './svc/toasts/toasts.component';
 import { LoginComponent } from './comp/login/login.component';
 import { LogoutComponent } from './comp/logout/logout.component';
 import { MainComponent } from './comp/main/main.component';
+import { StatsComponent } from './comp/stats/stats.component';
+import { HelpComponent } from './comp/help/help.component';
+import { AboutComponent } from './comp/about/about.component';
 
 @NgModule({
   declarations: [
@@ -38,18 +34,14 @@ import { MainComponent } from './comp/main/main.component';
     SearchComponent,
     HomeComponent,
     ToolbarComponent,
-    ResultComponent,
-    ResultConfigComponent,
-    ResultHomeComponent,
     HighlightPipe,
-    PropertyTableItemComponent,
-    ResultParametersetComponent,
-    ResultJobtypeComponent,
-    ResultWorkflowComponent,
     ToastsComponent,
     LoginComponent,
     LogoutComponent,
     MainComponent,
+    StatsComponent,
+    HelpComponent,
+    AboutComponent,
   ],
   imports: [
     AppRoutingModule,

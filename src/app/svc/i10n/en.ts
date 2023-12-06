@@ -12,7 +12,6 @@ export const L10nEn: L10nLocale = {
         errorCommon: 'Error retrieving data from the server: {0}'
     },
     app: {
-        promotion: 'Find the sysHUB Findr source code on Gitlab!',
         title: 'Findr',
         titles: {
             home: 'sysHUB Findr',
@@ -24,6 +23,10 @@ export const L10nEn: L10nLocale = {
     common: {
         clipboard: {
             confirm: 'Value copied to clipboard'
+        },
+        locales: {
+            de: 'German',
+            en: 'English',
         },
         phrases: {
             none: '»None«',
@@ -64,7 +67,19 @@ export const L10nEn: L10nLocale = {
         inputServerNotAvailableToast: 'Anmeldung fehlgeschlagen. Der Server ist gerade nicht erreichbar.'
     },
     navbar: {
-        placeholder: 'Search term...'
+        aboutLink: 'About',
+        searchPlaceholder: '🔍 Search term, e.g., currentjob',
+        clearCacheLink: 'Clear Cache',
+        helpLink: 'Help',
+        homeLink: 'Home',
+        localeIsActive: 'in use',
+        logoutLink: 'Logout',
+        searchBtn: 'Search',
+        searchBtnBusy: 'Searching...',
+        searchOptions: 'Options',
+        statsLink: 'Statistics',
+        promoLink: 'Findr on Github',
+        webclientLink: 'sysHUB web client'
     },
     result: {
         config: {

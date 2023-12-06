@@ -21,12 +21,14 @@ export const environment: FindrEnvironment = {
   },
   app: {
     baseUrl: "/findr/",
-    promotionLink: "https://cdegitlab.westeurope.cloudapp.azure.com/sfuchs/syshubfindr",
+    promotionLink: "https://github.com/surcoufx83/sysHUB-Findr",
     minPhraseLength: 3,
     useCache: true,
+    webclientLink: 'https://localhost:8443/webclient'
   },
   i10n: {
     fallback: "en",
+    locales: ["de", "en"]
   },
   storage: {
     categoriesKey: "findr-syshub-cat@dev",

@@ -22,7 +22,6 @@ export class AppComponent implements OnInit {
     this.pageprops.pagetitle.subscribe((title) => this.title = title);
     router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        console.log(event, event.url)
         if (this.isLoggedIn === true) {
           if (event.url === '/login')
             router.navigate(['/']);

@@ -16,7 +16,6 @@ export type L10nLocale = {
         errorCommon: string
     },
     app: {
-        promotion: string,
         title: string,
         titles: {
             home: string,
@@ -29,6 +28,7 @@ export type L10nLocale = {
         clipboard: {
             confirm: string
         },
+        locales: { [key: string]: string },
         phrases: {
             none: string,
             okUc: string,
@@ -60,7 +60,19 @@ export type L10nLocale = {
         inputServerNotAvailableToast: string
     }
     navbar: {
-        placeholder: string
+        aboutLink: string,
+        clearCacheLink: string,
+        helpLink: string,
+        homeLink: string,
+        localeIsActive: string,
+        logoutLink: string,
+        promoLink: string,
+        searchBtn: string,
+        searchBtnBusy: string,
+        searchOptions: string,
+        searchPlaceholder: string,
+        statsLink: string,
+        webclientLink: string
     },
     result: {
         config: {

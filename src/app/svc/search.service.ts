@@ -35,7 +35,7 @@ export class SearchService {
       return false;
     this._searchBusy.next(true);
     this._searchProgress.next(0);
-    search.token = this.cache.addSearch(search);
+    //search.token = this.cache.addSearch(search);
     this._searchConfig.next(search);
     this.router.navigate(['/search']);
     this.searchStep1(search);

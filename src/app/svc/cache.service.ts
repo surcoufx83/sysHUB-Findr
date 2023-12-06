@@ -33,11 +33,30 @@ export class CacheService {
    */
   private categoriesLoaded$ = false;
 
-  private _config: BehaviorSubject<SyshubConfigItem[]> = new BehaviorSubject<SyshubConfigItem[]>([]);
-  private configItems: { [key: string]: SyshubConfigItem } = {};
-  private configModifiedTimeIndex: { [key: string]: string } = {};
-  private configLoaded = false;
-  public config = this._config.asObservable();
+  /**
+   * Contains the sysHUB config items as an array in a subscribeable subject.
+   */
+  private config$: BehaviorSubject<SyshubConfigItem[]> = new BehaviorSubject<SyshubConfigItem[]>([]);
+
+  /**
+   * Contains the sysHUB config items as an array with children inside.
+   */
+  public Config = this.config$.asObservable();
+
+  /**
+   * Saves the uuid of a config item together with a reference to the object.
+   */
+  private configUuid2Ref$: { [key: string]: SyshubConfigItem } = {};
+
+  /**
+   * Saves the config path with its uuid for each config item.
+   */
+  private configPath2Uuid$: { [key: string]: string } = {};
+
+  /**
+   * Saves whether the config items have already been initially loaded from the browser cache.
+   */
+  private configLoaded$ = false;
 
   private _jobtypes: BehaviorSubject<SyshubJobType[]> = new BehaviorSubject<SyshubJobType[]>([]);
   private jobtypesIndex: { [key: string]: number } = {};
@@ -77,7 +96,7 @@ export class CacheService {
    */
   public clear(): void {
     this.categories$.next([]);
-    this._config.next([]);
+    this.config$.next([]);
     this._jobtypes.next([]);
     this._parameterset.next([]);
     this._workflows.next([]);
@@ -86,35 +105,22 @@ export class CacheService {
     this.loadCache();
   }
 
-  loadSubscriptions(): void {
-    this.Categories.subscribe((categories) => {
-      let indexed: { [key: string]: number } = {};
-      categories.filter((cat) => cat.uuid != '').forEach((cat, i) => {
-        this.uuids[cat.uuid] = {
-          uuid: cat.uuid,
-          modifiedtime: cat.modifiedtime,
-          type: 'SyshubCategory'
-        }
-        indexed[cat.uuid] = i;
-      });
-      if (this.categoriesLoaded$ && this._userconfig.value.enableCache)
-        localStorage.setItem(environment.storage?.categoriesKey ?? 'findr-syshub-cat', JSON.stringify(categories));
-      this.categoryUuid2Index$ = indexed;
-    });
-  }
-
-  addSearch(search: SearchConfig): string {
-    search.token = '' + Math.floor(Date.now() / 1000) / 1000;
-    this._searchresult.next({ search: search });
-    return search.token;
-  }
-
   getCatgeory(uuid: string): SyshubCategory | null {
     return this.categoryUuid2Index$[uuid] != undefined ? this.categories$.value[this.categoryUuid2Index$[uuid]] : null;
   }
 
-  getConfigItem(uuid: string): SyshubConfigItem | null {
-    return this.configItems[uuid] ?? null;
+  getConfigItemByPath(path: string): SyshubConfigItem | null {
+    return this.configPath2Uuid$[path] ? this.getConfigItemByUuid(this.configPath2Uuid$[path]) : null;
+  }
+
+  getConfigItemByUuid(uuid: string): SyshubConfigItem | null {
+    return this.configUuid2Ref$[uuid] ?? null;
+  }
+
+  /* addSearch(search: SearchConfig): string {
+    search.token = '' + Math.floor(Date.now() / 1000) / 1000;
+    this._searchresult.next({ search: search });
+    return search.token;
   }
 
   getIcon(type: string, value: any = null, fallback: string = 'folder'): string {
@@ -139,7 +145,7 @@ export class CacheService {
 
   getParametersetItem(uuid: string): SyshubPSetItem | null {
     return this.parametersetItems[uuid] ?? null;
-  }
+  } */
 
   getWorkflow(uuid: string): SyshubWorkflow | null {
     return this.workflowsIndex[uuid] != undefined ? this._workflows.value[this.workflowsIndex[uuid]] : null;
@@ -167,32 +173,11 @@ export class CacheService {
   }
 
   private loadConfigCache(): void {
-    this.config.subscribe((config) => {
-      if (this.configLoaded && this._userconfig.value.enableCache)
-        localStorage.setItem(environment.storage?.configKey ?? 'findr-syshub-config', JSON.stringify(config));
-      this.configItems = {};
-      this.configModifiedTimeIndex = this.loadConfigCacheIndex(config);
-    });
     let olddata = localStorage.getItem(environment.storage?.configKey ?? 'findr-syshub-config');
     if (olddata != null)
-      this._config.next(<SyshubConfigItem[]>JSON.parse(olddata));
-    else
-      this.reloadConfig();
-    this.configLoaded = true;
-  }
-
-  private loadConfigCacheIndex(config: SyshubConfigItem[], parentpath: string = '', parentpath2copy: string = '', parent?: SyshubConfigItem): { [key: string]: string } {
-    let indexed: { [key: string]: string } = {};
-    config.forEach((config) => {
-      /* config.path = `${parentpath}${parentpath != '' ? '/' : ''}${config.name}${config.type == 'Group/Folder' && config.value != '' ? ': ' + config.value : ''}`;
-      config.path2copy = `${parentpath2copy}${parentpath2copy != '' ? '/' : ''}${config.name}`;
-      config.parentRef = parent;
-      indexed[config.uuid] = config.modifiedtime;
-      if (config.children.length > 0)
-        indexed = { ...indexed, ...this.loadConfigCacheIndex(config.children, config.path, config.path2copy, config) };
-      this.configItems[config.uuid] = config; */
-    });
-    return indexed;
+      this.config$.next(<SyshubConfigItem[]>JSON.parse(olddata));
+    this.reloadConfig();
+    this.configLoaded$ = true;
   }
 
   private loadJobtypesCache(): void {
@@ -240,6 +225,53 @@ export class CacheService {
     return indexed;
   }
 
+  loadSubscriptions(): void {
+    this.loadSubscriptions_Categories();
+    this.loadSubscriptions_Config();
+  }
+
+  loadSubscriptions_Categories(): void {
+    this.Categories.subscribe((categories) => {
+      let indexed: { [key: string]: number } = {};
+      categories.filter((cat) => cat.uuid != '').forEach((cat, i) => {
+        this.uuids[cat.uuid] = {
+          uuid: cat.uuid,
+          modifiedtime: cat.modifiedtime,
+          type: 'SyshubCategory'
+        }
+        indexed[cat.uuid] = i;
+      });
+      if (this.categoriesLoaded$ && this._userconfig.value.enableCache)
+        localStorage.setItem(environment.storage?.categoriesKey ?? 'findr-syshub-cat', JSON.stringify(categories));
+      this.categoryUuid2Index$ = indexed;
+    });
+  }
+
+  loadSubscriptions_Config(): void {
+    this.Config.subscribe((configitems) => {
+      let indexed: { [key: string]: SyshubConfigItem } = {};
+      configitems.filter((cfg) => cfg.uuid != '').forEach((cfg, i) => {
+        this.loadSubscriptions_ConfigItem(cfg, indexed);
+      });
+      if (this.configLoaded$ && this._userconfig.value.enableCache)
+        localStorage.setItem(environment.storage?.configKey ?? 'findr-syshub-config', JSON.stringify(configitems));
+      this.configUuid2Ref$ = indexed;
+    });
+  }
+
+  loadSubscriptions_ConfigItem(cfg: SyshubConfigItem, indexed: { [key: string]: SyshubConfigItem }, path: string = ''): void {
+    this.uuids[cfg.uuid] = {
+      uuid: cfg.uuid,
+      modifiedtime: cfg.modifiedtime,
+      path: path === '' ? cfg.name : `${path}/${cfg.name}`,
+      type: 'SyshubConfigItem'
+    }
+    indexed[cfg.uuid] = cfg;
+    cfg.children.filter((child) => child.uuid != '').forEach((child, i) => {
+      this.loadSubscriptions_ConfigItem(child, indexed, path === '' ? cfg.name : `${path}/${cfg.name}`);
+    });
+  }
+
   private loadUserConfig(): void {
     this.userconfig.subscribe((userconfig) => {
       if (this.userconfigLoaded)
@@ -276,25 +308,28 @@ export class CacheService {
         });
         return;
       }
-      this.categories$.next(reply.sort((a, b) => a.name > b.name ? 1 : -1));
+      this.categories$.next(reply.sort((a, b) => a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1));
     });
   }
 
   reloadConfig(): void {
     let svc = this;
-    this.restapi.get('config/children?maxDeep=0').subscribe({
-      next(value: any): void {
-        svc._config.next((<SyshubConfigItem[]>value).sort((a, b) => a.name > b.name ? 1 : -1));
-      },
-      error(err: HttpErrorResponse): void {
-        /* svc.snackBar.open(
-          svc.i10n('api.errorCommon', [err.message]),
-          svc.i10n('common.phrases.okUc'), {
-          panelClass: ['error-snack'],
-        }); */
+    this.restapi.getConfigChildren('').subscribe((reply) => {
+      if (reply instanceof Error) {
+        this.toastService.addDangerToast({
+          message: this.l10n('api.errorCommon', [reply.message])
+        });
         return;
-      },
+      }
+      this.config$.next(this.reloadConfig_SortChilds(reply));
     });
+  }
+
+  reloadConfig_SortChilds(items: SyshubConfigItem[]): SyshubConfigItem[] {
+    items.forEach((cfg) => {
+      cfg.children = this.reloadConfig_SortChilds(cfg.children);
+    });
+    return items.sort((a, b) => a.name.toLocaleLowerCase() + (a.value?.toLocaleLowerCase() ?? '') > b.name.toLocaleLowerCase() + (b.value?.toLocaleLowerCase() ?? '') ? 1 : -1);
   }
 
   reloadJobtypes(): void {
@@ -359,7 +394,7 @@ export class CacheService {
     let configUpdated = false, parametersetUpdated = false, workflowsUpdated = false;
     result.config.forEach((obj) => {
       if (!configUpdated) {
-        if (this.configModifiedTimeIndex[obj.uuid] == undefined) {
+        /* if (this.configModifiedTimeIndex[obj.uuid] == undefined) {
           configUpdated = true;
           this.reloadConfig();
         } else {
@@ -367,7 +402,7 @@ export class CacheService {
             configUpdated = true;
             this.reloadConfig();
           }
-        }
+        } */
       }
     });
     result.parameterset.forEach((obj) => {

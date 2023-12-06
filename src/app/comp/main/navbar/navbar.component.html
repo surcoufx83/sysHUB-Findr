@@ -1,18 +1,30 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid d-flex justify-content-between align-items-center">
-        <a class="navbar-brand d-flex align-items-center" [routerLink]="['/']">
-            <img src="/assets/android-icon-36x36.png" style="width: 36px; height: 36px;">
-            <span class="ms-2 fs-3">
-                {{ l10nphrase.app.title }}
-            </span>
-        </a>
+        <div class="d-flex align-items-center">
+            <a class="navbar-brand d-flex align-items-center" [routerLink]="['/']">
+                <img src="/assets/android-icon-36x36.png" style="width: 36px; height: 36px;">
+                <span class="ms-2 fs-3">
+                    {{ l10nphrase.app.title }}
+                </span>
+            </a>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a [ngClass]="{'nav-link': true, 'active': url === '/'}" [routerLink]="['/']">{{
+                        l10nphrase.navbar.homeLink }}</a>
+                </li>
+                <li class="nav-item">
+                    <a [ngClass]="{'nav-link': true, 'active': url === '/stats'}" [routerLink]="['/stats']">{{
+                        l10nphrase.navbar.statsLink }}</a>
+                </li>
+            </ul>
+        </div>
         <div class="d-flex align-items-center">
             <form class="d-flex me-5" role="search">
                 <div class="input-group me-2">
-                    <input class="form-control" type="search" placeholder="🔍 Search" aria-label="Search"
-                        style="min-width: 460px;">
+                    <input class="form-control" type="search" [placeholder]="l10nphrase.navbar.searchPlaceholder"
+                        [attr.aria-label]="l10nphrase.navbar.searchBtn" style="min-width: 460px;">
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">Dropdown</button>
+                        aria-expanded="false">{{ l10nphrase.navbar.searchOptions }}</button>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="#">Action</a></li>
                         <li><a class="dropdown-item" href="#">Another action</a></li>
@@ -23,7 +35,8 @@
                         <li><a class="dropdown-item" href="#">Separated link</a></li>
                     </ul>
                 </div>
-                <button class="btn btn-success" type="submit">Search</button>
+                <button class="btn btn-success" type="submit">{{ searchBusy ? l10nphrase.navbar.searchBtnBusy :
+                    l10nphrase.navbar.searchBtn }}</button>
             </form>
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
@@ -31,11 +44,41 @@
                         <i class="bi-list"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li class="dropdown-item cursor-pointer" (click)="onClearCache()">Clear cache</li>
+                        <li class="dropdown-item cursor-pointer" (click)="onClearCache()">
+                            {{ l10nphrase.navbar.clearCacheLink }}
+                        </li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" [routerLink]="['/logout']">Logout</a></li>
+                        <li [ngClass]="{'dropdown-item cursor-pointer': true, 'text-muted': locale === currentLocale}"
+                            *ngFor="let locale of locales" (click)="onSwitchLocale(locale)">
+                            {{ localesLocalized[locale] }}
+                            <ng-container *ngIf="locale === currentLocale">({{ l10nphrase.navbar.localeIsActive
+                                }})</ng-container>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item" [routerLink]="['/help']">{{ l10nphrase.navbar.helpLink }}</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" [routerLink]="['/about']">{{ l10nphrase.navbar.aboutLink }}</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" target="_blank" [href]="promolink" *ngIf="promolink">{{
+                                l10nphrase.navbar.promoLink }}</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" target="_blank" [href]="webclientlink" *ngIf="webclientlink">{{
+                                l10nphrase.navbar.webclientLink }}</a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item" [routerLink]="['/logout']">{{ l10nphrase.navbar.logoutLink }}</a>
+                        </li>
                     </ul>
                 </li>
             </ul>
