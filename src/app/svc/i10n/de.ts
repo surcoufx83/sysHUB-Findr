@@ -45,7 +45,22 @@ export const L10nDe: L10nLocale = {
     },
     login: {
         title: 'Anmeldung',
-        unlockDescription: 'Bitte geben Sie Ihre sysHUB Zugangsdaten für Zugriff auf den Server an.'
+        unlockDescription: 'Bitte gib deine sysHUB Zugangsdaten für Zugriff auf den Server an.',
+        usernameField: {
+            label: 'sysHUB Benutzername',
+            placeholder: 'username',
+            invalidFeedback: 'Bitte einen Benutzernamen angeben.'
+        },
+        passwordField: {
+            label: 'Passwort',
+            placeholder: 'password',
+            invalidFeedback: 'Bitte ein Passwort eingeben.'
+        },
+        submitBtn: 'Anmelden',
+        submitBtnBusy: 'Anmeldung läuft...',
+        inputInvalidToast: 'Die Zugangsdaten sind unvollständig. Bitte prüfe deine Eingaben.',
+        inputCredentialsToast: 'Anmeldung vom Server abgewiesen. Bitte prüfe deine Eingaben und versuche es nochmal.',
+        inputServerNotAvailableToast: 'Anmeldung fehlgeschlagen. Der Server ist gerade nicht erreichbar.'
     },
     navbar: {
         placeholder: 'Suchbegriff...'

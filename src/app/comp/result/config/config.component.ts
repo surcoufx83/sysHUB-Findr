@@ -3,7 +3,8 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { Subscription } from 'rxjs';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
-import { SearchResult, SyshubConfig } from 'src/app/types';
+import { SearchResult } from 'src/app/types';
+import { SyshubConfigItem } from 'syshub-rest-module';
 
 @Component({
   selector: 'app-result-config',
@@ -15,15 +16,15 @@ export class ResultConfigComponent implements OnInit, OnDestroy {
   @Input() searchPhrase!: string;
   @Input() searchResult!: SearchResult;
   @Input() configItems: { [key: string]: number } = {};
-  @Input() configItemSorter: SyshubConfig[] = [];
+  @Input() configItemSorter: SyshubConfigItem[] = [];
   @Output() appcopy: EventEmitter<string> = new EventEmitter<string>();
-  configTree: SyshubConfig[] = [];
+  configTree: SyshubConfigItem[] = [];
   configItemsExpanded: string[] = [];
   activeNode: FlatConfigTreeNode | null = null;
   pinned: boolean = false;
   subscription?: Subscription;
 
-  private _transformer = (node: SyshubConfig, level: number) => {
+  private _transformer = (node: SyshubConfigItem, level: number) => {
     return {
       expandable: !!node.children && node.children.length > 0,
       hasMatch: (this.configItems[node.uuid] != undefined),
@@ -87,17 +88,17 @@ export class ResultConfigComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInitLoopItems(configitem: SyshubConfig): void {
+  ngOnInitLoopItems(configitem: SyshubConfigItem): void {
     if (this.configItems[configitem.uuid] != undefined && this.configItemsExpanded.indexOf(configitem.uuid) == -1) {
       this.ngOnInitLoopItemsExpand(configitem);
     }
     configitem.children.forEach((childitem) => this.ngOnInitLoopItems(childitem));
   }
 
-  ngOnInitLoopItemsExpand(configitem: SyshubConfig): void {
+  ngOnInitLoopItemsExpand(configitem: SyshubConfigItem): void {
     this.configItemsExpanded.push(configitem.uuid);
-    if (configitem.parentRef != undefined)
-      this.ngOnInitLoopItemsExpand(configitem.parentRef);
+    /* if (configitem.parentRef != undefined)
+      this.ngOnInitLoopItemsExpand(configitem.parentRef); */
   }
 
 }
@@ -106,7 +107,7 @@ interface FlatConfigTreeNode {
   expandable: boolean;
   hasMatch: boolean;
   childHasMatch: boolean;
-  obj: SyshubConfig;
+  obj: SyshubConfigItem;
   uuid: string;
   level: number;
 }

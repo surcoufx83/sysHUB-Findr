@@ -1,51 +1,92 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-// import { MatSnackBar } from '@angular/material/snack-bar';
-import { fromUnixTime, isEqual, parseISO } from 'date-fns';
+import { isEqual, parseISO } from 'date-fns';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { RestService } from 'syshub-rest-module';
-import { RestApiCategoryListReply, RestApiJobtypeListReply, SearchConfig, SearchResult, SearchResultUuids, SyshubCategory, SyshubConfig, SyshubJobtype, SyshubParameterset, SyshubWorkflow, UserConfig } from '../types';
+import { RestService, SyshubCategory, SyshubConfigItem, SyshubJobType, SyshubPSetItem, SyshubWorkflow } from 'syshub-rest-module';
 import { L10nService } from './i10n.service';
+import { ToastsService } from './toasts.service';
+import { SearchConfig, SearchResult, SearchResultUuids, UserConfig, UuidModifiedTypeObject } from '../types';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CacheService {
 
-  private _categories: BehaviorSubject<SyshubCategory[]> = new BehaviorSubject<SyshubCategory[]>([]);
-  private categoriesIndex: { [key: string]: number } = {};
-  private categoriesLoaded = false;
-  public categories = this._categories.asObservable();
-  private _config: BehaviorSubject<SyshubConfig[]> = new BehaviorSubject<SyshubConfig[]>([]);
-  private configItems: { [key: string]: SyshubConfig } = {};
+  /**
+   * Contains the sysHUB categories as an array in a subscribeable subject.
+   */
+  private categories$: BehaviorSubject<SyshubCategory[]> = new BehaviorSubject<SyshubCategory[]>([]);
+
+  /**
+   * Contains the sysHUB categories as an array.
+   */
+  public Categories = this.categories$.asObservable();
+
+  /**
+   * Saves the uuid of a category together with its index in the categories$ array.
+   */
+  private categoryUuid2Index$: { [key: string]: number } = {};
+
+  /**
+   * Saves whether the categories have already been initially loaded from the browser cache.
+   */
+  private categoriesLoaded$ = false;
+
+  private _config: BehaviorSubject<SyshubConfigItem[]> = new BehaviorSubject<SyshubConfigItem[]>([]);
+  private configItems: { [key: string]: SyshubConfigItem } = {};
   private configModifiedTimeIndex: { [key: string]: string } = {};
   private configLoaded = false;
   public config = this._config.asObservable();
-  private _jobtypes: BehaviorSubject<SyshubJobtype[]> = new BehaviorSubject<SyshubJobtype[]>([]);
+
+  private _jobtypes: BehaviorSubject<SyshubJobType[]> = new BehaviorSubject<SyshubJobType[]>([]);
   private jobtypesIndex: { [key: string]: number } = {};
   private jobtypesLoaded = false;
   public jobtypes = this._jobtypes.asObservable();
-  private _parameterset: BehaviorSubject<SyshubParameterset[]> = new BehaviorSubject<SyshubParameterset[]>([]);
-  private parametersetItems: { [key: string]: SyshubParameterset } = {};
+
+  private _parameterset: BehaviorSubject<SyshubPSetItem[]> = new BehaviorSubject<SyshubPSetItem[]>([]);
+  private parametersetItems: { [key: string]: SyshubPSetItem } = {};
   private parametersetModifiedTimeIndex: { [key: string]: string } = {};
   private parametersetLoaded = false;
   public parameterset = this._parameterset.asObservable();
+
+  private uuids: { [key: string]: UuidModifiedTypeObject } = {};
+
   private _userconfig: BehaviorSubject<UserConfig> = new BehaviorSubject<UserConfig>({ enableCache: environment.app?.useCache ?? true });
   private userconfigLoaded = false;
   public userconfig = this._userconfig.asObservable();
+
   private _workflows: BehaviorSubject<SyshubWorkflow[]> = new BehaviorSubject<SyshubWorkflow[]>([]);
   private workflowsIndex: { [key: string]: number } = {};
   private workflowsLoaded = false;
   public workflows = this._workflows.asObservable();
+
   private _searchresult: BehaviorSubject<SearchResult | null> = new BehaviorSubject<SearchResult | null>(null);
   public searchresult = this._searchresult.asObservable();
 
   constructor(
     private i10nService: L10nService,
     private restapi: RestService,
-    /* private snackBar: MatSnackBar */) {
+    private toastService: ToastsService,) {
+    this.loadSubscriptions();
     this.loadCache();
+  }
+
+  loadSubscriptions(): void {
+    this.Categories.subscribe((categories) => {
+      let indexed: { [key: string]: number } = {};
+      categories.filter((cat) => cat.uuid != '').forEach((cat, i) => {
+        this.uuids[cat.uuid] = {
+          uuid: cat.uuid,
+          modifiedtime: cat.modifiedtime,
+          type: 'SyshubCategory'
+        }
+        indexed[cat.uuid] = i;
+      });
+      if (this.categoriesLoaded$ && this._userconfig.value.enableCache)
+        localStorage.setItem(environment.storage?.categoriesKey ?? 'findr-syshub-cat', JSON.stringify(categories));
+      this.categoryUuid2Index$ = indexed;
+    });
   }
 
   addSearch(search: SearchConfig): string {
@@ -55,10 +96,10 @@ export class CacheService {
   }
 
   getCatgeory(uuid: string): SyshubCategory | null {
-    return this.categoriesIndex[uuid] != undefined ? this._categories.value[this.categoriesIndex[uuid]] : null;
+    return this.categoryUuid2Index$[uuid] != undefined ? this.categories$.value[this.categoryUuid2Index$[uuid]] : null;
   }
 
-  getConfigItem(uuid: string): SyshubConfig | null {
+  getConfigItem(uuid: string): SyshubConfigItem | null {
     return this.configItems[uuid] ?? null;
   }
 
@@ -78,11 +119,11 @@ export class CacheService {
     return fallback;
   }
 
-  getJobtype(uuid: string): SyshubJobtype | null {
+  getJobtype(uuid: string): SyshubJobType | null {
     return this.jobtypesIndex[uuid] != undefined ? this._jobtypes.value[this.jobtypesIndex[uuid]] : null;
   }
 
-  getParametersetItem(uuid: string): SyshubParameterset | null {
+  getParametersetItem(uuid: string): SyshubPSetItem | null {
     return this.parametersetItems[uuid] ?? null;
   }
 
@@ -104,19 +145,11 @@ export class CacheService {
   }
 
   private loadCategoriesCache(): void {
-    this.categories.subscribe((categories) => {
-      if (this.categoriesLoaded && this._userconfig.value.enableCache)
-        localStorage.setItem(environment.storage?.categoriesKey ?? 'findr-syshub-cat', JSON.stringify(categories));
-      let indexed: { [key: string]: number } = {};
-      categories.forEach((cat, i) => indexed[cat.uuid] = i);
-      this.categoriesIndex = indexed;
-    });
     let olddata = localStorage.getItem(environment.storage?.categoriesKey ?? 'findr-syshub-cat');
     if (olddata != null)
-      this._categories.next(<SyshubCategory[]>JSON.parse(olddata));
-    else
-      this.reloadCategories();
-    this.categoriesLoaded = true;
+      this.categories$.next(<SyshubCategory[]>JSON.parse(olddata));
+    this.reloadCategories();
+    this.categoriesLoaded$ = true;
   }
 
   private loadConfigCache(): void {
@@ -128,22 +161,22 @@ export class CacheService {
     });
     let olddata = localStorage.getItem(environment.storage?.configKey ?? 'findr-syshub-config');
     if (olddata != null)
-      this._config.next(<SyshubConfig[]>JSON.parse(olddata));
+      this._config.next(<SyshubConfigItem[]>JSON.parse(olddata));
     else
       this.reloadConfig();
     this.configLoaded = true;
   }
 
-  private loadConfigCacheIndex(config: SyshubConfig[], parentpath: string = '', parentpath2copy: string = '', parent?: SyshubConfig): { [key: string]: string } {
+  private loadConfigCacheIndex(config: SyshubConfigItem[], parentpath: string = '', parentpath2copy: string = '', parent?: SyshubConfigItem): { [key: string]: string } {
     let indexed: { [key: string]: string } = {};
     config.forEach((config) => {
-      config.path = `${parentpath}${parentpath != '' ? '/' : ''}${config.name}${config.type == 'Group/Folder' && config.value != '' ? ': ' + config.value : ''}`;
+      /* config.path = `${parentpath}${parentpath != '' ? '/' : ''}${config.name}${config.type == 'Group/Folder' && config.value != '' ? ': ' + config.value : ''}`;
       config.path2copy = `${parentpath2copy}${parentpath2copy != '' ? '/' : ''}${config.name}`;
       config.parentRef = parent;
       indexed[config.uuid] = config.modifiedtime;
       if (config.children.length > 0)
         indexed = { ...indexed, ...this.loadConfigCacheIndex(config.children, config.path, config.path2copy, config) };
-      this.configItems[config.uuid] = config;
+      this.configItems[config.uuid] = config; */
     });
     return indexed;
   }
@@ -158,7 +191,7 @@ export class CacheService {
     });
     let olddata = localStorage.getItem(environment.storage?.jobtypesKey ?? 'findr-syshub-jobtypes');
     if (olddata != null)
-      this._jobtypes.next(<SyshubJobtype[]>JSON.parse(olddata));
+      this._jobtypes.next(<SyshubJobType[]>JSON.parse(olddata));
     else
       this.reloadJobtypes();
     this.jobtypesLoaded = true;
@@ -173,22 +206,22 @@ export class CacheService {
     });
     let olddata = localStorage.getItem(environment.storage?.parametersetKey ?? 'findr-syshub-parameterset');
     if (olddata != null)
-      this._parameterset.next(<SyshubParameterset[]>JSON.parse(olddata));
+      this._parameterset.next(<SyshubPSetItem[]>JSON.parse(olddata));
     else
       this.reloadParameterset();
     this.parametersetLoaded = true;
   }
 
-  private loadParametersetCacheIndex(parameterset: SyshubParameterset[], parentpath: string = '', parentpath2copy: string = '', parent?: SyshubParameterset): { [key: string]: string } {
+  private loadParametersetCacheIndex(parameterset: SyshubPSetItem[], parentpath: string = '', parentpath2copy: string = '', parent?: SyshubPSetItem): { [key: string]: string } {
     let indexed: { [key: string]: string } = {};
     parameterset.forEach((parameterset) => {
-      parameterset.path = `${parentpath}${parentpath != '' ? '/' : ''}${parameterset.name}${parameterset.type == 'Group/Folder' && parameterset.value != '' ? ': ' + parameterset.value : ''}`;
+      /* parameterset.path = `${parentpath}${parentpath != '' ? '/' : ''}${parameterset.name}${parameterset.type == 'Group/Folder' && parameterset.value != '' ? ': ' + parameterset.value : ''}`;
       parameterset.path2copy = `${parentpath2copy}${parentpath2copy != '' ? '/' : ''}${parameterset.name}`;
       parameterset.parentRef = parent;
       indexed[parameterset.uuid] = parameterset.modifiedtime;
       if (parameterset.children.length > 0)
         indexed = { ...indexed, ...this.loadParametersetCacheIndex(parameterset.children, parameterset.path, parameterset.path2copy, parameterset) };
-      this.parametersetItems[parameterset.uuid] = parameterset;
+      this.parametersetItems[parameterset.uuid] = parameterset; */
     });
     return indexed;
   }
@@ -222,18 +255,14 @@ export class CacheService {
 
   reloadCategories(): void {
     let svc = this;
-    this.restapi.get('category/list').subscribe({
-      next(value: any): void {
-        svc._categories.next((<RestApiCategoryListReply>value).children.sort((a, b) => a.name > b.name ? 1 : -1));
-      },
-      error(err: HttpErrorResponse): void {
-        /* svc.snackBar.open(
-          svc.i10n('api.errorCommon', [err.message]),
-          svc.i10n('common.phrases.okUc'), {
-          panelClass: ['error-snack'],
-        }); */
+    this.restapi.getCategories().subscribe((reply) => {
+      if (reply instanceof Error) {
+        this.toastService.addDangerToast({
+          message: this.l10n('api.errorCommon', [reply.message])
+        });
         return;
-      },
+      }
+      this.categories$.next(reply.sort((a, b) => a.name > b.name ? 1 : -1));
     });
   }
 
@@ -241,7 +270,7 @@ export class CacheService {
     let svc = this;
     this.restapi.get('config/children?maxDeep=0').subscribe({
       next(value: any): void {
-        svc._config.next((<SyshubConfig[]>value).sort((a, b) => a.name > b.name ? 1 : -1));
+        svc._config.next((<SyshubConfigItem[]>value).sort((a, b) => a.name > b.name ? 1 : -1));
       },
       error(err: HttpErrorResponse): void {
         /* svc.snackBar.open(
@@ -258,7 +287,7 @@ export class CacheService {
     let svc = this;
     this.restapi.get('jobtype/list').subscribe({
       next(value: any): void {
-        svc._jobtypes.next((<RestApiJobtypeListReply>value).children.sort((a, b) => a.name > b.name ? 1 : -1));
+        //svc._jobtypes.next((<RestApiJobtypeListReply>value).children.sort((a, b) => a.name > b.name ? 1 : -1));
       },
       error(err: HttpErrorResponse): void {
         /* svc.snackBar.open(
@@ -275,7 +304,7 @@ export class CacheService {
     let svc = this;
     this.restapi.get('parameterset/children?maxDeep=0').subscribe({
       next(value: any): void {
-        svc._parameterset.next((<SyshubParameterset[]>value).sort((a, b) => a.name > b.name ? 1 : -1));
+        svc._parameterset.next((<SyshubPSetItem[]>value).sort((a, b) => a.name > b.name ? 1 : -1));
       },
       error(err: HttpErrorResponse): void {
         /* svc.snackBar.open(
@@ -346,10 +375,10 @@ export class CacheService {
           workflowsUpdated = true;
           this.reloadWorkflows();
         } else {
-          if (!this.getWorkflow(obj.uuid)!.modifiedTime || !isEqual(parseISO(this.getWorkflow(obj.uuid)!.modifiedTime), parseISO(this.configModifiedTimeIndex[obj.uuid]))) {
+          /* if (!this.getWorkflow(obj.uuid)!.modifiedTime || !isEqual(parseISO(this.getWorkflow(obj.uuid)!.modifiedTime), parseISO(this.configModifiedTimeIndex[obj.uuid]))) {
             workflowsUpdated = true;
             this.reloadWorkflows();
-          }
+          } */
         }
       }
     });

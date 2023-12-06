@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
-import { SearchResult, SyshubConfig, SyshubJobtype, SyshubNameValueItem, SyshubParameterset, SyshubWorkflow } from 'src/app/types';
+import { SearchResult } from 'src/app/types';
 
 @Component({
   selector: 'app-result-home',
@@ -12,12 +12,12 @@ export class ResultHomeComponent implements OnInit {
 
   @Input() searchPhrase!: string;
   @Input() searchResult!: SearchResult;
-  @Input() configItemSorter: SyshubConfig[] = [];
+  /* @Input() configItemSorter: SyshubConfig[] = [];
   @Input() jobtypeItemSorter: SyshubJobtype[] = [];
   @Input() jobtypeAttributesMatched: { [key: string]: SyshubNameValueItem[] } = {};
   @Input() jobtypeCustomAttributesMatched: { [key: string]: SyshubNameValueItem[] } = {};
   @Input() parametersetItemSorter: SyshubParameterset[] = [];
-  @Input() workflowItemSorter: SyshubWorkflow[] = [];
+  @Input() workflowItemSorter: SyshubWorkflow[] = []; */
 
   constructor(private i10nService: L10nService,
     private cacheService: CacheService) { }

@@ -14,7 +14,8 @@ export const environment: FindrEnvironment = {
       oauth: {
         enabled: true,
         clientId: "findr",
-        clientSecret: "b8gTWYo515b23JLZHuN2rZEZIHS6MKoJuXmNdgTK3Gj5HNdxh7BnyfibyN1A1HLx"
+        clientSecret: "b8gTWYo515b23JLZHuN2rZEZIHS6MKoJuXmNdgTK3Gj5HNdxh7BnyfibyN1A1HLx",
+        storeKey: "findr-auth"
       }
     }
   },

@@ -2,7 +2,8 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { Subscription } from 'rxjs';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
-import { SearchResult, SyshubJobtype } from 'src/app/types';
+import { SearchResult } from 'src/app/types';
+import { SyshubJobType } from 'syshub-rest-module';
 
 @Component({
   selector: 'app-result-jobtypes',
@@ -14,10 +15,10 @@ export class ResultJobtypeComponent implements OnInit, OnDestroy {
   @Input() searchPhrase!: string;
   @Input() searchResult!: SearchResult;
   @Input() jobtypeItems: { [key: string]: number } = {};
-  @Input() jobtypeItemSorter: SyshubJobtype[] = [];
+  @Input() jobtypeItemSorter: SyshubJobType[] = [];
   @Output() appcopy: EventEmitter<string> = new EventEmitter<string>();
-  activeJobtype: SyshubJobtype | null = null;
-  jobtypes: SyshubJobtype[] = [];
+  activeJobtype: SyshubJobType | null = null;
+  jobtypes: SyshubJobType[] = [];
   pinned: boolean = false;
   subscription?: Subscription;
 

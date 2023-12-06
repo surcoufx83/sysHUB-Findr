@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { SearchService } from 'src/app/svc/search.service';
-import { SearchConfig, SyshubCategory } from 'src/app/types';
+import { SearchConfig } from 'src/app/types';
 import { environment } from 'src/environments/environment';
-import { RestService } from 'syshub-rest-module';
+import { RestService, SyshubCategory } from 'syshub-rest-module';
 
 @Component({
   selector: 'app-home',
@@ -41,7 +41,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.restapi.getCurrentUser().subscribe((reply) => { console.log(reply); this.username = reply.name });
     this.restapi.isLoggedIn.subscribe((v) => this.loggedin = v);
-    this.cacheService.categories.subscribe((categories) => this.categories = categories);
+    this.cacheService.Categories.subscribe((categories) => this.categories = categories);
     this.searchService.searchConfig.subscribe((config) => this.searchConfig = config);
     this.cacheService.userconfig.subscribe((uc) => this.enableCache = uc.enableCache);
   }

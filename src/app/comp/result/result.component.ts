@@ -4,7 +4,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
-import { SearchResult, SyshubConfig, SyshubJobtype, SyshubNameValueItem, SyshubParameterset, SyshubWorkflow } from 'src/app/types';
+import { SearchResult } from 'src/app/types';
 
 @Component({
   selector: 'app-result',
@@ -16,15 +16,15 @@ export class ResultComponent implements OnInit, OnDestroy {
   url: string = '';
   searchResult: SearchResult | null = null;
   configItems: { [key: string]: number } = {};
-  configItemSorter: SyshubConfig[] = [];
+  //configItemSorter: SyshubConfig[] = [];
   jobtypeItems: { [key: string]: number } = {};
-  jobtypeItemSorter: SyshubJobtype[] = [];
-  jobtypeAttributesMatched: { [key: string]: SyshubNameValueItem[] } = {};
-  jobtypeCustomAttributesMatched: { [key: string]: SyshubNameValueItem[] } = {};
+  //jobtypeItemSorter: SyshubJobtype[] = [];
+  //jobtypeAttributesMatched: { [key: string]: SyshubNameValueItem[] } = {};
+  //jobtypeCustomAttributesMatched: { [key: string]: SyshubNameValueItem[] } = {};
   parametersetItems: { [key: string]: number } = {};
-  parametersetItemSorter: SyshubParameterset[] = [];
+  //parametersetItemSorter: SyshubParameterset[] = [];
   workflowItems: { [key: string]: number } = {};
-  workflowItemSorter: SyshubWorkflow[] = [];
+  //workflowItemSorter: SyshubWorkflow[] = [];
   private searchPhrasePattern: RegExp | null = null;
   private subscriptions: Subscription[] = [];
 
@@ -77,7 +77,7 @@ export class ResultComponent implements OnInit, OnDestroy {
   }
 
   initConfigItems(): void {
-    this.subscriptions.push(
+    /* this.subscriptions.push(
       this.cacheService.config.subscribe((config) => {
         this.configItems = {};
         this.configItemSorter = [];
@@ -92,11 +92,11 @@ export class ResultComponent implements OnInit, OnDestroy {
         this.configItemSorter = tempConfigItemSorter.sort((a, b) => a.path.toLocaleLowerCase() > b.path.toLocaleLowerCase() ? 1 : -1);
         this.configItemSorter.forEach((obj, i) => this.configItems[obj.uuid] = i);
       })
-    );
+    ); */
   }
 
   initJobtypeItems(): void {
-    this.subscriptions.push(
+    /* this.subscriptions.push(
       this.cacheService.jobtypes.subscribe((jobtypes) => {
         this.jobtypeItems = {};
         this.jobtypeItemSorter = [];
@@ -126,11 +126,11 @@ export class ResultComponent implements OnInit, OnDestroy {
         });
         this.jobtypeItemSorter = tempJobtypeItemSorter.sort((a, b) => a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1);
         this.jobtypeItemSorter.forEach((obj, i) => this.jobtypeItems[obj.uuid] = i);
-      }));
+      })); */
   }
 
   initParametersetItems(): void {
-    this.subscriptions.push(
+    /* this.subscriptions.push(
       this.cacheService.parameterset.subscribe((parametersets) => {
         this.parametersetItems = {};
         this.parametersetItemSorter = [];
@@ -144,11 +144,11 @@ export class ResultComponent implements OnInit, OnDestroy {
         });
         this.parametersetItemSorter = tempParametersetItemSorter.sort((a, b) => a.path.toLocaleLowerCase() > b.path.toLocaleLowerCase() ? 1 : -1);
         this.parametersetItemSorter.forEach((obj, i) => this.parametersetItems[obj.uuid] = i);
-      }));
+      })); */
   }
 
   initWorkflowItems(): void {
-    this.subscriptions.push(
+    /* this.subscriptions.push(
       this.cacheService.workflows.subscribe((workflows) => {
         this.workflowItems = {};
         this.workflowItemSorter = [];
@@ -162,7 +162,7 @@ export class ResultComponent implements OnInit, OnDestroy {
         });
         this.workflowItemSorter = tempWorkflowItemSorter.sort((a, b) => a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1);
         this.workflowItemSorter.forEach((obj, i) => this.workflowItems[obj.uuid] = i);
-      }));
+      })); */
   }
 
 }

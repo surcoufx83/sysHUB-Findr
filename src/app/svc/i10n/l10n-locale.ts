@@ -1,3 +1,9 @@
+export type L10nLocaleInput = {
+    label: string,
+    placeholder: string,
+    invalidFeedback: string,
+};
+
 export type L10nLocale = {
     api: {
         failed: {
@@ -43,7 +49,14 @@ export type L10nLocale = {
     },
     login: {
         title: string,
-        unlockDescription: string
+        unlockDescription: string,
+        usernameField: L10nLocaleInput,
+        passwordField: L10nLocaleInput,
+        submitBtn: string,
+        submitBtnBusy: string,
+        inputInvalidToast: string,
+        inputCredentialsToast: string,
+        inputServerNotAvailableToast: string
     }
     navbar: {
         placeholder: string

@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { RestService } from 'syshub-rest-module';
 import { PagepropsService } from './svc/pageprops.service';
-import { ToastsService } from './svc/toasts.service';
-import { ActivatedRouteSnapshot, NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +16,6 @@ export class AppComponent implements OnInit {
   constructor(
     private restapi: RestService,
     private pageprops: PagepropsService,
-    private toastService: ToastsService,
     router: Router,
   ) {
     this.restapi.isLoggedIn.subscribe((v) => { console.log(v); this.isLoggedIn = v });

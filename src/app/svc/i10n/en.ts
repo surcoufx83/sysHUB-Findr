@@ -45,7 +45,22 @@ export const L10nEn: L10nLocale = {
     },
     login: {
         title: 'Login',
-        unlockDescription: 'Bitte geben Sie Ihre sysHUB Zugangsdaten für Zugriff auf den Server an.'
+        unlockDescription: 'Please enter your sysHUB credentials for server access.',
+        usernameField: {
+            label: 'sysHUB Username',
+            placeholder: 'username',
+            invalidFeedback: 'Please enter a username.'
+        },
+        passwordField: {
+            label: 'Password',
+            placeholder: 'password',
+            invalidFeedback: 'Please enter a password.'
+        },
+        submitBtn: 'Log In',
+        submitBtnBusy: 'Logging in...',
+        inputInvalidToast: 'The credentials are incomplete. Please check your entries.',
+        inputCredentialsToast: 'Login rejected by the server. Please check your entries and try again.',
+        inputServerNotAvailableToast: 'Anmeldung fehlgeschlagen. Der Server ist gerade nicht erreichbar.'
     },
     navbar: {
         placeholder: 'Search term...'
