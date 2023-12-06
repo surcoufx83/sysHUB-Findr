@@ -27,12 +27,11 @@
             </form>
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle fs-3" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
+                    <a class="nav-link fs-3 py-0" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi-list"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li class="dropdown-item cursor-pointer">Clear cache</li>
+                        <li class="dropdown-item cursor-pointer" (click)="onClearCache()">Clear cache</li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>

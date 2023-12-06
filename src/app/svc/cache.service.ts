@@ -72,6 +72,20 @@ export class CacheService {
     this.loadCache();
   }
 
+  /**
+   * Clears the local storage and forces a full cache reload.
+   */
+  public clear(): void {
+    this.categories$.next([]);
+    this._config.next([]);
+    this._jobtypes.next([]);
+    this._parameterset.next([]);
+    this._workflows.next([]);
+    this._searchresult.next(null);
+    localStorage.removeItem(environment.storage?.searchconfigKey ?? 'findr-syshub-searchconfig');
+    this.loadCache();
+  }
+
   loadSubscriptions(): void {
     this.Categories.subscribe((categories) => {
       let indexed: { [key: string]: number } = {};

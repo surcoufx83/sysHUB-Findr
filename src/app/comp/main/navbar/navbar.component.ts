@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
 import { SearchService } from 'src/app/svc/search.service';
@@ -25,6 +26,7 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     private l10nService: L10nService,
+    private cacheService: CacheService,
     private searchService: SearchService,
     private router: Router
   ) { }
@@ -44,6 +46,10 @@ export class NavbarComponent implements OnInit {
       this.phraseInput = config.phrase;
     });
     this.searchService.searchProgress.subscribe((a) => this.searchProgress = a);
+  }
+
+  onClearCache(): void {
+    this.cacheService.clear();
   }
 
   search() {
