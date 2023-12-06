@@ -25,7 +25,9 @@ export class SearchService {
     private router: Router) {
     let oldconfig = localStorage.getItem(environment.storage?.searchconfigKey ?? 'findr-searchconfig');
     if (oldconfig != null) {
-      this._searchConfig.next(<SearchConfig>JSON.parse(oldconfig));
+      let cfg: SearchConfig = <SearchConfig>JSON.parse(oldconfig);
+      cfg.phrase = '';
+      this._searchConfig.next({ ...cfg });
     }
     this.searchConfig.subscribe((config) => localStorage.setItem(environment.storage?.searchconfigKey ?? 'findr-searchconfig', JSON.stringify(config)));
   }
