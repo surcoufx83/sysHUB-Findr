@@ -35,7 +35,6 @@ export const environment: FindrEnvironment = {
     l10nKey: "findr-l10n@dev",
     parametersetKey: "findr-syshub-parameterset@dev",
     searchconfigKey: "findr-searchconfig@dev",
-    tokenKey: "findr-session@dev",
     userconfigKey: "findr-usercfg@dev",
     userdataKey: "findr-userdata@dev",
     workflowsKey: "findr-syshub-workflows@dev",

@@ -19,7 +19,6 @@ export type FindrEnvironment = {
         l10nKey?: string,
         parametersetKey?: string,
         searchconfigKey?: string,
-        tokenKey?: string,
         userconfigKey?: string,
         userdataKey?: string,
         workflowsKey?: string,
