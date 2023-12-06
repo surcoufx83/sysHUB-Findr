@@ -388,12 +388,13 @@ export class CacheService {
   setResult(token: string, result: SearchResultUuids): void {
     if (!this._searchresult.value || this._searchresult.value!.search.token != token)
       return;
-    this._searchresult.value.result = result;
-    this.setResult_reloadOutdatedItems(result);
+    this._searchresult.value.result = { ...result };
+    this.setResult_reloadOutdatedItems(this._searchresult.value.result);
   }
 
   setResult_reloadOutdatedItems(result: SearchResultUuids): void {
     let configUpdated = false, parametersetUpdated = false, workflowsUpdated = false;
+    console.log(result);
     result.config.forEach((obj) => {
       if (!configUpdated) {
         /* if (this.configModifiedTimeIndex[obj.uuid] == undefined) {

@@ -1,11 +1,14 @@
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { RestService } from 'syshub-rest-module';
+import { Response, RestService } from 'syshub-rest-module';
 import { SearchConfig, SearchResultUuids } from '../types';
 import { CacheService } from './cache.service';
+import { ToastsService } from './toasts.service';
+import { L10nService } from './i10n.service';
+import { L10nLocale } from './i10n/l10n-locale';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +24,9 @@ export class SearchService {
 
   constructor(
     private cache: CacheService,
+    private l10nService: L10nService,
     private restapi: RestService,
+    private toastsService: ToastsService,
     private router: Router) {
     let oldconfig = localStorage.getItem(environment.storage?.searchconfigKey ?? 'findr-searchconfig');
     if (oldconfig != null) {
@@ -30,6 +35,14 @@ export class SearchService {
       this._searchConfig.next({ ...cfg });
     }
     this.searchConfig.subscribe((config) => localStorage.setItem(environment.storage?.searchconfigKey ?? 'findr-searchconfig', JSON.stringify(config)));
+  }
+
+  get l10nphrase(): L10nLocale {
+    return this.l10nService.locale;
+  }
+
+  l10n(phrase: string, params: any[] = []) {
+    return this.l10nService.ln(phrase, params);
   }
 
   public search(search: SearchConfig): boolean {
@@ -46,15 +59,18 @@ export class SearchService {
 
   private searchStep1(search: SearchConfig): void {
     let component = this;
-    this.restapi.runWorkflowAlias('findr-search', search).subscribe({
-      next(value: any): void {
-        component._searchProgress.next(50);
-        component.searchStep2(search, <SearchResultUuids>value);
-      },
-      error(error: HttpErrorResponse): void {
-        component._searchBusy.next(false);
-        component._searchProgress.next(0);
-        component.router.navigate(['/failure']);
+    this.restapi.runWorkflowAlias('findr-search', search).subscribe((reply: Response) => {
+      console.log(reply);
+      if (reply.status == HttpStatusCode.Ok) {
+        component._searchProgress.next(20);
+        component.searchStep2(search, <SearchResultUuids>reply.content);
+      }
+      else {
+        this.toastsService.addDangerToast({
+          message: this.l10n(this.l10nphrase.api.errorCommon, [reply.content['message'] ?? 'Unknown error, see browser console']),
+        });
+        this._searchBusy.next(false);
+        this._searchProgress.next(100);
       }
     });
   }
