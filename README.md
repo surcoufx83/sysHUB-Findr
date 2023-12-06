@@ -16,7 +16,9 @@ Nutzer des Findr müssen im sysHUB mindestens die folgenden Berechtigungen besit
 - Permission ...
 
 ## Konfiguration
-Die Konfiguration für ein Kundensystem erfolgt vorrangig in der `environment.prod.ts` (siehe [src\environments\environment.prod.ts](src\environments\environment.prod.ts)). Alle Werte die darin geändert werden erfordern ein neues Kompilieren der Webapp (siehe [Contributing Guide - Abschnitt Build](CONTRIBUTING.md#build)). Durch die direkte Einbindung in den Source code lädt die Seite schneller, mit weniger HTTP-Anfragen und ohne nachträgliches Rendering.
+Die Konfiguration für ein Kundensystem erfolgt vorrangig in der `environment.prod.ts` (siehe [src\environments](src\environments)). Sofern die Datei nicht existiert, erzeuge eine Kopie der `environment.prod.template.ts` und der `environment.template.ts` und entferne jeweils das `.template` aus dem Dateinamen.
+
+In der Datei müssen entweder Basic- oder OAuth Credentials angegeben und anschließend muss das gesamte Projektverzeichnis kompiliert werden (siehe [Contributing Guide - Abschnitt Build](CONTRIBUTING.md#build)). Durch die direkte Einbindung in den Source code lädt die Seite schneller, mit weniger HTTP-Anfragen und ohne nachträgliches Rendering.
 
 ### Konfigurationsparameter
 | Parameter | Werte (Default) | Verwendung und Hinweise |
