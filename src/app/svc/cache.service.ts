@@ -117,11 +117,7 @@ export class CacheService {
     return this.configUuid2Ref$[uuid] ?? null;
   }
 
-  /* addSearch(search: SearchConfig): string {
-    search.token = '' + Math.floor(Date.now() / 1000) / 1000;
-    this._searchresult.next({ search: search });
-    return search.token;
-  }
+  /* 
 
   getIcon(type: string, value: any = null, fallback: string = 'folder'): string {
     switch (type) {
@@ -297,6 +293,12 @@ export class CacheService {
     else
       this.reloadWorkflows();
     this.workflowsLoaded = true;
+  }
+
+  prepareSearch(search: SearchConfig): string {
+    search.token = '' + Math.floor(Date.now() / 1000) / 1000;
+    this._searchresult.next({ search: search });
+    return search.token;
   }
 
   reloadCategories(): void {

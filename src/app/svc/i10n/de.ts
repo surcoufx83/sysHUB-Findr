@@ -9,7 +9,7 @@ export const L10nDe: L10nLocale = {
             unauthorized: 'Anmeldung fehlgeschlagen.',
             unknown: 'Unbekannter Fehler.'
         },
-        errorCommon: 'Fehler beim Abrufen der Daten vom Server: {0}'
+        errorCommon: 'Fehler beim Abrufen der Daten vom Server: [0]'
     },
     app: {
         title: 'Findr',
@@ -31,13 +31,13 @@ export const L10nDe: L10nLocale = {
         phrases: {
             none: '»Keine«',
             okUc: 'OK',
-            toggleItem: '{0} auf- bzw. zuklappen'
+            toggleItem: '[0] auf- bzw. zuklappen'
         }
     },
     home: {
         title: 'Suchkonfiguration',
         welcomeTitle: 'sysHUB Findr Start',
-        welcomeSubtitleUser: 'Hallo {0}, nach was möchtest du heute suchen?',
+        welcomeSubtitleUser: 'Hallo [0], nach was möchtest du heute suchen?',
         welcomeSubtitleNoUser: 'Hallo, wonach möchtest du heute suchen?',
         enterPhrase: 'Gib deinen Suchbegriff ein',
         runSearch: 'Suche starten',
@@ -83,7 +83,7 @@ export const L10nDe: L10nLocale = {
     },
     result: {
         config: {
-            title: 'Treffer in der Konfiguration, Suche nach »{0}«',
+            title: 'Treffer in der Konfiguration, Suche nach »[0]«',
             subtitle: `
                 Auf dieser Seite wird die komplette Baumstruktur der Expertenkonfiguration
                 dargestellt und Treffer sind optisch hervorgehoben.
@@ -99,10 +99,10 @@ export const L10nDe: L10nLocale = {
                 uuid: 'Uuid',
                 value: 'Wert',
             },
-            selected: 'Details zu »{0}«'
+            selected: 'Details zu »[0]«'
         },
         jobtype: {
-            title: 'Treffer bei den Auftragstypen, Suche nach »{0}«',
+            title: 'Treffer bei den Auftragstypen, Suche nach »[0]«',
             subtitle: `
                 Diese Seite listet die konfigurierten Auftragstypen auf und
                 hebt Treffer sind optisch hervorgehoben.
@@ -132,14 +132,14 @@ export const L10nDe: L10nLocale = {
                 xid: 'Xid'
             },
             customAttributes: 'Attribute',
-            selected: 'Details zu »{0}«',
+            selected: 'Details zu »[0]«',
             classifySection: 'Klassifizierung',
             moreAttributesSection: 'Klassifizierung Jobattribute',
             processingSection: 'Verarbeitung',
             workflowsSection: 'Workflows'
         },
         overview: {
-            title: 'Trefferliste für die Suche nach »{0}«',
+            title: 'Trefferliste für die Suche nach »[0]«',
             subtitle: `
                 Die folgende Liste stellt nur eine kurze Zusammenfassung dar. Ausführliche
                 Ergebnisse und die grafische Repräsentation (Baumstruktur und Workflow-Designer)
@@ -147,7 +147,7 @@ export const L10nDe: L10nLocale = {
             `
         },
         parameterset: {
-            title: 'Treffer im Parameterset, Suche nach »{0}«',
+            title: 'Treffer im Parameterset, Suche nach »[0]«',
             subtitle: `
                 Auf dieser Seite wird die komplette Baumstruktur des Parametersets
                 dargestellt und Treffer sind optisch hervorgehoben.
@@ -163,20 +163,20 @@ export const L10nDe: L10nLocale = {
                 uuid: 'Uuid',
                 value: 'Wert',
             },
-            selected: 'Details zu »{0}«'
+            selected: 'Details zu »[0]«'
         },
         toolbar: {
             overview: 'Übersicht',
-            config: 'Konfig: {0}',
-            jobtypes: 'Jobtypes: {0}',
-            parameterset: 'Parameterset: {0}',
-            workflows: 'Workflows: {0}',
+            config: 'Konfig: [0]',
+            jobtypes: 'Jobtypes: [0]',
+            parameterset: 'Parameterset: [0]',
+            workflows: 'Workflows: [0]',
         },
         showWorkflow: 'Workflow anzeigen'
     },
     search: {
         errors: {
-            phraseEmpty: 'Bitte einen Suchbegriff mit mindestens {0} Zeichen eingeben.'
+            phraseEmpty: 'Bitte einen Suchbegriff mit mindestens [0] Zeichen eingeben.'
         },
         filter: {
             categoryFilter: 'Kategorie filtern',
@@ -212,7 +212,7 @@ export const L10nDe: L10nLocale = {
     },
     searching: {
         title: '',
-        cardTitle: 'Suchen nach {0}',
+        cardTitle: 'Suchen nach [0]',
         progress: {
             done: 'Alles erledigt. Weiterleitung zur Ergebnisansicht...',
             evaluatingResults: 'Die Ergebnisse wurden vom Server geladen und werden für die Anzeige vorbereitet...',

@@ -37,7 +37,7 @@ export class SearchService {
       return false;
     this._searchBusy.next(true);
     this._searchProgress.next(0);
-    //search.token = this.cache.addSearch(search);
+    search.token = this.cache.prepareSearch(search);
     this._searchConfig.next(search);
     this.router.navigate(['/search']);
     this.searchStep1(search);
@@ -46,7 +46,7 @@ export class SearchService {
 
   private searchStep1(search: SearchConfig): void {
     let component = this;
-    this.restapi.post('workflows/execute/alias/findr-search', search).subscribe({
+    this.restapi.runWorkflowAlias('findr-search', search).subscribe({
       next(value: any): void {
         component._searchProgress.next(50);
         component.searchStep2(search, <SearchResultUuids>value);
@@ -67,7 +67,7 @@ export class SearchService {
 
 }
 
-let defaultSearchConfig: SearchConfig = {
+export const defaultSearchConfig: SearchConfig = {
   phrase: '',
   token: '',
   topics: {
