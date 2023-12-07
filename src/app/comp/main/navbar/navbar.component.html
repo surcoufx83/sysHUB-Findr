@@ -9,12 +9,25 @@
             </a>
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a [ngClass]="{'nav-link': true, 'active': url === '/'}" [routerLink]="['/']">{{
+                    <a [ngClass]="{'nav-link': true, 'active': url === '/' || url === '/search'}"
+                        [routerLink]="['/']">{{
                         l10nphrase.navbar.homeLink }}</a>
                 </li>
                 <li class="nav-item">
                     <a [ngClass]="{'nav-link': true, 'active': url === '/stats'}" [routerLink]="['/stats']">{{
                         l10nphrase.navbar.statsLink }}</a>
+                </li>
+                <li class="nav-item" *ngIf="url === '/about'">
+                    <a [ngClass]="{'nav-link': true, 'active': true}" [routerLink]="['/about']">{{
+                        l10nphrase.navbar.aboutLink }}</a>
+                </li>
+                <li class="nav-item" *ngIf="url === '/help'">
+                    <a [ngClass]="{'nav-link': true, 'active': true}" [routerLink]="['/help']">{{
+                        l10nphrase.navbar.helpLink }}</a>
+                </li>
+                <li class="nav-item" *ngIf="url.startsWith('/result')">
+                    <a [ngClass]="{'nav-link': true, 'active': true}" [routerLink]="url">{{
+                        l10nphrase.navbar.resultLink }}</a>
                 </li>
             </ul>
         </div>
@@ -31,9 +44,8 @@
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li class="dropdown-item">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" [value]="true"
-                                    formControlName="searchConfig" id="navbar-search-config"
-                                    name="navbar-search-config">
+                                <input class="form-check-input" type="checkbox" formControlName="searchConfig"
+                                    id="navbar-search-config" name="navbar-search-config">
                                 <label class="form-check-label" for="navbar-search-config">
                                     {{ l10nphrase.search.topics.config }}
                                 </label>
@@ -41,9 +53,8 @@
                         </li>
                         <li class="dropdown-item">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" [value]="true"
-                                    formControlName="searchJobtypes" id="navbar-search-jobtypes"
-                                    name="navbar-search-jobtypes">
+                                <input class="form-check-input" type="checkbox" formControlName="searchJobtypes"
+                                    id="navbar-search-jobtypes" name="navbar-search-jobtypes">
                                 <label class="form-check-label" for="navbar-search-jobtypes">
                                     {{ l10nphrase.search.topics.jobtypes }}
                                 </label>
@@ -51,9 +62,8 @@
                         </li>
                         <li class="dropdown-item">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" [value]="true"
-                                    formControlName="searchPSet" id="navbar-search-parameterset"
-                                    name="navbar-search-parameterset">
+                                <input class="form-check-input" type="checkbox" formControlName="searchPSet"
+                                    id="navbar-search-parameterset" name="navbar-search-parameterset">
                                 <label class="form-check-label" for="navbar-search-parameterset">
                                     {{ l10nphrase.search.topics.parameterset }}
                                 </label>
@@ -61,9 +71,8 @@
                         </li>
                         <li class="dropdown-item">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" [value]="true"
-                                    formControlName="searchWorkflows" id="navbar-search-workflows"
-                                    name="navbar-search-workflows">
+                                <input class="form-check-input" type="checkbox" formControlName="searchWorkflows"
+                                    id="navbar-search-workflows" name="navbar-search-workflows">
                                 <label class="form-check-label" for="navbar-search-workflows">
                                     {{ l10nphrase.search.topics.workflows }}
                                 </label>

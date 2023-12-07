@@ -60,9 +60,8 @@ export class SearchService {
   private searchStep1(search: SearchConfig): void {
     let component = this;
     this.restapi.runWorkflowAlias('findr-search', search).subscribe((reply: Response) => {
-      console.log(reply);
       if (reply.status == HttpStatusCode.Ok) {
-        component._searchProgress.next(20);
+        component._searchProgress.next(50);
         component.searchStep2(search, <SearchResultUuids>reply.content);
       }
       else {

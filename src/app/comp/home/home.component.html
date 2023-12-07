@@ -1,177 +1,125 @@
-<!-- <app-toolbar [title]="i10n('home.title')"></app-toolbar>
-
-<div class="container mx-auto justify-center mt-4">
-    <form #navbarSearch="ngForm" (submit)="search()">
-        <mat-card appearance="outlined" class="w-full">
-            <mat-card-header class="mb-3">
-                <mat-card-title>{{ i10n('home.welcomeTitle') }}</mat-card-title>
-                <mat-card-subtitle>
-                    {{ i10n(username != '' ? 'home.welcomeSubtitleUser' : 'home.welcomeSubtitleNoUser', [username]) }}
-                </mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-                <div class="flex flex-row items-center gap-4 mb-5">
-                    <div class="w-full md:w-1/2">
-                        <mat-form-field appearance="fill" style="width: 100%">
-                            <mat-label>{{ i10n('home.enterPhrase') }}</mat-label>
-                            <input matInput type="text" [(ngModel)]="phraseInput" name="home-phrase" id="home-phrase">
-                            <button mat-icon-button matPrefix>
-                                <mat-icon>search</mat-icon>
+<article class="container">
+    <section>
+        <h1>{{ l10nphrase.home.welcomeTitle }}</h1>
+        <p>
+            {{ l10n(username != '' ? l10nphrase.home.welcomeSubtitleUser : l10nphrase.home.welcomeSubtitleNoUser,
+            [username]) }}
+        </p>
+    </section>
+    <section>
+        <form [formGroup]="searchForm" (submit)="onSubmitSearch()">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="input-group me-2">
+                            <input class="form-control" type="search"
+                                [placeholder]="l10nphrase.navbar.searchPlaceholder" formControlName="phrase"
+                                name="home-search-phrase" id="home-search-phrase"
+                                [attr.aria-label]="l10nphrase.navbar.searchBtn" autocomplete="off">
+                            <button
+                                [ngClass]="{ 'btn dropdown-toggle': true, 'btn-outline-secondary': searchForm.controls.searchConfig.value && searchForm.controls.searchJobtypes.value && searchForm.controls.searchPSet.value && searchForm.controls.searchWorkflows.value, 'btn-secondary': !searchForm.controls.searchConfig.value || !searchForm.controls.searchJobtypes.value || !searchForm.controls.searchPSet.value || !searchForm.controls.searchWorkflows.value}"
+                                type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                aria-expanded="false">
+                                <i
+                                    [ngClass]="'me-2 ' + (!searchForm.controls.searchConfig.value || !searchForm.controls.searchJobtypes.value || !searchForm.controls.searchPSet.value || !searchForm.controls.searchWorkflows.value ? 'bi-toggle-on text-info' : 'bi-toggle-off')"></i>
+                                {{ l10nphrase.navbar.searchOptions }}
                             </button>
-                        </mat-form-field>
-                    </div>
-                    <div class="mat-form-field-wrapper">
-                        <button mat-raised-button type="submit" color="primary">{{
-                            i10n('home.runSearch') }}</button>
-                    </div>
-                </div>
-                <mat-tab-group dynamicHeight mat-stretch-tabs="false" mat-align-tabs="start">
-                    <mat-tab>
-                        <ng-template mat-tab-label>
-                            <mat-icon class="mr-1 align-middle">backup_table</mat-icon>
-                            {{ i10n('home.tabs.topics') }}
-                        </ng-template>
-                        <ng-container *ngTemplateOutlet="topicsTab"></ng-container>
-                    </mat-tab>
-                    <mat-tab>
-                        <ng-template mat-tab-label>
-                            <mat-icon class="mr-1 align-middle">tune</mat-icon>
-                            {{ i10n('home.tabs.filter') }}
-                        </ng-template>
-                        <ng-container *ngTemplateOutlet="filterTab"></ng-container>
-                    </mat-tab>
-                    <mat-tab>
-                        <ng-template mat-tab-label>
-                            <mat-icon class="mr-1 align-middle">settings</mat-icon>
-                            {{ i10n('home.tabs.options') }}
-                        </ng-template>
-                        <ng-container *ngTemplateOutlet="optionsTab"></ng-container>
-                    </mat-tab>
-                </mat-tab-group>
-            </mat-card-content>
-        </mat-card>
-    </form>
-</div>
-
-<ng-template #topicsTab>
-    <div class="m-3 w-full md:w-1/2">
-        <mat-list role="list" *ngIf="searchConfig" class="mat-list-break-height">
-            <mat-list-item role="listitem" class="py-0">
-                <div matLine>
-                    <mat-checkbox [(ngModel)]="searchConfig.topics.workflows">
-                        <div>{{ i10n('search.topics.workflows') }}</div>
-                    </mat-checkbox>
-                </div>
-            </mat-list-item>
-            <mat-divider *ngIf="searchConfig.topics.workflows"></mat-divider>
-            <mat-list-item role="listitem" class="py-0" *ngIf="searchConfig.topics.workflows">
-                <div matLine>
-                    <mat-checkbox [(ngModel)]="searchConfig.filter.searchWorkflowContent">
-                        <div>{{ i10n('search.filter.searchWorkflowContent') }}</div>
-                    </mat-checkbox>
-                </div>
-                <div matLine class="checkbox-description mt-2">
-                    <div class="flex items-center">
-                        <div>
-                            <mat-icon class="mr-2">info</mat-icon>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" formControlName="searchConfig"
+                                            id="home-search-config" name="home-search-config">
+                                        <label class="form-check-label" for="home-search-config">
+                                            {{ l10nphrase.search.topics.config }}
+                                        </label>
+                                    </div>
+                                </li>
+                                <li class="dropdown-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" formControlName="searchJobtypes"
+                                            id="home-search-jobtypes" name="home-search-jobtypes">
+                                        <label class="form-check-label" for="home-search-jobtypes">
+                                            {{ l10nphrase.search.topics.jobtypes }}
+                                        </label>
+                                    </div>
+                                </li>
+                                <li class="dropdown-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" formControlName="searchPSet"
+                                            id="home-search-parameterset" name="home-search-parameterset">
+                                        <label class="form-check-label" for="home-search-parameterset">
+                                            {{ l10nphrase.search.topics.parameterset }}
+                                        </label>
+                                    </div>
+                                </li>
+                                <li class="dropdown-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox"
+                                            formControlName="searchWorkflows" id="home-search-workflows"
+                                            name="home-search-workflows">
+                                        <label class="form-check-label" for="home-search-workflows">
+                                            {{ l10nphrase.search.topics.workflows }}
+                                        </label>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
-                        <div>{{ i10n('search.filter.searchWorkflowContentDescription') }}</div>
+                        <button class="btn btn-success text-nowrap" [disabled]="searchBusy" type="submit">{{ searchBusy
+                            ?
+                            l10nphrase.navbar.searchBtnBusy :
+                            l10nphrase.home.runSearch }}</button>
                     </div>
+                    <p class="text-primary cursor-pointer" style="font-size: 80%;" (click)="changeFilterView()">
+                        {{ l10nphrase.home.moreFilterToggle }}
+                        <i
+                            [ngClass]="{ 'bi': true, 'bi-caret-down': !showMoreFilter, 'bi-caret-up': showMoreFilter }"></i>
+                    </p>
                 </div>
-            </mat-list-item>
-            <mat-divider></mat-divider>
-            <mat-list-item role="listitem" class="py-0">
-                <div matLine>
-                    <mat-checkbox [(ngModel)]="searchConfig.topics.config">
-                        <div>{{ i10n('search.topics.config') }}</div>
-                    </mat-checkbox>
+                <div class="card-body pt-0" *ngIf="showMoreFilter">
+                    <h4 class="card-title">{{ l10nphrase.home.moreFilter }}</h4>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <div class="d-flex align-items-center">
+                                <span class="me-3">{{ l10nphrase.search.filter.categoryFilter }}:</span>
+                                <select class="form-select" formControlName="categoryFilter"
+                                    id="home-search-categoryFilter" name="home-search-categoryFilter"
+                                    style="max-width: 320px;">
+                                    <option [value]="null">{{ l10nphrase.search.filter.categoryFilterNone }}</option>
+                                    <option [value]="category.uuid" *ngFor="let category of categories">{{ category.name
+                                        }}</option>
+                                </select>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" formControlName="excludeBComments"
+                                    id="home-search-excludeBComments" name="home-search-excludeBComments">
+                                <label class="form-check-label" for="home-search-excludeBComments">
+                                    {{ l10nphrase.search.filter.excludeBComments }}
+                                </label>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" formControlName="includeUuids"
+                                    id="home-search-includeUuids" name="home-search-includeUuids">
+                                <label class="form-check-label" for="home-search-includeUuids">
+                                    {{ l10nphrase.search.filter.includeUuids }}
+                                </label>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" formControlName="searchWorkflowContent"
+                                    id="home-search-searchWorkflowContent" name="home-search-searchWorkflowContent">
+                                <label class="form-check-label" for="home-search-searchWorkflowContent">
+                                    {{ l10nphrase.search.filter.searchWorkflowContent }}
+                                </label>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-            </mat-list-item>
-            <mat-divider></mat-divider>
-            <mat-list-item role="listitem" class="py-0">
-                <div matLine>
-                    <mat-checkbox [(ngModel)]="searchConfig.topics.parameterset">
-                        <div>{{ i10n('search.topics.parameterset') }}</div>
-                    </mat-checkbox>
-                </div>
-            </mat-list-item>
-            <mat-divider></mat-divider>
-            <mat-list-item role="listitem" class="py-0">
-                <div matLine>
-                    <mat-checkbox [(ngModel)]="searchConfig.topics.jobtypes">
-                        <div>{{ i10n('search.topics.jobtypes') }}</div>
-                    </mat-checkbox>
-                </div>
-            </mat-list-item>
-        </mat-list>
-    </div>
-</ng-template>
-
-<ng-template #filterTab>
-    <div class="m-3 w-full md:w-1/2">
-        <mat-list role="list" *ngIf="searchConfig" class="mat-list-break-height">
-            <mat-list-item role="listitem">
-                <div matLine>
-                    <mat-form-field class="w-full md:w-1/2">
-                        <mat-label>{{ i10n('search.filter.categoryFilter') }}</mat-label>
-                        <mat-select [(value)]="searchConfig.filter.categoryFilter">
-                            <mat-option [value]="null">{{ i10n('search.filter.categoryFilterNone') }}</mat-option>
-                            <mat-option *ngFor="let category of categories" [value]="category.uuid">
-                                {{ category.name }}
-                            </mat-option>
-                        </mat-select>
-                        <button type="button" mat-icon-button matSuffix (click)="syncCategories()">
-                            <mat-icon>sync</mat-icon>
-                        </button>
-                    </mat-form-field>
-                </div>
-                <div matLine class="checkbox-description">
-                    <div class="flex items-center">
-                        <div>
-                            <mat-icon class="mr-2">filter_alt</mat-icon>
-                        </div>
-                        <div>{{ i10n('search.filter.categoryFilterDescription') }}</div>
-                    </div>
-                </div>
-            </mat-list-item>
-            <mat-divider></mat-divider>
-            <mat-list-item role="listitem">
-                <div matLine>
-                    <mat-checkbox [(ngModel)]="searchConfig.filter.includeUuids">
-                        <div>{{ i10n('search.filter.includeUuids') }}</div>
-                    </mat-checkbox>
-                </div>
-            </mat-list-item>
-            <mat-divider></mat-divider>
-            <mat-list-item role="listitem">
-                <div matLine>
-                    <mat-checkbox [(ngModel)]="searchConfig.filter.excludeBComments">
-                        <div>{{ i10n('search.filter.excludeBComments') }}</div>
-                    </mat-checkbox>
-                </div>
-            </mat-list-item>
-        </mat-list>
-    </div>
-</ng-template>
-
-<ng-template #optionsTab>
-    <div class="m-3 w-full md:w-1/2">
-        <mat-list role="list" *ngIf="searchConfig" class="mat-list-break-height">
-            <mat-list-item role="listitem">
-                <div matLine>
-                    <mat-checkbox [(ngModel)]="enableCache" (change)="changeCacheCheckbox()">
-                        <div>{{ i10n('search.options.enableCache') }}</div>
-                    </mat-checkbox>
-                </div>
-                <div matLine class="checkbox-description">
-                    <div class="flex items-center">
-                        <div>
-                            <mat-icon class="mr-2">info</mat-icon>
-                        </div>
-                        <div>{{ i10n('search.options.enableCacheDescription') }}</div>
-                    </div>
-                </div>
-            </mat-list-item>
-        </mat-list>
-    </div>
-</ng-template> -->
+            </div>
+        </form>
+    </section>
+</article>

@@ -36,17 +36,12 @@ export type L10nLocale = {
         }
     },
     home: {
-        title: string,
-        welcomeTitle: string,
-        welcomeSubtitleUser: string,
-        welcomeSubtitleNoUser: string,
-        enterPhrase: string,
+        moreFilter: string,
+        moreFilterToggle: string,
         runSearch: string,
-        tabs: {
-            topics: string,
-            filter: string,
-            options: string
-        }
+        welcomeSubtitleNoUser: string,
+        welcomeSubtitleUser: string,
+        welcomeTitle: string,
     },
     login: {
         title: string,
@@ -67,6 +62,7 @@ export type L10nLocale = {
         localeIsActive: string,
         logoutLink: string,
         promoLink: string,
+        resultLink: string,
         searchBtn: string,
         searchBtnBusy: string,
         searchOptions: string,
@@ -152,11 +148,9 @@ export type L10nLocale = {
         filter: {
             categoryFilter: string,
             categoryFilterNone: string,
-            categoryFilterDescription: string,
             excludeBComments: string,
             includeUuids: string,
-            searchWorkflowContent: string,
-            searchWorkflowContentDescription: string
+            searchWorkflowContent: string
         },
         options: {
             enableCache: string,
@@ -173,12 +167,6 @@ export type L10nLocale = {
     searching: {
         title: string,
         cardTitle: string,
-        progress: {
-            done: string,
-            evaluatingResults: string,
-            queryingObjects: string,
-            preparingResultView: string,
-            waitingForResults: string
-        }
+        progress: { [key: string]: string }
     }
 }

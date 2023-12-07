@@ -35,17 +35,12 @@ export const L10nEn: L10nLocale = {
         }
     },
     home: {
-        title: 'Search Configuration',
-        welcomeTitle: 'sysHUB Findr Start',
-        welcomeSubtitleUser: 'Hello [0], what would you like to search for today?',
-        welcomeSubtitleNoUser: 'Hello, what are you looking to search for today?',
-        enterPhrase: 'Enter your search term',
+        moreFilter: 'Advanced Filters',
+        moreFilterToggle: 'Search with advanced filters',
         runSearch: 'Start Search',
-        tabs: {
-            topics: 'Search Areas',
-            filter: 'Restrictions',
-            options: 'Options',
-        }
+        welcomeSubtitleNoUser: 'Hello, what would you like to find today?',
+        welcomeSubtitleUser: 'Hello [0], what would you like to find today?',
+        welcomeTitle: 'sysHUBFindr',
     },
     login: {
         title: 'Login',
@@ -74,6 +69,7 @@ export const L10nEn: L10nLocale = {
         homeLink: 'Home',
         localeIsActive: 'in use',
         logoutLink: 'Logout',
+        resultLink: 'Search Result',
         searchBtn: 'Search',
         searchBtnBusy: 'Searching...',
         searchOptions: 'Options',
@@ -178,17 +174,9 @@ export const L10nEn: L10nLocale = {
         filter: {
             categoryFilter: 'Filter by Category',
             categoryFilterNone: 'Not Filtered',
-            categoryFilterDescription: `
-                Filter by category: If set, only objects assigned to this category
-                are determined. All other objects are ignored.
-            `,
             excludeBComments: 'Ignore [B] Comments',
             includeUuids: 'Search UUIDs',
-            searchWorkflowContent: 'Include Workflow Contents',
-            searchWorkflowContentDescription: `
-                Searching the workflow contents takes significantly longer and generates
-                a lot of load on the system and database.
-            `
+            searchWorkflowContent: 'Include Workflow Contents'
         },
         options: {
             enableCache: 'Use Browser Cache',

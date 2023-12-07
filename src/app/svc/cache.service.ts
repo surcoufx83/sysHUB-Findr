@@ -438,6 +438,14 @@ export class CacheService {
       this.reloadJobtypes();
   }
 
+  showMoreFilter(newvalue: boolean): void {
+    if (newvalue !== this._userconfig.value.showMoreFilter) {
+      let obj: UserConfig = { ...this._userconfig.value };
+      obj.showMoreFilter = newvalue;
+      this._userconfig.next(obj);
+    }
+  }
+
   useCache(newvalue: boolean): void {
     if (newvalue != this._userconfig.value.enableCache) {
       let obj: UserConfig = { ...this._userconfig.value };

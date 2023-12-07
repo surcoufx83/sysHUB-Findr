@@ -37,7 +37,7 @@ export class NavbarComponent implements OnInit {
     searchJobtypes: new FormControl<boolean>(true),
     searchPSet: new FormControl<boolean>(true),
     searchWorkflows: new FormControl<boolean>(true),
-  })
+  });
 
   constructor(
     private l10nService: L10nService,
@@ -53,7 +53,7 @@ export class NavbarComponent implements OnInit {
     });
     this.searchService.searchBusy.subscribe((busy) => this.searchBusy = busy);
     this.searchService.searchConfig.subscribe((cfg) => {
-      //this.searchConfig = { ...cfg };
+      this.searchConfig = { ...cfg };
       this.searchForm.controls.phrase.patchValue(cfg.phrase);
       this.searchForm.controls.searchConfig.patchValue(cfg.topics.config);
       this.searchForm.controls.searchJobtypes.patchValue(cfg.topics.jobtypes);

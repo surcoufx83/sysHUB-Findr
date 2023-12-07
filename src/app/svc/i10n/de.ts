@@ -35,17 +35,12 @@ export const L10nDe: L10nLocale = {
         }
     },
     home: {
-        title: 'Suchkonfiguration',
-        welcomeTitle: 'sysHUB Findr Start',
-        welcomeSubtitleUser: 'Hallo [0], nach was möchtest du heute suchen?',
-        welcomeSubtitleNoUser: 'Hallo, wonach möchtest du heute suchen?',
-        enterPhrase: 'Gib deinen Suchbegriff ein',
+        moreFilter: 'Erweiterte Filter',
+        moreFilterToggle: 'Suche mit erweiterten Filtern',
         runSearch: 'Suche starten',
-        tabs: {
-            topics: 'Suchbereiche',
-            filter: 'Einschränkungen',
-            options: 'Optionen',
-        }
+        welcomeSubtitleNoUser: 'Hallo, was möchtest du heute finden?',
+        welcomeSubtitleUser: 'Hallo [0], was möchtest du heute finden?',
+        welcomeTitle: 'sysHUBFindr',
     },
     login: {
         title: 'Anmeldung',
@@ -74,6 +69,7 @@ export const L10nDe: L10nLocale = {
         homeLink: 'Start',
         localeIsActive: 'aktiv',
         logoutLink: 'Abmelden',
+        resultLink: 'Suchergebnis',
         searchBtn: 'Suchen',
         searchBtnBusy: 'Suche läuft...',
         searchOptions: 'Optionen',
@@ -179,20 +175,11 @@ export const L10nDe: L10nLocale = {
             phraseEmpty: 'Bitte einen Suchbegriff mit mindestens [0] Zeichen eingeben.'
         },
         filter: {
-            categoryFilter: 'Kategorie filtern',
-            categoryFilterNone: 'Nicht gefiltert',
-            categoryFilterDescription: `
-                Kategorie filtern: Wenn eingestellt, so werden
-                ausschließlich Objekte ermittelt, welche dieser Kategorie
-                zugeordnet sind. Alle anderen Objekte werden ignoriert.
-            `,
+            categoryFilter: 'Filtern nach Kategorie',
+            categoryFilterNone: 'Nicht angewendet',
             excludeBComments: '[B]-Kommentare ignorieren',
             includeUuids: 'UUID\'s durchsuchen',
             searchWorkflowContent: 'Inklusive Workflowinhalte',
-            searchWorkflowContentDescription: `
-                Das Durchsuchen der Workflowinhalte dauert deutlich länger und erzeugt
-                viel Last auf System und Datenbank.
-            `
         },
         options: {
             enableCache: 'Browser-Cache verwenden',

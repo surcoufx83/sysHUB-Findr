@@ -1,7 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
-import { SearchService } from 'src/app/svc/search.service';
+import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
+import { SearchService, defaultSearchConfig } from 'src/app/svc/search.service';
+import { ToastsService } from 'src/app/svc/toasts.service';
 import { SearchConfig } from 'src/app/types';
 import { environment } from 'src/environments/environment';
 import { RestService, SyshubCategory } from 'syshub-rest-module';
@@ -11,51 +15,108 @@ import { RestService, SyshubCategory } from 'syshub-rest-module';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnDestroy, OnInit {
 
+  currentLocale: string;
   enableCache: boolean = environment.app?.useCache ?? true;
   loggedin: boolean = false;
   minPhraseLength: number = environment.app?.minPhraseLength ?? 3;
   phraseInput: string = '';
+  searchBusy: boolean = false;
   searchConfig?: SearchConfig;
+  showMoreFilter: boolean = false;
   username: string = '';
 
   categories: SyshubCategory[] = [];
+  subs: Subscription[] = [];
+
+  searchForm = new FormGroup({
+    phrase: new FormControl<string>('', { validators: [Validators.required, Validators.minLength(this.minPhraseLength)] }),
+    searchConfig: new FormControl<boolean>(true),
+    searchJobtypes: new FormControl<boolean>(true),
+    searchPSet: new FormControl<boolean>(true),
+    searchWorkflows: new FormControl<boolean>(true),
+    categoryFilter: new FormControl<string | null>(null),
+    excludeBComments: new FormControl<boolean>(true),
+    includeUuids: new FormControl<boolean>(true),
+    searchWorkflowContent: new FormControl<boolean>(true),
+  });
 
   constructor(
-    private i10nService: L10nService,
+    private l10nService: L10nService,
     private restapi: RestService,
-    //private snackBar: MatSnackBar,
     private searchService: SearchService,
-    private cacheService: CacheService
-  ) { }
+    private cacheService: CacheService,
+    private toastsService: ToastsService,
+  ) {
+    this.currentLocale = l10nService.lang.length > 2 ? l10nService.lang.substring(0, 2) : l10nService.lang;
+  }
 
   changeCacheCheckbox(): void {
     this.cacheService.useCache(this.enableCache);
   }
 
+  changeFilterView(): void {
+    this.cacheService.showMoreFilter(!this.showMoreFilter);
+  }
+
+  get l10nphrase(): L10nLocale {
+    return this.l10nService.locale;
+  }
+
   l10n(phrase: string, params: any[] = []) {
-    return this.i10nService.ln(phrase, params);
+    return this.l10nService.ln(phrase, params);
+  }
+
+  ngOnDestroy(): void {
+    this.subs.forEach((s) => s.unsubscribe());
+    this.subs = [];
   }
 
   ngOnInit(): void {
-    this.restapi.getCurrentUser().subscribe((reply) => { console.log(reply); this.username = reply.name });
-    this.restapi.isLoggedIn.subscribe((v) => this.loggedin = v);
-    this.cacheService.Categories.subscribe((categories) => this.categories = categories);
-    this.searchService.searchConfig.subscribe((config) => this.searchConfig = config);
-    this.cacheService.userconfig.subscribe((uc) => this.enableCache = uc.enableCache);
+    this.subs.push(this.restapi.getCurrentUser().subscribe((reply) => { console.log(reply); this.username = reply.name }));
+    this.subs.push(this.restapi.isLoggedIn.subscribe((v) => this.loggedin = v));
+    this.subs.push(this.cacheService.Categories.subscribe((categories) => this.categories = categories));
+    this.subs.push(this.cacheService.userconfig.subscribe((uc) => {
+      this.enableCache = uc.enableCache;
+      this.showMoreFilter = uc.showMoreFilter || false;
+    }));
+    this.subs.push(this.searchService.searchBusy.subscribe((busy) => this.searchBusy = busy));
+    this.subs.push(this.searchService.searchConfig.subscribe((cfg) => {
+      this.searchConfig = { ...cfg };
+      this.searchForm.controls.phrase.patchValue(cfg.phrase);
+      this.searchForm.controls.searchConfig.patchValue(cfg.topics.config);
+      this.searchForm.controls.searchJobtypes.patchValue(cfg.topics.jobtypes);
+      this.searchForm.controls.searchPSet.patchValue(cfg.topics.parameterset);
+      this.searchForm.controls.searchWorkflows.patchValue(cfg.topics.workflows);
+      this.searchForm.controls.categoryFilter.patchValue(cfg.filter.categoryFilter == null ? null : cfg.filter.categoryFilter.uuid);
+      this.searchForm.controls.excludeBComments.patchValue(cfg.filter.excludeBComments);
+      this.searchForm.controls.includeUuids.patchValue(cfg.filter.includeUuids);
+      this.searchForm.controls.searchWorkflowContent.patchValue(cfg.filter.searchWorkflowContent);
+      this.searchForm.markAsPristine();
+    }));
   }
 
-  search(): void {
-    if (this.searchConfig == undefined)
+  onSubmitSearch() {
+    if (this.searchBusy)
       return;
-    if (this.phraseInput.trim().length < this.minPhraseLength) {
-      //this.snackBar.open(this.i10n('search.errors.phraseEmpty', ['' + this.minPhraseLength]), this.i10n('common.phrases.okUc'));
+    if (this.searchForm.invalid) {
+      this.toastsService.addDangerToast({
+        message: this.l10n(this.l10nphrase.search.errors.phraseEmpty, [this.minPhraseLength]),
+      });
       return;
     }
-    let config = { ...this.searchConfig };
-    config.phrase = this.phraseInput;
-    this.searchService.search(config);
+    let newcfg: SearchConfig = { ...this.searchConfig || { ...defaultSearchConfig } }
+    newcfg.phrase = this.searchForm.controls.phrase.value!;
+    newcfg.topics.config = this.searchForm.controls.searchConfig.value!;
+    newcfg.topics.jobtypes = this.searchForm.controls.searchJobtypes.value!;
+    newcfg.topics.parameterset = this.searchForm.controls.searchPSet.value!;
+    newcfg.topics.workflows = this.searchForm.controls.searchWorkflows.value!;
+    newcfg.filter.categoryFilter = this.searchForm.controls.categoryFilter.value != null ? this.cacheService.getCatgeory(this.searchForm.controls.categoryFilter.value) : null;
+    newcfg.filter.excludeBComments = this.searchForm.controls.excludeBComments.value!;
+    newcfg.filter.includeUuids = this.searchForm.controls.includeUuids.value!;
+    newcfg.filter.searchWorkflowContent = this.searchForm.controls.searchWorkflowContent.value!;
+    this.searchService.search(newcfg);
   }
 
   syncCategories(): void {
