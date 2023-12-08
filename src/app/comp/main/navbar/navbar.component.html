@@ -91,6 +91,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li class="dropdown-item cursor-pointer" (click)="onClearCache()">
+                            <i class="bi bi-arrow-repeat me-2"></i>
                             {{ l10nphrase.navbar.clearCacheLink }}
                         </li>
                         <li>
@@ -98,32 +99,47 @@
                         </li>
                         <li [ngClass]="{'dropdown-item cursor-pointer': true, 'text-muted': locale === currentLocale}"
                             *ngFor="let locale of locales" (click)="onSwitchLocale(locale)">
-                            {{ localesLocalized[locale] }}
-                            <ng-container *ngIf="locale === currentLocale">({{ l10nphrase.navbar.localeIsActive
+                            <i class="bi bi-translate me-2" *ngIf="locale !== currentLocale"></i>
+                            <i class="bi bi-check2-circle me-2" *ngIf="locale === currentLocale"></i>
+                            {{ localesLocalized[locale] }} <ng-container *ngIf="locale === currentLocale">({{
+                                l10nphrase.navbar.localeIsActive
                                 }})</ng-container>
                         </li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
                         <li>
-                            <a class="dropdown-item" [routerLink]="['/help']">{{ l10nphrase.navbar.helpLink }}</a>
+                            <a class="dropdown-item" [routerLink]="['/help']">
+                                <i class="bi bi-question-circle me-2"></i>
+                                {{ l10nphrase.navbar.helpLink }}
+                            </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" [routerLink]="['/about']">{{ l10nphrase.navbar.aboutLink }}</a>
+                            <a class="dropdown-item" [routerLink]="['/about']">
+                                <i class="bi bi-info-circle me-2"></i>
+                                {{ l10nphrase.navbar.aboutLink }}
+                            </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" target="_blank" [href]="promolink" *ngIf="promolink">{{
-                                l10nphrase.navbar.promoLink }}</a>
+                            <a class="dropdown-item" target="_blank" [href]="promolink" *ngIf="promolink">
+                                <i class="bi bi-git me-2"></i>
+                                {{ l10nphrase.navbar.promoLink }}
+                            </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" target="_blank" [href]="webclientlink" *ngIf="webclientlink">{{
-                                l10nphrase.navbar.webclientLink }}</a>
+                            <a class="dropdown-item" target="_blank" [href]="webclientlink" *ngIf="webclientlink">
+                                <i class="bi bi-browser-edge me-2"></i>
+                                {{ l10nphrase.navbar.webclientLink }}
+                            </a>
                         </li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
                         <li>
-                            <a class="dropdown-item" [routerLink]="['/logout']">{{ l10nphrase.navbar.logoutLink }}</a>
+                            <a class="dropdown-item" [routerLink]="['/logout']">
+                                <i class="bi bi-box-arrow-left me-2"></i>
+                                {{ l10nphrase.navbar.logoutLink }}
+                            </a>
                         </li>
                     </ul>
                 </li>
