@@ -7,6 +7,7 @@ import { RestService, SyshubCategory, SyshubConfigItem, SyshubJobType, SyshubPSe
 import { L10nService } from './i10n.service';
 import { ToastsService } from './toasts.service';
 import { SearchConfig, SearchResult, SearchResultUuids, UserConfig, UuidModifiedTypeObject } from '../types';
+import { L10nLocale } from './i10n/l10n-locale';
 
 @Injectable({
   providedIn: 'root'
@@ -84,7 +85,7 @@ export class CacheService {
   public searchresult = this._searchresult.asObservable();
 
   constructor(
-    private i10nService: L10nService,
+    private l10nService: L10nService,
     private restapi: RestService,
     private toastService: ToastsService,) {
     this.loadSubscriptions();
@@ -147,8 +148,12 @@ export class CacheService {
     return this.workflowsIndex[uuid] != undefined ? this._workflows.value[this.workflowsIndex[uuid]] : null;
   }
 
+  get l10nphrase(): L10nLocale {
+    return this.l10nService.locale;
+  }
+
   l10n(phrase: string, params: any[] = []) {
-    return this.i10nService.ln(phrase, params);
+    return this.l10nService.ln(phrase, params);
   }
 
   private loadCache(): void {
@@ -306,7 +311,7 @@ export class CacheService {
     this.restapi.getCategories().subscribe((reply) => {
       if (reply instanceof Error) {
         this.toastService.addDangerToast({
-          message: this.l10n('api.errorCommon', [reply.message])
+          message: this.l10n(this.l10nphrase.api.errorCommon, [reply.message])
         });
         return;
       }
@@ -319,7 +324,7 @@ export class CacheService {
     this.restapi.getConfigChildren('').subscribe((reply) => {
       if (reply instanceof Error) {
         this.toastService.addDangerToast({
-          message: this.l10n('api.errorCommon', [reply.message])
+          message: this.l10n(this.l10nphrase.api.errorCommon, [reply.message])
         });
         return;
       }
@@ -342,7 +347,7 @@ export class CacheService {
       },
       error(err: HttpErrorResponse): void {
         /* svc.snackBar.open(
-          svc.i10n('api.errorCommon', [err.message]),
+          svc.i10n(this.l10nphrase.api.errorCommon, [err.message]),
           svc.i10n('common.phrases.okUc'), {
           panelClass: ['error-snack'],
         }); */
@@ -359,7 +364,7 @@ export class CacheService {
       },
       error(err: HttpErrorResponse): void {
         /* svc.snackBar.open(
-          svc.i10n('api.errorCommon', [err.message]),
+          svc.i10n(this.l10nphrase.api.errorCommon, [err.message]),
           svc.i10n('common.phrases.okUc'), {
           panelClass: ['error-snack'],
         }); */
@@ -376,7 +381,7 @@ export class CacheService {
       },
       error(err: HttpErrorResponse): void {
         /* svc.snackBar.open(
-          svc.i10n('api.errorCommon', [err.message]),
+          svc.i10n(this.l10nphrase.api.errorCommon, [err.message]),
           svc.i10n('common.phrases.okUc'), {
           panelClass: ['error-snack'],
         }); */
