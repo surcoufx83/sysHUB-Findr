@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { isEqual, parseISO } from 'date-fns';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { RestService, SyshubCategory, SyshubConfigItem, SyshubJobType, SyshubPSetItem, SyshubWorkflow } from 'syshub-rest-module';
+import { RestService, SyshubCategory, SyshubConfigItem, SyshubJobType, SyshubPSetItem, SyshubWorkflow, UnauthorizedError } from 'syshub-rest-module';
 import { L10nService } from './i10n.service';
 import { ToastsService } from './toasts.service';
 import { SearchConfig, SearchResult, SearchResultUuids, UserConfig, UuidModifiedTypeObject } from '../types';
@@ -310,9 +310,10 @@ export class CacheService {
     let svc = this;
     this.restapi.getCategories().subscribe((reply) => {
       if (reply instanceof Error) {
-        this.toastService.addDangerToast({
-          message: this.l10n(this.l10nphrase.api.errorCommon, [reply.message])
-        });
+        if (!(reply instanceof UnauthorizedError))
+          this.toastService.addDangerToast({
+            message: this.l10n(this.l10nphrase.api.errorCommon, [reply.message])
+          });
         return;
       }
       this.categories$.next(reply.sort((a, b) => a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1));
@@ -323,9 +324,10 @@ export class CacheService {
     let svc = this;
     this.restapi.getConfigChildren('').subscribe((reply) => {
       if (reply instanceof Error) {
-        this.toastService.addDangerToast({
-          message: this.l10n(this.l10nphrase.api.errorCommon, [reply.message])
-        });
+        if (!(reply instanceof UnauthorizedError))
+          this.toastService.addDangerToast({
+            message: this.l10n(this.l10nphrase.api.errorCommon, [reply.message])
+          });
         return;
       }
       this.config$.next(this.reloadConfig_SortChilds(reply));

@@ -25,7 +25,7 @@
     "bootstrap-icons": "^1.11.2",
     "date-fns": "^2.30.0",
     "rxjs": "^7.8.1",
-    "syshub-rest-module": "^3.0.0",
+    "syshub-rest-module": "^3.0.1",
     "tslib": "^2.6.2",
     "zone.js": "~0.14.2"
   },

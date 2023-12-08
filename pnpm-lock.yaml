@@ -54,8 +54,8 @@ dependencies:
     specifier: ^7.8.1
     version: 7.8.1
   syshub-rest-module:
-    specifier: ^3.0.0
-    version: 3.0.0(@angular/common@17.0.6)(@angular/core@17.0.6)
+    specifier: ^3.0.1
+    version: 3.0.1(@angular/common@17.0.6)(@angular/core@17.0.6)
   tslib:
     specifier: ^2.6.2
     version: 2.6.2
@@ -6475,8 +6475,8 @@ packages:
     engines: {node: '>=0.10'}
     dev: true
 
-  /syshub-rest-module@3.0.0(@angular/common@17.0.6)(@angular/core@17.0.6):
-    resolution: {integrity: sha512-BYNP6ZCsbzcvOdMLhVv0CReP+EtiSMraYEGZM3dOWRPyPsuD16LClAac0n8knq027UpANb2jo552Kvkz8rCMWw==}
+  /syshub-rest-module@3.0.1(@angular/common@17.0.6)(@angular/core@17.0.6):
+    resolution: {integrity: sha512-qwlpxlXqjZpevkyH6MWp15aMs+MnHfgd7QEO2vJ4t/SFGLL1X+NNIYkzEzMeP3Rmboqv8IJzsFPChXe9EiicJQ==}
     peerDependencies:
       '@angular/common': ^17.0.6
       '@angular/core': ^17.0.6
