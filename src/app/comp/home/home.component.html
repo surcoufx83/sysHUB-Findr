@@ -17,11 +17,11 @@
                                 name="home-search-phrase" id="home-search-phrase"
                                 [attr.aria-label]="l10nphrase.navbar.searchBtn" autocomplete="off">
                             <button
-                                [ngClass]="{ 'btn dropdown-toggle': true, 'btn-outline-secondary': searchForm.controls.searchConfig.value && searchForm.controls.searchJobtypes.value && searchForm.controls.searchPSet.value && searchForm.controls.searchWorkflows.value, 'btn-secondary': !searchForm.controls.searchConfig.value || !searchForm.controls.searchJobtypes.value || !searchForm.controls.searchPSet.value || !searchForm.controls.searchWorkflows.value}"
+                                [ngClass]="{ 'btn dropdown-toggle': true, 'btn-outline-secondary':isDefaultConfig, 'btn-secondary': !isDefaultConfig}"
                                 type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside"
                                 aria-expanded="false">
                                 <i
-                                    [ngClass]="'me-2 ' + (!searchForm.controls.searchConfig.value || !searchForm.controls.searchJobtypes.value || !searchForm.controls.searchPSet.value || !searchForm.controls.searchWorkflows.value ? 'bi-toggle-on text-info' : 'bi-toggle-off')"></i>
+                                    [ngClass]="'me-2 ' + (!isDefaultConfig ? 'bi-toggle-on text-info' : 'bi-toggle-off')"></i>
                                 {{ l10nphrase.navbar.searchOptions }}
                             </button>
                             <ul class="dropdown-menu">
@@ -59,6 +59,58 @@
                                             name="home-search-workflows">
                                         <label class="form-check-label" for="home-search-workflows">
                                             {{ l10nphrase.search.topics.workflows }}
+                                        </label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li class="dropdown-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox"
+                                            formControlName="searchCertstore" id="home-search-certstore"
+                                            name="home-search-certstore">
+                                        <label class="form-check-label" for="home-search-certstore">
+                                            {{ l10nphrase.search.topics.certstore }}
+                                        </label>
+                                    </div>
+                                </li>
+                                <li class="dropdown-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox"
+                                            formControlName="searchServerConfig" id="home-search-serverConfig"
+                                            name="home-search-serverConfig">
+                                        <label class="form-check-label" for="home-search-serverConfig">
+                                            {{ l10nphrase.search.topics.serverConfig }}
+                                        </label>
+                                    </div>
+                                </li>
+                                <li class="dropdown-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox"
+                                            formControlName="searchServerInfo" id="home-search-serverInfo"
+                                            name="home-search-serverInfo">
+                                        <label class="form-check-label" for="home-search-serverInfo">
+                                            {{ l10nphrase.search.topics.serverInfo }}
+                                        </label>
+                                    </div>
+                                </li>
+                                <li class="dropdown-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox"
+                                            formControlName="searchIppDevices" id="home-search-ippDevices"
+                                            name="home-search-ippDevices">
+                                        <label class="form-check-label" for="home-search-ippDevices">
+                                            {{ l10nphrase.search.topics.ippDevices }}
+                                        </label>
+                                    </div>
+                                </li>
+                                <li class="dropdown-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" formControlName="searchUsers"
+                                            id="home-search-users" name="home-search-users">
+                                        <label class="form-check-label" for="home-search-users">
+                                            {{ l10nphrase.search.topics.users }}
                                         </label>
                                     </div>
                                 </li>

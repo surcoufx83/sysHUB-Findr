@@ -1,14 +1,15 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Response, RestService } from 'syshub-rest-module';
+import { Response, RestService, SyshubCertStoreItem, SyshubIppDevice, SyshubServerInformation, SyshubUserAccount } from 'syshub-rest-module';
 import { SearchConfig, SearchResultUuids } from '../types';
 import { CacheService } from './cache.service';
 import { ToastsService } from './toasts.service';
 import { L10nService } from './i10n.service';
 import { L10nLocale } from './i10n/l10n-locale';
+import { sub } from 'date-fns';
 
 @Injectable({
   providedIn: 'root'
@@ -58,11 +59,10 @@ export class SearchService {
   }
 
   private searchStep1(search: SearchConfig): void {
-    let component = this;
     this.restapi.runWorkflowAlias('findr-search', search).subscribe((reply: Response) => {
       if (reply.status == HttpStatusCode.Ok) {
-        component._searchProgress.next(50);
-        component.searchStep2(search, <SearchResultUuids>reply.content);
+        this._searchProgress.next(50);
+        this.searchStep2(search, <SearchResultUuids>reply.content);
       }
       else {
         this.toastsService.addDangerToast({
@@ -74,10 +74,154 @@ export class SearchService {
     });
   }
 
+  private searchStep2_CertStore(enabled: boolean, phrase: string): Observable<{ keystore: SyshubCertStoreItem[], truststore: SyshubCertStoreItem[] } | null | false> {
+    let subject = new Subject<{ keystore: SyshubCertStoreItem[], truststore: SyshubCertStoreItem[] } | null | false>;
+    setTimeout(() => {
+      if (!enabled) {
+        subject.next(null);
+        subject.complete();
+        return;
+      }
+      let certstore: { keystore: SyshubCertStoreItem[], truststore: SyshubCertStoreItem[] } = { keystore: [], truststore: [] };
+      this.restapi.getCertStoreItems('keystore').subscribe((store1) => {
+        if (store1 instanceof Error) {
+          subject.next(false);
+          subject.complete();
+          return;
+        }
+        certstore.keystore = [...store1];
+        this.restapi.getCertStoreItems('truststore').subscribe((store2) => {
+          if (store2 instanceof Error) {
+            subject.next(false);
+            subject.complete();
+            return;
+          }
+          certstore.truststore = [...store2];
+          subject.next(certstore);
+          subject.complete();
+        });
+      });
+    }, 1);
+    return subject;
+  }
+
+  private searchStep2_IppDevices(enabled: boolean, phrase: string): Observable<SyshubIppDevice[] | null | false> {
+    let subject = new Subject<SyshubIppDevice[] | null | false>;
+    setTimeout(() => {
+      if (!enabled) {
+        subject.next(null);
+        subject.complete();
+        return;
+      }
+      this.restapi.getDevices().subscribe((items) => {
+        if (items instanceof Error) {
+          subject.next(false);
+          subject.complete();
+          return;
+        }
+        subject.next(items);
+        subject.complete();
+      });
+    }, 1);
+    return subject;
+  }
+
+  private searchStep2_ServerConfig(enabled: boolean, phrase: string): Observable<{ [key: string]: string } | null | false> {
+    let subject = new Subject<{ [key: string]: string } | null | false>;
+    setTimeout(() => {
+      if (!enabled) {
+        subject.next(null);
+        subject.complete();
+        return;
+      }
+      this.restapi.getServerProperties().subscribe((items) => {
+        if (items instanceof Error) {
+          subject.next(false);
+          subject.complete();
+          return;
+        }
+        subject.next(items);
+        subject.complete();
+      });
+    }, 1);
+    return subject;
+  }
+
+  private searchStep2_ServerInfo(enabled: boolean, phrase: string): Observable<SyshubServerInformation | null | false> {
+    let subject = new Subject<SyshubServerInformation | null | false>;
+    setTimeout(() => {
+      if (!enabled) {
+        subject.next(null);
+        subject.complete();
+        return;
+      }
+      this.restapi.getServerInformation().subscribe((items) => {
+        if (items instanceof Error) {
+          subject.next(false);
+          subject.complete();
+          return;
+        }
+        subject.next(items);
+        subject.complete();
+      });
+    }, 1);
+    return subject;
+  }
+
+  private searchStep2_User(enabled: boolean, phrase: string): Observable<SyshubUserAccount[] | null | false> {
+    let subject = new Subject<SyshubUserAccount[] | null | false>;
+    setTimeout(() => {
+      if (!enabled) {
+        subject.next(null);
+        subject.complete();
+        return;
+      }
+      this.restapi.getUsers().subscribe((items) => {
+        if (items instanceof Error) {
+          subject.next(false);
+          subject.complete();
+          return;
+        }
+        subject.next(items);
+        subject.complete();
+      });
+    }, 1);
+    return subject;
+  }
+
   private searchStep2(search: SearchConfig, result: SearchResultUuids): void {
-    this.cache.setResult(search.token, result);
-    this._searchBusy.next(false);
-    this._searchProgress.next(100);
+    let systemTopics = search.topics.system.certstore || search.topics.system.ippDevices || search.topics.system.serverConfig || search.topics.system.serverInfo || search.topics.system.users;
+
+    if (result.system == undefined) {
+      result.system = {}
+    }
+
+    // Query individual Rest API endpoints. If search is not active, method will return null.
+    this.searchStep2_CertStore(search.topics.system.certstore, search.phrase).subscribe((r) => { result.system!.certstore = r; this._searchProgress.next(this._searchProgress.value + 10); });
+    this.searchStep2_IppDevices(search.topics.system.ippDevices, search.phrase).subscribe((r) => { result.system!.ippDevices = r; this._searchProgress.next(this._searchProgress.value + 10); });
+    this.searchStep2_ServerConfig(search.topics.system.serverConfig, search.phrase).subscribe((r) => { result.system!.serverConfig = r; this._searchProgress.next(this._searchProgress.value + 10); });
+    this.searchStep2_ServerInfo(search.topics.system.serverInfo, search.phrase).subscribe((r) => { result.system!.serverInfo = r; this._searchProgress.next(this._searchProgress.value + 10); });
+    this.searchStep2_User(search.topics.system.users, search.phrase).subscribe((r) => { result.system!.users = r; this._searchProgress.next(this._searchProgress.value + 10); });
+
+    // Wait for individual Rest API calls finished with a timeout of 20 seconds
+    this.searchstep2Timeout = 20000;
+    setTimeout(() => {
+      this.searchstep2_loop(search, systemTopics, result);
+    }, 0);
+  }
+
+  private searchstep2Timeout = 20000;
+  private searchstep2_loop(search: SearchConfig, searchSystemTopics: boolean, result: SearchResultUuids): void {
+    if (!searchSystemTopics || this.searchstep2Timeout <= 0 || (result.system!.certstore !== undefined && result.system!.ippDevices !== undefined && result.system!.serverConfig !== undefined && result.system!.serverInfo !== undefined && result.system!.users !== undefined)) {
+      this.cache.setResult(search.token, result);
+      this._searchBusy.next(false);
+      this._searchProgress.next(100);
+      return;
+    }
+    setTimeout(() => {
+      this.searchstep2Timeout -= 1000;
+      this.searchstep2_loop(search, searchSystemTopics, result);
+    }, 1000);
   }
 
 }
@@ -90,6 +234,13 @@ export const defaultSearchConfig: SearchConfig = {
     jobtypes: true,
     parameterset: true,
     workflows: true,
+    system: {
+      certstore: false,
+      serverConfig: false,
+      serverInfo: false,
+      ippDevices: false,
+      users: false
+    }
   },
   filter: {
     categoryFilter: null,

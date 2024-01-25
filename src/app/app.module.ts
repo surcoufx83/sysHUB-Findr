@@ -1,4 +1,4 @@
-import { APP_BASE_HREF } from '@angular/common';
+import { APP_BASE_HREF, CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -27,6 +27,7 @@ import { StatsComponent } from './comp/stats/stats.component';
 import { HelpComponent } from './comp/help/help.component';
 import { AboutComponent } from './comp/about/about.component';
 import { ProgressbarComponent } from './comp/main/progressbar/progressbar.component';
+import { ResultComponent } from './comp/result/result.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { ProgressbarComponent } from './comp/main/progressbar/progressbar.compon
     HelpComponent,
     AboutComponent,
     ProgressbarComponent,
+    ResultComponent,
   ],
   imports: [
     AppRoutingModule,

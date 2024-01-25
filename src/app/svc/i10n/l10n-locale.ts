@@ -138,7 +138,8 @@ export type L10nLocale = {
             config: string,
             jobtypes: string,
             parameterset: string,
-            workflows: string
+            workflows: string,
+            matches: string
         }
     },
     search: {
@@ -158,9 +159,14 @@ export type L10nLocale = {
         },
         topics: {
             categories: string,
+            certstore: string,
             config: string,
+            ippDevices: string,
             jobtypes: string,
             parameterset: string,
+            serverConfig: string,
+            serverInfo: string,
+            users: string,
             workflows: string
         }
     },

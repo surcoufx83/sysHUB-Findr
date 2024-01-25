@@ -144,6 +144,18 @@ export class CacheService {
     return this.parametersetItems[uuid] ?? null;
   } */
 
+
+
+  loadSearchResult(token: string): boolean {
+    let result: string | null = sessionStorage.getItem(token);
+    if (result !== null) {
+      this._searchresult.next(<SearchResult>JSON.parse(result));
+      this.setResult_reloadOutdatedItems(this._searchresult.value!.result!);
+      return true;
+    }
+    return false;
+  }
+
   getWorkflow(uuid: string): SyshubWorkflow | null {
     return this.workflowsIndex[uuid] != undefined ? this._workflows.value[this.workflowsIndex[uuid]] : null;
   }
@@ -342,53 +354,41 @@ export class CacheService {
   }
 
   reloadJobtypes(): void {
-    let svc = this;
-    this.restapi.get('jobtype/list').subscribe({
-      next(value: any): void {
-        //svc._jobtypes.next((<RestApiJobtypeListReply>value).children.sort((a, b) => a.name > b.name ? 1 : -1));
-      },
-      error(err: HttpErrorResponse): void {
-        /* svc.snackBar.open(
-          svc.i10n(this.l10nphrase.api.errorCommon, [err.message]),
-          svc.i10n('common.phrases.okUc'), {
-          panelClass: ['error-snack'],
-        }); */
+    this.restapi.getJobTypes().subscribe((reply) => {
+      if (reply instanceof Error) {
+        if (!(reply instanceof UnauthorizedError))
+          this.toastService.addDangerToast({
+            message: this.l10n(this.l10nphrase.api.errorCommon, [reply.message])
+          });
         return;
-      },
+      }
+      this._jobtypes.next([...reply].sort((a, b) => a.name > b.name ? 1 : -1));
     });
   }
 
   reloadParameterset(): void {
-    let svc = this;
-    this.restapi.get('parameterset/children?maxDeep=0').subscribe({
-      next(value: any): void {
-        svc._parameterset.next((<SyshubPSetItem[]>value).sort((a, b) => a.name > b.name ? 1 : -1));
-      },
-      error(err: HttpErrorResponse): void {
-        /* svc.snackBar.open(
-          svc.i10n(this.l10nphrase.api.errorCommon, [err.message]),
-          svc.i10n('common.phrases.okUc'), {
-          panelClass: ['error-snack'],
-        }); */
+    this.restapi.getPsetChildren('', 0).subscribe((reply) => {
+      if (reply instanceof Error) {
+        if (!(reply instanceof UnauthorizedError))
+          this.toastService.addDangerToast({
+            message: this.l10n(this.l10nphrase.api.errorCommon, [reply.message])
+          });
         return;
-      },
+      }
+      this._parameterset.next([...reply].sort((a, b) => a.name > b.name ? 1 : -1));
     });
   }
 
   reloadWorkflows(): void {
-    let svc = this;
-    this.restapi.get('workflows').subscribe({
-      next(value: any): void {
-        svc._workflows.next((<SyshubWorkflow[]>value).sort((a, b) => a.name > b.name ? 1 : -1));
-      },
-      error(err: HttpErrorResponse): void {
-        /* svc.snackBar.open(
-          svc.i10n(this.l10nphrase.api.errorCommon, [err.message]),
-          svc.i10n('common.phrases.okUc'), {
-          panelClass: ['error-snack'],
-        }); */
+    this.restapi.getWorkflows({}).subscribe((reply) => {
+      if (reply instanceof Error) {
+        if (!(reply instanceof UnauthorizedError))
+          this.toastService.addDangerToast({
+            message: this.l10n(this.l10nphrase.api.errorCommon, [reply.message])
+          });
         return;
-      },
+      }
+      this._workflows.next([...reply].sort((a, b) => a.name > b.name ? 1 : -1));
     });
   }
 
@@ -396,12 +396,13 @@ export class CacheService {
     if (!this._searchresult.value || this._searchresult.value!.search.token != token)
       return;
     this._searchresult.value.result = { ...result };
+    sessionStorage.setItem(token, JSON.stringify({ ...this._searchresult.value }));
     this.setResult_reloadOutdatedItems(this._searchresult.value.result);
   }
 
   setResult_reloadOutdatedItems(result: SearchResultUuids): void {
     let configUpdated = false, parametersetUpdated = false, workflowsUpdated = false;
-    console.log(result);
+    console.log('setResult_reloadOutdatedItems', result);
     result.config.forEach((obj) => {
       if (!configUpdated) {
         /* if (this.configModifiedTimeIndex[obj.uuid] == undefined) {

@@ -1,0 +1,68 @@
+@if (searchResult) {
+<article class="container-fluid">
+    <section>
+        <h1>{{ l10n(l10nphrase.result.overview.title, [searchResult.search.phrase]) }}</h1>
+        <p>
+            {{ l10nphrase.result.overview.subtitle }}
+        </p>
+    </section>
+    <section>
+        <div class="d-flex flex-column">
+
+            <!-- result header buttons to select chapter -->
+            <div class="card">
+                <div class="card-body">
+                    <a [routerLink]="['/result']"
+                        [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token}">
+                        <button type="button"
+                            [ngClass]="{ 'btn btn-sm me-2': true, 'btn-success': selectedChapter == '', 'btn-outline-success': selectedChapter != '' }">
+                            {{ l10nphrase.result.toolbar.overview }}
+                        </button>
+                    </a>
+                    <a [routerLink]="['/result']"
+                        [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'ConfigItems'}">
+                        <button type="button"
+                            [ngClass]="{ 'btn btn-sm me-2': true, 'btn-success': selectedChapter == 'ConfigItems', 'btn-outline-success': selectedChapter != 'ConfigItems' && searchResult.result!.config.length > 0, 'btn-outline-secondary': selectedChapter != 'ConfigItems' && searchResult.result!.config.length == 0 }">
+                            {{ l10n(l10nphrase.result.toolbar.config, [ searchResult.result?.config?.length]) }}
+                            <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
+                        </button>
+                    </a>
+                    <a [routerLink]="['/result']"
+                        [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'JobTypes'}">
+                        <button type="button"
+                            [ngClass]="{ 'btn btn-sm me-2': true, 'btn-success': selectedChapter == 'JobTypes', 'btn-outline-success': selectedChapter != 'JobTypes' && searchResult.result!.jobtypes.length > 0, 'btn-outline-secondary': selectedChapter != 'JobTypes' && searchResult.result!.jobtypes.length == 0 }">
+                            {{ l10n(l10nphrase.result.toolbar.jobtypes, [ searchResult.result?.jobtypes?.length]) }}
+                            <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
+                        </button>
+                    </a>
+                    <a [routerLink]="['/result']"
+                        [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'PSetItems'}">
+                        <button type="button"
+                            [ngClass]="{ 'btn btn-sm me-2': true, 'btn-success': selectedChapter == 'PSetItems', 'btn-outline-success': selectedChapter != 'PSetItems' && searchResult.result!.parameterset.length > 0, 'btn-outline-secondary': selectedChapter != 'PSetItems' && searchResult.result!.parameterset.length == 0 }">
+                            {{ l10n(l10nphrase.result.toolbar.parameterset, [
+                            searchResult.result?.parameterset?.length]) }}
+                            <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
+                        </button>
+                    </a>
+                    <a [routerLink]="['/result']"
+                        [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'WorkflowItems'}">
+                        <button type="button"
+                            [ngClass]="{ 'btn btn-sm me-2': true, 'btn-success': selectedChapter == 'WorkflowItems', 'btn-outline-success': selectedChapter != 'WorkflowItems' && searchResult.result!.workflows.length > 0, 'btn-outline-secondary': selectedChapter != 'WorkflowItems' && searchResult.result!.workflows.length == 0 }">
+                            {{ l10n(l10nphrase.result.toolbar.workflows, [ searchResult.result?.workflows?.length]) }}
+                            <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
+                        </button>
+                    </a>
+                </div>
+            </div>
+            <!-- result header buttons to select chapter -->
+
+            <!-- result container based on selected chapter -->
+            <div>
+
+            </div>
+            <!-- result container based on selected chapter -->
+
+        </div>
+    </section>
+</article>
+}

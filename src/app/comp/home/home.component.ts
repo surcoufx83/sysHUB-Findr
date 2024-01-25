@@ -40,6 +40,11 @@ export class HomeComponent implements OnDestroy, OnInit {
     excludeBComments: new FormControl<boolean>(true),
     includeUuids: new FormControl<boolean>(true),
     searchWorkflowContent: new FormControl<boolean>(true),
+    searchCertstore: new FormControl<boolean>(false),
+    searchServerConfig: new FormControl<boolean>(false),
+    searchServerInfo: new FormControl<boolean>(false),
+    searchIppDevices: new FormControl<boolean>(false),
+    searchUsers: new FormControl<boolean>(false),
   });
 
   constructor(
@@ -60,6 +65,18 @@ export class HomeComponent implements OnDestroy, OnInit {
     this.cacheService.showMoreFilter(!this.showMoreFilter);
   }
 
+  get isDefaultConfig(): boolean {
+    return (this.searchForm.controls.searchConfig.value || true) == defaultSearchConfig.topics.config &&
+      (this.searchForm.controls.searchJobtypes.value || true) == defaultSearchConfig.topics.jobtypes &&
+      (this.searchForm.controls.searchPSet.value || true) == defaultSearchConfig.topics.parameterset &&
+      (this.searchForm.controls.searchWorkflows.value || true) == defaultSearchConfig.topics.workflows &&
+      (this.searchForm.controls.searchCertstore.value || false) == defaultSearchConfig.topics.system.certstore &&
+      (this.searchForm.controls.searchServerConfig.value || false) == defaultSearchConfig.topics.system.serverConfig &&
+      (this.searchForm.controls.searchServerInfo.value || false) == defaultSearchConfig.topics.system.serverInfo &&
+      (this.searchForm.controls.searchIppDevices.value || false) == defaultSearchConfig.topics.system.ippDevices &&
+      (this.searchForm.controls.searchUsers.value || false) == defaultSearchConfig.topics.system.users
+  }
+
   get l10nphrase(): L10nLocale {
     return this.l10nService.locale;
   }
@@ -74,7 +91,7 @@ export class HomeComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    this.subs.push(this.restapi.getCurrentUser().subscribe((reply) => { console.log(reply); this.username = reply.name }));
+    this.subs.push(this.restapi.getCurrentUser().subscribe((reply) => this.username = reply.name));
     this.subs.push(this.restapi.isLoggedIn.subscribe((v) => this.loggedin = v));
     this.subs.push(this.cacheService.Categories.subscribe((categories) => this.categories = categories));
     this.subs.push(this.cacheService.userconfig.subscribe((uc) => {
@@ -89,6 +106,11 @@ export class HomeComponent implements OnDestroy, OnInit {
       this.searchForm.controls.searchJobtypes.patchValue(cfg.topics.jobtypes);
       this.searchForm.controls.searchPSet.patchValue(cfg.topics.parameterset);
       this.searchForm.controls.searchWorkflows.patchValue(cfg.topics.workflows);
+      this.searchForm.controls.searchCertstore.patchValue(cfg.topics.system.certstore);
+      this.searchForm.controls.searchServerConfig.patchValue(cfg.topics.system.serverConfig);
+      this.searchForm.controls.searchServerInfo.patchValue(cfg.topics.system.serverInfo);
+      this.searchForm.controls.searchIppDevices.patchValue(cfg.topics.system.ippDevices);
+      this.searchForm.controls.searchUsers.patchValue(cfg.topics.system.users);
       this.searchForm.controls.categoryFilter.patchValue(cfg.filter.categoryFilter == null ? null : cfg.filter.categoryFilter.uuid);
       this.searchForm.controls.excludeBComments.patchValue(cfg.filter.excludeBComments);
       this.searchForm.controls.includeUuids.patchValue(cfg.filter.includeUuids);
@@ -112,6 +134,11 @@ export class HomeComponent implements OnDestroy, OnInit {
     newcfg.topics.jobtypes = this.searchForm.controls.searchJobtypes.value!;
     newcfg.topics.parameterset = this.searchForm.controls.searchPSet.value!;
     newcfg.topics.workflows = this.searchForm.controls.searchWorkflows.value!;
+    newcfg.topics.system.certstore = this.searchForm.controls.searchCertstore.value!;
+    newcfg.topics.system.serverConfig = this.searchForm.controls.searchServerConfig.value!;
+    newcfg.topics.system.serverInfo = this.searchForm.controls.searchServerInfo.value!;
+    newcfg.topics.system.ippDevices = this.searchForm.controls.searchIppDevices.value!;
+    newcfg.topics.system.users = this.searchForm.controls.searchUsers.value!;
     newcfg.filter.categoryFilter = this.searchForm.controls.categoryFilter.value != null ? this.cacheService.getCatgeory(this.searchForm.controls.categoryFilter.value) : null;
     newcfg.filter.excludeBComments = this.searchForm.controls.excludeBComments.value!;
     newcfg.filter.includeUuids = this.searchForm.controls.includeUuids.value!;

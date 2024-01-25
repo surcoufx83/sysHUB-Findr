@@ -1,4 +1,4 @@
-import { L10nLocale } from "./l10n-locale";
+import { L10nLocale } from './l10n-locale';
 
 export const L10nEn: L10nLocale = {
     api: {
@@ -79,7 +79,7 @@ export const L10nEn: L10nLocale = {
     },
     result: {
         config: {
-            title: 'Matches in Configuration, Searching for \"[0]\"',
+            title: 'Matches in Configuration, Searching for \'[0]\'',
             subtitle: `
                 This page displays the entire tree structure of the expert configuration
                 and highlights matches visually.
@@ -94,10 +94,10 @@ export const L10nEn: L10nLocale = {
                 uuid: 'Uuid',
                 value: 'Value',
             },
-            selected: 'Details for \"[0]\"'
+            selected: 'Details for \'[0]\''
         },
         jobtype: {
-            title: 'Matches in Job Types, Searching for \"[0]\"',
+            title: 'Matches in Job Types, Searching for \'[0]\'',
             subtitle: `
                 This page lists the configured job types and
                 visually highlights matches.
@@ -126,14 +126,14 @@ export const L10nEn: L10nLocale = {
                 xid: 'Xid'
             },
             customAttributes: 'Attributes',
-            selected: 'Details for \"[0]\"',
+            selected: 'Details for \'[0]\'',
             classifySection: 'Classification',
             moreAttributesSection: 'Job Attributes Classification',
             processingSection: 'Processing',
             workflowsSection: 'Workflows'
         },
         overview: {
-            title: 'Search Results for \"[0]\"',
+            title: 'Search Results for \'[0]\'',
             subtitle: `
                 The following list is just a brief summary. Detailed
                 results and graphical representation (tree structure and workflow designer)
@@ -141,7 +141,7 @@ export const L10nEn: L10nLocale = {
             `
         },
         parameterset: {
-            title: 'Matches in Parameter Set, Searching for \"[0]\"',
+            title: 'Matches in Parameter Set, Searching for \'[0]\'',
             subtitle: `
                 This page displays the complete tree structure of the parameter set
                 and highlights matches visually.
@@ -156,7 +156,7 @@ export const L10nEn: L10nLocale = {
                 uuid: 'Uuid',
                 value: 'Value',
             },
-            selected: 'Details for \"[0]\"'
+            selected: 'Details for \'[0]\''
         },
         toolbar: {
             overview: 'Overview',
@@ -164,6 +164,7 @@ export const L10nEn: L10nLocale = {
             jobtypes: 'Job Types: [0]',
             parameterset: 'Parameter Set: [0]',
             workflows: 'Workflows: [0]',
+            matches: 'matches'
         },
         showWorkflow: 'Show Workflow'
     },
@@ -188,9 +189,14 @@ export const L10nEn: L10nLocale = {
         },
         topics: {
             categories: 'Categories',
+            certstore: 'Certificate Store',
             config: 'Configuration',
+            ippDevices: 'Printers',
             jobtypes: 'Job Types',
             parameterset: 'Parameter Set',
+            serverConfig: 'Server Configuration',
+            serverInfo: 'Server Info',
+            users: 'Users',
             workflows: 'Workflows',
         }
     },

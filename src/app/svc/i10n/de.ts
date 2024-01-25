@@ -1,4 +1,4 @@
-import { L10nLocale } from "./l10n-locale";
+import { L10nLocale } from './l10n-locale';
 
 export const L10nDe: L10nLocale = {
     api: {
@@ -167,6 +167,7 @@ export const L10nDe: L10nLocale = {
             jobtypes: 'Jobtypes: [0]',
             parameterset: 'Parameterset: [0]',
             workflows: 'Workflows: [0]',
+            matches: 'Treffer'
         },
         showWorkflow: 'Workflow anzeigen'
     },
@@ -191,9 +192,14 @@ export const L10nDe: L10nLocale = {
         },
         topics: {
             categories: 'Kategorien',
+            certstore: 'Zertifikatsspeicher',
             config: 'Konfiguration',
+            ippDevices: 'Drucker',
             jobtypes: 'Auftragstypen',
             parameterset: 'Parameterset',
+            serverConfig: 'Serverkonfiguration',
+            serverInfo: 'Server Infos',
+            users: 'Benutzer',
             workflows: 'Workflows',
         }
     },

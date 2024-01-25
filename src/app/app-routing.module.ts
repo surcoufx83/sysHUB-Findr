@@ -8,12 +8,14 @@ import { LogoutComponent } from './comp/logout/logout.component';
 import { StatsComponent } from './comp/stats/stats.component';
 import { HelpComponent } from './comp/help/help.component';
 import { AboutComponent } from './comp/about/about.component';
+import { ResultComponent } from './comp/result/result.component';
 
 const routes: Routes = [
   { path: 'about', component: AboutComponent, canActivate: [routeGuard] },
   { path: 'help', component: HelpComponent, canActivate: [routeGuard] },
   { path: 'login', component: LoginComponent, canActivate: [routeGuard] },
   { path: 'logout', component: LogoutComponent, canActivate: [routeGuard] },
+  { path: 'result', component: ResultComponent, canActivate: [routeGuard] },
   { path: 'search', component: SearchComponent, canActivate: [routeGuard] },
   { path: 'stats', component: StatsComponent, canActivate: [routeGuard] },
   { path: '**', component: HomeComponent },
