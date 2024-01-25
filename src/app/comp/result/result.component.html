@@ -12,58 +12,130 @@
             <!-- result header buttons to select chapter -->
             <div class="card">
                 <div class="card-body">
-                    <a [routerLink]="['/result']"
-                        [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token}">
-                        <button type="button"
-                            [ngClass]="{ 'btn btn-sm me-2': true, 'btn-success': selectedChapter == '', 'btn-outline-success': selectedChapter != '' }">
-                            {{ l10nphrase.result.toolbar.overview }}
-                        </button>
-                    </a>
-                    <a [routerLink]="['/result']"
-                        [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'ConfigItems'}">
-                        <button type="button"
-                            [ngClass]="{ 'btn btn-sm me-2': true, 'btn-success': selectedChapter == 'ConfigItems', 'btn-outline-success': selectedChapter != 'ConfigItems' && searchResult.result!.config.length > 0, 'btn-outline-secondary': selectedChapter != 'ConfigItems' && searchResult.result!.config.length == 0 }">
-                            {{ l10n(l10nphrase.result.toolbar.config, [ searchResult.result?.config?.length]) }}
-                            <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
-                        </button>
-                    </a>
-                    <a [routerLink]="['/result']"
-                        [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'JobTypes'}">
-                        <button type="button"
-                            [ngClass]="{ 'btn btn-sm me-2': true, 'btn-success': selectedChapter == 'JobTypes', 'btn-outline-success': selectedChapter != 'JobTypes' && searchResult.result!.jobtypes.length > 0, 'btn-outline-secondary': selectedChapter != 'JobTypes' && searchResult.result!.jobtypes.length == 0 }">
-                            {{ l10n(l10nphrase.result.toolbar.jobtypes, [ searchResult.result?.jobtypes?.length]) }}
-                            <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
-                        </button>
-                    </a>
-                    <a [routerLink]="['/result']"
-                        [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'PSetItems'}">
-                        <button type="button"
-                            [ngClass]="{ 'btn btn-sm me-2': true, 'btn-success': selectedChapter == 'PSetItems', 'btn-outline-success': selectedChapter != 'PSetItems' && searchResult.result!.parameterset.length > 0, 'btn-outline-secondary': selectedChapter != 'PSetItems' && searchResult.result!.parameterset.length == 0 }">
-                            {{ l10n(l10nphrase.result.toolbar.parameterset, [
-                            searchResult.result?.parameterset?.length]) }}
-                            <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
-                        </button>
-                    </a>
-                    <a [routerLink]="['/result']"
-                        [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'WorkflowItems'}">
-                        <button type="button"
-                            [ngClass]="{ 'btn btn-sm me-2': true, 'btn-success': selectedChapter == 'WorkflowItems', 'btn-outline-success': selectedChapter != 'WorkflowItems' && searchResult.result!.workflows.length > 0, 'btn-outline-secondary': selectedChapter != 'WorkflowItems' && searchResult.result!.workflows.length == 0 }">
-                            {{ l10n(l10nphrase.result.toolbar.workflows, [ searchResult.result?.workflows?.length]) }}
-                            <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
-                        </button>
-                    </a>
-                    @if (searchResult.result?.system != undefined) {
-                    @if (searchResult.result?.system?.certstore) {
-                    <a [routerLink]="['/result']"
-                        [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'CertStoreItems'}">
-                        <button type="button"
-                            [ngClass]="{ 'btn btn-sm me-2': true, 'btn-success': selectedChapter == 'CertStoreItems', 'btn-outline-success': selectedChapter != 'CertStoreItems' && searchResult.result!.workflows.length > 0, 'btn-outline-secondary': selectedChapter != 'CertStoreItems' && searchResult.result!.workflows.length == 0 }">
-                            {{ l10n(l10nphrase.result.toolbar.certStore, [ searchResult.result?.workflows?.length]) }}
-                            <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
-                        </button>
-                    </a>
-                    }
-                    }
+                    <div class="d-flex flex-column flex-md-row justify-content-between">
+                        <div>
+                            <a [routerLink]="['/result']"
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token}">
+                                <button type="button"
+                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == '', 'btn-outline-success': selectedChapter != '' }">
+                                    <i class="bi bi-view-list me-2"></i>
+                                    {{ l10nphrase.result.toolbar.overview }}
+                                </button>
+                            </a>
+                            <a [routerLink]="['/result']"
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'ConfigItems'}">
+                                <button type="button"
+                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'ConfigItems', 'btn-outline-success': selectedChapter != 'ConfigItems' && searchResult.result!.config.length > 0, 'btn-outline-secondary': selectedChapter != 'ConfigItems' && searchResult.result!.config.length == 0 }">
+                                    <i class="bi bi-c-square-fill me-2"></i>
+                                    {{ l10n(l10nphrase.result.toolbar.config, [ searchResult.result?.config?.length]) }}
+                                    <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
+                                </button>
+                            </a>
+                            <a [routerLink]="['/result']"
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'JobTypes'}">
+                                <button type="button"
+                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'JobTypes', 'btn-outline-success': selectedChapter != 'JobTypes' && searchResult.result!.jobtypes.length > 0, 'btn-outline-secondary': selectedChapter != 'JobTypes' && searchResult.result!.jobtypes.length == 0 }">
+                                    <i class="bi bi-fonts me-2"></i>
+                                    {{ l10n(l10nphrase.result.toolbar.jobtypes, [
+                                    searchResult.result?.jobtypes?.length]) }}
+                                    <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
+                                </button>
+                            </a>
+                            <a [routerLink]="['/result']"
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'PSetItems'}">
+                                <button type="button"
+                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'PSetItems', 'btn-outline-success': selectedChapter != 'PSetItems' && searchResult.result!.parameterset.length > 0, 'btn-outline-secondary': selectedChapter != 'PSetItems' && searchResult.result!.parameterset.length == 0 }">
+                                    <i class="bi bi-p-square-fill me-2"></i>
+                                    {{ l10n(l10nphrase.result.toolbar.parameterset, [
+                                    searchResult.result?.parameterset?.length]) }}
+                                    <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
+                                </button>
+                            </a>
+                            <a [routerLink]="['/result']"
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'WorkflowItems'}">
+                                <button type="button"
+                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'WorkflowItems', 'btn-outline-success': selectedChapter != 'WorkflowItems' && searchResult.result!.workflows.length > 0, 'btn-outline-secondary': selectedChapter != 'WorkflowItems' && searchResult.result!.workflows.length == 0 }">
+                                    <i class="bi bi-diagram-2-fill me-2"></i>
+                                    {{ l10n(l10nphrase.result.toolbar.workflows, [
+                                    searchResult.result?.workflows?.length]) }}
+                                    <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
+                                </button>
+                            </a>
+                            @if (searchResult.result?.system != undefined) {
+                            @if (searchResult.result?.system?.certstore) {
+                            <a [routerLink]="['/result']"
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'CertStoreItems'}">
+                                <button type="button"
+                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'CertStoreItems', 'btn-outline-success': selectedChapter != 'CertStoreItems' && searchResult.result!.workflows.length > 0, 'btn-outline-secondary': selectedChapter != 'CertStoreItems' && searchResult.result!.workflows.length == 0 }">
+                                    <i class="bi bi-award-fill me-2"></i>
+                                    {{ l10n(l10nphrase.result.toolbar.certStore,
+                                    [getMatchesStr(searchResult.result?.system?.certstore)]) }}
+                                    <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
+                                </button>
+                            </a>
+                            }
+                            @if (searchResult.result?.system?.ippDevices) {
+                            <a [routerLink]="['/result']"
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'IppDevices'}">
+                                <button type="button"
+                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'IppDevices', 'btn-outline-success': selectedChapter != 'IppDevices' && searchResult.result!.workflows.length > 0, 'btn-outline-secondary': selectedChapter != 'IppDevices' && searchResult.result!.workflows.length == 0 }">
+                                    <i class="bi bi-printer-fill me-2"></i>
+                                    {{ l10n(l10nphrase.result.toolbar.ippDevices,
+                                    [getMatchesStr(searchResult.result?.system?.ippDevices)]) }}
+                                    <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
+                                </button>
+                            </a>
+                            }
+                            @if (searchResult.result?.system?.serverConfig) {
+                            <a [routerLink]="['/result']"
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'ServerConfig'}">
+                                <button type="button"
+                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'ServerConfig', 'btn-outline-success': selectedChapter != 'ServerConfig' && searchResult.result!.workflows.length > 0, 'btn-outline-secondary': selectedChapter != 'ServerConfig' && searchResult.result!.workflows.length == 0 }">
+                                    <i class="bi bi-sliders2-vertical me-2"></i>
+                                    {{ l10n(l10nphrase.result.toolbar.serverConfig,
+                                    [getMatchesStr(searchResult.result?.system?.serverConfig)])
+                                    }}
+                                    <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
+                                </button>
+                            </a>
+                            }
+                            @if (searchResult.result?.system?.serverInfo) {
+                            <a [routerLink]="['/result']"
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'ServerInformation'}">
+                                <button type="button"
+                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'ServerInformation', 'btn-outline-success': selectedChapter != 'ServerInformation' && searchResult.result!.workflows.length > 0, 'btn-outline-secondary': selectedChapter != 'ServerInformation' && searchResult.result!.workflows.length == 0 }">
+                                    <i class="bi bi-server me-2"></i>
+                                    {{ l10n(l10nphrase.result.toolbar.serverInfo,
+                                    [getMatchesStr(searchResult.result?.system?.serverInfo)]) }}
+                                    <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
+                                </button>
+                            </a>
+                            }
+                            @if (searchResult.result?.system?.users) {
+                            <a [routerLink]="['/result']"
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'Users'}">
+                                <button type="button"
+                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'Users', 'btn-outline-success': selectedChapter != 'Users' && searchResult.result!.workflows.length > 0, 'btn-outline-secondary': selectedChapter != 'Users' && searchResult.result!.workflows.length == 0 }">
+                                    <i class="bi bi-people-fill me-2"></i>
+                                    {{ l10n(l10nphrase.result.toolbar.users,
+                                    [getMatchesStr(searchResult.result?.system?.users)]) }}
+                                    <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
+                                </button>
+                            </a>
+                            }
+                            }
+                        </div>
+                        <div>
+                            <a [routerLink]="['/result']" class="ms-md-5"
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'ImpExpView'}">
+                                <button type="button"
+                                    [ngClass]="{ 'btn btn-sm text-nowrap': true, 'btn-success': selectedChapter == 'ImpExpView', 'btn-outline-success': selectedChapter != 'ImpExpView' }">
+                                    <i class="bi bi-floppy-fill me-2"></i>
+                                    {{ l10nphrase.result.toolbar.exportResults }}
+                                </button>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- result header buttons to select chapter -->

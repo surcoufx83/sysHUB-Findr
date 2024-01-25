@@ -162,17 +162,18 @@ export const L10nDe: L10nLocale = {
             selected: 'Details zu »[0]«'
         },
         toolbar: {
-            overview: 'Übersicht',
-            config: 'Konfig: [0]',
-            jobtypes: 'Jobtypes: [0]',
-            parameterset: 'Parameterset: [0]',
-            workflows: 'Workflows: [0]',
-            matches: 'Treffer',
             certStore: 'Zertifikatsspeicher: [0]',
+            config: 'Konfig: [0]',
+            exportResults: 'Trefferliste exportieren',
             ippDevices: 'Drucker: [0]',
+            jobtypes: 'Jobtypes: [0]',
+            matches: 'Treffer',
+            overview: 'Übersicht',
+            parameterset: 'Parameterset: [0]',
             serverConfig: 'Serverkonfiguration: [0]',
             serverInfo: 'Server Infos: [0]',
-            users: 'Benutzer: [0]'
+            users: 'Benutzer: [0]',
+            workflows: 'Workflows: [0]',
         },
         showWorkflow: 'Workflow anzeigen'
     },

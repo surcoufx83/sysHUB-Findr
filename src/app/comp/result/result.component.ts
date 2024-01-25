@@ -14,7 +14,7 @@ import { SearchResult } from 'src/app/types';
 })
 export class ResultComponent implements OnDestroy, OnInit {
 
-  selectedChapter: '' | 'ConfigItems' | 'JobTypes' | 'PSetItems' | 'WorkflowItems' | 'CertStoreItems' | 'IppDevices' | 'ServerConfig' | 'ServerInformation' | 'Users' = '';
+  selectedChapter: '' | 'ConfigItems' | 'JobTypes' | 'PSetItems' | 'WorkflowItems' | 'CertStoreItems' | 'IppDevices' | 'ServerConfig' | 'ServerInformation' | 'Users' | 'ImpExpView' = '';
   searchResult: SearchResult | null = null;
 
   subs: Subscription[] = [];
@@ -26,6 +26,12 @@ export class ResultComponent implements OnDestroy, OnInit {
 
   get l10nphrase(): L10nLocale {
     return this.l10nService.locale;
+  }
+
+  getMatchesStr(obj: { matches: number, content: any } | null | false | undefined): string {
+    if (obj === null || obj === undefined || obj === false)
+      return '0';
+    return `${obj.matches}`;
   }
 
   l10n(phrase: string, params: any[] = []) {

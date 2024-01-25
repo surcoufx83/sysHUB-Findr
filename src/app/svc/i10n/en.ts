@@ -159,17 +159,18 @@ export const L10nEn: L10nLocale = {
             selected: 'Details for \'[0]\''
         },
         toolbar: {
-            overview: 'Overview',
-            config: 'Config: [0]',
-            jobtypes: 'Job Types: [0]',
-            parameterset: 'Parameter Set: [0]',
-            workflows: 'Workflows: [0]',
-            matches: 'Matches',
             certStore: 'Certificate Store: [0]',
+            config: 'Config: [0]',
+            exportResults: 'Export Results List',
             ippDevices: 'Printers: [0]',
+            jobtypes: 'Job Types: [0]',
+            matches: 'Matches',
+            overview: 'Overview',
+            parameterset: 'Parameter Set: [0]',
             serverConfig: 'Server Configuration: [0]',
             serverInfo: 'Server Info: [0]',
-            users: 'Users: [0]'
+            users: 'Users: [0]',
+            workflows: 'Workflows: [0]',
         },
         showWorkflow: 'Show Workflow'
     },

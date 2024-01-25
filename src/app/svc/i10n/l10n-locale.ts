@@ -136,6 +136,7 @@ export type L10nLocale = {
         toolbar: {
             certStore: string,
             config: string,
+            exportResults: string,
             ippDevices: string,
             jobtypes: string,
             matches: string,

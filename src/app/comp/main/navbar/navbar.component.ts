@@ -37,6 +37,11 @@ export class NavbarComponent implements OnInit {
     searchJobtypes: new FormControl<boolean>(true),
     searchPSet: new FormControl<boolean>(true),
     searchWorkflows: new FormControl<boolean>(true),
+    searchCertstore: new FormControl<boolean>(false),
+    searchServerConfig: new FormControl<boolean>(false),
+    searchServerInfo: new FormControl<boolean>(false),
+    searchIppDevices: new FormControl<boolean>(false),
+    searchUsers: new FormControl<boolean>(false),
   });
 
   constructor(
@@ -59,6 +64,11 @@ export class NavbarComponent implements OnInit {
       this.searchForm.controls.searchJobtypes.patchValue(cfg.topics.jobtypes);
       this.searchForm.controls.searchPSet.patchValue(cfg.topics.parameterset);
       this.searchForm.controls.searchWorkflows.patchValue(cfg.topics.workflows);
+      this.searchForm.controls.searchCertstore.patchValue(cfg.topics.system.certstore);
+      this.searchForm.controls.searchServerConfig.patchValue(cfg.topics.system.serverConfig);
+      this.searchForm.controls.searchServerInfo.patchValue(cfg.topics.system.serverInfo);
+      this.searchForm.controls.searchIppDevices.patchValue(cfg.topics.system.ippDevices);
+      this.searchForm.controls.searchUsers.patchValue(cfg.topics.system.users);
       this.searchForm.markAsPristine();
     });
     this.locales.forEach((locale) => {
@@ -103,6 +113,11 @@ export class NavbarComponent implements OnInit {
     newcfg.topics.jobtypes = this.searchForm.controls.searchJobtypes.value!;
     newcfg.topics.parameterset = this.searchForm.controls.searchPSet.value!;
     newcfg.topics.workflows = this.searchForm.controls.searchWorkflows.value!;
+    newcfg.topics.system.certstore = this.searchForm.controls.searchCertstore.value!;
+    newcfg.topics.system.serverConfig = this.searchForm.controls.searchServerConfig.value!;
+    newcfg.topics.system.serverInfo = this.searchForm.controls.searchServerInfo.value!;
+    newcfg.topics.system.ippDevices = this.searchForm.controls.searchIppDevices.value!;
+    newcfg.topics.system.users = this.searchForm.controls.searchUsers.value!;
     this.searchService.search(newcfg);
   }
 
