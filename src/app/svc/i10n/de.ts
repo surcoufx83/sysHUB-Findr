@@ -167,7 +167,12 @@ export const L10nDe: L10nLocale = {
             jobtypes: 'Jobtypes: [0]',
             parameterset: 'Parameterset: [0]',
             workflows: 'Workflows: [0]',
-            matches: 'Treffer'
+            matches: 'Treffer',
+            certStore: 'Zertifikatsspeicher: [0]',
+            ippDevices: 'Drucker: [0]',
+            serverConfig: 'Serverkonfiguration: [0]',
+            serverInfo: 'Server Infos: [0]',
+            users: 'Benutzer: [0]'
         },
         showWorkflow: 'Workflow anzeigen'
     },

@@ -164,7 +164,12 @@ export const L10nEn: L10nLocale = {
             jobtypes: 'Job Types: [0]',
             parameterset: 'Parameter Set: [0]',
             workflows: 'Workflows: [0]',
-            matches: 'matches'
+            matches: 'Matches',
+            certStore: 'Certificate Store: [0]',
+            ippDevices: 'Printers: [0]',
+            serverConfig: 'Server Configuration: [0]',
+            serverInfo: 'Server Info: [0]',
+            users: 'Users: [0]'
         },
         showWorkflow: 'Show Workflow'
     },

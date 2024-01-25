@@ -10,6 +10,7 @@ import { ToastsService } from './toasts.service';
 import { L10nService } from './i10n.service';
 import { L10nLocale } from './i10n/l10n-locale';
 import { sub } from 'date-fns';
+import { ControlContainer } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -197,11 +198,26 @@ export class SearchService {
     }
 
     // Query individual Rest API endpoints. If search is not active, method will return null.
-    this.searchStep2_CertStore(search.topics.system.certstore, search.phrase).subscribe((r) => { result.system!.certstore = r; this._searchProgress.next(this._searchProgress.value + 10); });
-    this.searchStep2_IppDevices(search.topics.system.ippDevices, search.phrase).subscribe((r) => { result.system!.ippDevices = r; this._searchProgress.next(this._searchProgress.value + 10); });
-    this.searchStep2_ServerConfig(search.topics.system.serverConfig, search.phrase).subscribe((r) => { result.system!.serverConfig = r; this._searchProgress.next(this._searchProgress.value + 10); });
-    this.searchStep2_ServerInfo(search.topics.system.serverInfo, search.phrase).subscribe((r) => { result.system!.serverInfo = r; this._searchProgress.next(this._searchProgress.value + 10); });
-    this.searchStep2_User(search.topics.system.users, search.phrase).subscribe((r) => { result.system!.users = r; this._searchProgress.next(this._searchProgress.value + 10); });
+    this.searchStep2_CertStore(search.topics.system.certstore, search.phrase).subscribe((r) => {
+      result.system!.certstore = (r === null || r === false) ? r : { matches: this.searchstep2_MatchCertStore(search, r), content: r };
+      this._searchProgress.next(this._searchProgress.value + 10);
+    });
+    this.searchStep2_IppDevices(search.topics.system.ippDevices, search.phrase).subscribe((r) => {
+      result.system!.ippDevices = (r === null || r === false) ? r : { matches: this.searchstep2_MatchDevice(search, r), content: r };
+      this._searchProgress.next(this._searchProgress.value + 10);
+    });
+    this.searchStep2_ServerConfig(search.topics.system.serverConfig, search.phrase).subscribe((r) => {
+      result.system!.serverConfig = (r === null || r === false) ? r : { matches: this.searchstep2_MatchContent(search, JSON.stringify(r).toLocaleLowerCase()), content: r };
+      this._searchProgress.next(this._searchProgress.value + 10);
+    });
+    this.searchStep2_ServerInfo(search.topics.system.serverInfo, search.phrase).subscribe((r) => {
+      result.system!.serverInfo = (r === null || r === false) ? r : { matches: this.searchstep2_MatchContent(search, JSON.stringify(r).toLocaleLowerCase()), content: r };
+      this._searchProgress.next(this._searchProgress.value + 10);
+    });
+    this.searchStep2_User(search.topics.system.users, search.phrase).subscribe((r) => {
+      result.system!.users = (r === null || r === false) ? r : { matches: this.searchstep2_MatchUser(search, r), content: r };
+      this._searchProgress.next(this._searchProgress.value + 10);
+    });
 
     // Wait for individual Rest API calls finished with a timeout of 20 seconds
     this.searchstep2Timeout = 20000;
@@ -210,8 +226,34 @@ export class SearchService {
     }, 0);
   }
 
+  private searchstep2_MatchContent(search: SearchConfig, content: string): number {
+    const regex = new RegExp(search.phrase.toLocaleLowerCase(), 'gi');
+    const matches = content.match(regex);
+    return matches?.length || 0;
+  }
+
+  private searchstep2_MatchCertStore(search: SearchConfig, content: { keystore: SyshubCertStoreItem[], truststore: SyshubCertStoreItem[] }): number {
+    let count = 0;
+    content.keystore.forEach((cert) => count += `${cert.algorithm}${cert.alias}${cert.certX509IssuerDN}${cert.certX509SubjectDN}${cert.subjectAlternativeName}`.toLocaleLowerCase().includes(search.phrase.toLocaleLowerCase()) ? 1 : 0);
+    content.truststore.forEach((cert) => count += `${cert.algorithm}${cert.alias}${cert.certX509IssuerDN}${cert.certX509SubjectDN}${cert.subjectAlternativeName}`.toLocaleLowerCase().includes(search.phrase.toLocaleLowerCase()) ? 1 : 0);
+    return count;
+  }
+
+  private searchstep2_MatchDevice(search: SearchConfig, content: SyshubIppDevice[]): number {
+    let count = 0;
+    content.forEach((device) => count += `${device.name}${device.desc}${device.form}${device.location}${device.uri}`.toLocaleLowerCase().includes(search.phrase.toLocaleLowerCase()) ? 1 : 0);
+    return count;
+  }
+
+  private searchstep2_MatchUser(search: SearchConfig, content: SyshubUserAccount[]): number {
+    let count = 0;
+    content.forEach((user) => count += `${user.email}${user.name}${search.filter.includeUuids ? user.uuid : ''}`.toLocaleLowerCase().includes(search.phrase.toLocaleLowerCase()) ? 1 : 0);
+    return count;
+  }
+
   private searchstep2Timeout = 20000;
   private searchstep2_loop(search: SearchConfig, searchSystemTopics: boolean, result: SearchResultUuids): void {
+    console.log(result);
     if (!searchSystemTopics || this.searchstep2Timeout <= 0 || (result.system!.certstore !== undefined && result.system!.ippDevices !== undefined && result.system!.serverConfig !== undefined && result.system!.serverInfo !== undefined && result.system!.users !== undefined)) {
       this.cache.setResult(search.token, result);
       this._searchBusy.next(false);

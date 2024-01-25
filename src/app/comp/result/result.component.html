@@ -52,6 +52,18 @@
                             <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
                         </button>
                     </a>
+                    @if (searchResult.result?.system != undefined) {
+                    @if (searchResult.result?.system?.certstore) {
+                    <a [routerLink]="['/result']"
+                        [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'CertStoreItems'}">
+                        <button type="button"
+                            [ngClass]="{ 'btn btn-sm me-2': true, 'btn-success': selectedChapter == 'CertStoreItems', 'btn-outline-success': selectedChapter != 'CertStoreItems' && searchResult.result!.workflows.length > 0, 'btn-outline-secondary': selectedChapter != 'CertStoreItems' && searchResult.result!.workflows.length == 0 }">
+                            {{ l10n(l10nphrase.result.toolbar.certStore, [ searchResult.result?.workflows?.length]) }}
+                            <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
+                        </button>
+                    </a>
+                    }
+                    }
                 </div>
             </div>
             <!-- result header buttons to select chapter -->

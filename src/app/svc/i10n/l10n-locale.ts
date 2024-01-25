@@ -134,12 +134,17 @@ export type L10nLocale = {
         },
         showWorkflow: string,
         toolbar: {
-            overview: string,
+            certStore: string,
             config: string,
+            ippDevices: string,
             jobtypes: string,
+            matches: string,
+            overview: string,
             parameterset: string,
+            serverConfig: string,
+            serverInfo: string,
+            users: string,
             workflows: string,
-            matches: string
         }
     },
     search: {

@@ -14,7 +14,7 @@ import { SearchResult } from 'src/app/types';
 })
 export class ResultComponent implements OnDestroy, OnInit {
 
-  selectedChapter: '' | 'ConfigItems' | 'JobTypes' | 'PSetItems' | 'WorkflowItems' = '';
+  selectedChapter: '' | 'ConfigItems' | 'JobTypes' | 'PSetItems' | 'WorkflowItems' | 'CertStoreItems' | 'IppDevices' | 'ServerConfig' | 'ServerInformation' | 'Users' = '';
   searchResult: SearchResult | null = null;
 
   subs: Subscription[] = [];
@@ -50,7 +50,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       } else
         this.router.navigate(['/']);
       let view = map.get('view') ?? '';
-      if (view == '' || view == 'ConfigItems' || view == 'JobTypes' || view == 'PSetItems' || view == 'WorkflowItems')
+      if (view == '' || view == 'ConfigItems' || view == 'JobTypes' || view == 'PSetItems' || view == 'WorkflowItems' || view == 'CertStoreItems' || view == 'IppDevices' || view == 'ServerConfig' || view == 'ServerInformation' || view == 'Users')
         this.selectedChapter = view;
     })
   }

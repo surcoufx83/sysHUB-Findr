@@ -42,11 +42,11 @@ export type SearchResultUuids = {
     parameterset: UuidModifiedObject[],
     workflows: UuidModifiedObject[],
     system?: {
-        certstore?: { keystore: SyshubCertStoreItem[], truststore: SyshubCertStoreItem[] } | null | false,
-        serverConfig?: { [key: string]: string } | null | false,
-        serverInfo?: SyshubServerInformation | null | false,
-        ippDevices?: SyshubIppDevice[] | null | false,
-        users?: SyshubUserAccount[] | null | false,
+        certstore?: { matches: number, content: { keystore: SyshubCertStoreItem[], truststore: SyshubCertStoreItem[] } } | null | false,
+        serverConfig?: { matches: number, content: { [key: string]: string } } | null | false,
+        serverInfo?: { matches: number, content: SyshubServerInformation } | null | false,
+        ippDevices?: { matches: number, content: SyshubIppDevice[] } | null | false,
+        users?: { matches: number, content: SyshubUserAccount[] } | null | false,
     }
 }
 
