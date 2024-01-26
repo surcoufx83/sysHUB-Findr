@@ -4,8 +4,9 @@ import { Subscription } from 'rxjs';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
-import { SearchConfig, SearchResult } from 'src/app/types';
-import { SyshubConfigItem, SyshubJobType, SyshubPSetItem, SyshubWorkflow } from 'syshub-rest-module';
+import { SearchService } from 'src/app/svc/search.service';
+import { SearchConfig, SearchResult, SearchResultCertStoreContent } from 'src/app/types';
+import { SyshubCertStoreItem, SyshubConfigItem, SyshubIppDevice, SyshubJobType, SyshubPSetItem, SyshubWorkflow } from 'syshub-rest-module';
 
 @Component({
   selector: 'app-result-overview',
@@ -16,10 +17,13 @@ export class OverviewComponent implements OnDestroy, OnInit {
 
   @Input({ required: true }) searchResult!: SearchResult;
 
+  certstore: SearchResultCertStoreContent = { keystore: [], truststore: [] };
+
   configByTree: { [key: string]: SyshubConfigItem[] } = {};
   configTreeKeys: string[] = [];
   configUpdate: number | null = null;
 
+  ippDevices: SyshubIppDevice[] = [];
   jobtypes: SyshubJobType[] = [];
 
   psetByTree: { [key: string]: SyshubPSetItem[] } = {};
@@ -34,6 +38,7 @@ export class OverviewComponent implements OnDestroy, OnInit {
 
   constructor(private l10nService: L10nService,
     private cacheService: CacheService,
+    private searchService: SearchService,
     private router: Router,
     private route: ActivatedRoute) { }
 
@@ -71,7 +76,9 @@ export class OverviewComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
+    this.ngOnInit_prepareCertstore();
     this.ngOnInit_prepareConfig();
+    this.ngOnInit_prepareIppDevices();
     this.ngOnInit_prepareJobtypes();
     this.ngOnInit_preparePset();
     this.ngOnInit_prepareWorkflows();
@@ -85,6 +92,21 @@ export class OverviewComponent implements OnDestroy, OnInit {
       (this.searchResult.result?.system?.serverConfig ? this.searchResult.result?.system?.serverConfig.matches || 0 : 0) +
       (this.searchResult.result?.system?.serverInfo ? this.searchResult.result?.system?.serverInfo.matches || 0 : 0) +
       (this.searchResult.result?.system?.users ? this.searchResult.result?.system?.users.matches || 0 : 0);
+  }
+
+  ngOnInit_prepareCertstore(): void {
+    if (this.searchResult.result?.system?.certstore === undefined || this.searchResult.result?.system?.certstore === null || this.searchResult.result?.system?.certstore === false)
+      return;
+    let tempcertstore: SearchResultCertStoreContent = { keystore: [], truststore: [] };
+    this.searchResult.result?.system?.certstore.content.keystore.forEach((cert) => {
+      if (this.searchService.matchCertStoreItem(cert, this.searchResult.search))
+        tempcertstore.keystore.push(cert);
+    });
+    this.searchResult.result?.system?.certstore.content.truststore.forEach((cert) => {
+      if (this.searchService.matchCertStoreItem(cert, this.searchResult.search))
+        tempcertstore.truststore.push(cert);
+    });
+    this.certstore = { ...tempcertstore };
   }
 
   ngOnInit_prepareConfig(): void {
@@ -104,6 +126,18 @@ export class OverviewComponent implements OnDestroy, OnInit {
       this.configByTree = { ...newtree };
       this.configTreeKeys = Object.keys(this.configByTree).sort((a, b) => a.toLocaleLowerCase() > b.toLocaleLowerCase() ? 1 : -1);
     }));
+  }
+
+  ngOnInit_prepareIppDevices(): void {
+    if (this.searchResult.result?.system?.ippDevices === undefined || this.searchResult.result?.system?.ippDevices === null || this.searchResult.result?.system?.ippDevices === false)
+      return;
+    let tempippDevices: SyshubIppDevice[] = [];
+    this.searchResult.result?.system?.ippDevices.content.forEach((device) => {
+      if (this.searchService.matchIppDevice(device, this.searchResult.search))
+        tempippDevices.push(device);
+    });
+    this.ippDevices = [...tempippDevices];
+    console.log(this.ippDevices)
   }
 
   ngOnInit_prepareJobtypes(): void {

@@ -78,8 +78,7 @@
     <ul>
         @for (wfitem of workflows ; track $index) {
         <li>
-            <i class="bi bi-fonts me-2"
-                [title]="l10n(l10nphrase.result.overview.propertyType, [l10nphrase.search.topics.workflows])"></i>
+            <i class="bi bi-diagram-2-fill me-2"></i>
             <span [innerHTML]="wfitem.name | highlight: searchResult.search.phrase"></span>
         </li>
         }
@@ -87,3 +86,60 @@
 </div>
 }
 <!-- Workflows summary list -->
+
+<!-- Cert store summary list -->
+@if (certstore.keystore.length > 0 || certstore.truststore.length > 0) {
+<div class="card-body">
+    <h5><strong>{{l10nphrase.search.topics.certstore}} ({{ certstore.keystore.length + certstore.truststore.length == 0
+            ? 'keine' :
+            certstore.keystore.length + certstore.truststore.length }} {{ l10nphrase.result.toolbar.matches
+            }})</strong></h5>
+    @if (certstore.keystore.length > 0) {
+    <h5><strong>{{l10nphrase.search.topics.keystore}} ({{ certstore.keystore.length == 0 ? 'keine' :
+            certstore.keystore.length }} {{ l10nphrase.result.toolbar.matches
+            }})</strong></h5>
+    <ul>
+        @for (certitem of certstore.keystore ; track $index) {
+        <li>
+            <i class="bi bi-award-fill me-2"></i>
+            <span [innerHTML]="certitem.alias| highlight: searchResult.search.phrase"></span>
+            (<span [innerHTML]="certitem.subjectAlternativeName| highlight: searchResult.search.phrase"></span>)
+        </li>
+        }
+    </ul>
+    }
+    @if (certstore.truststore.length > 0) {
+    <h5><strong>{{l10nphrase.search.topics.truststore}} ({{ certstore.truststore.length == 0 ? 'keine' :
+            certstore.truststore.length }} {{ l10nphrase.result.toolbar.matches
+            }})</strong></h5>
+    <ul>
+        @for (certitem of certstore.truststore ; track $index) {
+        <li>
+            <i class="bi bi-award-fill me-2"></i>
+            <span [innerHTML]="certitem.alias| highlight: searchResult.search.phrase"></span>
+            (<span [innerHTML]="certitem.certX509IssuerDN| highlight: searchResult.search.phrase"></span>)
+        </li>
+        }
+    </ul>
+    }
+</div>
+}
+<!-- Cert store summary list -->
+
+<!-- Ippdevices summary list -->
+@if (ippDevices.length || 0 > 0) {
+<div class="card-body">
+    <h5><strong>{{l10nphrase.search.topics.ippDevices}} ({{ ippDevices.length }} {{ l10nphrase.result.toolbar.matches
+            }})</strong></h5>
+    <ul>
+        @for (devitem of ippDevices ; track $index) {
+        <li>
+            <i class="bi bi-printer-fill me-2"></i>
+            <span [innerHTML]="devitem.name | highlight: searchResult.search.phrase"></span>
+            (<span [innerHTML]="devitem.uri | highlight: searchResult.search.phrase"></span>)
+        </li>
+        }
+    </ul>
+</div>
+}
+<!-- Ippdevices summary list -->

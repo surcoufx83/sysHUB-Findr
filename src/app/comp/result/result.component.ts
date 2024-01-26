@@ -28,10 +28,10 @@ export class ResultComponent implements OnDestroy, OnInit {
     return this.l10nService.locale;
   }
 
-  getMatchesStr(obj: { matches: number, content: any } | null | false | undefined): string {
+  getMatches(obj: { matches: number, content: any } | null | false | undefined): number {
     if (obj === null || obj === undefined || obj === false)
-      return '0';
-    return `${obj.matches}`;
+      return 0;
+    return obj.matches;
   }
 
   l10n(phrase: string, params: any[] = []) {

@@ -35,6 +35,11 @@ export type SearchResult = {
     result?: SearchResultUuids,
 }
 
+export type SearchResultCertStoreContent = {
+    keystore: SyshubCertStoreItem[],
+    truststore: SyshubCertStoreItem[],
+}
+
 export type SearchResultUuids = {
     result: {};
     config: UuidModifiedObject[],
@@ -42,7 +47,7 @@ export type SearchResultUuids = {
     parameterset: UuidModifiedObject[],
     workflows: UuidModifiedObject[],
     system?: {
-        certstore?: { matches: number, content: { keystore: SyshubCertStoreItem[], truststore: SyshubCertStoreItem[] } } | null | false,
+        certstore?: { matches: number, content: SearchResultCertStoreContent } | null | false,
         serverConfig?: { matches: number, content: { [key: string]: string } } | null | false,
         serverInfo?: { matches: number, content: SyshubServerInformation } | null | false,
         ippDevices?: { matches: number, content: SyshubIppDevice[] } | null | false,

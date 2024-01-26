@@ -207,9 +207,11 @@ export const L10nEn: L10nLocale = {
             config: 'Configuration',
             ippDevices: 'Printers',
             jobtypes: 'Job Types',
+            keystore: 'Keystore',
             parameterset: 'Parameter Set',
             serverConfig: 'Server Configuration',
             serverInfo: 'Server Info',
+            truststore: 'Truststore',
             users: 'Users',
             workflows: 'Workflows',
         }

@@ -176,9 +176,11 @@ export type L10nLocale = {
             config: string,
             ippDevices: string,
             jobtypes: string,
+            keystore: string,
             parameterset: string,
             serverConfig: string,
             serverInfo: string,
+            truststore: string,
             users: string,
             workflows: string
         }

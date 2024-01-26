@@ -66,10 +66,10 @@
                             <a [routerLink]="['/result']"
                                 [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'CertStoreItems'}">
                                 <button type="button"
-                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'CertStoreItems', 'btn-outline-success': selectedChapter != 'CertStoreItems' && searchResult.result!.workflows.length > 0, 'btn-outline-secondary': selectedChapter != 'CertStoreItems' && searchResult.result!.workflows.length == 0 }">
+                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'CertStoreItems', 'btn-outline-success': selectedChapter != 'CertStoreItems' && getMatches(searchResult.result?.system?.certstore) > 0, 'btn-outline-secondary': selectedChapter != 'CertStoreItems' && getMatches(searchResult.result?.system?.certstore) == 0 }">
                                     <i class="bi bi-award-fill me-2"></i>
                                     {{ l10n(l10nphrase.result.toolbar.certStore,
-                                    [getMatchesStr(searchResult.result?.system?.certstore)]) }}
+                                    [getMatches(searchResult.result?.system?.certstore)]) }}
                                     <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
                                 </button>
                             </a>
@@ -78,10 +78,10 @@
                             <a [routerLink]="['/result']"
                                 [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'IppDevices'}">
                                 <button type="button"
-                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'IppDevices', 'btn-outline-success': selectedChapter != 'IppDevices' && searchResult.result!.workflows.length > 0, 'btn-outline-secondary': selectedChapter != 'IppDevices' && searchResult.result!.workflows.length == 0 }">
+                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'IppDevices', 'btn-outline-success': selectedChapter != 'IppDevices' && getMatches(searchResult.result?.system?.ippDevices) > 0, 'btn-outline-secondary': selectedChapter != 'IppDevices' && getMatches(searchResult.result?.system?.ippDevices) == 0 }">
                                     <i class="bi bi-printer-fill me-2"></i>
                                     {{ l10n(l10nphrase.result.toolbar.ippDevices,
-                                    [getMatchesStr(searchResult.result?.system?.ippDevices)]) }}
+                                    [getMatches(searchResult.result?.system?.ippDevices)]) }}
                                     <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
                                 </button>
                             </a>
@@ -90,10 +90,10 @@
                             <a [routerLink]="['/result']"
                                 [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'ServerConfig'}">
                                 <button type="button"
-                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'ServerConfig', 'btn-outline-success': selectedChapter != 'ServerConfig' && searchResult.result!.workflows.length > 0, 'btn-outline-secondary': selectedChapter != 'ServerConfig' && searchResult.result!.workflows.length == 0 }">
+                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'ServerConfig', 'btn-outline-success': selectedChapter != 'ServerConfig' && getMatches(searchResult.result?.system?.serverConfig) > 0, 'btn-outline-secondary': selectedChapter != 'ServerConfig' && getMatches(searchResult.result?.system?.serverConfig) == 0 }">
                                     <i class="bi bi-sliders2-vertical me-2"></i>
                                     {{ l10n(l10nphrase.result.toolbar.serverConfig,
-                                    [getMatchesStr(searchResult.result?.system?.serverConfig)])
+                                    [getMatches(searchResult.result?.system?.serverConfig)])
                                     }}
                                     <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
                                 </button>
@@ -103,10 +103,10 @@
                             <a [routerLink]="['/result']"
                                 [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'ServerInformation'}">
                                 <button type="button"
-                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'ServerInformation', 'btn-outline-success': selectedChapter != 'ServerInformation' && searchResult.result!.workflows.length > 0, 'btn-outline-secondary': selectedChapter != 'ServerInformation' && searchResult.result!.workflows.length == 0 }">
+                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'ServerInformation', 'btn-outline-success': selectedChapter != 'ServerInformation' && getMatches(searchResult.result?.system?.serverInfo) > 0, 'btn-outline-secondary': selectedChapter != 'ServerInformation' && getMatches(searchResult.result?.system?.serverInfo) == 0 }">
                                     <i class="bi bi-server me-2"></i>
                                     {{ l10n(l10nphrase.result.toolbar.serverInfo,
-                                    [getMatchesStr(searchResult.result?.system?.serverInfo)]) }}
+                                    [getMatches(searchResult.result?.system?.serverInfo)]) }}
                                     <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
                                 </button>
                             </a>
@@ -115,10 +115,10 @@
                             <a [routerLink]="['/result']"
                                 [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'Users'}">
                                 <button type="button"
-                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'Users', 'btn-outline-success': selectedChapter != 'Users' && searchResult.result!.workflows.length > 0, 'btn-outline-secondary': selectedChapter != 'Users' && searchResult.result!.workflows.length == 0 }">
+                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'Users', 'btn-outline-success': selectedChapter != 'Users' && getMatches(searchResult.result?.system?.users) > 0, 'btn-outline-secondary': selectedChapter != 'Users' && getMatches(searchResult.result?.system?.users) == 0 }">
                                     <i class="bi bi-people-fill me-2"></i>
                                     {{ l10n(l10nphrase.result.toolbar.users,
-                                    [getMatchesStr(searchResult.result?.system?.users)]) }}
+                                    [getMatches(searchResult.result?.system?.users)]) }}
                                     <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
                                 </button>
                             </a>

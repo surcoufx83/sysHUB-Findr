@@ -39,6 +39,14 @@ export class SearchService {
     this.searchConfig.subscribe((config) => localStorage.setItem(environment.storage?.searchconfigKey ?? 'findr-searchconfig', JSON.stringify(config)));
   }
 
+  public matchCertStoreItem(content: SyshubCertStoreItem, search: SearchConfig): boolean {
+    return `${content.algorithm}${content.alias}${content.certX509IssuerDN}${content.certX509SubjectDN}${content.subjectAlternativeName}`.toLocaleLowerCase().includes(search.phrase.toLocaleLowerCase());
+  }
+
+  public matchIppDevice(content: SyshubIppDevice, search: SearchConfig): boolean {
+    return `${content.name}${content.desc}${content.form}${content.location}${content.uri}`.toLocaleLowerCase().includes(search.phrase.toLocaleLowerCase());
+  }
+
   get l10nphrase(): L10nLocale {
     return this.l10nService.locale;
   }
@@ -234,14 +242,14 @@ export class SearchService {
 
   private searchstep2_MatchCertStore(search: SearchConfig, content: { keystore: SyshubCertStoreItem[], truststore: SyshubCertStoreItem[] }): number {
     let count = 0;
-    content.keystore.forEach((cert) => count += `${cert.algorithm}${cert.alias}${cert.certX509IssuerDN}${cert.certX509SubjectDN}${cert.subjectAlternativeName}`.toLocaleLowerCase().includes(search.phrase.toLocaleLowerCase()) ? 1 : 0);
-    content.truststore.forEach((cert) => count += `${cert.algorithm}${cert.alias}${cert.certX509IssuerDN}${cert.certX509SubjectDN}${cert.subjectAlternativeName}`.toLocaleLowerCase().includes(search.phrase.toLocaleLowerCase()) ? 1 : 0);
+    content.keystore.forEach((cert) => count += this.matchCertStoreItem(cert, search) ? 1 : 0);
+    content.truststore.forEach((cert) => count += this.matchCertStoreItem(cert, search) ? 1 : 0);
     return count;
   }
 
   private searchstep2_MatchDevice(search: SearchConfig, content: SyshubIppDevice[]): number {
     let count = 0;
-    content.forEach((device) => count += `${device.name}${device.desc}${device.form}${device.location}${device.uri}`.toLocaleLowerCase().includes(search.phrase.toLocaleLowerCase()) ? 1 : 0);
+    content.forEach((device) => count += this.matchIppDevice(device, search) ? 1 : 0);
     return count;
   }
 
