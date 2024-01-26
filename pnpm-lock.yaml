@@ -56,6 +56,9 @@ dependencies:
   syshub-rest-module:
     specifier: ^3.0.2
     version: 3.0.2(@angular/common@17.1.1)(@angular/core@17.1.1)
+  titleize:
+    specifier: ^4.0.0
+    version: 4.0.0
   tslib:
     specifier: ^2.6.2
     version: 2.6.2
@@ -6141,6 +6144,11 @@ packages:
   /thunky@1.1.0:
     resolution: {integrity: sha512-eHY7nBftgThBqOyHGVN+l8gF0BucP09fMo0oO/Lb0w1OF80dJv+lDVpXG60WMQvkcxAkNybKsrEIE3ZtKGmPrA==}
     dev: true
+
+  /titleize@4.0.0:
+    resolution: {integrity: sha512-ZgUJ1K83rhdu7uh7EHAC2BgY5DzoX8V5rTvoWI4vFysggi6YjLe5gUXABPWAU7VkvGP7P/0YiWq+dcPeYDsf1g==}
+    engines: {node: '>=18'}
+    dev: false
 
   /tmp@0.0.33:
     resolution: {integrity: sha512-jRCJlojKnZ3addtTOjdIqoRuPEKBvNXcGYqzO6zWZX8KfKEpnGY5jfggJQ3EjKuu8D4bJRr0y+cYJFmYbImXGw==}

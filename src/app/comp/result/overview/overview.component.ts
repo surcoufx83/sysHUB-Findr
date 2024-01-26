@@ -5,8 +5,9 @@ import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
 import { SearchService } from 'src/app/svc/search.service';
-import { SearchConfig, SearchResult, SearchResultCertStoreContent } from 'src/app/types';
-import { SyshubCertStoreItem, SyshubConfigItem, SyshubIppDevice, SyshubJobType, SyshubPSetItem, SyshubWorkflow } from 'syshub-rest-module';
+import { SearchConfig, SearchResult, SearchResultCertStoreContent, SimpleKeyValue } from 'src/app/types';
+import { SyshubCertStoreItem, SyshubConfigItem, SyshubIppDevice, SyshubJobType, SyshubPSetItem, SyshubUserAccount, SyshubWorkflow } from 'syshub-rest-module';
+import titleize from 'titleize';
 
 @Component({
   selector: 'app-result-overview',
@@ -22,14 +23,14 @@ export class OverviewComponent implements OnDestroy, OnInit {
   configByTree: { [key: string]: SyshubConfigItem[] } = {};
   configTreeKeys: string[] = [];
   configUpdate: number | null = null;
-
   ippDevices: SyshubIppDevice[] = [];
   jobtypes: SyshubJobType[] = [];
-
   psetByTree: { [key: string]: SyshubPSetItem[] } = {};
   psetTreeKeys: string[] = [];
   psetUpdate: number | null = null;
-
+  serverInfo: SimpleKeyValue[] = [];
+  serverProperties: SimpleKeyValue[] = [];
+  user: SyshubUserAccount[] = [];
   workflows: SyshubWorkflow[] = [];
 
   subs: Subscription[] = [];
@@ -81,6 +82,9 @@ export class OverviewComponent implements OnDestroy, OnInit {
     this.ngOnInit_prepareIppDevices();
     this.ngOnInit_prepareJobtypes();
     this.ngOnInit_preparePset();
+    this.ngOnInit_prepareServerConfig();
+    this.ngOnInit_prepareServerInfo();
+    this.ngOnInit_prepareUser();
     this.ngOnInit_prepareWorkflows();
 
     this.totalMatchCount = (this.searchResult.result?.config?.length || 0) +
@@ -137,7 +141,6 @@ export class OverviewComponent implements OnDestroy, OnInit {
         tempippDevices.push(device);
     });
     this.ippDevices = [...tempippDevices];
-    console.log(this.ippDevices)
   }
 
   ngOnInit_prepareJobtypes(): void {
@@ -171,6 +174,52 @@ export class OverviewComponent implements OnDestroy, OnInit {
     }));
   }
 
+  ngOnInit_prepareServerConfig(): void {
+    if (this.searchResult.result?.system?.serverConfig === undefined || this.searchResult.result?.system?.serverConfig === null || this.searchResult.result?.system?.serverConfig === false)
+      return;
+    let tempserverProperties: SimpleKeyValue[] = [];
+    Object.entries(this.searchResult.result.system.serverConfig.content).forEach((kvpair) => {
+      if (this.searchService.match(kvpair[0], this.searchResult.search) || this.searchService.match(kvpair[1], this.searchResult.search))
+        tempserverProperties.push({ key: kvpair[0], value: this.ngOnInit_prepareServerConfig_convert(kvpair[1]) });
+    });
+    this.serverProperties = [...tempserverProperties].sort((a, b) => a.key.toLocaleLowerCase() > b.key.toLocaleLowerCase() ? 1 : a.key.toLocaleLowerCase() < b.key.toLocaleLowerCase() ? -1 : a.value.toLocaleLowerCase() > b.value.toLocaleLowerCase() ? 1 : a.value.toLocaleLowerCase() < b.value.toLocaleLowerCase() ? -1 : 0);
+  }
+
+  ngOnInit_prepareServerConfig_convert(strin: any): any {
+    if (!strin)
+      return '';
+    const teststr = `${strin}`.toLocaleLowerCase();
+    if (teststr === 'true' || teststr === 'false')
+      return teststr === 'true' ? true : false;
+    if (!isNaN(Number(teststr)))
+      return Number(teststr);
+    return strin;
+  }
+
+  ngOnInit_prepareServerInfo(): void {
+    if (this.searchResult.result?.system?.serverInfo === undefined || this.searchResult.result?.system?.serverInfo === null || this.searchResult.result?.system?.serverInfo === false)
+      return;
+    let tempserverInfo: SimpleKeyValue[] = [];
+    Object.entries(<{ [key: string]: any }>this.searchResult.result.system.serverInfo.content).forEach((kvpair) => {
+      if (Array.isArray(kvpair[1]))
+        kvpair[1] = JSON.stringify(kvpair[1]);
+      if (this.searchService.match(kvpair[0], this.searchResult.search) || this.searchService.match(kvpair[1], this.searchResult.search))
+        tempserverInfo.push({ key: kvpair[0], value: this.ngOnInit_prepareServerConfig_convert(kvpair[1]) });
+    });
+    this.serverInfo = [...tempserverInfo].sort((a, b) => a.key.toLocaleLowerCase() > b.key.toLocaleLowerCase() ? 1 : a.key.toLocaleLowerCase() < b.key.toLocaleLowerCase() ? -1 : a.value.toLocaleLowerCase() > b.value.toLocaleLowerCase() ? 1 : a.value.toLocaleLowerCase() < b.value.toLocaleLowerCase() ? -1 : 0);
+  }
+
+  ngOnInit_prepareUser(): void {
+    if (this.searchResult.result?.system?.users === undefined || this.searchResult.result?.system?.users === null || this.searchResult.result?.system?.users === false)
+      return;
+    let tempuser: SyshubUserAccount[] = [];
+    this.searchResult.result.system.users.content.forEach((user) => {
+      if (this.searchService.matchUser(user, this.searchResult.search))
+        tempuser.push(user);
+    });
+    this.user = [...tempuser].sort((a, b) => a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1);
+  }
+
   ngOnInit_prepareWorkflows(): void {
     this.subs.push(this.cacheService.Workflows.subscribe(() => {
       let tempworkflows: SyshubWorkflow[] = [];
@@ -181,6 +230,10 @@ export class OverviewComponent implements OnDestroy, OnInit {
       });
       this.workflows = [...tempworkflows];
     }));
+  }
+
+  fixcase(strin: string): string {
+    return titleize(strin);
   }
 
 }

@@ -26,6 +26,7 @@
     "date-fns": "^2.30.0",
     "rxjs": "^7.8.1",
     "syshub-rest-module": "^3.0.2",
+    "titleize": "^4.0.0",
     "tslib": "^2.6.2",
     "zone.js": "~0.14.3"
   },

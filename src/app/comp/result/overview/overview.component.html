@@ -95,9 +95,9 @@
             certstore.keystore.length + certstore.truststore.length }} {{ l10nphrase.result.toolbar.matches
             }})</strong></h5>
     @if (certstore.keystore.length > 0) {
-    <h5><strong>{{l10nphrase.search.topics.keystore}} ({{ certstore.keystore.length == 0 ? 'keine' :
-            certstore.keystore.length }} {{ l10nphrase.result.toolbar.matches
-            }})</strong></h5>
+    <h6>{{l10nphrase.search.topics.keystore}} ({{ certstore.keystore.length == 0 ? 'keine' :
+        certstore.keystore.length }} {{ l10nphrase.result.toolbar.matches
+        }})</h6>
     <ul>
         @for (certitem of certstore.keystore ; track $index) {
         <li>
@@ -109,9 +109,9 @@
     </ul>
     }
     @if (certstore.truststore.length > 0) {
-    <h5><strong>{{l10nphrase.search.topics.truststore}} ({{ certstore.truststore.length == 0 ? 'keine' :
-            certstore.truststore.length }} {{ l10nphrase.result.toolbar.matches
-            }})</strong></h5>
+    <h6>{{l10nphrase.search.topics.truststore}} ({{ certstore.truststore.length == 0 ? 'keine' :
+        certstore.truststore.length }} {{ l10nphrase.result.toolbar.matches
+        }})</h6>
     <ul>
         @for (certitem of certstore.truststore ; track $index) {
         <li>
@@ -143,3 +143,60 @@
 </div>
 }
 <!-- Ippdevices summary list -->
+
+<!-- Server properties summary list -->
+@if (serverProperties.length || 0 > 0) {
+<div class="card-body">
+    <h5><strong>{{l10nphrase.search.topics.serverConfig}} ({{ serverProperties.length }} {{
+            l10nphrase.result.toolbar.matches
+            }})</strong></h5>
+    <ul>
+        @for (prop of serverProperties ; track $index) {
+        <li>
+            <i class="bi bi-printer-fill me-2"></i>
+            <span [innerHTML]="prop.key| highlight: searchResult.search.phrase"></span> : <span
+                [innerHTML]="prop.value | highlight: searchResult.search.phrase"></span>
+        </li>
+        }
+    </ul>
+</div>
+}
+<!-- Server properties summary list -->
+
+<!-- Server info summary list -->
+@if (serverInfo.length || 0 > 0) {
+<div class="card-body">
+    <h5><strong>{{l10nphrase.search.topics.serverInfo}} ({{ serverInfo.length }} {{
+            l10nphrase.result.toolbar.matches
+            }})</strong></h5>
+    <ul>
+        @for (prop of serverInfo ; track $index) {
+        <li>
+            <i class="bi bi-printer-fill me-2"></i>
+            <span [innerHTML]="prop.key| highlight: searchResult.search.phrase"></span> : <span
+                [innerHTML]="prop.value | highlight: searchResult.search.phrase"></span>
+        </li>
+        }
+    </ul>
+</div>
+}
+<!-- Server info summary list -->
+
+<!-- User summary list -->
+@if (user.length || 0 > 0) {
+<div class="card-body">
+    <h5><strong>{{l10nphrase.search.topics.users}} ({{ user.length }} {{
+            l10nphrase.result.toolbar.matches
+            }})</strong></h5>
+    <ul>
+        @for (useritem of user ; track $index) {
+        <li>
+            <i class="bi bi-printer-fill me-2"></i>
+            <span [innerHTML]="useritem.name | highlight: searchResult.search.phrase"></span>
+            (<span>{{ fixcase(useritem.type) }}{{ useritem.email ? ', ' + useritem.email : '' }}</span>)
+        </li>
+        }
+    </ul>
+</div>
+}
+<!-- User summary list -->

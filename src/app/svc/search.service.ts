@@ -39,12 +39,22 @@ export class SearchService {
     this.searchConfig.subscribe((config) => localStorage.setItem(environment.storage?.searchconfigKey ?? 'findr-searchconfig', JSON.stringify(config)));
   }
 
+  public match(content: any, search: SearchConfig): boolean {
+    if (!content)
+      return false;
+    return `${content}`.toLocaleLowerCase().includes(search.phrase.toLocaleLowerCase());
+  }
+
   public matchCertStoreItem(content: SyshubCertStoreItem, search: SearchConfig): boolean {
-    return `${content.algorithm}${content.alias}${content.certX509IssuerDN}${content.certX509SubjectDN}${content.subjectAlternativeName}`.toLocaleLowerCase().includes(search.phrase.toLocaleLowerCase());
+    return this.match(`${content.algorithm}${content.alias}${content.certX509IssuerDN}${content.certX509SubjectDN}${content.subjectAlternativeName}`, search);
   }
 
   public matchIppDevice(content: SyshubIppDevice, search: SearchConfig): boolean {
-    return `${content.name}${content.desc}${content.form}${content.location}${content.uri}`.toLocaleLowerCase().includes(search.phrase.toLocaleLowerCase());
+    return this.match(`${content.name}${content.desc}${content.form}${content.location}${content.uri}`, search);
+  }
+
+  public matchUser(content: SyshubUserAccount, search: SearchConfig): boolean {
+    return this.match(`${content.email}${content.name}${search.filter.includeUuids ? content.uuid : ''}`, search);
   }
 
   get l10nphrase(): L10nLocale {
@@ -255,7 +265,7 @@ export class SearchService {
 
   private searchstep2_MatchUser(search: SearchConfig, content: SyshubUserAccount[]): number {
     let count = 0;
-    content.forEach((user) => count += `${user.email}${user.name}${search.filter.includeUuids ? user.uuid : ''}`.toLocaleLowerCase().includes(search.phrase.toLocaleLowerCase()) ? 1 : 0);
+    content.forEach((user) => count += this.matchUser(user, search) ? 1 : 0);
     return count;
   }
 

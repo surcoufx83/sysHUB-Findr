@@ -1,10 +1,5 @@
 import { SyshubCategory, SyshubCertStoreItem, SyshubIppDevice, SyshubServerInformation, SyshubUserAccount } from "syshub-rest-module";
 
-export type UserConfig = {
-    enableCache: boolean,
-    showMoreFilter?: boolean,
-}
-
 export type SearchConfig = {
     phrase: string,
     token: string,
@@ -55,9 +50,19 @@ export type SearchResultUuids = {
     }
 }
 
+export type SimpleKeyValue = {
+    key: string,
+    value: any
+}
+
 export type UuidModifiedObject = {
     uuid: string,
     modifiedtime: string,
+}
+
+export type UserConfig = {
+    enableCache: boolean,
+    showMoreFilter?: boolean,
 }
 
 export type UuidModifiedTypeObject = {
