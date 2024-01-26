@@ -69,17 +69,69 @@ export class CacheService {
    */
   private configLoaded$ = false;
 
-  private _jobtypes: BehaviorSubject<SyshubJobType[]> = new BehaviorSubject<SyshubJobType[]>([]);
-  private jobtypesIndex: { [key: string]: number } = {};
-  private jobtypesLoaded = false;
-  public jobtypes = this._jobtypes.asObservable();
+  /**
+   * Contains the job types as an array in a subscribeable subject.
+   */
+  private jobtypes$: BehaviorSubject<SyshubJobType[]> = new BehaviorSubject<SyshubJobType[]>([]);
 
+  /**
+   * Contains a subscribeable subject that is updated after job types have been reloaded and all recalculations have been done.
+   */
+  private jobtypesUpdated$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
+
+  /**
+   * Contains the job types as an array.
+   */
+  public Jobtypes = this.jobtypes$.asObservable();
+
+  /**
+   * Contains a subscribeable subject that is updated after job types have been reloaded and all recalculations have been done.
+   */
+  public JobtypesUpdated = this.jobtypesUpdated$.asObservable();
+
+  /**
+   * Saves the uuid of a job type together with the index from the jobtypes$ array.
+   */
+  private jobtypeUuid2Index$: { [key: string]: number } = {};
+
+  /**
+   * Saves whether the job types have already been initially loaded from the browser cache.
+   */
+  private jobtypesLoaded$ = false;
+
+  /**
+   * Contains the parameter set items as an array in a subscribeable subject.
+   */
   private parameterset$: BehaviorSubject<SyshubPSetItem[]> = new BehaviorSubject<SyshubPSetItem[]>([]);
+
+  /**
+   * Contains a subscribeable subject that is updated after parameter set has been reloaded and all recalculations have been done.
+   */
   private parametersetUpdated$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
+
+  /**
+   * Contains the parameter set items as an array with children inside.
+   */
   public Parameterset = this.parameterset$.asObservable();
+
+  /**
+   * Contains a subscribeable subject that is updated after parameter set has been reloaded and all recalculations have been done.
+   */
   public ParametersetUpdated = this.parametersetUpdated$.asObservable();
+
+  /**
+   * Saves the uuid of a parameter set item together with a reference to the object.
+   */
   private parametersetUuid2Ref$: { [key: string]: SyshubPSetItem } = {};
+
+  /**
+   * Saves the parameter set path with its uuid for each parameter set item.
+   */
   private parametersetPath2Uuid$: { [key: string]: string } = {};
+
+  /**
+   * Saves whether the parameter set items have already been initially loaded from the browser cache.
+   */
   private parametersetLoaded$ = false;
 
   private uuids: { [key: string]: UuidModifiedTypeObject } = {};
@@ -110,7 +162,7 @@ export class CacheService {
   public clear(): void {
     this.categories$.next([]);
     this.config$.next([]);
-    this._jobtypes.next([]);
+    this.jobtypes$.next([]);
     this.parameterset$.next([]);
     this._workflows.next([]);
     this._searchresult.next(null);
@@ -159,7 +211,7 @@ export class CacheService {
   }
 
   getJobtypeByUuid(uuid: string): SyshubJobType | null {
-    return this.jobtypesIndex[uuid] != undefined ? this._jobtypes.value[this.jobtypesIndex[uuid]] : null;
+    return this.jobtypeUuid2Index$[uuid] != undefined ? this.jobtypes$.value[this.jobtypeUuid2Index$[uuid]] : null;
   }
 
   getPsetItemByPath(path: string): SyshubPSetItem | null {
@@ -229,19 +281,12 @@ export class CacheService {
   }
 
   private loadJobtypesCache(): void {
-    this.jobtypes.subscribe((jobtypes) => {
-      if (this.jobtypesLoaded && this._userconfig.value.enableCache)
-        localStorage.setItem(environment.storage?.jobtypesKey ?? 'findr-syshub-jobtypes', JSON.stringify(jobtypes));
-      let indexed: { [key: string]: number } = {};
-      jobtypes.forEach((type, i) => indexed[type.uuid] = i);
-      this.jobtypesIndex = indexed;
-    });
     let olddata = localStorage.getItem(environment.storage?.jobtypesKey ?? 'findr-syshub-jobtypes');
     if (olddata != null)
-      this._jobtypes.next(<SyshubJobType[]>JSON.parse(olddata));
+      this.jobtypes$.next(<SyshubJobType[]>JSON.parse(olddata));
     else
       this.reloadJobtypes();
-    this.jobtypesLoaded = true;
+    this.jobtypesLoaded$ = true;
   }
 
   private loadParametersetCache(): void {
@@ -255,6 +300,7 @@ export class CacheService {
   loadSubscriptions(): void {
     this.loadSubscriptions_Categories();
     this.loadSubscriptions_Config();
+    this.loadSubscriptions_Jobtypes();
     this.loadSubscriptions_PSet();
   }
 
@@ -298,6 +344,17 @@ export class CacheService {
     indexed[cfg.uuid] = cfg;
     cfg.children.filter((child) => child.uuid != '').forEach((child, i) => {
       this.loadSubscriptions_ConfigItem(child, indexed, path === '' ? cfg.name : `${path}/${cfg.name}`);
+    });
+  }
+
+  loadSubscriptions_Jobtypes(): void {
+    this.Jobtypes.subscribe((jobtypes) => {
+      if (this.jobtypesLoaded$ && this._userconfig.value.enableCache)
+        localStorage.setItem(environment.storage?.jobtypesKey ?? 'findr-syshub-jobtypes', JSON.stringify(jobtypes));
+      let indexed: { [key: string]: number } = {};
+      jobtypes.forEach((type, i) => indexed[type.uuid] = i);
+      this.jobtypeUuid2Index$ = indexed;
+      this.jobtypesUpdated$.next(Date.now());
     });
   }
 
@@ -404,23 +461,10 @@ export class CacheService {
           });
         return;
       }
-      this._jobtypes.next([...reply].sort((a, b) => a.name > b.name ? 1 : -1));
+      this.jobtypes$.next([...reply].sort((a, b) => a.name > b.name ? 1 : -1));
     });
   }
 
-  /* reloadParameterset(): void {
-    this.restapi.getPsetChildren('', 0).subscribe((reply) => {
-      if (reply instanceof Error) {
-        if (!(reply instanceof UnauthorizedError))
-          this.toastService.addDangerToast({
-            message: this.l10n(this.l10nphrase.api.errorCommon, [reply.message])
-          });
-        return;
-      }
-      this.parameterset$.next([...reply].sort((a, b) => a.name > b.name ? 1 : -1));
-    });
-  }
- */
   reloadParameterset(): void {
     let svc = this;
     this.restapi.getPsetChildren('').subscribe((reply) => {

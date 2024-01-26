@@ -104,7 +104,7 @@ export class OverviewComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit_prepareJobtypes(): void {
-    this.subs.push(this.cacheService.jobtypes.subscribe(() => {
+    this.subs.push(this.cacheService.Jobtypes.subscribe(() => {
       let tempjobtypes: SyshubJobType[] = [];
       this.searchResult.result?.jobtypes.forEach((jtobj) => {
         const jt = this.cacheService.getJobtypeByUuid(jtobj.uuid);
