@@ -4,7 +4,7 @@ export const L10nEn: L10nLocale = {
     api: {
         failed: {
             badRequest: 'Invalid request.',
-            forbidden: 'No permission.',
+            forbidden: 'Unauthorized access.',
             notFound: 'Resource not available.',
             unauthorized: 'Login failed.',
             unknown: 'Unknown error.'
@@ -15,7 +15,7 @@ export const L10nEn: L10nLocale = {
         title: 'Findr',
         titles: {
             home: 'sysHUB Findr',
-            searchOngoing: 'Searching...',
+            searchOngoing: 'Search in progress...',
             resultView: 'Result View',
             resultConfigView: 'Result (Config)'
         }
@@ -27,11 +27,12 @@ export const L10nEn: L10nLocale = {
         locales: {
             de: 'German',
             en: 'English',
+            fr: 'French',
         },
         phrases: {
-            none: '»None«',
+            none: 'None',
             okUc: 'OK',
-            toggleItem: 'Toggle [0] open or close'
+            toggleItem: 'Toggle [0]'
         }
     },
     home: {
@@ -44,11 +45,11 @@ export const L10nEn: L10nLocale = {
     },
     login: {
         title: 'Login',
-        unlockDescription: 'Please enter your sysHUB credentials for server access.',
+        unlockDescription: 'Please enter your sysHUB credentials for access to the server.',
         usernameField: {
             label: 'sysHUB Username',
             placeholder: 'username',
-            invalidFeedback: 'Please enter a username.'
+            invalidFeedback: 'Please provide a username.'
         },
         passwordField: {
             label: 'Password',
@@ -57,9 +58,9 @@ export const L10nEn: L10nLocale = {
         },
         submitBtn: 'Log In',
         submitBtnBusy: 'Logging in...',
-        inputInvalidToast: 'The credentials are incomplete. Please check your entries.',
-        inputCredentialsToast: 'Login rejected by the server. Please check your entries and try again.',
-        inputServerNotAvailableToast: 'Anmeldung fehlgeschlagen. Der Server ist gerade nicht erreichbar.'
+        inputInvalidToast: 'Credentials are incomplete. Please check your inputs.',
+        inputCredentialsToast: 'Login rejected by the server. Please verify your credentials and try again.',
+        inputServerNotAvailableToast: 'Login failed. The server is currently unavailable.'
     },
     navbar: {
         aboutLink: 'About',
@@ -67,9 +68,9 @@ export const L10nEn: L10nLocale = {
         clearCacheLink: 'Clear Cache',
         helpLink: 'Help',
         homeLink: 'Home',
-        localeIsActive: 'in use',
-        logoutLink: 'Logout',
-        resultLink: 'Search Result',
+        localeIsActive: 'active',
+        logoutLink: 'Log Out',
+        resultLink: 'Search Results',
         searchBtn: 'Search',
         searchBtnBusy: 'Searching...',
         searchOptions: 'Options',
@@ -79,34 +80,41 @@ export const L10nEn: L10nLocale = {
     },
     result: {
         config: {
-            title: 'Matches in Configuration, Searching for \'[0]\'',
+            title: 'Hits in the Configuration, Searching for "[0]"',
             subtitle: `
-                This page displays the entire tree structure of the expert configuration
-                and highlights matches visually.
-                Hovering the cursor over an entry displays it on the right side.
-                If the pin is active, hovering will no longer switch the display, but clicking will.
+                This page displays the complete tree structure of the expert configuration,
+                with hits visually highlighted. When hovering over an entry, it will be
+                displayed in the right section. If the pin is active, there will be no
+                change when hovering, but there will be when clicking.
             `,
             properties: {
                 description: 'Description',
                 name: 'Name',
                 path: 'Path',
                 type: 'Element Type',
-                uuid: 'Uuid',
+                uuid: 'UUID',
                 value: 'Value',
             },
-            selected: 'Details for \'[0]\''
+            selected: 'Details for "[0]"'
+        },
+        header: {
+            title: 'Search Results for "[0]"',
+            subtitle: `
+                The overview provides a brief summary of the hits. For more details,
+                click on the buttons in their respective categories.
+                Gray button = no hit in this category.
+            `
         },
         jobtype: {
-            title: 'Matches in Job Types, Searching for \'[0]\'',
+            title: 'Matches in Job Types, Searching for "[0]"',
             subtitle: `
-                This page lists the configured job types and
-                visually highlights matches.
-                Hovering the cursor over an entry displays it on the right side.
-                If the pin is active, hovering will no longer switch the display, but clicking will.
+                This page lists the configured job types, and matches are visually highlighted.
+                When hovering over an entry with the cursor, it is displayed on the right side.
+                If the pin is active, there will be no change when hovering, but when clicking.
             `,
             attributes: {
                 category: 'Category',
-                classifiedworkflowuuid: 'Workflow (after Classification)',
+                classifiedworkflowuuid: 'Workflow (by Classification)',
                 datatype: 'Data Type',
                 deldays: 'Delete After Days',
                 description: 'Description',
@@ -126,47 +134,48 @@ export const L10nEn: L10nLocale = {
                 xid: 'Xid'
             },
             customAttributes: 'Attributes',
-            selected: 'Details for \'[0]\'',
+            selected: 'Details for "[0]"',
             classifySection: 'Classification',
-            moreAttributesSection: 'Job Attributes Classification',
+            moreAttributesSection: 'Classification Job Attributes',
             processingSection: 'Processing',
             workflowsSection: 'Workflows'
         },
         overview: {
-            title: 'Search Results for \'[0]\'',
-            subtitle: `
-                The following list is just a brief summary. Detailed
-                results and graphical representation (tree structure and workflow designer)
-                can be accessed via the buttons above.
-            `
+            title: 'Summary',
+            subtitle1: 'The search resulted in a total of <strong>[0]</strong> hits.',
+            subtitle2: `
+                Below is a list of all the hits. If you want to view these in a tree structure (e.g., for Config and
+                Parameterset), use the buttons above to navigate to the respective section.`,
+            propertyType: 'Type: [0]'
         },
         parameterset: {
-            title: 'Matches in Parameter Set, Searching for \'[0]\'',
+            title: 'Hits in Parameterset, Searching for "[0]"',
             subtitle: `
-                This page displays the complete tree structure of the parameter set
-                and highlights matches visually.
-                Hovering the cursor over an entry displays it on the right side.
-                If the pin is active, hovering will no longer switch the display, but clicking will.
+                On this page, the complete tree structure of the parameterset is displayed,
+                and hits are visually highlighted.
+                When hovering over an entry with the cursor, it is displayed on the right side.
+                If the pin is active, there will be no change when hovering, but there will be when clicking.
             `,
             properties: {
                 description: 'Description',
                 name: 'Name',
                 path: 'Path',
                 type: 'Element Type',
-                uuid: 'Uuid',
+                uuid: 'UUID',
                 value: 'Value',
             },
-            selected: 'Details for \'[0]\''
+            selected: 'Details for "[0]"'
         },
         toolbar: {
             certStore: 'Certificate Store: [0]',
             config: 'Config: [0]',
-            exportResults: 'Export Results List',
+            exportResults: 'Export Search Results',
             ippDevices: 'Printers: [0]',
             jobtypes: 'Job Types: [0]',
-            matches: 'Matches',
+            matches: 'hits',
+            noMatches: 'no hits',
             overview: 'Overview',
-            parameterset: 'Parameter Set: [0]',
+            parameterset: 'Parameterset: [0]',
             serverConfig: 'Server Configuration: [0]',
             serverInfo: 'Server Info: [0]',
             users: 'Users: [0]',
@@ -180,18 +189,17 @@ export const L10nEn: L10nLocale = {
         },
         filter: {
             categoryFilter: 'Filter by Category',
-            categoryFilterNone: 'Not Filtered',
+            categoryFilterNone: 'Not Applied',
             excludeBComments: 'Ignore [B] Comments',
             includeUuids: 'Search UUIDs',
-            searchWorkflowContent: 'Include Workflow Contents'
+            searchWorkflowContent: 'Include Workflow Contents',
         },
         options: {
             enableCache: 'Use Browser Cache',
             enableCacheDescription: `
-                If this option is set, various elements are cached in the browser.
-                If these elements are found again later, they do not need to be loaded
-                from the server again.
-            `
+                    When this option is enabled, various elements are cached in the browser.
+                    If these elements are found again later, they do not need to be loaded from the server again.
+                `
         },
         topics: {
             categories: 'Categories',
@@ -208,13 +216,13 @@ export const L10nEn: L10nLocale = {
     },
     searching: {
         title: '',
-        cardTitle: 'Searching for [0]',
+        cardTitle: 'Searching for "[0]"',
         progress: {
             done: 'All done. Redirecting to the results view...',
-            evaluatingResults: 'Results have been loaded from the server and are being prepared for display...',
-            queryingObjects: 'The matching objects are now being loaded from the server and may be stored in the browser cache...',
-            preparingResultView: 'Preparing the results view...',
-            waitingForResults: 'Search request has been sent to the server. Waiting for the result...',
+            evaluatingResults: 'The results have been loaded from the server and are being prepared for display...',
+            queryingObjects: 'The match objects are now being loaded from the server and may be cached in the browser...',
+            preparingResultView: 'Preparing the result view...',
+            waitingForResults: 'The search request has been sent to the server. Waiting for the results...',
         }
     }
 };

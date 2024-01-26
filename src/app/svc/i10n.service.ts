@@ -1,11 +1,12 @@
 import { Injectable, OnInit } from '@angular/core';
 import { format, formatDuration, intervalToDuration, parseISO } from 'date-fns'
-import { de, enUS } from 'date-fns/locale';
+import { de, enUS, fr } from 'date-fns/locale';
 import { BehaviorSubject } from 'rxjs';
 import { L10nLocale } from './i10n/l10n-locale';
 import { L10nEn } from './i10n/en';
 import { L10nDe } from './i10n/de';
 import { environment } from 'src/environments/environment';
+import { L10nFr } from './i10n/fr';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,8 @@ export class L10nService {
     'en-US': L10nEn,
     'de': L10nDe,
     'de-DE': L10nDe,
+    'fr': L10nFr,
+    'fr-FR': L10nFr,
   }
 
   constructor() {
@@ -52,6 +55,10 @@ export class L10nService {
         case 'de-DE':
         case '':
           this.datefnsLocale = de;
+          break;
+        case 'fr':
+        case 'fr-FR':
+          this.datefnsLocale = fr;
           break;
         default:
           this.datefnsLocale = enUS;

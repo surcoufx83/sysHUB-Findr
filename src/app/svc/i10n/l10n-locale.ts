@@ -84,6 +84,10 @@ export type L10nLocale = {
             },
             selected: string
         },
+        header: {
+            title: string,
+            subtitle: string
+        },
         jobtype: {
             attributes: {
                 category: string,
@@ -117,7 +121,9 @@ export type L10nLocale = {
         },
         overview: {
             title: string,
-            subtitle: string
+            subtitle1: string,
+            subtitle2: string,
+            propertyType: string
         },
         parameterset: {
             properties: {
@@ -140,6 +146,7 @@ export type L10nLocale = {
             ippDevices: string,
             jobtypes: string,
             matches: string,
+            noMatches: string,
             overview: string,
             parameterset: string,
             serverConfig: string,

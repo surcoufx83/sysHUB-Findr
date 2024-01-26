@@ -26,7 +26,8 @@ export const L10nDe: L10nLocale = {
         },
         locales: {
             de: 'Deutsch',
-            en: 'English',
+            en: 'Englisch',
+            fr: 'Französisch',
         },
         phrases: {
             none: '»Keine«',
@@ -97,6 +98,14 @@ export const L10nDe: L10nLocale = {
             },
             selected: 'Details zu »[0]«'
         },
+        header: {
+            title: 'Trefferliste für die Suche nach »[0]«',
+            subtitle: `
+                Die übersicht zeigt eine kurze Zusammenfassung der Treffer. Mehr Details
+                findest du nach dem Klicken auf die Buttons der jeweiligen Kategorien. 
+                Grauer Button = kein Treffer in dieser Kategorie.
+            `
+        },
         jobtype: {
             title: 'Treffer bei den Auftragstypen, Suche nach »[0]«',
             subtitle: `
@@ -135,12 +144,12 @@ export const L10nDe: L10nLocale = {
             workflowsSection: 'Workflows'
         },
         overview: {
-            title: 'Trefferliste für die Suche nach »[0]«',
-            subtitle: `
-                Die folgende Liste stellt nur eine kurze Zusammenfassung dar. Ausführliche
-                Ergebnisse und die grafische Repräsentation (Baumstruktur und Workflow-Designer)
-                können über die Buttons oben erreicht werden.
-            `
+            title: 'Zusammenfassung',
+            subtitle1: 'Die Suche hat insgesamt <strong>[0]</strong> Treffer ergeben.',
+            subtitle2: `
+                Nachfolgend findest du eine Auflistung aller Treffer. Wenn du diese in einer Baumstruktur (z.B. für Konfig und
+                Parameterset) sehen möchtest, verwende die obenstehenden Buttons um an die entsprechende Stelle zu navigieren.`,
+            propertyType: 'Typ: [0]'
         },
         parameterset: {
             title: 'Treffer im Parameterset, Suche nach »[0]«',
@@ -168,6 +177,7 @@ export const L10nDe: L10nLocale = {
             ippDevices: 'Drucker: [0]',
             jobtypes: 'Jobtypes: [0]',
             matches: 'Treffer',
+            noMatches: 'keine Treffer',
             overview: 'Übersicht',
             parameterset: 'Parameterset: [0]',
             serverConfig: 'Serverkonfiguration: [0]',

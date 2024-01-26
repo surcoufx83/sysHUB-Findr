@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { isEqual, parseISO } from 'date-fns';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { RestService, SyshubCategory, SyshubConfigItem, SyshubJobType, SyshubPSetItem, SyshubWorkflow, UnauthorizedError } from 'syshub-rest-module';
 import { L10nService } from './i10n.service';
@@ -39,10 +39,14 @@ export class CacheService {
    */
   private config$: BehaviorSubject<SyshubConfigItem[]> = new BehaviorSubject<SyshubConfigItem[]>([]);
 
+  private configUpdated$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
+
   /**
    * Contains the sysHUB config items as an array with children inside.
    */
   public Config = this.config$.asObservable();
+
+  public ConfigUpdated = this.configUpdated$.asObservable();
 
   /**
    * Saves the uuid of a config item together with a reference to the object.
@@ -64,11 +68,13 @@ export class CacheService {
   private jobtypesLoaded = false;
   public jobtypes = this._jobtypes.asObservable();
 
-  private _parameterset: BehaviorSubject<SyshubPSetItem[]> = new BehaviorSubject<SyshubPSetItem[]>([]);
-  private parametersetItems: { [key: string]: SyshubPSetItem } = {};
-  private parametersetModifiedTimeIndex: { [key: string]: string } = {};
-  private parametersetLoaded = false;
-  public parameterset = this._parameterset.asObservable();
+  private parameterset$: BehaviorSubject<SyshubPSetItem[]> = new BehaviorSubject<SyshubPSetItem[]>([]);
+  private parametersetUpdated$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
+  public Parameterset = this.parameterset$.asObservable();
+  public ParametersetUpdated = this.parametersetUpdated$.asObservable();
+  private parametersetUuid2Ref$: { [key: string]: SyshubPSetItem } = {};
+  private parametersetPath2Uuid$: { [key: string]: string } = {};
+  private parametersetLoaded$ = false;
 
   private uuids: { [key: string]: UuidModifiedTypeObject } = {};
 
@@ -99,7 +105,7 @@ export class CacheService {
     this.categories$.next([]);
     this.config$.next([]);
     this._jobtypes.next([]);
-    this._parameterset.next([]);
+    this.parameterset$.next([]);
     this._workflows.next([]);
     this._searchresult.next(null);
     localStorage.removeItem(environment.storage?.searchconfigKey ?? 'findr-syshub-searchconfig');
@@ -118,33 +124,56 @@ export class CacheService {
     return this.configUuid2Ref$[uuid] ?? null;
   }
 
-  /* 
+  getConfigTree(uuid: string | null): string {
+    if (uuid == null)
+      return '';
+    const item = this.getConfigItemByUuid(uuid);
+    if (item == null)
+      return '';
+    if (item.parent == null)
+      return item.name;
+    return `${this.getConfigTree(item.parent)} / ${item.name}`;
+  }
 
-  getIcon(type: string, value: any = null, fallback: string = 'folder'): string {
+  getIcon(type: string, value: any = null, fallback: string = 'bi-folder'): string {
+    console.log(type)
     switch (type) {
-      case 'Boolean': return value === true || value === 'true' ? 'radio_button_checked' : 'radio_button_unchecked';
-      case 'Cron Expression': return 'av_timer';
-      case 'File': return 'file';
-      case 'FileSystem Path': return 'folder_open';
-      case 'Group/Folder': return 'account_tree';
-      case 'Integer': return '123';
-      case 'Password': return 'password';
-      case 'Roles': return 'group';
-      case 'String': return 'format_size';
-      case 'Workflow-UUID': return 'memory';
+      case 'Boolean': return value === true || value === 'true' ? 'bi-toggle-on' : 'bi-toggle-off';
+      case 'Cron Expression': return 'bi-alarm';
+      case 'File': return 'bi-file-binary';
+      case 'FileSystem Path': return 'bi-folder2-open';
+      case 'Group/Folder': return 'bi-collection';
+      case 'Integer': return 'bi-123';
+      case 'Password': return 'bi-key';
+      case 'Roles': return 'bi-person-check';
+      case 'String': return 'bi-body-text';
+      case 'Workflow-UUID': return 'bi-fingerprint';
     }
     return fallback;
   }
 
-  getJobtype(uuid: string): SyshubJobType | null {
+  getJobtypeByUuid(uuid: string): SyshubJobType | null {
     return this.jobtypesIndex[uuid] != undefined ? this._jobtypes.value[this.jobtypesIndex[uuid]] : null;
   }
 
-  getParametersetItem(uuid: string): SyshubPSetItem | null {
-    return this.parametersetItems[uuid] ?? null;
-  } */
+  getPsetItemByPath(path: string): SyshubPSetItem | null {
+    return this.parametersetPath2Uuid$[path] ? this.getPsetItemByUuid(this.parametersetPath2Uuid$[path]) : null;
+  }
 
+  getPsetItemByUuid(uuid: string): SyshubPSetItem | null {
+    return this.parametersetUuid2Ref$[uuid] ?? null;
+  }
 
+  getPsetTree(uuid: string | null): string {
+    if (uuid == null)
+      return '';
+    const item = this.getPsetItemByUuid(uuid);
+    if (item == null)
+      return '';
+    if (item.parent == null)
+      return item.name;
+    return `${this.getPsetTree(item.parent)} / ${item.name}`;
+  }
 
   loadSearchResult(token: string): boolean {
     let result: string | null = sessionStorage.getItem(token);
@@ -210,37 +239,17 @@ export class CacheService {
   }
 
   private loadParametersetCache(): void {
-    this.parameterset.subscribe((parameterset) => {
-      if (this.parametersetLoaded && this._userconfig.value.enableCache)
-        localStorage.setItem(environment.storage?.parametersetKey ?? 'findr-syshub-parameterset', JSON.stringify(parameterset));
-      this.parametersetItems = {};
-      this.parametersetModifiedTimeIndex = this.loadParametersetCacheIndex(parameterset);
-    });
-    let olddata = localStorage.getItem(environment.storage?.parametersetKey ?? 'findr-syshub-parameterset');
+    let olddata = localStorage.getItem(environment.storage?.configKey ?? 'findr-syshub-parameterset');
     if (olddata != null)
-      this._parameterset.next(<SyshubPSetItem[]>JSON.parse(olddata));
-    else
-      this.reloadParameterset();
-    this.parametersetLoaded = true;
-  }
-
-  private loadParametersetCacheIndex(parameterset: SyshubPSetItem[], parentpath: string = '', parentpath2copy: string = '', parent?: SyshubPSetItem): { [key: string]: string } {
-    let indexed: { [key: string]: string } = {};
-    parameterset.forEach((parameterset) => {
-      /* parameterset.path = `${parentpath}${parentpath != '' ? '/' : ''}${parameterset.name}${parameterset.type == 'Group/Folder' && parameterset.value != '' ? ': ' + parameterset.value : ''}`;
-      parameterset.path2copy = `${parentpath2copy}${parentpath2copy != '' ? '/' : ''}${parameterset.name}`;
-      parameterset.parentRef = parent;
-      indexed[parameterset.uuid] = parameterset.modifiedtime;
-      if (parameterset.children.length > 0)
-        indexed = { ...indexed, ...this.loadParametersetCacheIndex(parameterset.children, parameterset.path, parameterset.path2copy, parameterset) };
-      this.parametersetItems[parameterset.uuid] = parameterset; */
-    });
-    return indexed;
+      this.parameterset$.next(<SyshubPSetItem[]>JSON.parse(olddata));
+    this.reloadParameterset();
+    this.parametersetLoaded$ = true;
   }
 
   loadSubscriptions(): void {
     this.loadSubscriptions_Categories();
     this.loadSubscriptions_Config();
+    this.loadSubscriptions_PSet();
   }
 
   loadSubscriptions_Categories(): void {
@@ -268,7 +277,8 @@ export class CacheService {
       });
       if (this.configLoaded$ && this._userconfig.value.enableCache)
         localStorage.setItem(environment.storage?.configKey ?? 'findr-syshub-config', JSON.stringify(configitems));
-      this.configUuid2Ref$ = indexed;
+      this.configUuid2Ref$ = { ...indexed };
+      this.configUpdated$.next(Date.now());
     });
   }
 
@@ -282,6 +292,32 @@ export class CacheService {
     indexed[cfg.uuid] = cfg;
     cfg.children.filter((child) => child.uuid != '').forEach((child, i) => {
       this.loadSubscriptions_ConfigItem(child, indexed, path === '' ? cfg.name : `${path}/${cfg.name}`);
+    });
+  }
+
+  loadSubscriptions_PSet(): void {
+    this.Parameterset.subscribe((parameterset) => {
+      let indexed: { [key: string]: SyshubPSetItem } = {};
+      parameterset.filter((item) => item.uuid != '').forEach((item, i) => {
+        this.loadSubscriptions_PSetItem(item, indexed);
+      });
+      if (this.parametersetLoaded$ && this._userconfig.value.enableCache)
+        localStorage.setItem(environment.storage?.configKey ?? 'findr-syshub-parameterset', JSON.stringify(parameterset));
+      this.parametersetUuid2Ref$ = { ...indexed };
+      this.parametersetUpdated$.next(Date.now());
+    });
+  }
+
+  loadSubscriptions_PSetItem(item: SyshubPSetItem, indexed: { [key: string]: SyshubPSetItem }, path: string = ''): void {
+    this.uuids[item.uuid] = {
+      uuid: item.uuid,
+      modifiedtime: item.modifiedtime,
+      path: path === '' ? item.name : `${path}/${item.name}`,
+      type: 'SyshubPSetItem'
+    }
+    indexed[item.uuid] = item;
+    item.children.filter((child) => child.uuid != '').forEach((child, i) => {
+      this.loadSubscriptions_PSetItem(child, indexed, path === '' ? item.name : `${path}/${item.name}`);
     });
   }
 
@@ -366,7 +402,7 @@ export class CacheService {
     });
   }
 
-  reloadParameterset(): void {
+  /* reloadParameterset(): void {
     this.restapi.getPsetChildren('', 0).subscribe((reply) => {
       if (reply instanceof Error) {
         if (!(reply instanceof UnauthorizedError))
@@ -375,8 +411,29 @@ export class CacheService {
           });
         return;
       }
-      this._parameterset.next([...reply].sort((a, b) => a.name > b.name ? 1 : -1));
+      this.parameterset$.next([...reply].sort((a, b) => a.name > b.name ? 1 : -1));
     });
+  }
+ */
+  reloadParameterset(): void {
+    let svc = this;
+    this.restapi.getPsetChildren('').subscribe((reply) => {
+      if (reply instanceof Error) {
+        if (!(reply instanceof UnauthorizedError))
+          this.toastService.addDangerToast({
+            message: this.l10n(this.l10nphrase.api.errorCommon, [reply.message])
+          });
+        return;
+      }
+      this.parameterset$.next(this.reloadParameterset_SortChilds(reply));
+    });
+  }
+
+  reloadParameterset_SortChilds(items: SyshubPSetItem[]): SyshubPSetItem[] {
+    items.forEach((item) => {
+      item.children = this.reloadParameterset_SortChilds(item.children);
+    });
+    return items.sort((a, b) => a.name.toLocaleLowerCase() + (a.value?.toLocaleLowerCase() ?? '') > b.name.toLocaleLowerCase() + (b.value?.toLocaleLowerCase() ?? '') ? 1 : -1);
   }
 
   reloadWorkflows(): void {
@@ -418,7 +475,7 @@ export class CacheService {
     });
     result.parameterset.forEach((obj) => {
       if (!parametersetUpdated) {
-        if (this.parametersetModifiedTimeIndex[obj.uuid] == undefined) {
+        /* if (this.parametersetModifiedTimeIndex[obj.uuid] == undefined) {
           parametersetUpdated = true;
           this.reloadParameterset();
         } else {
@@ -426,7 +483,7 @@ export class CacheService {
             parametersetUpdated = true;
             this.reloadParameterset();
           }
-        }
+        } */
       }
     });
     result.workflows.forEach((obj) => {

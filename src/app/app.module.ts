@@ -28,6 +28,7 @@ import { HelpComponent } from './comp/help/help.component';
 import { AboutComponent } from './comp/about/about.component';
 import { ProgressbarComponent } from './comp/main/progressbar/progressbar.component';
 import { ResultComponent } from './comp/result/result.component';
+import { OverviewComponent } from './comp/result/overview/overview.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { ResultComponent } from './comp/result/result.component';
     AboutComponent,
     ProgressbarComponent,
     ResultComponent,
+    OverviewComponent,
   ],
   imports: [
     AppRoutingModule,

@@ -1,16 +1,16 @@
 @if (searchResult) {
 <article class="container-fluid">
     <section>
-        <h1>{{ l10n(l10nphrase.result.overview.title, [searchResult.search.phrase]) }}</h1>
+        <h1>{{ l10n(l10nphrase.result.header.title, [searchResult.search.phrase]) }}</h1>
         <p>
-            {{ l10nphrase.result.overview.subtitle }}
+            {{ l10nphrase.result.header.subtitle }}
         </p>
     </section>
     <section>
         <div class="d-flex flex-column">
 
             <!-- result header buttons to select chapter -->
-            <div class="card">
+            <div class="card mb-3 mb-lg-4">
                 <div class="card-body">
                     <div class="d-flex flex-column flex-md-row justify-content-between">
                         <div>
@@ -141,8 +141,10 @@
             <!-- result header buttons to select chapter -->
 
             <!-- result container based on selected chapter -->
-            <div>
-
+            <div class="card">
+                @if (selectedChapter == '') {
+                <app-result-overview [searchResult]="searchResult"></app-result-overview>
+                }
             </div>
             <!-- result container based on selected chapter -->
 

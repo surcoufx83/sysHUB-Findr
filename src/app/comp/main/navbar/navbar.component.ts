@@ -19,7 +19,7 @@ export class NavbarComponent implements OnInit {
   @Input() title: string = '';
 
   currentLocale: string;
-  locales: string[] = environment.i10n?.locales ?? ['en', 'de'];
+  locales: string[] = environment.i10n?.locales ?? ['en', 'de', 'fr'];
   localesLocalized: { [key: string]: string } = {};
   minPhraseLength: number = environment.app?.minPhraseLength ?? 3;
   promolink: string = environment.app?.promotionLink ?? '';
