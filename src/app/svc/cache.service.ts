@@ -39,6 +39,9 @@ export class CacheService {
    */
   private config$: BehaviorSubject<SyshubConfigItem[]> = new BehaviorSubject<SyshubConfigItem[]>([]);
 
+  /**
+   * Contains a subscribeable subject that is update after config has been reloaded and all recalculations have been done.
+   */
   private configUpdated$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
 
   /**
@@ -46,6 +49,9 @@ export class CacheService {
    */
   public Config = this.config$.asObservable();
 
+  /**
+   * Contains a subscribeable subject that is update after config has been reloaded and all recalculations have been done.
+   */
   public ConfigUpdated = this.configUpdated$.asObservable();
 
   /**
