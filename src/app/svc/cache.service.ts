@@ -219,7 +219,6 @@ export class CacheService {
   }
 
   getIcon(type: string, value: any = null, fallback: string = 'bi-folder'): string {
-    console.log(type)
     switch (type) {
       case 'Boolean': return value === true || value === 'true' ? 'bi-toggle-on' : 'bi-toggle-off';
       case 'Cron Expression': return 'bi-alarm';
@@ -327,6 +326,7 @@ export class CacheService {
     this.loadSubscriptions_Config();
     this.loadSubscriptions_Jobtypes();
     this.loadSubscriptions_PSet();
+    this.loadSubscriptions_Workflows();
   }
 
   loadSubscriptions_Categories(): void {

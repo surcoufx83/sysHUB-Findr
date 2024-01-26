@@ -5,7 +5,7 @@ import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
 import { SearchConfig, SearchResult } from 'src/app/types';
-import { SyshubConfigItem, SyshubJobType, SyshubPSetItem } from 'syshub-rest-module';
+import { SyshubConfigItem, SyshubJobType, SyshubPSetItem, SyshubWorkflow } from 'syshub-rest-module';
 
 @Component({
   selector: 'app-result-overview',
@@ -25,6 +25,8 @@ export class OverviewComponent implements OnDestroy, OnInit {
   psetByTree: { [key: string]: SyshubPSetItem[] } = {};
   psetTreeKeys: string[] = [];
   psetUpdate: number | null = null;
+
+  workflows: SyshubWorkflow[] = [];
 
   subs: Subscription[] = [];
 
@@ -72,6 +74,7 @@ export class OverviewComponent implements OnDestroy, OnInit {
     this.ngOnInit_prepareConfig();
     this.ngOnInit_prepareJobtypes();
     this.ngOnInit_preparePset();
+    this.ngOnInit_prepareWorkflows();
 
     this.totalMatchCount = (this.searchResult.result?.config?.length || 0) +
       (this.searchResult.result?.jobtypes?.length || 0) +
@@ -131,6 +134,18 @@ export class OverviewComponent implements OnDestroy, OnInit {
       });
       this.psetByTree = { ...newtree };
       this.psetTreeKeys = Object.keys(this.psetByTree).sort((a, b) => a.toLocaleLowerCase() > b.toLocaleLowerCase() ? 1 : -1);
+    }));
+  }
+
+  ngOnInit_prepareWorkflows(): void {
+    this.subs.push(this.cacheService.Workflows.subscribe(() => {
+      let tempworkflows: SyshubWorkflow[] = [];
+      this.searchResult.result?.workflows.forEach((wfobj) => {
+        const wf = this.cacheService.getWorkflow(wfobj.uuid);
+        if (wf != null)
+          tempworkflows.push(wf);
+      });
+      this.workflows = [...tempworkflows];
     }));
   }
 

@@ -68,3 +68,22 @@
 </div>
 }
 <!-- Parameterset tree summary list -->
+
+<!-- Workflows summary list -->
+@if (searchResult.result?.workflows?.length || 0 > 0) {
+<div class="card-body">
+    <h5><strong>{{l10nphrase.search.topics.workflows}} ({{ searchResult.result?.workflows?.length == 0 ? 'keine' :
+            searchResult.result?.workflows?.length }} {{ l10nphrase.result.toolbar.matches
+            }})</strong></h5>
+    <ul>
+        @for (wfitem of workflows ; track $index) {
+        <li>
+            <i class="bi bi-fonts me-2"
+                [title]="l10n(l10nphrase.result.overview.propertyType, [l10nphrase.search.topics.workflows])"></i>
+            <span [innerHTML]="wfitem.name | highlight: searchResult.search.phrase"></span>
+        </li>
+        }
+    </ul>
+</div>
+}
+<!-- Workflows summary list -->
