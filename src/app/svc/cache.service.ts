@@ -140,10 +140,35 @@ export class CacheService {
   private userconfigLoaded = false;
   public userconfig = this._userconfig.asObservable();
 
-  private _workflows: BehaviorSubject<SyshubWorkflow[]> = new BehaviorSubject<SyshubWorkflow[]>([]);
-  private workflowsIndex: { [key: string]: number } = {};
-  private workflowsLoaded = false;
-  public workflows = this._workflows.asObservable();
+  /**
+   * Contains the workflows as an array in a subscribable subject.
+   */
+  private workflows$: BehaviorSubject<SyshubWorkflow[]> = new BehaviorSubject<SyshubWorkflow[]>([]);
+
+  /**
+   * Contains a subscribable subject that is updated after workflows have been reloaded and all recalculations have been done.
+   */
+  private workflowsUpdated$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
+
+  /**
+   * Contains the workflows as an array.
+   */
+  public Workflows = this.workflows$.asObservable();
+
+  /**
+   * Contains a subscribable subject that is updated after workflows have been reloaded and all recalculations have been done.
+   */
+  public WorkflowsUpdated = this.workflowsUpdated$.asObservable();
+
+  /**
+   * Saves the uuid of a workflow together with the index from the workflows$ array.
+   */
+  private workflowUuid2Index$: { [key: string]: number } = {};
+
+  /**
+   * Saves whether the workflows have already been initially loaded from the browser cache.
+   */
+  private workflowsLoaded$ = false;
 
   private _searchresult: BehaviorSubject<SearchResult | null> = new BehaviorSubject<SearchResult | null>(null);
   public searchresult = this._searchresult.asObservable();
@@ -164,7 +189,7 @@ export class CacheService {
     this.config$.next([]);
     this.jobtypes$.next([]);
     this.parameterset$.next([]);
-    this._workflows.next([]);
+    this.workflows$.next([]);
     this._searchresult.next(null);
     localStorage.removeItem(environment.storage?.searchconfigKey ?? 'findr-syshub-searchconfig');
     this.loadCache();
@@ -244,7 +269,7 @@ export class CacheService {
   }
 
   getWorkflow(uuid: string): SyshubWorkflow | null {
-    return this.workflowsIndex[uuid] != undefined ? this._workflows.value[this.workflowsIndex[uuid]] : null;
+    return this.workflowUuid2Index$[uuid] != undefined ? this.workflows$.value[this.workflowUuid2Index$[uuid]] : null;
   }
 
   get l10nphrase(): L10nLocale {
@@ -384,6 +409,17 @@ export class CacheService {
     });
   }
 
+  loadSubscriptions_Workflows(): void {
+    this.Workflows.subscribe((workflows) => {
+      if (this.workflowsLoaded$ && this._userconfig.value.enableCache)
+        localStorage.setItem(environment.storage?.workflowsKey ?? 'findr-syshub-workflows', JSON.stringify(workflows));
+      let indexed: { [key: string]: number } = {};
+      workflows.forEach((wf, i) => indexed[wf.uuid] = i);
+      this.workflowUuid2Index$ = indexed;
+      this.workflowsUpdated$.next(Date.now());
+    });
+  }
+
   private loadUserConfig(): void {
     this.userconfig.subscribe((userconfig) => {
       if (this.userconfigLoaded)
@@ -396,19 +432,12 @@ export class CacheService {
   }
 
   private loadWorkflowCache(): void {
-    this.workflows.subscribe((workflows) => {
-      if (this.workflowsLoaded && this._userconfig.value.enableCache)
-        localStorage.setItem(environment.storage?.workflowsKey ?? 'workflowsKey', JSON.stringify(workflows));
-      let indexed: { [key: string]: number } = {};
-      workflows.forEach((cat, i) => indexed[cat.uuid] = i);
-      this.workflowsIndex = indexed;
-    });
-    let olddata = localStorage.getItem(environment.storage?.workflowsKey ?? 'workflowsKey');
+    let olddata = localStorage.getItem(environment.storage?.workflowsKey ?? 'findr-syshub-workflows');
     if (olddata != null)
-      this._workflows.next(<SyshubWorkflow[]>JSON.parse(olddata));
+      this.workflows$.next(<SyshubWorkflow[]>JSON.parse(olddata));
     else
       this.reloadWorkflows();
-    this.workflowsLoaded = true;
+    this.workflowsLoaded$ = true;
   }
 
   prepareSearch(search: SearchConfig): string {
@@ -495,7 +524,7 @@ export class CacheService {
           });
         return;
       }
-      this._workflows.next([...reply].sort((a, b) => a.name > b.name ? 1 : -1));
+      this.workflows$.next([...reply].sort((a, b) => a.name > b.name ? 1 : -1));
     });
   }
 
