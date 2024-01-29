@@ -153,7 +153,7 @@
     <ul>
         @for (prop of serverProperties ; track $index) {
         <li>
-            <i class="bi bi-printer-fill me-2"></i>
+            <i class="bi bi-sliders2-vertical me-2"></i>
             <span [innerHTML]="prop.key| highlight: searchResult.search.phrase"></span> : <span
                 [innerHTML]="prop.value | highlight: searchResult.search.phrase"></span>
         </li>
@@ -172,7 +172,7 @@
     <ul>
         @for (prop of serverInfo ; track $index) {
         <li>
-            <i class="bi bi-printer-fill me-2"></i>
+            <i class="bi bi-server me-2"></i>
             <span [innerHTML]="prop.key| highlight: searchResult.search.phrase"></span> : <span
                 [innerHTML]="prop.value | highlight: searchResult.search.phrase"></span>
         </li>
@@ -191,7 +191,7 @@
     <ul>
         @for (useritem of user ; track $index) {
         <li>
-            <i class="bi bi-printer-fill me-2"></i>
+            <i class="bi bi-people-fill me-2"></i>
             <span [innerHTML]="useritem.name | highlight: searchResult.search.phrase"></span>
             (<span>{{ fixcase(useritem.type) }}{{ useritem.email ? ', ' + useritem.email : '' }}</span>)
         </li>
