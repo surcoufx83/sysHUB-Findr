@@ -105,7 +105,7 @@ export const L10nDe: L10nLocale = {
             subtitle: `
                 Die übersicht zeigt eine kurze Zusammenfassung der Treffer. Mehr Details
                 findest du nach dem Klicken auf die Buttons der jeweiligen Kategorien. 
-                Grauer Button = kein Treffer in dieser Kategorie.
+                Grauer Button = kein Treffer in diesem Bereich.
             `
         },
         jobtype: {

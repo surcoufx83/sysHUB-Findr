@@ -102,10 +102,10 @@ export const L10nEn: L10nLocale = {
         header: {
             title: 'Search Results for "[0]"',
             subtitle: `
-                The overview provides a brief summary of the hits. For more details,
-                click on the buttons in their respective categories.
-                Gray button = no hit in this category.
-            `
+                The overview provides a brief summary of the results. For more details,
+                click on the buttons of the respective sections below. 
+                Gray button = no results in this section.
+            `,
         },
         jobtype: {
             title: 'Matches in Job Types, Searching for "[0]"',

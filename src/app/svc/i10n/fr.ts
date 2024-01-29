@@ -101,12 +101,12 @@ export const L10nFr: L10nLocale = {
             selected: 'Détails pour "[0]"'
         },
         header: {
-            title: 'Résultats de la Recherche pour "[0]"',
+            title: 'Résultats de la recherche pour "[0]"',
             subtitle: `
-                L'aperçu fournit un résumé succinct des résultats. Pour plus de détails,
-                cliquez sur les boutons dans leurs catégories respectives.
-                Bouton gris = pas de résultat dans cette catégorie.
-            `
+                La vue d'ensemble offre un résumé succinct des résultats. Pour plus de détails,
+                cliquez sur les boutons des sections respectives ci-dessous. 
+                Bouton gris = aucune correspondance dans cette section.
+            `,
         },
         jobtype: {
             title: 'Correspondances dans les Types de Travail, Recherche de "[0]"',
