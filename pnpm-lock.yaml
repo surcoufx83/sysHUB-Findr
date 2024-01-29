@@ -50,6 +50,9 @@ dependencies:
   date-fns:
     specifier: ^2.30.0
     version: 2.30.0
+  flag-icons:
+    specifier: ^7.1.0
+    version: 7.1.0
   ngx-device-detector:
     specifier: ^7.0.0
     version: 7.0.0(@angular/common@17.1.1)(@angular/core@17.1.1)
@@ -3780,6 +3783,10 @@ packages:
       locate-path: 7.2.0
       path-exists: 5.0.0
     dev: true
+
+  /flag-icons@7.1.0:
+    resolution: {integrity: sha512-AH4v++19bpC5P3Wh767top4wylJYJCWkFnvNiDqGHDxqSqdMZ49jpLXp8PWBHTTXaNQ+/A+QPrOwyiIGaiIhmw==}
+    dev: false
 
   /flat@5.0.2:
     resolution: {integrity: sha512-b6suED+5/3rTpUBdG1gupIl8MPFCAMA0QXwmljLhvCUKcUvdE4gWky9zpuGCcXHOsz4J9wPGNWq6OKpmIzz3hQ==}

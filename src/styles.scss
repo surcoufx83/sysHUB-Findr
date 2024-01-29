@@ -27,6 +27,8 @@ $theme-colors: (
 @import 'bootstrap/scss/bootstrap.scss';
 @import '@fontsource/montserrat';
 
+@import 'flag-icons/css/flag-icons.min.css';
+
 body {
     font-family: "Montserrat";
 }

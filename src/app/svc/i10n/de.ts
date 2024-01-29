@@ -26,7 +26,7 @@ export const L10nDe: L10nLocale = {
         },
         locales: {
             de: 'Deutsch',
-            en: 'Englisch',
+            en: '🇺🇸 Englisch',
             fr: 'Französisch',
         },
         phrases: {
