@@ -1,4 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, SecurityContext } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CacheService } from 'src/app/svc/cache.service';
@@ -22,7 +24,8 @@ export class ResultComponent implements OnDestroy, OnInit {
   constructor(private l10nService: L10nService,
     private cacheService: CacheService,
     private router: Router,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    @Inject(DOCUMENT) private document: Document) { }
 
   get l10nphrase(): L10nLocale {
     return this.l10nService.locale;
@@ -59,6 +62,22 @@ export class ResultComponent implements OnDestroy, OnInit {
       if (view == '' || view == 'ConfigItems' || view == 'JobTypes' || view == 'PSetItems' || view == 'WorkflowItems' || view == 'CertStoreItems' || view == 'IppDevices' || view == 'ServerConfig' || view == 'ServerInformation' || view == 'Users')
         this.selectedChapter = view;
     })
+  }
+
+  onExportResultBtnClick(): void {
+    if (!this.searchResult)
+      return;
+    const data = JSON.stringify(this.searchResult, null, 2);
+    const blobdata = new Blob([data], {
+      type: 'application/json'
+    });
+    let link = this.document.createElement('a');
+    link.setAttribute('type', 'hidden');
+    link.href = URL.createObjectURL(blobdata);
+    link.download = `Findr search for ${encodeURI(this.searchResult.search.phrase)}.json`;
+    this.document.body.appendChild(link);
+    link.click();
+    link.remove();
   }
 
 }

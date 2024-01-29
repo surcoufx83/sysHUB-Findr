@@ -126,14 +126,11 @@
                             }
                         </div>
                         <div>
-                            <a [routerLink]="['/result']" class="ms-md-5"
-                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'ImpExpView'}">
-                                <button type="button"
-                                    [ngClass]="{ 'btn btn-sm text-nowrap': true, 'btn-success': selectedChapter == 'ImpExpView', 'btn-outline-success': selectedChapter != 'ImpExpView' }">
-                                    <i class="bi bi-floppy-fill me-2"></i>
-                                    {{ l10nphrase.result.toolbar.exportResults }}
-                                </button>
-                            </a>
+                            <button type="button" class="btn btn-sm text-nowrap btn-outline-success"
+                                (click)="onExportResultBtnClick()">
+                                <i class="bi bi-floppy-fill me-2"></i>
+                                {{ l10nphrase.result.toolbar.exportResults }}
+                            </button>
                         </div>
                     </div>
                 </div>
