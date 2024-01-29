@@ -67,7 +67,7 @@ export type UserConfig = {
 
 export type UuidModifiedTypeObject = {
     uuid: string,
-    modifiedtime: number | null,
+    modifiedtime: number | string | null,
     path?: string,
     type: 'SyshubCategory' | 'SyshubConfigItem' | 'SyshubJobType' | 'SyshubPSetItem' | 'SyshubWorkflow',
 }

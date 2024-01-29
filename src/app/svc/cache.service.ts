@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { isEqual, parseISO } from 'date-fns';
+import { isEqual, parseISO, toDate } from 'date-fns';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { RestService, SyshubCategory, SyshubConfigItem, SyshubJobType, SyshubPSetItem, SyshubWorkflow, UnauthorizedError } from 'syshub-rest-module';
@@ -279,10 +279,43 @@ export class CacheService {
     let result: string | null = sessionStorage.getItem(token);
     if (result !== null) {
       this._searchresult.next(<SearchResult>JSON.parse(result));
-      this.setResult_reloadOutdatedItems(this._searchresult.value!.result!);
+      this.loadSearchResult_reloadOutdatedItems(this._searchresult.value!.result!);
       return true;
     }
     return false;
+  }
+
+  /**
+   * Reload outdated entities if modifiedtime has changed since last reload.
+   * This is called when loading a search result from the cache. 
+   * @param result The search result entities
+   */
+  loadSearchResult_reloadOutdatedItems(result: SearchResultUuids): void {
+    let configUpdated = false, parametersetUpdated = false, workflowsUpdated = false;
+    result.config.forEach((obj) => {
+      if (!configUpdated)
+        if (this.uuids[obj.uuid] == undefined || this.uuids[obj.uuid].modifiedtime !== obj.modifiedtime) {
+          configUpdated = true;
+          this.reloadConfig();
+        }
+    });
+    result.parameterset.forEach((obj) => {
+      if (!parametersetUpdated)
+        if (this.uuids[obj.uuid] == undefined || this.uuids[obj.uuid].modifiedtime !== obj.modifiedtime) {
+          parametersetUpdated = true;
+          this.reloadParameterset();
+        }
+    });
+    result.workflows.forEach((obj) => {
+      if (!workflowsUpdated)
+        if (this.uuids[obj.uuid] == undefined || this.uuids[obj.uuid].modifiedtime !== obj.modifiedtime) {
+          workflowsUpdated = true;
+          this.reloadWorkflows();
+        }
+    });
+    // Limitation: As jobtypes do not contain modifiedtime we reload them after search result contains at least one jobtype
+    if (result.jobtypes.length > 0)
+      this.reloadJobtypes();
   }
 
   getWorkflow(uuid: string): SyshubWorkflow | null {
@@ -441,7 +474,14 @@ export class CacheService {
       if (this.workflowsLoaded$ && this._userconfig.value.enableCache)
         localStorage.setItem(environment.storage?.workflowsKey ?? 'findr-syshub-workflows', JSON.stringify(workflows));
       let indexed: { [key: string]: number } = {};
-      workflows.forEach((wf, i) => indexed[wf.uuid] = i);
+      workflows.forEach((wf, i) => {
+        indexed[wf.uuid] = i;
+        this.uuids[wf.uuid] = {
+          uuid: wf.uuid,
+          modifiedtime: wf.modifiedTime,
+          type: 'SyshubWorkflow'
+        }
+      });
       this.workflowUuid2Index$ = indexed;
       this.workflowsUpdated$.next(Date.now());
     });
@@ -560,53 +600,6 @@ export class CacheService {
       return;
     this._searchresult.value.result = { ...result };
     sessionStorage.setItem(token, JSON.stringify({ ...this._searchresult.value }));
-    this.setResult_reloadOutdatedItems(this._searchresult.value.result);
-  }
-
-  setResult_reloadOutdatedItems(result: SearchResultUuids): void {
-    let configUpdated = false, parametersetUpdated = false, workflowsUpdated = false;
-    console.log('setResult_reloadOutdatedItems', result);
-    result.config.forEach((obj) => {
-      if (!configUpdated) {
-        /* if (this.configModifiedTimeIndex[obj.uuid] == undefined) {
-          configUpdated = true;
-          this.reloadConfig();
-        } else {
-          if (!isEqual(parseISO(obj.modifiedtime), parseISO(this.configModifiedTimeIndex[obj.uuid]))) {
-            configUpdated = true;
-            this.reloadConfig();
-          }
-        } */
-      }
-    });
-    result.parameterset.forEach((obj) => {
-      if (!parametersetUpdated) {
-        /* if (this.parametersetModifiedTimeIndex[obj.uuid] == undefined) {
-          parametersetUpdated = true;
-          this.reloadParameterset();
-        } else {
-          if (!isEqual(parseISO(obj.modifiedtime), parseISO(this.parametersetModifiedTimeIndex[obj.uuid]))) {
-            parametersetUpdated = true;
-            this.reloadParameterset();
-          }
-        } */
-      }
-    });
-    result.workflows.forEach((obj) => {
-      if (!workflowsUpdated) {
-        if (this.getWorkflow(obj.uuid) == null) {
-          workflowsUpdated = true;
-          this.reloadWorkflows();
-        } else {
-          /* if (!this.getWorkflow(obj.uuid)!.modifiedTime || !isEqual(parseISO(this.getWorkflow(obj.uuid)!.modifiedTime), parseISO(this.configModifiedTimeIndex[obj.uuid]))) {
-            workflowsUpdated = true;
-            this.reloadWorkflows();
-          } */
-        }
-      }
-    });
-    if (result.jobtypes.length > 1)
-      this.reloadJobtypes();
   }
 
   showMoreFilter(newvalue: boolean): void {
