@@ -16,7 +16,7 @@
         @for (path of configTreeKeys ; track $index) {
         @for (configitem of configByTree[path] ; track $index) {
         <li>
-            <i [ngClass]="['bi me-2', getIcon(configitem.type)]"
+            <i [ngClass]="['bi me-2', getIcon(configitem.type, configitem.value)]"
                 [title]="l10n(l10nphrase.result.overview.propertyType, [configitem.type])"></i>
             <span [innerHTML]="path | highlight: searchResult.search.phrase"></span> : <span
                 [innerHTML]="configitem.value | highlight: searchResult.search.phrase"></span>
@@ -57,7 +57,7 @@
         @for (path of psetTreeKeys ; track $index) {
         @for (psetitem of psetByTree[path] ; track $index) {
         <li>
-            <i [ngClass]="['bi me-2', getIcon(psetitem.type)]"
+            <i [ngClass]="['bi me-2', getIcon(psetitem.type, psetitem.value)]"
                 [title]="l10n(l10nphrase.result.overview.propertyType, [psetitem.type])"></i>
             <span [innerHTML]="path | highlight: searchResult.search.phrase"></span> : <span
                 [innerHTML]="psetitem.value | highlight: searchResult.search.phrase"></span>
