@@ -68,7 +68,6 @@ export const L10nEn: L10nLocale = {
         clearCacheLink: 'Clear Cache',
         helpLink: 'Help',
         homeLink: 'Home',
-        localeIsActive: 'active',
         logoutLink: 'Log Out',
         resultLink: 'Search Results',
         searchBtn: 'Search',

@@ -68,7 +68,6 @@ export const L10nFr: L10nLocale = {
         clearCacheLink: 'Effacer le cache',
         helpLink: 'Aide',
         homeLink: 'Accueil',
-        localeIsActive: 'actif',
         logoutLink: 'Déconnexion',
         resultLink: 'Résultats de recherche',
         searchBtn: 'Rechercher',

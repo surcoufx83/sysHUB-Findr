@@ -4,6 +4,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
+import { PagepropsService } from 'src/app/svc/pageprops.service';
 import { SearchService, defaultSearchConfig } from 'src/app/svc/search.service';
 import { ToastsService } from 'src/app/svc/toasts.service';
 import { SearchConfig } from 'src/app/types';
@@ -18,6 +19,7 @@ export class NavbarComponent implements OnInit {
 
   @Input() title: string = '';
 
+  appTheme: 'light' | 'dark' | 'auto' | null = null;
   currentLocale: string;
   locales: string[] = environment.i10n?.locales ?? ['en', 'de', 'fr'];
   localesLocalized: { [key: string]: string } = {};
@@ -49,6 +51,7 @@ export class NavbarComponent implements OnInit {
     private cacheService: CacheService,
     private searchService: SearchService,
     private toastsService: ToastsService,
+    private pagepropsService: PagepropsService,
     router: Router
   ) {
     router.events.subscribe((event) => {
@@ -75,6 +78,11 @@ export class NavbarComponent implements OnInit {
       this.localesLocalized[locale] = this.l10nphrase.common.locales[locale] ?? locale;
     });
     this.currentLocale = this.l10nService.lang.length > 2 ? this.l10nService.lang.substring(0, 2) : this.l10nService.lang;
+    this.pagepropsService.AppTheme.subscribe((theme) => { this.appTheme = theme; console.warn(theme) });
+  }
+
+  applyTheme(theme: 'light' | 'dark' | null): void {
+    this.pagepropsService.applyTheme(theme);
   }
 
   get l10nphrase(): L10nLocale {

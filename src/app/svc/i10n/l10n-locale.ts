@@ -59,7 +59,6 @@ export type L10nLocale = {
         clearCacheLink: string,
         helpLink: string,
         homeLink: string,
-        localeIsActive: string,
         logoutLink: string,
         promoLink: string,
         resultLink: string,

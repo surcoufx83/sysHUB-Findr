@@ -145,13 +145,34 @@
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li [ngClass]="{'dropdown-item cursor-pointer': true, 'text-muted': locale === currentLocale}"
-                            *ngFor="let locale of locales" (click)="onSwitchLocale(locale)">
-                            <i class="bi bi-translate me-2" *ngIf="locale !== currentLocale"></i>
-                            <i class="bi bi-check2-circle me-2" *ngIf="locale === currentLocale"></i>
-                            {{ localesLocalized[locale] }} <ng-container *ngIf="locale === currentLocale">({{
-                                l10nphrase.navbar.localeIsActive
-                                }})</ng-container>
+                        @for(locale of locales; track $index) {
+                        <li class="dropdown-item cursor-pointer" (click)="onSwitchLocale(locale)">
+                            @if(locale !== currentLocale) {
+                            <i ngClass="bi bi-translate me-2"></i>
+                            }
+                            @else {
+                            <i class="bi bi-check2-circle text-success me-2"></i>
+                            }
+                            {{ localesLocalized[locale] }}
+                        </li>
+                        }
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="dropdown-item cursor-pointer" (click)="applyTheme('light')">
+                            <i
+                                [ngClass]="{ 'bi me-2': true, 'bi-brightness-high-fill text-success': appTheme == 'light', 'bi-brightness-high': appTheme != 'light' }"></i>
+                            hell
+                        </li>
+                        <li class="dropdown-item cursor-pointer" (click)="applyTheme('dark')">
+                            <i
+                                [ngClass]="{ 'bi me-2': true, 'bi-moon-fill text-success': appTheme == 'dark', 'bi-moon': appTheme != 'dark' }"></i>
+                            dunkel
+                        </li>
+                        <li class="dropdown-item cursor-pointer" (click)="applyTheme(null)">
+                            <i
+                                [ngClass]="{ 'bi me-2': true, 'bi-circle-half text-success': appTheme == 'auto' || appTheme == null, 'bi-brightness-high':appTheme != 'auto' && appTheme != null }"></i>
+                            automatisch
                         </li>
                         <li>
                             <hr class="dropdown-divider">
