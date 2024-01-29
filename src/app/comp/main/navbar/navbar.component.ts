@@ -78,7 +78,7 @@ export class NavbarComponent implements OnInit {
       this.localesLocalized[locale] = this.l10nphrase.common.locales[locale] ?? locale;
     });
     this.currentLocale = this.l10nService.lang.length > 2 ? this.l10nService.lang.substring(0, 2) : this.l10nService.lang;
-    this.pagepropsService.AppTheme.subscribe((theme) => { this.appTheme = theme; console.warn(theme) });
+    this.pagepropsService.AppTheme.subscribe((theme) => this.appTheme = theme);
   }
 
   applyTheme(theme: 'light' | 'dark' | null): void {
