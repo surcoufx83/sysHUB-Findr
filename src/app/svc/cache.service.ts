@@ -173,6 +173,8 @@ export class CacheService {
   private _searchresult: BehaviorSubject<SearchResult | null> = new BehaviorSubject<SearchResult | null>(null);
   public searchresult = this._searchresult.asObservable();
 
+  private userIsLoggedin$: boolean | null = null;
+
   constructor(
     private l10nService: L10nService,
     private restapi: RestService,
@@ -185,14 +187,30 @@ export class CacheService {
    * Clears the local storage and forces a full cache reload.
    */
   public clear(): void {
+    this.clearInternal(true);
+  }
+
+  /**
+   * Clears the local storage and forces a full cache reload.
+   */
+  private clearInternal(reload?: boolean, fullclear?: boolean): void {
     this.categories$.next([]);
     this.config$.next([]);
     this.jobtypes$.next([]);
     this.parameterset$.next([]);
     this.workflows$.next([]);
     this._searchresult.next(null);
+    localStorage.removeItem(environment.storage?.categoriesKey ?? 'findr-syshub-cat');
+    localStorage.removeItem(environment.storage?.configKey ?? 'findr-syshub-config');
+    localStorage.removeItem(environment.storage?.jobtypesKey ?? 'findr-syshub-jobtypes');
+    localStorage.removeItem(environment.storage?.configKey ?? 'findr-syshub-parameterset');
+    localStorage.removeItem(environment.storage?.workflowsKey ?? 'findr-syshub-workflows');
     localStorage.removeItem(environment.storage?.searchconfigKey ?? 'findr-syshub-searchconfig');
-    this.loadCache();
+    if (fullclear) {
+      sessionStorage.clear();
+    }
+    if (reload)
+      this.loadCache();
   }
 
   getCatgeory(uuid: string): SyshubCategory | null {
@@ -322,6 +340,15 @@ export class CacheService {
   }
 
   loadSubscriptions(): void {
+    this.restapi.isLoggedIn.subscribe((state) => {
+      if (state === false && this.userIsLoggedin$ === true) {
+        this.clearInternal(false, true);
+      }
+      this.userIsLoggedin$ = state;
+      if (state === true) {
+        this.loadCache();
+      }
+    })
     this.loadSubscriptions_Categories();
     this.loadSubscriptions_Config();
     this.loadSubscriptions_Jobtypes();

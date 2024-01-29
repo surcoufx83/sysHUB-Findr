@@ -62,6 +62,9 @@ export const L10nEn: L10nLocale = {
         inputCredentialsToast: 'Login rejected by the server. Please verify your credentials and try again.',
         inputServerNotAvailableToast: 'Login failed. The server is currently unavailable.'
     },
+    logout: {
+        logoutOngoingMsg: 'Logging out...',
+    },
     navbar: {
         aboutLink: 'About',
         searchPlaceholder: '🔍 Search term, e.g., currentjob',

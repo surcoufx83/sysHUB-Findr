@@ -62,6 +62,9 @@ export const L10nFr: L10nLocale = {
         inputCredentialsToast: 'Connexion refusée par le serveur. Veuillez vérifier vos identifiants et réessayer.',
         inputServerNotAvailableToast: 'Échec de la connexion. Le serveur n\'est actuellement pas disponible.'
     },
+    logout: {
+        logoutOngoingMsg: 'Déconnexion en cours...',
+    },
     navbar: {
         aboutLink: 'À propos',
         searchPlaceholder: '🔍 Terme de recherche, par exemple, currentjob',

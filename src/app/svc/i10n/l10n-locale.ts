@@ -53,7 +53,10 @@ export type L10nLocale = {
         inputInvalidToast: string,
         inputCredentialsToast: string,
         inputServerNotAvailableToast: string
-    }
+    },
+    logout: {
+        logoutOngoingMsg: string,
+    },
     navbar: {
         aboutLink: string,
         clearCacheLink: string,

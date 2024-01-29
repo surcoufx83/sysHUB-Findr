@@ -62,6 +62,9 @@ export const L10nDe: L10nLocale = {
         inputCredentialsToast: 'Anmeldung vom Server abgewiesen. Bitte prüfe deine Eingaben und versuche es nochmal.',
         inputServerNotAvailableToast: 'Anmeldung fehlgeschlagen. Der Server ist gerade nicht erreichbar.'
     },
+    logout: {
+        logoutOngoingMsg: 'Du wirst abgemeldet...',
+    },
     navbar: {
         aboutLink: 'Über',
         searchPlaceholder: '🔍 Suchbegriff, z.B. currentjob',
