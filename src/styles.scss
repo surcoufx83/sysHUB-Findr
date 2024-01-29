@@ -31,6 +31,18 @@ body {
     font-family: "Montserrat";
 }
 
+body[data-bs-theme="dark"] {
+    .hide-toggler:not(:focus):not(:hover):not(:active) {
+        color: #dee2e6 !important;
+    }
+}
+
+body[data-bs-theme="light"] {
+    .hide-toggler:not(:focus):not(:hover):not(:active) {
+        color: #212529 !important;
+    }
+}
+
 app-toasts {
     position: absolute;
     bottom: 0;

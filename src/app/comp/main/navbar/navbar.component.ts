@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NavigationEnd, Router } from '@angular/router';
+import { DeviceDetectorService } from 'ngx-device-detector';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
@@ -20,6 +21,7 @@ export class NavbarComponent implements OnInit {
   @Input() title: string = '';
 
   appTheme: 'light' | 'dark' | 'auto' | null = null;
+  deviceType: 'mobile' | 'tablet' | 'desktop' = 'desktop';
   currentLocale: string;
   locales: string[] = environment.i10n?.locales ?? ['en', 'de', 'fr'];
   localesLocalized: { [key: string]: string } = {};
@@ -54,6 +56,7 @@ export class NavbarComponent implements OnInit {
     private pagepropsService: PagepropsService,
     router: Router
   ) {
+    this.deviceType = pagepropsService.DeviceType;
     router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.url = event.url;

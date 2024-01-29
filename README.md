@@ -4,9 +4,6 @@ Dokumentation zum sysHUB Findr. Weitere Informationen über aktuelle Änderungen
 ## ⚠️ Work in progress
 Diese Software befindet sich noch in der Entwicklung. Sie basiert auf dem [COSMOSFindr aus Version 2.9.1](https://cdegitlab.westeurope.cloudapp.azure.com/sfuchs/COSMOSFindr) der aber durch viele Änderungen in sysHUB und der REST API hinfällig wurde. Der sysHUBFindr ist der generalüberholte Findr mit modernen Webkomponenten und einem neuen Outfit auf Grundlage des Material Design von Google.
 
-## 👩‍💻 GUI nicht mobil optimiert!
-Die aktuelle Version des Findr ist für Desktop-Bildschirme mit einer empfohlenen Auflösung von mindestens 1080P optimiert. Die Darstellung auf mobilen oder Hochkant-Bildschirmen ist aktuell nicht implementiert.
-
 ## Voraussetzungen
 Um diese Software nutzen zu können und dürfen ist folgendes erforderlich:
 - NT-ware uniFLOW sysHUB ab Version 2022.1.0
@@ -41,35 +38,57 @@ In der Datei müssen entweder Basic- oder OAuth Credentials angegeben und anschl
 | syshub.oauth.clientId     | String (`findr`)               | Name eines im sysHUB konfigurierten Authorisierungsserver (Scope `private;public` erforderlich, Resource Ids `cosmos-web;cosmos-webapi` erforderlich)                                                                                                                                           |
 | syshub.oauth.clientSecret | String (`...`)                 | Das zur Client Id zugehörige secret.                                                                                                                                                                                                                                                            |
 
-### Theme <span style="color:red">Incomplete ([see #2](https://github.com/surcoufx83/sysHUB-Findr/issues/2))</span>
-Der Findr enthält einen automatischen Design-Wechsel zwischen hellem und dunklem Modus abhängig von den Benutzerpräferenzen, eingestellt im Betriebssystem.
+### Theme
+<img style="float: right; margin-left: 1rem;" src="docs/theme-switch.png" alt="Wechsel des Themas (hell/dunkel) über das Menü">
+Der Findr enthält einen automatischen Design-Wechsel zwischen hellem und dunklem Modus abhängig von den Benutzerpräferenzen, eingestellt im Betriebssystem. über das Bürger-Menü rechts oben kann durch den Benutzer auch manuell ein Thema festgelegt werden.
+<br clear="all"/>
 
-### Lokalisierung (I10N) <span style="color:red">Incomplete</span>
+### Lokalisierung (L10N)
+<img style="float: left; margin-right: 1rem;" src="docs/locale-switch.png" alt="Wechsel der Sprache über das Menü">
+Der Findr ist übersetzt in die Sprachen Deutsch, Englisch, Französisch. Beim Laden der Seite bestimmt die Browser-Standardeinstellung (i.d.R. = Betriebssystem-Sprache), welche Sprache angezeigt wird. Anwender können über das Bürger-Menü rechts oben eine andere Sprache auswählen.
+<br clear="all"/>
 
-### Sucheinstellungen auf der Startseite <span style="color:red">Incomplete</span>
+### Sucheinstellungen auf der Startseite
+Über die Startseite können Sucheinstellungen vorgenommen werden, die über die Suche in der Navigationsleiste aus Platzgründen nicht verfügbar sind.  Diese zusätzlichen Einstellungen sind im Findr als "erweiterte Filter" bezeichnet. In diese sind folgende Optionen enthalten:
+- Suchen nur in Elementen die einer Kategorie zugeordnet sind
+- `[B]`-Kommentare ignorieren (Standard-Kommentare in Prozessen und Beschreibungstexten)
+- UUID's durchsuchen
+- Inklusive Workflowinhalte
+
+In den Findr Standardeinstellungen sind diese wie folgt gesetzt:
+- Kategorie-Filter: deaktiviert
+- `[B]`-Kommentare ignorieren: aktiviert
+- UUID's durchsuchen: deaktiviert
+- Inklusive Workflowinhalte: aktiviert
+
+Werden diese Einstellungen durch den Anwender auf der Startseite geändert und dann eine Suche ausgeführt, so werden diese Einstellungen für den Anwender als neuer Standard im Browser gespeichert. Ebenso verwendet die Suche in der Navigationsleiste zukünftig diese Einstellungen.
 
 ## Vorschau auf die Funktionalitäten <span style="color:red">Incomplete</span>
+
+### Anmeldeseite<span style="color:red">Incomplete</span>
 
 ### Startseite
 Die Startseite dient der Konfiguration einer Suchanfrage. Die Suchanfrage wird für das nächste mal im Browsercache gespeichert. Das Suchfeld in der obersten Navigationsleiste bietet jederzeit den schnellsten Weg eine weitere Suche zu starten (Einstellungen der vorherigen Suche werden übernommen).
 
-| Desktopansicht                                              |
-| ----------------------------------------------------------- |
-| ![Startseite in der Desktop-Ansicht](docs/home-desktop.png) |
+| Desktopansicht                                              | Mobile Ansicht                                                                               |
+| ----------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| ![Startseite in der Desktop-Ansicht](docs/home-desktop.png) | <img src="docs/home-mobile.png" alt="Startseite in der Ansicht für Mobilgeräte" width="85%"> |
 
 ### Suche läuft
 Nachdem die Suche gestartet wird, wird der Anwender auf eine Seite zum Status der Suche weitergeleitet. Diese wird zusammen mit einem sich bewegenden Balken angezeigt, bis das Ergebnis der Suche vom sysHUB zurückgemeldet und aufbereitet wurde.
+Wurde bei der Suche eine der Optionen Zertifikatsspeicher, Server properties, Server infos, Drucker oder Benutzer gewählt, führt das dazu, dass nach der herkömlichen Suche die entsprechenden Rest API Endpoints aufgerufen und untersucht werden.
 
-| Desktopansicht                                                    | Mobile Ansicht                                                                             |
-| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| ![Suche läuft in der Desktop-Ansicht](docs/searching-desktop.png) | <img src="docs/searching-mobile.png" alt="Suche läuft in der mobilen Ansicht" width="91%"> |
+| Desktopansicht                                                    | Mobile Ansicht                                                                              |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| ![Suche läuft in der Desktop-Ansicht](docs/searching-desktop.png) | <img src="docs/searching-mobile.png" alt="Suche läuft in der mobilen Ansicht" width="100%"> |
 
-### Ergebnis-Zusammenfassung
-Sobald das Suchergebnis verarbeitet wurde, wird dem Anwender eine Zusammenfassung angezeigt. In der Trefferliste werden jeweils für Konfiguration, Parameterset, Auftragstypen und Workflows listenartig dargestellt, welche Treffer ermittelt wurden. In dieser Zusammenfassung gibt es für Konfiguration und Parameterset keine Baumdarstellung.
+### Ergebnis-Zusammenfassung<span style="color:red">Incomplete</span>
+Sobald das Suchergebnis verarbeitet wurde, wird dem Anwender eine Zusammenfassung angezeigt. In der Trefferliste werden jeweils für Konfiguration, Parameterset, Auftragstypen, Workflows, Zertifikatsspeicher, Server properties, Server infos, Drucker und Benutzer listenartig dargestellt, welche Treffer ermittelt wurden. In dieser Zusammenfassung gibt es für Konfiguration und Parameterset keine Baumdarstellung.
 
 An jeder Stelle der Ergebnisse werden Treffer innerhalb eines Wertes mit einem blassen gelb hinterlegt.
 
-über die zweite Navigationsleiste (oberhalb der Trefferliste) springt der Anwender in die jeweilige Detailansicht.
+über die Navigationsleiste (oberhalb der Zusammenfassung) springt der Anwender in die jeweilige Detailansicht. Die Buttons sind ausgegraut dargestellt, wenn in dem Bereich der Suchbegriff nicht gefunden wurde. 
+Zusätzlich lässt sich die Trefferliste exportieren. Der Export enthält eine Json-Datei welche die Suchanfrage inkl. der Ergebnisse beinhaltet. Der Export kann zum Beispiel zu Diagnosezwecken in einem anderen Findr importiert werden.
 
 | Desktopansicht                                                                                     | Mobile Ansicht                                                                                                              |
 | -------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
@@ -91,9 +110,13 @@ Mit einem Klick auf das Copy-Icon neben einem Detaileintrag kann der Wert kopier
 | ![Baumansicht Config Mouseover in der Desktop-Ansicht](docs/result-config-desktop.png)        | <img src="docs/result-config-mobile.png" alt="Baumansicht Config Mouseover in der mobilen Ansicht" width="91%">        |
 | ![Baumansicht Config Angepinnt in der Desktop-Ansicht](docs/result-config-pinned-desktop.png) | <img src="docs/result-config-pinned-mobile.png" alt="Baumansicht Config Angepinnt in der mobilen Ansicht" width="91%"> |
 
-### Ergebnisansicht Auftragstypen
+### Ergebnisansicht Auftragstypen<span style="color:red">Incomplete</span>
 Die Ergebnisansicht der Auftragstypen ist nur wenig anders, als die der Konfig. Es gibt natürlich keine Baumstruktur, stattdessen werden die Elemente als Liste dargestellt. Wie auch bei Konfig und Parameterset gibt es im rechten Bereich die Detailinformationen zu einem Auftragstypen inkl. der Jobattribute-Klassifizierung.
 
 | Desktopansicht                                                                            | Mobile Ansicht                                                                                                     |
 | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
 | ![Ergebnisansicht Auftragstypen in der Desktop-Ansicht](docs/result-jobtypes-desktop.png) | <img src="docs/result-jobtypes-mobile.png" alt="Ergebnisansicht Auftragstypen in der mobilen Ansicht" width="91%"> |
+
+## Ergebnisliste exportieren und importieren <span style="color:red">Incomplete</span>
+
+## Fehlerdiagnose Findr <span style="color:red">Incomplete</span>

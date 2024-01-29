@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router, Event as NavigationEvent, NavigationEnd } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { L10nService } from './i10n.service';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,15 @@ export class PagepropsService {
   private appTheme$: BehaviorSubject<'light' | 'dark' | 'auto' | null> = new BehaviorSubject<'light' | 'dark' | 'auto' | null>(null);
   public AppTheme = this.appTheme$.asObservable();
 
-  constructor(private i10nService: L10nService, private router: Router) {
+  private deviceType$: 'mobile' | 'tablet' | 'desktop' = 'desktop';
+
+  constructor(
+    private i10nService: L10nService,
+    private router: Router,
+    private device: DeviceDetectorService,
+  ) {
+
+    this.deviceType$ = device.isDesktop() ? 'desktop' : device.isMobile() ? 'mobile' : 'tablet';
 
     this.loadDefaultTheme();
 
@@ -56,6 +65,10 @@ export class PagepropsService {
         }
       }
     );
+  }
+
+  public get DeviceType(): 'mobile' | 'tablet' | 'desktop' {
+    return this.deviceType$;
   }
 
   l10n(phrase: string, params: any[] = []) {
