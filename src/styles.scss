@@ -54,11 +54,8 @@ mark,
     --bs-text-opacity: 1;
     color: rgba(var(--bs-success-rgb), var(--bs-text-opacity)) !important;
     background-color: transparent !important;
-    --bs-border-opacity: 1;
-    border-color: rgba(var(--bs-success-rgb), var(--bs-border-opacity)) !important;
-    border-width: 1px !important;
-    border-style: dotted;
     font-weight: bold;
+    padding: 0 !important;
 }
 
 ul.treeview {
