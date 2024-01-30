@@ -139,8 +139,18 @@
 
             <!-- result container based on selected chapter -->
             <div class="card">
-                @if (selectedChapter == '') {
-                <app-result-overview [searchResult]="searchResult"></app-result-overview>
+                @switch (selectedChapter) {
+                @case ('ConfigItems') {
+                <app-result-config [configByTree]="configByTree" [configTreeKeys]="configTreeKeys"
+                    [configUpdate]="configUpdate"></app-result-config>
+                }
+                @default {
+                <app-result-overview [searchResult]="searchResult" [totalMatchCount]="totalMatchCount"
+                    [certstore]="certstore" [configByTree]="configByTree" [configTreeKeys]="configTreeKeys"
+                    [ippDevices]="ippDevices" [jobtypes]="jobtypes" [psetByTree]="psetByTree"
+                    [psetTreeKeys]="psetTreeKeys" [serverInfo]="serverInfo" [serverProperties]="serverProperties"
+                    [user]="user" [workflows]="workflows"></app-result-overview>
+                }
                 }
             </div>
             <!-- result container based on selected chapter -->

@@ -30,6 +30,7 @@ import { ProgressbarComponent } from './comp/main/progressbar/progressbar.compon
 import { ResultComponent } from './comp/result/result.component';
 import { OverviewComponent } from './comp/result/overview/overview.component';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { ConfigComponent } from './comp/result/config/config.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
     ProgressbarComponent,
     ResultComponent,
     OverviewComponent,
+    ConfigComponent,
   ],
   imports: [
     AppRoutingModule,

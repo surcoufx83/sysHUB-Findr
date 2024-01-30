@@ -65,3 +65,73 @@ mark,
 .mark {
     font-weight: bold;
 }
+
+ul.treeview {
+    margin: auto;
+    padding: 0 0 0 9px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: relative;
+
+    &:before {
+        display: inline-block;
+        content: "";
+        position: absolute;
+        top: -20px;
+        bottom: 16px;
+        left: 0;
+        z-index: 1;
+        border: 1px dotted #67b2dd;
+        border-width: 0 0 0 1px;
+    }
+
+    ul.branch {
+        margin: 0 0 0 23px;
+        padding: 0;
+        position: relative;
+
+        &:before {
+            display: inline-block;
+            content: "";
+            position: absolute;
+            z-index: 1;
+            top: -3px;
+            bottom: 12px;
+            left: -16px;
+            border: 1px dotted #67b2dd;
+            border-width: 0 0 0 1px;
+        }
+    }
+
+    li {
+        position: relative;
+        cursor: pointer;
+        max-width: calc(100% - 20px);
+        list-style: none;
+        margin: 1px 0;
+        padding: 5px;
+        -webkit-box-sizing: content-box;
+        -moz-box-sizing: content-box;
+        box-sizing: content-box;
+
+        &:before {
+            display: inline-block;
+            content: "";
+            position: absolute;
+            top: 14px;
+            left: -13px;
+            width: 15px;
+            height: 0;
+            border-top: 1px dotted #67b2dd;
+            z-index: 1;
+        }
+
+        &.has-children {
+            >div {
+                -webkit-box-sizing: content-box;
+                -moz-box-sizing: content-box;
+                box-sizing: content-box;
+            }
+        }
+    }
+}

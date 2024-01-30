@@ -14,28 +14,22 @@ import titleize from 'titleize';
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
 })
-export class OverviewComponent implements OnDestroy, OnInit {
+export class OverviewComponent {
 
   @Input({ required: true }) searchResult!: SearchResult;
+  @Input({ required: true }) totalMatchCount: number = 0;
 
-  certstore: SearchResultCertStoreContent = { keystore: [], truststore: [] };
-
-  configByTree: { [key: string]: SyshubConfigItem[] } = {};
-  configTreeKeys: string[] = [];
-  configUpdate: number | null = null;
-  ippDevices: SyshubIppDevice[] = [];
-  jobtypes: SyshubJobType[] = [];
-  psetByTree: { [key: string]: SyshubPSetItem[] } = {};
-  psetTreeKeys: string[] = [];
-  psetUpdate: number | null = null;
-  serverInfo: SimpleKeyValue[] = [];
-  serverProperties: SimpleKeyValue[] = [];
-  user: SyshubUserAccount[] = [];
-  workflows: SyshubWorkflow[] = [];
-
-  subs: Subscription[] = [];
-
-  totalMatchCount: number = 0;
+  @Input({ required: true }) certstore: SearchResultCertStoreContent = { keystore: [], truststore: [] };
+  @Input({ required: true }) configByTree: { [key: string]: SyshubConfigItem[] } = {};
+  @Input({ required: true }) configTreeKeys: string[] = [];
+  @Input({ required: true }) ippDevices: SyshubIppDevice[] = [];
+  @Input({ required: true }) jobtypes: SyshubJobType[] = [];
+  @Input({ required: true }) psetByTree: { [key: string]: SyshubPSetItem[] } = {};
+  @Input({ required: true }) psetTreeKeys: string[] = [];
+  @Input({ required: true }) serverInfo: SimpleKeyValue[] = [];
+  @Input({ required: true }) serverProperties: SimpleKeyValue[] = [];
+  @Input({ required: true }) user: SyshubUserAccount[] = [];
+  @Input({ required: true }) workflows: SyshubWorkflow[] = [];
 
   constructor(private l10nService: L10nService,
     private cacheService: CacheService,
@@ -47,189 +41,12 @@ export class OverviewComponent implements OnDestroy, OnInit {
     return this.cacheService.getIcon(type, value);
   }
 
-  getConfigItemByUuid(uuid: string): SyshubConfigItem | null {
-    return this.cacheService.getConfigItemByUuid(uuid);
-  }
-
-  getConfigTree(uuid: string | null): string {
-    return this.cacheService.getConfigTree(uuid);
-  }
-
-  getPsetItemByUuid(uuid: string): SyshubPSetItem | null {
-    return this.cacheService.getPsetItemByUuid(uuid);
-  }
-
-  getPsetTree(uuid: string | null): string {
-    return this.cacheService.getPsetTree(uuid);
-  }
-
   get l10nphrase(): L10nLocale {
     return this.l10nService.locale;
   }
 
   l10n(phrase: string, params: any[] = []) {
     return this.l10nService.ln(phrase, params);
-  }
-
-  ngOnDestroy(): void {
-    this.subs.forEach((s) => s.unsubscribe());
-    this.subs = [];
-  }
-
-  ngOnInit(): void {
-    this.ngOnInit_prepareCertstore();
-    this.ngOnInit_prepareConfig();
-    this.ngOnInit_prepareIppDevices();
-    this.ngOnInit_prepareJobtypes();
-    this.ngOnInit_preparePset();
-    this.ngOnInit_prepareServerConfig();
-    this.ngOnInit_prepareServerInfo();
-    this.ngOnInit_prepareUser();
-    this.ngOnInit_prepareWorkflows();
-
-    this.totalMatchCount = (this.searchResult.result?.config?.length || 0) +
-      (this.searchResult.result?.jobtypes?.length || 0) +
-      (this.searchResult.result?.parameterset?.length || 0) +
-      (this.searchResult.result?.workflows?.length || 0) +
-      (this.searchResult.result?.system?.certstore ? this.searchResult.result?.system?.certstore.matches || 0 : 0) +
-      (this.searchResult.result?.system?.ippDevices ? this.searchResult.result?.system?.ippDevices.matches || 0 : 0) +
-      (this.searchResult.result?.system?.serverConfig ? this.searchResult.result?.system?.serverConfig.matches || 0 : 0) +
-      (this.searchResult.result?.system?.serverInfo ? this.searchResult.result?.system?.serverInfo.matches || 0 : 0) +
-      (this.searchResult.result?.system?.users ? this.searchResult.result?.system?.users.matches || 0 : 0);
-  }
-
-  ngOnInit_prepareCertstore(): void {
-    if (this.searchResult.result?.system?.certstore === undefined || this.searchResult.result?.system?.certstore === null || this.searchResult.result?.system?.certstore === false)
-      return;
-    let tempcertstore: SearchResultCertStoreContent = { keystore: [], truststore: [] };
-    this.searchResult.result?.system?.certstore.content.keystore.forEach((cert) => {
-      if (this.searchService.matchCertStoreItem(cert, this.searchResult.search))
-        tempcertstore.keystore.push(cert);
-    });
-    this.searchResult.result?.system?.certstore.content.truststore.forEach((cert) => {
-      if (this.searchService.matchCertStoreItem(cert, this.searchResult.search))
-        tempcertstore.truststore.push(cert);
-    });
-    this.certstore = { ...tempcertstore };
-  }
-
-  ngOnInit_prepareConfig(): void {
-    this.subs.push(this.cacheService.ConfigUpdated.subscribe((when) => {
-      if (when === this.configUpdate || when === null)
-        return;
-      let newtree: { [key: string]: SyshubConfigItem[] } = {};
-      this.searchResult.result?.config.forEach((item) => {
-        let config = this.getConfigItemByUuid(item.uuid);
-        if (config !== null) {
-          let tree = this.getConfigTree(item.uuid);
-          if (newtree[tree] == undefined)
-            newtree[tree] = []
-          newtree[tree].push(config);
-        }
-      });
-      this.configByTree = { ...newtree };
-      this.configTreeKeys = Object.keys(this.configByTree).sort((a, b) => a.toLocaleLowerCase() > b.toLocaleLowerCase() ? 1 : -1);
-    }));
-  }
-
-  ngOnInit_prepareIppDevices(): void {
-    if (this.searchResult.result?.system?.ippDevices === undefined || this.searchResult.result?.system?.ippDevices === null || this.searchResult.result?.system?.ippDevices === false)
-      return;
-    let tempippDevices: SyshubIppDevice[] = [];
-    this.searchResult.result?.system?.ippDevices.content.forEach((device) => {
-      if (this.searchService.matchIppDevice(device, this.searchResult.search))
-        tempippDevices.push(device);
-    });
-    this.ippDevices = [...tempippDevices];
-  }
-
-  ngOnInit_prepareJobtypes(): void {
-    this.subs.push(this.cacheService.Jobtypes.subscribe(() => {
-      let tempjobtypes: SyshubJobType[] = [];
-      this.searchResult.result?.jobtypes.forEach((jtobj) => {
-        const jt = this.cacheService.getJobtypeByUuid(jtobj.uuid);
-        if (jt != null)
-          tempjobtypes.push(jt);
-      });
-      this.jobtypes = [...tempjobtypes];
-    }));
-  }
-
-  ngOnInit_preparePset(): void {
-    this.subs.push(this.cacheService.ParametersetUpdated.subscribe((when) => {
-      if (when === this.psetUpdate || when === null)
-        return;
-      let newtree: { [key: string]: SyshubPSetItem[] } = {};
-      this.searchResult.result?.parameterset.forEach((item) => {
-        let psitem = this.getPsetItemByUuid(item.uuid);
-        if (psitem !== null) {
-          let tree = this.getPsetTree(item.uuid);
-          if (newtree[tree] == undefined)
-            newtree[tree] = []
-          newtree[tree].push(psitem);
-        }
-      });
-      this.psetByTree = { ...newtree };
-      this.psetTreeKeys = Object.keys(this.psetByTree).sort((a, b) => a.toLocaleLowerCase() > b.toLocaleLowerCase() ? 1 : -1);
-    }));
-  }
-
-  ngOnInit_prepareServerConfig(): void {
-    if (this.searchResult.result?.system?.serverConfig === undefined || this.searchResult.result?.system?.serverConfig === null || this.searchResult.result?.system?.serverConfig === false)
-      return;
-    let tempserverProperties: SimpleKeyValue[] = [];
-    Object.entries(this.searchResult.result.system.serverConfig.content).forEach((kvpair) => {
-      if (this.searchService.match(kvpair[0], this.searchResult.search) || this.searchService.match(kvpair[1], this.searchResult.search))
-        tempserverProperties.push({ key: kvpair[0], value: this.ngOnInit_prepareServerConfig_convert(kvpair[1]) });
-    });
-    this.serverProperties = [...tempserverProperties].sort((a, b) => a.key.toLocaleLowerCase() > b.key.toLocaleLowerCase() ? 1 : a.key.toLocaleLowerCase() < b.key.toLocaleLowerCase() ? -1 : a.value.toLocaleLowerCase() > b.value.toLocaleLowerCase() ? 1 : a.value.toLocaleLowerCase() < b.value.toLocaleLowerCase() ? -1 : 0);
-  }
-
-  ngOnInit_prepareServerConfig_convert(strin: any): any {
-    if (!strin)
-      return '';
-    const teststr = `${strin}`.toLocaleLowerCase();
-    if (teststr === 'true' || teststr === 'false')
-      return teststr === 'true' ? true : false;
-    if (!isNaN(Number(teststr)))
-      return Number(teststr);
-    return strin;
-  }
-
-  ngOnInit_prepareServerInfo(): void {
-    if (this.searchResult.result?.system?.serverInfo === undefined || this.searchResult.result?.system?.serverInfo === null || this.searchResult.result?.system?.serverInfo === false)
-      return;
-    let tempserverInfo: SimpleKeyValue[] = [];
-    Object.entries(<{ [key: string]: any }>this.searchResult.result.system.serverInfo.content).forEach((kvpair) => {
-      if (Array.isArray(kvpair[1]))
-        kvpair[1] = JSON.stringify(kvpair[1]);
-      if (this.searchService.match(kvpair[0], this.searchResult.search) || this.searchService.match(kvpair[1], this.searchResult.search))
-        tempserverInfo.push({ key: kvpair[0], value: this.ngOnInit_prepareServerConfig_convert(kvpair[1]) });
-    });
-    this.serverInfo = [...tempserverInfo].sort((a, b) => a.key.toLocaleLowerCase() > b.key.toLocaleLowerCase() ? 1 : a.key.toLocaleLowerCase() < b.key.toLocaleLowerCase() ? -1 : a.value.toLocaleLowerCase() > b.value.toLocaleLowerCase() ? 1 : a.value.toLocaleLowerCase() < b.value.toLocaleLowerCase() ? -1 : 0);
-  }
-
-  ngOnInit_prepareUser(): void {
-    if (this.searchResult.result?.system?.users === undefined || this.searchResult.result?.system?.users === null || this.searchResult.result?.system?.users === false)
-      return;
-    let tempuser: SyshubUserAccount[] = [];
-    this.searchResult.result.system.users.content.forEach((user) => {
-      if (this.searchService.matchUser(user, this.searchResult.search))
-        tempuser.push(user);
-    });
-    this.user = [...tempuser].sort((a, b) => a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1);
-  }
-
-  ngOnInit_prepareWorkflows(): void {
-    this.subs.push(this.cacheService.Workflows.subscribe(() => {
-      let tempworkflows: SyshubWorkflow[] = [];
-      this.searchResult.result?.workflows.forEach((wfobj) => {
-        const wf = this.cacheService.getWorkflow(wfobj.uuid);
-        if (wf != null)
-          tempworkflows.push(wf);
-      });
-      this.workflows = [...tempworkflows];
-    }));
   }
 
   fixcase(strin: string): string {

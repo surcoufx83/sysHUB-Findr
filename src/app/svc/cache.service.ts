@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { isEqual, parseISO, toDate } from 'date-fns';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Subject, config } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { RestService, SyshubCategory, SyshubConfigItem, SyshubJobType, SyshubPSetItem, SyshubWorkflow, UnauthorizedError } from 'syshub-rest-module';
 import { L10nService } from './i10n.service';
@@ -412,6 +412,7 @@ export class CacheService {
       configitems.filter((cfg) => cfg.uuid != '').forEach((cfg, i) => {
         this.loadSubscriptions_ConfigItem(cfg, indexed);
       });
+      configitems = configitems.sort((a, b) => a.type == 'Group/Folder' && b.type != 'Group/Folder' ? 1 : b.type == 'Group/Folder' && a.type != 'Group/Folder' ? -1 : a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1);
       if (this.configLoaded$ && this._userconfig.value.enableCache)
         localStorage.setItem(environment.storage?.configKey ?? 'findr-syshub-config', JSON.stringify(configitems));
       this.configUuid2Ref$ = { ...indexed };
@@ -430,6 +431,7 @@ export class CacheService {
     cfg.children.filter((child) => child.uuid != '').forEach((child, i) => {
       this.loadSubscriptions_ConfigItem(child, indexed, path === '' ? cfg.name : `${path}/${cfg.name}`);
     });
+    cfg.children = cfg.children.sort((a, b) => a.type == 'Group/Folder' && b.type != 'Group/Folder' ? -1 : b.type == 'Group/Folder' && a.type != 'Group/Folder' ? 1 : a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1);
   }
 
   loadSubscriptions_Jobtypes(): void {
@@ -449,6 +451,7 @@ export class CacheService {
       parameterset.filter((item) => item.uuid != '').forEach((item, i) => {
         this.loadSubscriptions_PSetItem(item, indexed);
       });
+      parameterset = parameterset.sort((a, b) => a.type == 'Group/Folder' && b.type != 'Group/Folder' ? 1 : b.type == 'Group/Folder' && a.type != 'Group/Folder' ? -1 : a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1);
       if (this.parametersetLoaded$ && this._userconfig.value.enableCache)
         localStorage.setItem(environment.storage?.configKey ?? 'findr-syshub-parameterset', JSON.stringify(parameterset));
       this.parametersetUuid2Ref$ = { ...indexed };
@@ -467,6 +470,7 @@ export class CacheService {
     item.children.filter((child) => child.uuid != '').forEach((child, i) => {
       this.loadSubscriptions_PSetItem(child, indexed, path === '' ? item.name : `${path}/${item.name}`);
     });
+    item.children = item.children.sort((a, b) => a.type == 'Group/Folder' && b.type != 'Group/Folder' ? 1 : b.type == 'Group/Folder' && a.type != 'Group/Folder' ? -1 : a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1);
   }
 
   loadSubscriptions_Workflows(): void {
