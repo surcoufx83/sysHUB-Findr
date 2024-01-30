@@ -33,18 +33,6 @@ body {
     font-family: "Montserrat";
 }
 
-body[data-bs-theme="dark"] {
-    .hide-toggler:not(:focus):not(:hover):not(:active) {
-        color: #dee2e6 !important;
-    }
-}
-
-body[data-bs-theme="light"] {
-    .hide-toggler:not(:focus):not(:hover):not(:active) {
-        color: #212529 !important;
-    }
-}
-
 app-toasts {
     position: absolute;
     bottom: 0;
@@ -63,6 +51,13 @@ app-toasts {
 
 mark,
 .mark {
+    --bs-text-opacity: 1;
+    color: rgba(var(--bs-success-rgb), var(--bs-text-opacity)) !important;
+    background-color: transparent !important;
+    --bs-border-opacity: 1;
+    border-color: rgba(var(--bs-success-rgb), var(--bs-border-opacity)) !important;
+    border-width: 1px !important;
+    border-style: dotted;
     font-weight: bold;
 }
 
@@ -72,6 +67,7 @@ ul.treeview {
     overflow-x: hidden;
     overflow-y: auto;
     position: relative;
+    word-break: break-all;
 
     &:before {
         display: inline-block;
@@ -106,7 +102,6 @@ ul.treeview {
     li {
         position: relative;
         cursor: pointer;
-        max-width: calc(100% - 20px);
         list-style: none;
         margin: 1px 0;
         padding: 5px;
@@ -126,7 +121,7 @@ ul.treeview {
             z-index: 1;
         }
 
-        >div {
+        >div.header {
             -webkit-box-sizing: content-box;
             -moz-box-sizing: content-box;
             box-sizing: content-box;
@@ -136,6 +131,51 @@ ul.treeview {
                 display: none;
             }
 
+        }
+
+        &.has-match {
+            &:before {
+                --bs-border-opacity: 1;
+                border-color: rgba(var(--bs-success-rgb), var(--bs-border-opacity)) !important;
+                border-width: 2px !important;
+            }
+
+            >div.header {
+                --bs-text-opacity: 1;
+                color: rgba(var(--bs-success-rgb), var(--bs-text-opacity)) !important;
+                font-weight: bold;
+            }
+
+            >ul.branch::before {
+                --bs-border-opacity: 1;
+                border-color: rgba(var(--bs-success-rgb), var(--bs-border-opacity)) !important;
+                border-width: 0 0 0 2px;
+            }
+        }
+    }
+}
+
+body[data-bs-theme="dark"] {
+    .hide-toggler:not(:focus):not(:hover):not(:active) {
+        color: #dee2e6 !important;
+    }
+}
+
+body[data-bs-theme="light"] {
+    .hide-toggler:not(:focus):not(:hover):not(:active) {
+        color: #212529 !important;
+    }
+
+    ul.treeview,
+    ul.branch {
+        &:before {
+            --bs-border-opacity: 1;
+            border-color: rgba(var(--bs-secondary-rgb), var(--bs-border-opacity)) !important;
+        }
+
+        li:not(.has-match):before {
+            --bs-border-opacity: 1;
+            border-color: rgba(var(--bs-secondary-rgb), var(--bs-border-opacity)) !important;
         }
     }
 }

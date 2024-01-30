@@ -96,6 +96,7 @@ export class ResultComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit_updateItems(result: SearchResult | null): void {
+
     if (result?.search.phrase != this.searchResult?.search.phrase || result == null) {
       this.ngOnInit_updateItems_clearOldData();
     }

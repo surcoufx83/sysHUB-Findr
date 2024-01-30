@@ -225,15 +225,15 @@ export class CacheService {
     return this.configUuid2Ref$[uuid] ?? null;
   }
 
-  getConfigTree(uuid: string | null): string {
+  getConfigTree(uuid: string | null, includeUuids: boolean = false): string {
     if (uuid == null)
       return '';
     const item = this.getConfigItemByUuid(uuid);
     if (item == null)
       return '';
     if (item.parent == null)
-      return item.name;
-    return `${this.getConfigTree(item.parent)} / ${item.name}`;
+      return item.name + (includeUuids ? `[${item.uuid}]` : '');
+    return `${this.getConfigTree(item.parent, includeUuids)} / ${item.name}` + (includeUuids ? `[${item.uuid}]` : '');
   }
 
   getIcon(type: string, value: any = null, fallback: string = 'bi-folder'): string {

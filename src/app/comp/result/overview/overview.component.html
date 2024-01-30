@@ -1,14 +1,11 @@
-<div class="card-header">
-    <h4 class="mb-0">{{ l10nphrase.result.overview.title }}</h4>
-</div>
-<div class="card-body">
-    <span [innerHTML]="l10n(l10nphrase.result.overview.subtitle1, [totalMatchCount])"></span><br />
-    {{l10nphrase.result.overview.subtitle2}}
-</div>
+<span [innerHTML]="l10n(l10nphrase.result.overview.subtitle1, [totalMatchCount])"></span><br />
+{{l10nphrase.result.overview.subtitle2}}
+<br clear="all" />
+<br clear="all" />
 
 <!-- Config tree summary list -->
 @if (searchResult.result?.config?.length || 0 > 0) {
-<div class="card-body">
+<div class="py-3">
     <h5><strong>{{l10nphrase.search.topics.config}} ({{ searchResult.result?.config?.length == 0 ? 'keine' :
             searchResult.result?.config?.length }} {{ l10nphrase.result.toolbar.matches
             }})</strong></h5>
@@ -30,7 +27,7 @@
 
 <!-- Jobtypes summary list -->
 @if (searchResult.result?.jobtypes?.length || 0 > 0) {
-<div class="card-body">
+<div class="py-3">
     <h5><strong>{{l10nphrase.search.topics.jobtypes}} ({{ searchResult.result?.jobtypes?.length == 0 ? 'keine' :
             searchResult.result?.jobtypes?.length }} {{ l10nphrase.result.toolbar.matches
             }})</strong></h5>
@@ -49,7 +46,7 @@
 
 <!-- Parameterset tree summary list -->
 @if (searchResult.result?.parameterset?.length || 0 > 0) {
-<div class="card-body">
+<div class="py-3">
     <h5><strong>{{l10nphrase.search.topics.parameterset}} ({{ searchResult.result?.parameterset?.length }} {{
             l10nphrase.result.toolbar.matches
             }})</strong></h5>
@@ -71,7 +68,7 @@
 
 <!-- Workflows summary list -->
 @if (searchResult.result?.workflows?.length || 0 > 0) {
-<div class="card-body">
+<div class="py-3">
     <h5><strong>{{l10nphrase.search.topics.workflows}} ({{ searchResult.result?.workflows?.length == 0 ? 'keine' :
             searchResult.result?.workflows?.length }} {{ l10nphrase.result.toolbar.matches
             }})</strong></h5>
@@ -89,7 +86,7 @@
 
 <!-- Cert store summary list -->
 @if (certstore.keystore.length > 0 || certstore.truststore.length > 0) {
-<div class="card-body">
+<div class="py-3">
     <h5><strong>{{l10nphrase.search.topics.certstore}} ({{ certstore.keystore.length + certstore.truststore.length == 0
             ? 'keine' :
             certstore.keystore.length + certstore.truststore.length }} {{ l10nphrase.result.toolbar.matches
@@ -128,7 +125,7 @@
 
 <!-- Ippdevices summary list -->
 @if (ippDevices.length || 0 > 0) {
-<div class="card-body">
+<div class="py-3">
     <h5><strong>{{l10nphrase.search.topics.ippDevices}} ({{ ippDevices.length }} {{ l10nphrase.result.toolbar.matches
             }})</strong></h5>
     <ul>
@@ -146,7 +143,7 @@
 
 <!-- Server properties summary list -->
 @if (serverProperties.length || 0 > 0) {
-<div class="card-body">
+<div class="py-3">
     <h5><strong>{{l10nphrase.search.topics.serverConfig}} ({{ serverProperties.length }} {{
             l10nphrase.result.toolbar.matches
             }})</strong></h5>
@@ -165,7 +162,7 @@
 
 <!-- Server info summary list -->
 @if (serverInfo.length || 0 > 0) {
-<div class="card-body">
+<div class="py-3">
     <h5><strong>{{l10nphrase.search.topics.serverInfo}} ({{ serverInfo.length }} {{
             l10nphrase.result.toolbar.matches
             }})</strong></h5>
@@ -184,7 +181,7 @@
 
 <!-- User summary list -->
 @if (user.length || 0 > 0) {
-<div class="card-body">
+<div class="py-3">
     <h5><strong>{{l10nphrase.search.topics.users}} ({{ user.length }} {{
             l10nphrase.result.toolbar.matches
             }})</strong></h5>

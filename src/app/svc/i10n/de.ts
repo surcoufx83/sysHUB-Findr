@@ -82,13 +82,11 @@ export const L10nDe: L10nLocale = {
     },
     result: {
         config: {
-            title: 'Treffer in der Konfiguration, Suche nach »[0]«',
+            title: 'Treffer in der Expertenkonfiguration',
             subtitle: `
                 Auf dieser Seite wird die komplette Baumstruktur der Expertenkonfiguration
-                dargestellt und Treffer sind optisch hervorgehoben.
-                Beim Zeigen mit dem Cursor auf einen Eintrag wird dieser im rechten Bereich
-                dargestellt. Ist die Pinnadel aktiv, findet beim Zeigen kein Wechsel mehr
-                statt, aber beim Klicken.
+                dargestellt und Treffer sind optisch hervorgehoben und automatisch aufgeklappt.
+                Beim Klicken auf einen Eintrag werden die Details im rechten Bereich dargestellt.
             `,
             properties: {
                 description: 'Beschreibung',
