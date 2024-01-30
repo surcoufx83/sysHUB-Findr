@@ -365,7 +365,7 @@ export class CacheService {
   }
 
   private loadParametersetCache(): void {
-    let olddata = localStorage.getItem(environment.storage?.configKey ?? 'findr-syshub-parameterset');
+    let olddata = localStorage.getItem(environment.storage?.parametersetKey ?? 'findr-syshub-parameterset');
     if (olddata != null)
       this.parameterset$.next(<SyshubPSetItem[]>JSON.parse(olddata));
     this.reloadParameterset();
@@ -453,7 +453,7 @@ export class CacheService {
       });
       parameterset = parameterset.sort((a, b) => a.type == 'Group/Folder' && b.type != 'Group/Folder' ? 1 : b.type == 'Group/Folder' && a.type != 'Group/Folder' ? -1 : a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1);
       if (this.parametersetLoaded$ && this._userconfig.value.enableCache)
-        localStorage.setItem(environment.storage?.configKey ?? 'findr-syshub-parameterset', JSON.stringify(parameterset));
+        localStorage.setItem(environment.storage?.parametersetKey ?? 'findr-syshub-parameterset', JSON.stringify(parameterset));
       this.parametersetUuid2Ref$ = { ...indexed };
       this.parametersetUpdated$.next(Date.now());
     });
