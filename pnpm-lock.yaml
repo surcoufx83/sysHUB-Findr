@@ -60,8 +60,8 @@ dependencies:
     specifier: ^7.8.1
     version: 7.8.1
   syshub-rest-module:
-    specifier: ^3.0.2
-    version: 3.0.2(@angular/common@17.1.1)(@angular/core@17.1.1)
+    specifier: ^3.0.3
+    version: 3.0.3(@angular/common@17.1.1)(@angular/core@17.1.1)
   titleize:
     specifier: ^4.0.0
     version: 4.0.0
@@ -2971,7 +2971,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001581
-      electron-to-chromium: 1.4.648
+      electron-to-chromium: 1.4.650
       node-releases: 2.0.14
       update-browserslist-db: 1.0.13(browserslist@4.22.3)
 
@@ -3451,8 +3451,8 @@ packages:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
     dev: true
 
-  /electron-to-chromium@1.4.648:
-    resolution: {integrity: sha512-EmFMarXeqJp9cUKu/QEciEApn0S/xRcpZWuAm32U7NgoZCimjsilKXHRO9saeEW55eHZagIDg6XTUOv32w9pjg==}
+  /electron-to-chromium@1.4.650:
+    resolution: {integrity: sha512-sYSQhJCJa4aGA1wYol5cMQgekDBlbVfTRavlGZVr3WZpDdOPcp6a6xUnFfrt8TqZhsBYYbDxJZCjGfHuGupCRQ==}
 
   /emoji-regex@8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
@@ -6085,8 +6085,8 @@ packages:
     engines: {node: '>=0.10'}
     dev: true
 
-  /syshub-rest-module@3.0.2(@angular/common@17.1.1)(@angular/core@17.1.1):
-    resolution: {integrity: sha512-sYktPUzXmVfEKDjSUMvGd2LFqhZCKVIKg783LDJVf2sZN1nLafJfwgfv0bEYXq/GOisYQcp+wRQwrAq/K1qqdw==}
+  /syshub-rest-module@3.0.3(@angular/common@17.1.1)(@angular/core@17.1.1):
+    resolution: {integrity: sha512-tVieV8Y7jBT7RYCuFS4eBo+vUqPVDVlCLdRJptRzYWNU7FuFRXSLGIo5tt4RgrXKohS/iNkM+c4W3cuU90WUKA==}
     peerDependencies:
       '@angular/common': ^17.0.6
       '@angular/core': ^17.0.6

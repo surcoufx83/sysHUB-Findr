@@ -154,7 +154,6 @@
                     @for(locale of locales; track $index) {
                     <li class="dropdown-item cursor-pointer" (click)="onSwitchLocale(locale)">
                         @if(locale !== currentLocale) {
-                        <!-- <i ngClass="bi bi-translate me-2"></i> -->
                         <span
                             [ngClass]="[ 'fi', 'me-1', 'fi-' + (locale != 'en' ? locale : 'us').toLowerCase()]"></span>
                         }
