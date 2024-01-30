@@ -31,6 +31,7 @@ import { ResultComponent } from './comp/result/result.component';
 import { OverviewComponent } from './comp/result/overview/overview.component';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { ConfigComponent } from './comp/result/config/config.component';
+import { TreeComponent } from './comp/result/tree/tree.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { ConfigComponent } from './comp/result/config/config.component';
     ResultComponent,
     OverviewComponent,
     ConfigComponent,
+    TreeComponent,
   ],
   imports: [
     AppRoutingModule,

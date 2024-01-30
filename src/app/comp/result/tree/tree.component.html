@@ -1,0 +1,20 @@
+@for (item of tree; track $index) {
+<li [ngClass]="{ 'has-children': item.children.length > 0 , 'open': openNodes.includes($index)}">
+    <div class="header">
+        @if (item.children.length > 0) {
+        <i [ngClass]="['bi me-2', openNodes.includes($index) ? 'bi-dash-square' : 'bi-plus-square']"
+            (click)="toggleNode($index)"></i>
+        }
+        @else {
+        <i [ngClass]="['bi me-2', getIcon(item)]"></i>
+        }
+        <span class="name">{{ item.name }}</span>
+        <i class="bi bi-window-stack ms-2 show-on-hover"></i>
+    </div>
+    @if (item.children.length > 0) {
+    <ul [ngClass]="{ 'branch': true, 'd-none': !openNodes.includes($index) }">
+        <app-result-tree [tree]="item.children"></app-result-tree>
+    </ul>
+    }
+</li>
+}

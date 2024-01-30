@@ -81,7 +81,7 @@ ul.treeview {
         bottom: 16px;
         left: 0;
         z-index: 1;
-        border: 1px dotted #67b2dd;
+        border: 1px dotted #dee2e6;
         border-width: 0 0 0 1px;
     }
 
@@ -98,7 +98,7 @@ ul.treeview {
             top: -3px;
             bottom: 12px;
             left: -16px;
-            border: 1px dotted #67b2dd;
+            border: 1px dotted #dee2e6;
             border-width: 0 0 0 1px;
         }
     }
@@ -122,16 +122,20 @@ ul.treeview {
             left: -13px;
             width: 15px;
             height: 0;
-            border-top: 1px dotted #67b2dd;
+            border-top: 1px dotted #dee2e6;
             z-index: 1;
         }
 
-        &.has-children {
-            >div {
-                -webkit-box-sizing: content-box;
-                -moz-box-sizing: content-box;
-                box-sizing: content-box;
+        >div {
+            -webkit-box-sizing: content-box;
+            -moz-box-sizing: content-box;
+            box-sizing: content-box;
+            display: inline-block;
+
+            &:not(:hover)>.show-on-hover {
+                display: none;
             }
+
         }
     }
 }
