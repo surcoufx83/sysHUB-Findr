@@ -81,6 +81,9 @@ export const L10nDe: L10nLocale = {
         webclientLink: 'sysHUB web client'
     },
     result: {
+        common: {
+            clickToOpenDialog: 'Klicken um Details zu Eintrag "[0]" anzuzeigen',
+        },
         config: {
             title: 'Treffer in der Expertenkonfiguration',
             subtitle: `

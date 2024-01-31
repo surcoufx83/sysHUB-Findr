@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router, Event as NavigationEvent, NavigationEnd } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { L10nService } from './i10n.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
 
@@ -9,6 +9,14 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 })
 export class PagepropsService {
 
+  private appTheme$: BehaviorSubject<'light' | 'dark' | 'auto' | null> = new BehaviorSubject<'light' | 'dark' | 'auto' | null>(null);
+  public AppTheme = this.appTheme$.asObservable();
+
+  private deviceType$: 'mobile' | 'tablet' | 'desktop' = 'desktop';
+
+  private nodeInspectorItem$ = new Subject<{ type: string, node: any }>();
+  public NodeInspectorItem = this.nodeInspectorItem$.asObservable();
+
   private pages: PageTitleItem[] = [
     { pattern: new RegExp(/^\/$/), text: 'sysHUB Findr' },
     { pattern: new RegExp(/^\/result/), i10n: 'app.titles.resultView' },
@@ -16,11 +24,6 @@ export class PagepropsService {
   ];
   private _pagetitle: BehaviorSubject<string> = new BehaviorSubject<string>('sysHUB Findr');
   public pagetitle = this._pagetitle.asObservable();
-
-  private appTheme$: BehaviorSubject<'light' | 'dark' | 'auto' | null> = new BehaviorSubject<'light' | 'dark' | 'auto' | null>(null);
-  public AppTheme = this.appTheme$.asObservable();
-
-  private deviceType$: 'mobile' | 'tablet' | 'desktop' = 'desktop';
 
   constructor(
     private i10nService: L10nService,
@@ -69,6 +72,10 @@ export class PagepropsService {
 
   public get DeviceType(): 'mobile' | 'tablet' | 'desktop' {
     return this.deviceType$;
+  }
+
+  public inspect(type: string, node: any): void {
+    this.nodeInspectorItem$.next({ type: type, node: node });
   }
 
   l10n(phrase: string, params: any[] = []) {

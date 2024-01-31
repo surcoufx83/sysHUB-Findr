@@ -52,7 +52,6 @@ export class ConfigComponent implements OnDestroy, OnInit {
 
   private matchTree(tree: string): boolean {
     for (let i = 0; i < this.configTreeKeys.length; i++) {
-      //console.log('matchtree', tree, this.configTreeKeys[i])
       if (this.configTreeKeys[i].indexOf(tree) === 0)
         return true;
     }
@@ -77,10 +76,6 @@ export class ConfigComponent implements OnDestroy, OnInit {
       this.ngOnInit_loopTree(temppaths, configtree);
       this.fullConfigTree = [...configtree];
       this.configUuids = { ...temppaths };
-      console.log(this.fullConfigTree)
-      console.log(this.configTreeKeys)
-      console.warn(this.configUuids)
-      console.warn(this.configByTree)
     }));
   }
 

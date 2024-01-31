@@ -32,6 +32,9 @@ import { OverviewComponent } from './comp/result/overview/overview.component';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { ConfigComponent } from './comp/result/config/config.component';
 import { TreeComponent } from './comp/result/tree/tree.component';
+import { ParametersetComponent } from './comp/result/parameterset/parameterset.component';
+import { JobtypesComponent } from './comp/result/jobtypes/jobtypes.component';
+import { NodeInspectorComponent } from './comp/result/node-inspector/node-inspector.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +56,9 @@ import { TreeComponent } from './comp/result/tree/tree.component';
     OverviewComponent,
     ConfigComponent,
     TreeComponent,
+    ParametersetComponent,
+    JobtypesComponent,
+    NodeInspectorComponent,
   ],
   imports: [
     AppRoutingModule,

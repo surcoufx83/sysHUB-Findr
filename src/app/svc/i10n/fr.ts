@@ -81,6 +81,9 @@ export const L10nFr: L10nLocale = {
         webclientLink: 'Client web sysHUB'
     },
     result: {
+        common: {
+            clickToOpenDialog: 'Cliquez pour ouvrir les détails de l\'entrée "[0]"',
+        },
         config: {
             title: 'Résultats dans la Configuration, Recherche de "[0]"',
             subtitle: `

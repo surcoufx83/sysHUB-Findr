@@ -157,6 +157,10 @@
                     <app-result-config [configByTree]="configByTree" [configUpdate]="configUpdate"
                         [searchResult]="searchResult"></app-result-config>
                     }
+                    @case ('PSetItems') {
+                    <app-result-parameterset [psetByTree]="psetByTree" [psetUpdate]="psetUpdate"
+                        [searchResult]="searchResult"></app-result-parameterset>
+                    }
                     @default {
                     <app-result-overview [searchResult]="searchResult" [totalMatchCount]="totalMatchCount"
                         [certstore]="certstore" [configByTree]="configByTree" [configTreeKeys]="configTreeKeys"
@@ -173,3 +177,5 @@
     </section>
 </article>
 }
+
+<app-result-node-inspector></app-result-node-inspector>

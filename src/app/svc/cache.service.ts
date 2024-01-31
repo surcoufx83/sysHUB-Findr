@@ -264,15 +264,15 @@ export class CacheService {
     return this.parametersetUuid2Ref$[uuid] ?? null;
   }
 
-  getPsetTree(uuid: string | null): string {
+  getPsetTree(uuid: string | null, includeUuids: boolean = false): string {
     if (uuid == null)
       return '';
     const item = this.getPsetItemByUuid(uuid);
     if (item == null)
       return '';
     if (item.parent == null)
-      return item.name;
-    return `${this.getPsetTree(item.parent)} / ${item.name}`;
+      return item.name + (includeUuids ? `[${item.uuid}]` : '');
+    return `${this.getPsetTree(item.parent, includeUuids)} / ${item.name}` + (includeUuids ? `[${item.uuid}]` : '');
   }
 
   loadSearchResult(token: string): boolean {

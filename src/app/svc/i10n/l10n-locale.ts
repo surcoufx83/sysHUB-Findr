@@ -73,6 +73,9 @@ export type L10nLocale = {
         webclientLink: string
     },
     result: {
+        common: {
+            clickToOpenDialog: string,
+        },
         config: {
             title: string,
             subtitle: string,

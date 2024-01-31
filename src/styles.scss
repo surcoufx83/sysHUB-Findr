@@ -34,7 +34,7 @@ body {
 }
 
 app-toasts {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: calc(50% - 175px);
     width: 350px;
@@ -124,8 +124,19 @@ ul.treeview {
             box-sizing: content-box;
             display: inline-block;
 
-            &:not(:hover)>.show-on-hover {
-                display: none;
+            &.interaction-reminder:hover::after {
+                content: '\f6d2';
+                display: inline-block;
+                font-family: bootstrap-icons !important;
+                font-size: 6pt;
+                font-style: normal;
+                font-weight: normal !important;
+                font-variant: normal;
+                text-transform: none;
+                line-height: 1;
+                transform: translate(.2rem, -.3rem);
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
             }
 
         }
