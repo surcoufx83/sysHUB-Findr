@@ -158,22 +158,22 @@ export const L10nEn: L10nLocale = {
             propertyType: 'Type: [0]'
         },
         parameterset: {
-            title: 'Hits in Parameterset, Searching for "[0]"',
+            title: 'Matches in Parameter Set',
             subtitle: `
-                On this page, the complete tree structure of the parameterset is displayed,
-                and hits are visually highlighted.
-                When hovering over an entry with the cursor, it is displayed on the right side.
-                If the pin is active, there will be no change when hovering, but there will be when clicking.
+                This page displays the complete tree structure of the parameter set,
+                with matches visually highlighted and automatically expanded.
+                Clicking on an entry will display the details in the right-hand section.
             `,
-            properties: {
+            nodeInspector: {
                 description: 'Description',
-                name: 'Name',
+                modified: 'Modified',
+                parentUuid: 'Parent',
                 path: 'Path',
-                type: 'Element Type',
+                subject: 'Parameter Set',
+                type: 'Type',
                 uuid: 'UUID',
                 value: 'Value',
-            },
-            selected: 'Details for "[0]"'
+            }
         },
         toolbar: {
             certStore: 'cert. store: [0]',

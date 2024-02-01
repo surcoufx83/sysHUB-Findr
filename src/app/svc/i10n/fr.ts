@@ -158,22 +158,22 @@ export const L10nFr: L10nLocale = {
             propertyType: 'Type : [0]'
         },
         parameterset: {
-            title: 'Correspondances dans le Parameterset, Recherche de "[0]"',
+            title: 'Correspondances dans le Paramétrage',
             subtitle: `
-                Sur cette page, la structure arborescente complète du Parameterset est affichée,
-                et les correspondances sont mises en évidence visuellement.
-                En survolant une entrée avec le curseur, elle est affichée sur le côté droit.
-                Si la punaise est active, il n'y aura pas de changement au survol, mais il y en aura lors de la cliquaison.
+                Cette page affiche la structure complète de l'arborescence du paramétrage,
+                avec les correspondances mises en évidence et automatiquement dépliées.
+                En cliquant sur une entrée, les détails s'affichent dans la section de droite.
             `,
-            properties: {
+            nodeInspector: {
                 description: 'Description',
-                name: 'Nom',
+                modified: 'Modifié',
+                parentUuid: 'Parent',
                 path: 'Chemin',
-                type: 'Type d\'Élément',
+                subject: 'Paramétrage',
+                type: 'Type',
                 uuid: 'UUID',
                 value: 'Valeur',
-            },
-            selected: 'Détails pour "[0]"'
+            }
         },
         toolbar: {
             certStore: 'stock. certificats : [0]',

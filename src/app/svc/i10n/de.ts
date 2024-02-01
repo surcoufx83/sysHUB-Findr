@@ -160,23 +160,22 @@ export const L10nDe: L10nLocale = {
             propertyType: 'Typ: [0]'
         },
         parameterset: {
-            title: 'Treffer im Parameterset, Suche nach »[0]«',
+            title: 'Treffer im Parameterset',
             subtitle: `
                 Auf dieser Seite wird die komplette Baumstruktur des Parametersets
-                dargestellt und Treffer sind optisch hervorgehoben.
-                Beim Zeigen mit dem Cursor auf einen Eintrag wird dieser im rechten Bereich
-                dargestellt. Ist die Pinnadel aktiv, findet beim Zeigen kein Wechsel mehr
-                statt, aber beim Klicken.
+                dargestellt und Treffer sind optisch hervorgehoben und automatisch aufgeklappt.
+                Beim Klicken auf einen Eintrag werden die Details im rechten Bereich dargestellt.
             `,
-            properties: {
+            nodeInspector: {
                 description: 'Beschreibung',
-                name: 'Name',
+                modified: 'Geändert',
+                parentUuid: 'Parent',
                 path: 'Pfad',
-                type: 'Elementtyp',
+                subject: 'Parameterset',
+                type: 'Typ',
                 uuid: 'Uuid',
                 value: 'Wert',
             },
-            selected: 'Details zu »[0]«'
         },
         toolbar: {
             certStore: 'Zertifikatsspeicher: [0]',

@@ -37,6 +37,7 @@ import { JobtypesComponent } from './comp/result/jobtypes/jobtypes.component';
 import { NodeInspectorComponent } from './comp/node-inspector/node-inspector.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NodeInspectorConfigNodeComponent } from './comp/node-inspector/config-node/config-node.component';
+import { NodeInspectorPsetNodeComponent } from './comp/node-inspector/pset-node/pset-node.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { NodeInspectorConfigNodeComponent } from './comp/node-inspector/config-n
     JobtypesComponent,
     NodeInspectorComponent,
     NodeInspectorConfigNodeComponent,
+    NodeInspectorPsetNodeComponent,
   ],
   imports: [
     AppRoutingModule,

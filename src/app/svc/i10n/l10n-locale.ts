@@ -136,17 +136,18 @@ export type L10nLocale = {
             propertyType: string
         },
         parameterset: {
-            properties: {
+            title: string,
+            subtitle: string,
+            nodeInspector: {
                 description: string,
-                name: string,
+                modified: string,
+                parentUuid: string,
                 path: string,
+                subject: string,
                 type: string,
                 uuid: string,
-                value: string
-            },
-            selected: string,
-            subtitle: string,
-            title: string
+                value: string,
+            }
         },
         showWorkflow: string,
         toolbar: {
