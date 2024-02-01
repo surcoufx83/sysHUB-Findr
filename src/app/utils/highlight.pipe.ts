@@ -17,12 +17,11 @@ export class HighlightPipe implements PipeTransform {
     const match = `${value}`.match(re);
 
     // If there's no match, just return the original value.
-    if (!match) {
+    if (!match)
       return value;
-    }
 
-    const replacedValue = value.replace(re, "<mark>" + match[0] + "</mark>")
-    return this.sanitizer.bypassSecurityTrustHtml(replacedValue)
+    const replacedValue = value.replace(re, "<mark>" + this.sanitizer.sanitize(SecurityContext.HTML, match[0]) + "</mark>");
+    return this.sanitizer.bypassSecurityTrustHtml(replacedValue);
   }
 
 }
