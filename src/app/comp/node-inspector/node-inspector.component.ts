@@ -1,11 +1,12 @@
 import { Point } from '@angular/cdk/drag-drop';
 import { DOCUMENT } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, Input, OnDestroy, OnInit, QueryList, TemplateRef, ViewChildren } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
 import { PagepropsService } from 'src/app/svc/pageprops.service';
+import { SearchResult } from 'src/app/types';
 import { SyshubConfigItem, SyshubPSetItem } from 'syshub-rest-module';
 
 @Component({
@@ -15,19 +16,34 @@ import { SyshubConfigItem, SyshubPSetItem } from 'syshub-rest-module';
 })
 export class NodeInspectorComponent implements AfterViewInit, OnDestroy, OnInit {
 
+  @Input({ required: true }) searchResult!: SearchResult;
+
   private nodeTypes = ['ConfigItems', 'JobTypes', 'PSetItems', 'WorkflowItems', 'CertStoreItems', 'IppDevices', 'ServerConfig', 'ServerInformation', 'Users', 'ImpExpView'];
   private subs: Subscription[] = [];
 
   nodeCards: NodeInspectorItem[] = [];
   nodesAdded: string[] = [];
-  zindex: number = 1200;
+  zindex: number = 100;
+
+  colorpalette = [
+    '',
+    'card-danger border-danger',
+    'card-danger-subtle border-danger-subtle',
+    'card-warning border-warning',
+    'card-warning-subtle border-warning-subtle',
+    'card-success border-success',
+    'card-success-subtle border-success-subtle',
+    'card-info border-info',
+    'card-info-subtle border-info-subtle',
+    'card-secondary border-secondary',
+  ];
+
 
   @ViewChildren('nodeitem') nodeitems?: QueryList<ElementRef>;
 
   constructor(private l10nService: L10nService,
     private cacheService: CacheService,
     private propsService: PagepropsService,
-    @Inject(DOCUMENT) private document: Document
   ) { }
 
   get l10nphrase(): L10nLocale {
@@ -64,44 +80,39 @@ export class NodeInspectorComponent implements AfterViewInit, OnDestroy, OnInit 
     if (!this.nodeTypes.includes(type))
       return;
     const nodeid = `node-${type}${node.uuid}`;
-    this.onDisposeNode(nodeid);
+    if (this.nodesAdded.includes(nodeid)) {
+      this.onReopenNode(nodeid);
+      return;
+    }
     console.log(node, parentRect, window.scrollY);
     console.log()
     this.nodesAdded.push(nodeid);
 
     this.nodeCards.push({
       id: nodeid,
-      dragroot: `#drag-root-${node.uuid}`,
-      position: {
-        x: parentRect.right + 24,
-        y: parentRect.top
-      },
+      color: 0,
+      nodeitem: node,
+      type: type,
       zindex: ++this.zindex
     });
   }
 
-  disposeNodes: any;
-  onDisposeNode(id: string): void {
-    if (!this.nodesAdded.includes(id))
-      return;
-    this.nodeCards.forEach((node, i) => {
-      if (node.id === id)
-        node.dispose = true;
-      clearTimeout(this.disposeNodes);
-      this.disposeNodes = setTimeout(() => {
-        this.onDisposeNodes();
-      }, 10000);
+  onReopenNode(nodeid: string) {
+    this.nodeCards.forEach((node) => {
+      if (node.id === nodeid)
+        node.zindex = ++this.zindex;
     })
-    this.nodesAdded.splice(this.nodesAdded.indexOf(id), 1);
   }
 
-  onDisposeNodes(): void {
-    console.log('onDisposeNodes')
-    for (let i = this.nodeCards.length - 1; i >= 0; i--) {
-      console.log('onDisposeNodes', i, this.nodeCards[i].dispose)
-      if (this.nodeCards[i].dispose === true) {
-        console.warn('onDisposeNodes DELETE ', this.nodeCards[i])
-        this.nodeCards.splice(i, 1);
+  onRemoveNode(i: number, nodeid: string): void {
+    for (let i = 0; i < this.nodesAdded.length; i++) {
+      if (this.nodesAdded[i] === nodeid) {
+        this.nodesAdded.splice(i, 1);
+        this.nodeCards.forEach((node) => {
+          if (node.id === nodeid)
+            node.dispose = true;
+        });
+        return;
       }
     }
   }
@@ -110,9 +121,9 @@ export class NodeInspectorComponent implements AfterViewInit, OnDestroy, OnInit 
 
 export type NodeInspectorItem = {
   id: string;
+  color: number;
   dispose?: boolean;
-  dragroot: string
-  position: Point;
-  ref?: ElementRef;
+  nodeitem: SyshubConfigItem | SyshubPSetItem;
+  type: string;
   zindex: number;
 }

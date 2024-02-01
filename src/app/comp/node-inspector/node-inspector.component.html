@@ -1,29 +1,26 @@
 @for (node of nodeCards; track $index) {
 @if (node.dispose !== true) {
-<div #nodeitem class="card " [ngStyle]="{ 'max-width': '450px', 'z-index': node.zindex}" [id]="node.id" cdkDrag
-    [cdkDragFreeDragPosition]="node.position" [cdkDragRootElement]="node.dragroot">
-    <div class="card-header ">
-        <h4>Test</h4>
-    </div>
-    <div class="card-body">
-        aJKShdlkah jdlkja dlkj a
-        lsdj ;asdjkl
-        ;asjd;ljks <address>k asdlkj asldkj ;l
-            asjd
-            ;l jadl a
-            ;lsdj
-            ;lasjd;ljas dlj as;
-            dljas
-            ldj
-            ;las jd
-        </address>
-        lakj lsaj fdljasd
-        sa j
-        dlj asljdlasjd;lasjd;lasj d
-        asdl
-        a d;l
+<div [ngClass]="['card', 'node-inspector', 'ms-2', 'mb-2', colorpalette[node.color]]"
+    [ngStyle]="{ 'z-index': node.zindex}" [id]="node.id" cdkDrag (click)="onReopenNode(node.id)">
+    @switch (node.type) {
+    @case ('ConfigItems') {
+    <app-node-inspector-config-node [nodeItem]="$any(node.nodeitem)" [searchResult]="searchResult"
+        (onChangeColor)="node.color = (node.color == colorpalette.length - 1 ? 0 : node.color + 1)">
+        <button type="button" class="btn btn-sm px-2" cdkDragHandle>
+            <i class="bi bi-arrows-move"></i>
+        </button>
+        <button type="button" class="btn btn-sm px-2" (click)="onRemoveNode($index, node.id)">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </app-node-inspector-config-node>
+    }
+    @case ('PSetItems') {
 
-    </div>
+    }
+    @default {
+
+    }
+    }
 </div>
 }
 }

@@ -75,19 +75,24 @@ export type L10nLocale = {
     result: {
         common: {
             clickToOpenDialog: string,
+            nodeInspector: {
+                copyTooltip: string,
+                copied: string,
+            }
         },
         config: {
             title: string,
             subtitle: string,
-            properties: {
+            nodeInspector: {
                 description: string,
-                name: string,
+                modified: string,
+                parentUuid: string,
                 path: string,
+                subject: string,
                 type: string,
                 uuid: string,
                 value: string,
-            },
-            selected: string
+            }
         },
         header: {
             title: string,

@@ -45,8 +45,72 @@ app-toasts {
     }
 }
 
+code {
+    font-size: var(--bs-body-font-size);
+}
+
+.card {
+    &.card-danger .card-header {
+        --bs-bg-opacity: 1;
+        background-color: rgba(var(--bs-danger-rgb), var(--bs-bg-opacity)) !important;
+    }
+
+    &.card-danger-subtle .card-header {
+        --bs-bg-opacity: 1;
+        background-color: var(--bs-danger-bg-subtle) !important;
+    }
+
+    &.card-warning .card-header {
+        --bs-bg-opacity: 1;
+        background-color: rgba(var(--bs-warning-rgb), var(--bs-bg-opacity)) !important;
+    }
+
+    &.card-warning .card-header {
+        --bs-bg-opacity: 1;
+        background-color: rgba(var(--bs-warning-rgb), var(--bs-bg-opacity)) !important;
+    }
+
+    &.card-success .card-header {
+        --bs-bg-opacity: 1;
+        background-color: rgba(var(--bs-success-rgb), var(--bs-bg-opacity)) !important;
+    }
+
+    &.card-success .card-header {
+        --bs-bg-opacity: 1;
+        background-color: rgba(var(--bs-success-rgb), var(--bs-bg-opacity)) !important;
+    }
+
+    &.card-info .card-header {
+        --bs-bg-opacity: 1;
+        background-color: rgba(var(--bs-info-rgb), var(--bs-bg-opacity)) !important;
+    }
+
+    &.card-info .card-header {
+        --bs-bg-opacity: 1;
+        background-color: rgba(var(--bs-info-rgb), var(--bs-bg-opacity)) !important;
+    }
+
+    &.card-secondary .card-header {
+        --bs-bg-opacity: 1;
+        background-color: rgba(var(--bs-secondary-rgb), var(--bs-bg-opacity)) !important;
+    }
+
+    &.card-secondary .card-header {
+        --bs-bg-opacity: 1;
+        background-color: rgba(var(--bs-secondary-rgb), var(--bs-bg-opacity)) !important;
+    }
+}
+
 .cursor-pointer {
     cursor: pointer;
+}
+
+.fs-7 {
+    font-size: 90%;
+}
+
+.fs-8 {
+    font-size: 80%;
 }
 
 mark,

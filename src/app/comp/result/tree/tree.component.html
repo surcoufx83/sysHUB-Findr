@@ -4,7 +4,8 @@
     <div class="header interaction-reminder" [title]="l10n(l10nphrase.result.common.clickToOpenDialog, [item.name])"
         (click)="selectNode(item, $event)" [id]="'drag-root-' + item.uuid">
         @if (item.children.length > 0) {
-        <i [ngClass]="['bi me-2', isOpen(item) ? 'bi-dash-square' : 'bi-plus-square']" (click)="toggleNode(item)"></i>
+        <i [ngClass]="['bi me-2', isOpen(item) ? 'bi-dash-square' : 'bi-plus-square']"
+            (click)="toggleNode(item); $event.stopImmediatePropagation()"></i>
         }
         @else {
         <i [ngClass]="['bi me-2', getIcon(item)]"></i>

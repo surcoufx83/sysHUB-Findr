@@ -83,25 +83,28 @@ export const L10nFr: L10nLocale = {
     result: {
         common: {
             clickToOpenDialog: 'Cliquez pour ouvrir les détails de l\'entrée "[0]"',
+            nodeInspector: {
+                copyTooltip: 'Copier dans le presse-papiers',
+                copied: 'Le texte "[0]" a été copié dans le presse-papiers.'
+            }
         },
         config: {
-            title: 'Résultats dans la Configuration, Recherche de "[0]"',
+            title: 'Correspondances dans la Configuration d\'Expert',
             subtitle: `
-                Cette page affiche la structure arborescente complète de la configuration
-                experte, avec les résultats mis en évidence visuellement. En survolant une
-                entrée, elle sera affichée dans la section de droite. Si la punaise est active,
-                il n'y aura pas de changement au survol, mais il y en aura lors de la
-                cliquaison.
+                Cette page affiche la structure complète de l'arborescence de la configuration d'expert,
+                avec les correspondances mises en évidence et automatiquement dépliées.
+                En cliquant sur une entrée, les détails s'affichent dans la section de droite.
             `,
-            properties: {
+            nodeInspector: {
                 description: 'Description',
-                name: 'Nom',
+                modified: 'Modifié',
+                parentUuid: 'Parent',
                 path: 'Chemin',
-                type: 'Type d\'élément',
+                subject: 'Configuration d\'Expert',
+                type: 'Type',
                 uuid: 'UUID',
                 value: 'Valeur',
-            },
-            selected: 'Détails pour "[0]"'
+            }
         },
         header: {
             title: 'Résultats de la recherche pour "[0]"',

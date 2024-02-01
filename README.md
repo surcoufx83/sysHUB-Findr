@@ -98,17 +98,16 @@ Zusätzlich lässt sich die Trefferliste exportieren. Der Export enthält eine J
 | ![Trefferliste Workflows in der Desktop-Ansicht](docs/result-overview-workflows-desktop.png)       | <img src="docs/result-overview-workflows-mobile.png" alt="Trefferliste Workflows in der mobilen Ansicht" width="91%">       |
 
 ### Ergebnisansicht Konfiguration und Parametersets
-Nach einem Klick auf Konfig oder Parameterset in der zweiten Navigationsleiste wird die jeweilige detaillierte Ergebnisansicht geladen. Dabei wird für Konfig wie auch für Parametersets die komplette Baumstruktur dargestellt. Alle Knoten in denen mindestens ein Treffer gefunden wurde sind automatisch aufgeklappt und mit einem grünen Icon versehen. Die Icons in der Baumstruktur repräsentieren den Datentyp. 
+Nach dem Klick auf einen Listeneintrag, zum Beispiel ein Zweig in der Expertenkonfiguration, öffnet sich ein kleines Eigenschaftenfenster auf der rechten Seite der Ergebnisansicht. Diese Fenster können farblich eingefärbt und frei auf der Seite verschoben werden. Mit dem `X`-Icon wird das Fenster geschlossen.
 
-In der rechten Spalte (mobile Ansicht oberhalb) werden alle Details zu einem Eintrag angezeigt, sobald der Cursor sich über einen Eintrag der Baumstruktur bewegt.
-Klickt der Anwender die weiße Pinnadel bei den Details oder einen Eintrag in der Baumstruktur an, wird dieser Eintrag angepinnt und das Bewegen des Maus Cursors wählt kein anderes Element automatisch mehr aus. Im angepinnten Modus (ersichtlich an der blauen Pinnadel) ist es möglich beliebig durch die Baumstruktur zu scrollen, ohne den gewählten Eintrag aus dem Blick zu verlieren.
+In der Mobilen Ansicht werden die Eigenschaften i.d.R. direkt unterhalb des Elements eingeblendet. Eine Hervorhebung oder das Verschieben ist dafür nicht vorgesehen.
 
-Mit einem Klick auf das Copy-Icon neben einem Detaileintrag kann der Wert kopiert werden.
+Die Eigenschaftenfenster enthalten jeweils neben einem Wert immer auch ein kleines `Copy`-Icon. Wird darauf geklickt, so wird der Textinhalt der Eigenschaft (z.B. die Uuid) in die Zwischenablage übernommen.
 
-| Desktopansicht                                                                                | Mobile Ansicht                                                                                                         |
-| --------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| ![Baumansicht Config Mouseover in der Desktop-Ansicht](docs/result-config-desktop.png)        | <img src="docs/result-config-mobile.png" alt="Baumansicht Config Mouseover in der mobilen Ansicht" width="91%">        |
-| ![Baumansicht Config Angepinnt in der Desktop-Ansicht](docs/result-config-pinned-desktop.png) | <img src="docs/result-config-pinned-mobile.png" alt="Baumansicht Config Angepinnt in der mobilen Ansicht" width="91%"> |
+
+| Desktopansicht                                                         | Mobile Ansicht                                                                                  |
+| ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| ![Eigenschaftenfenster eines Elements](docs/result-config-desktop.png) | <img src="docs/result-config-mobile.png" alt="Eigenschaftenfenster eines Elements" width="91%"> |
 
 ### Ergebnisansicht Auftragstypen<span style="color:red">Incomplete</span>
 Die Ergebnisansicht der Auftragstypen ist nur wenig anders, als die der Konfig. Es gibt natürlich keine Baumstruktur, stattdessen werden die Elemente als Liste dargestellt. Wie auch bei Konfig und Parameterset gibt es im rechten Bereich die Detailinformationen zu einem Auftragstypen inkl. der Jobattribute-Klassifizierung.

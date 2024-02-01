@@ -152,23 +152,31 @@
                     </h4>
                 </div>
                 <div class="card-body d-flex">
-                    @switch (selectedChapter) {
-                    @case ('ConfigItems') {
-                    <app-result-config [configByTree]="configByTree" [configUpdate]="configUpdate"
-                        [searchResult]="searchResult"></app-result-config>
-                    }
-                    @case ('PSetItems') {
-                    <app-result-parameterset [psetByTree]="psetByTree" [psetUpdate]="psetUpdate"
-                        [searchResult]="searchResult"></app-result-parameterset>
-                    }
-                    @default {
-                    <app-result-overview [searchResult]="searchResult" [totalMatchCount]="totalMatchCount"
-                        [certstore]="certstore" [configByTree]="configByTree" [configTreeKeys]="configTreeKeys"
-                        [ippDevices]="ippDevices" [jobtypes]="jobtypes" [psetByTree]="psetByTree"
-                        [psetTreeKeys]="psetTreeKeys" [serverInfo]="serverInfo" [serverProperties]="serverProperties"
-                        [user]="user" [workflows]="workflows"></app-result-overview>
-                    }
-                    }
+                    <div>
+                        @switch (selectedChapter) {
+                        @case ('ConfigItems') {
+                        <app-result-config [configByTree]="configByTree" [configUpdate]="configUpdate"
+                            [searchResult]="searchResult"></app-result-config>
+                        }
+                        @case ('PSetItems') {
+                        <app-result-parameterset [psetByTree]="psetByTree" [psetUpdate]="psetUpdate"
+                            [searchResult]="searchResult"></app-result-parameterset>
+                        }
+                        @default {
+                        <app-result-overview [searchResult]="searchResult" [totalMatchCount]="totalMatchCount"
+                            [certstore]="certstore" [configByTree]="configByTree" [configTreeKeys]="configTreeKeys"
+                            [ippDevices]="ippDevices" [jobtypes]="jobtypes" [psetByTree]="psetByTree"
+                            [psetTreeKeys]="psetTreeKeys" [serverInfo]="serverInfo"
+                            [serverProperties]="serverProperties" [user]="user"
+                            [workflows]="workflows"></app-result-overview>
+                        }
+                        }
+                    </div>
+                    <div class="d-none d-lg-block" style="max-width: 50vw;">
+                        <div class="sticky-top pe-3" style="top: 2rem;">
+                            <app-node-inspector [searchResult]="searchResult"></app-node-inspector>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- result container based on selected chapter -->

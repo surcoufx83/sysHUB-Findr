@@ -83,6 +83,10 @@ export const L10nDe: L10nLocale = {
     result: {
         common: {
             clickToOpenDialog: 'Klicken um Details zu Eintrag "[0]" anzuzeigen',
+            nodeInspector: {
+                copyTooltip: 'In Zwischenablage',
+                copied: 'Der Text "[0]" wurde in die Zwischenablage kopiert.'
+            }
         },
         config: {
             title: 'Treffer in der Expertenkonfiguration',
@@ -91,15 +95,16 @@ export const L10nDe: L10nLocale = {
                 dargestellt und Treffer sind optisch hervorgehoben und automatisch aufgeklappt.
                 Beim Klicken auf einen Eintrag werden die Details im rechten Bereich dargestellt.
             `,
-            properties: {
+            nodeInspector: {
                 description: 'Beschreibung',
-                name: 'Name',
+                modified: 'Geändert',
+                parentUuid: 'Parent',
                 path: 'Pfad',
-                type: 'Elementtyp',
+                subject: 'Expertenkonfiguration',
+                type: 'Typ',
                 uuid: 'Uuid',
                 value: 'Wert',
             },
-            selected: 'Details zu »[0]«'
         },
         header: {
             title: 'Trefferliste für die Suche nach »[0]«',

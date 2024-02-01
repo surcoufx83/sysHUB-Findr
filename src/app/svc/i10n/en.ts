@@ -83,24 +83,28 @@ export const L10nEn: L10nLocale = {
     result: {
         common: {
             clickToOpenDialog: 'Click to open details for entry "[0]"',
+            nodeInspector: {
+                copyTooltip: 'Copy to clipboard',
+                copied: 'Text "[0]" has been copied to the clipboard.'
+            }
         },
         config: {
-            title: 'Hits in the Configuration, Searching for "[0]"',
+            title: 'Matches in Expert Configuration',
             subtitle: `
                 This page displays the complete tree structure of the expert configuration,
-                with hits visually highlighted. When hovering over an entry, it will be
-                displayed in the right section. If the pin is active, there will be no
-                change when hovering, but there will be when clicking.
+                with matches visually highlighted and automatically expanded.
+                Clicking on an entry will display the details in the right-hand section.
             `,
-            properties: {
+            nodeInspector: {
                 description: 'Description',
-                name: 'Name',
+                modified: 'Modified',
+                parentUuid: 'Parent',
                 path: 'Path',
-                type: 'Element Type',
+                subject: 'Expert Configuration',
+                type: 'Type',
                 uuid: 'UUID',
                 value: 'Value',
-            },
-            selected: 'Details for "[0]"'
+            }
         },
         header: {
             title: 'Search Results for "[0]"',

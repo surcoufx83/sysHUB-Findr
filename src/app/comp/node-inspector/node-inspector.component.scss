@@ -1,0 +1,11 @@
+@import "bootstrap/scss/bootstrap";
+
+.card.node-inspector {
+    width: 100%;
+}
+
+@include media-breakpoint-up(lg) {
+    .card.node-inspector {
+        min-width: 500px;
+    }
+}

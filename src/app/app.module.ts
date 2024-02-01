@@ -36,6 +36,7 @@ import { ParametersetComponent } from './comp/result/parameterset/parameterset.c
 import { JobtypesComponent } from './comp/result/jobtypes/jobtypes.component';
 import { NodeInspectorComponent } from './comp/node-inspector/node-inspector.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { NodeInspectorConfigNodeComponent } from './comp/node-inspector/config-node/config-node.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     ParametersetComponent,
     JobtypesComponent,
     NodeInspectorComponent,
+    NodeInspectorConfigNodeComponent,
   ],
   imports: [
     AppRoutingModule,
