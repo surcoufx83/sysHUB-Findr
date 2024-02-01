@@ -1,0 +1,29 @@
+@for (node of nodeCards; track $index) {
+@if (node.dispose !== true) {
+<div #nodeitem class="card " [ngStyle]="{ 'max-width': '450px', 'z-index': node.zindex}" [id]="node.id" cdkDrag
+    [cdkDragFreeDragPosition]="node.position" [cdkDragRootElement]="node.dragroot">
+    <div class="card-header ">
+        <h4>Test</h4>
+    </div>
+    <div class="card-body">
+        aJKShdlkah jdlkja dlkj a
+        lsdj ;asdjkl
+        ;asjd;ljks <address>k asdlkj asldkj ;l
+            asjd
+            ;l jadl a
+            ;lsdj
+            ;lasjd;ljas dlj as;
+            dljas
+            ldj
+            ;las jd
+        </address>
+        lakj lsaj fdljasd
+        sa j
+        dlj asljdlasjd;lasjd;lasj d
+        asdl
+        a d;l
+
+    </div>
+</div>
+}
+}

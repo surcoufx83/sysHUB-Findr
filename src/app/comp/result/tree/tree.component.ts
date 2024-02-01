@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
@@ -51,8 +51,9 @@ export class TreeComponent implements OnInit {
       this.searchResult.result?.parameterset.forEach((item) => this.matchedNodeUuids.push(item.uuid));
   }
 
-  selectNode(node: SyshubConfigItem | SyshubPSetItem): void {
-    this.propsService.inspect(this.treetype, node);
+  selectNode(node: SyshubConfigItem | SyshubPSetItem, event: MouseEvent): void {
+    let ref = new ElementRef(event.target);
+    this.propsService.inspect(this.treetype, node, (<HTMLElement>(<HTMLElement>ref.nativeElement)?.parentNode).getBoundingClientRect());
   }
 
   toggleNode(node: SyshubConfigItem | SyshubPSetItem): void {

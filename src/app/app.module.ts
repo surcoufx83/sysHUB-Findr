@@ -34,7 +34,8 @@ import { ConfigComponent } from './comp/result/config/config.component';
 import { TreeComponent } from './comp/result/tree/tree.component';
 import { ParametersetComponent } from './comp/result/parameterset/parameterset.component';
 import { JobtypesComponent } from './comp/result/jobtypes/jobtypes.component';
-import { NodeInspectorComponent } from './comp/result/node-inspector/node-inspector.component';
+import { NodeInspectorComponent } from './comp/node-inspector/node-inspector.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import { NodeInspectorComponent } from './comp/result/node-inspector/node-inspec
     AppRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,
+    DragDropModule,
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
