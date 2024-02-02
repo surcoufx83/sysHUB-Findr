@@ -149,17 +149,13 @@ export type L10nLocale = {
                 value: string,
             }
         },
+        serverInfo: {
+            title: string,
+            subtitle: string,
+        },
         serverProperties: {
             title: string,
             subtitle: string,
-            nodeInspector: {
-                description: string,
-                refs: string,
-                subject: string,
-                type: string,
-                value: string,
-            },
-            knownPropertiesDescription: { [key: string]: string }
         },
         showWorkflow: string,
         toolbar: {

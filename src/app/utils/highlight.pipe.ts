@@ -12,6 +12,9 @@ export class HighlightPipe implements PipeTransform {
     if (!args || !value)
       return value;
 
+    if (Array.isArray(value) || typeof value === 'object')
+      value = JSON.stringify(value);
+
     // Match in a case insensitive maneer
     const re = new RegExp(args, 'gi');
     const match = `${value}`.match(re);
@@ -20,7 +23,7 @@ export class HighlightPipe implements PipeTransform {
     if (!match)
       return value;
 
-    const replacedValue = value.replace(re, "<mark>" + this.sanitizer.sanitize(SecurityContext.HTML, match[0]) + "</mark>");
+    const replacedValue = `${value}`.replace(re, "<mark>" + this.sanitizer.sanitize(SecurityContext.HTML, match[0]) + "</mark>");
     return this.sanitizer.bypassSecurityTrustHtml(replacedValue);
   }
 

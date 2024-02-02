@@ -5,7 +5,6 @@ import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
 import { PagepropsService } from 'src/app/svc/pageprops.service';
 import { SearchResult } from 'src/app/types';
 import { SyshubConfigItem, SyshubPSetItem } from 'syshub-rest-module';
-import { ServerProperties } from '../result/serverprops/serverprops.component';
 
 @Component({
   selector: 'app-node-inspector',
@@ -59,10 +58,10 @@ export class NodeInspectorComponent implements OnDestroy, OnInit {
     }))
   }
 
-  onInspectNewNodeItem(type: string, node: SyshubConfigItem | SyshubPSetItem | ServerProperties): void {
+  onInspectNewNodeItem(type: string, node: SyshubConfigItem | SyshubPSetItem): void {
     if (!this.nodeTypes.includes(type))
       return;
-    const nodeid = `node-${type}${(type == 'ServerConfig' ? (<ServerProperties>node).key : (<SyshubConfigItem | SyshubPSetItem>node).uuid)}`;
+    const nodeid = `node-${type}${node.uuid}`;
     if (this.nodesAdded.includes(nodeid)) {
       this.onReopenNode(nodeid);
       return;
@@ -104,7 +103,7 @@ export type NodeInspectorItem = {
   id: string;
   color: number;
   dispose?: boolean;
-  nodeitem: SyshubConfigItem | SyshubPSetItem | ServerProperties;
+  nodeitem: SyshubConfigItem | SyshubPSetItem;
   type: string;
   zindex: number;
 }
