@@ -38,6 +38,8 @@ import { NodeInspectorComponent } from './comp/node-inspector/node-inspector.com
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NodeInspectorConfigNodeComponent } from './comp/node-inspector/config-node/config-node.component';
 import { NodeInspectorPsetNodeComponent } from './comp/node-inspector/pset-node/pset-node.component';
+import { NodeInspectorServerpropsNodeComponent } from './comp/node-inspector/serverprops-node/serverprops-node.component';
+import { ServerpropsComponent } from './comp/result/serverprops/serverprops.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +66,8 @@ import { NodeInspectorPsetNodeComponent } from './comp/node-inspector/pset-node/
     NodeInspectorComponent,
     NodeInspectorConfigNodeComponent,
     NodeInspectorPsetNodeComponent,
+    NodeInspectorServerpropsNodeComponent,
+    ServerpropsComponent,
   ],
   imports: [
     AppRoutingModule,

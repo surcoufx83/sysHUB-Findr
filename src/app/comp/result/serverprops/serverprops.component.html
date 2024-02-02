@@ -1,0 +1,20 @@
+<p>{{l10nphrase.result.serverProperties.subtitle}}</p>
+
+<table class="table table-sm table-hover">
+    <tbody>
+        @for (item of serverProperties; track $index) {
+        <tr>
+            <td class="cursor-pointer" style="width: 16px;" (click)="selectNode(item)"
+                [title]="l10n(l10nphrase.result.common.clickToOpenDialog, [item.key])">
+                <i class="bi bi-window-stack"></i>
+            </td>
+            <td>
+                <strong [innerHTML]="item.key | highlight: searchResult.search.phrase"></strong>
+            </td>
+            <td>
+                <span [innerHTML]="item.value | highlight: searchResult.search.phrase"></span>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

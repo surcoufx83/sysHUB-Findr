@@ -1,10 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
-import { SearchService } from 'src/app/svc/search.service';
 import { SearchResult } from 'src/app/types';
 import { SyshubPSetItem } from 'syshub-rest-module';
 
@@ -25,10 +23,7 @@ export class ParametersetComponent implements OnDestroy, OnInit {
   subs: Subscription[] = [];
 
   constructor(private l10nService: L10nService,
-    private cacheService: CacheService,
-    private searchService: SearchService,
-    private router: Router,
-    private route: ActivatedRoute) { }
+    private cacheService: CacheService,) { }
 
   getIcon(type: string, value: any = null) {
     return this.cacheService.getIcon(type, value);

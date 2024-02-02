@@ -4,6 +4,8 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { L10nService } from './i10n.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { SyshubConfigItem, SyshubPSetItem } from 'syshub-rest-module';
+import { SimpleKeyValue } from '../types';
+import { ServerProperties } from '../comp/result/serverprops/serverprops.component';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +17,7 @@ export class PagepropsService {
 
   private deviceType$: 'mobile' | 'tablet' | 'desktop' = 'desktop';
 
-  private nodeInspectorItem$ = new Subject<{ type: string, node: SyshubConfigItem | SyshubPSetItem, parentRect: DOMRect }>();
+  private nodeInspectorItem$ = new Subject<{ type: string, node: SyshubConfigItem | SyshubPSetItem | ServerProperties }>();
   public NodeInspectorItem = this.nodeInspectorItem$.asObservable();
 
   private pages: PageTitleItem[] = [
@@ -75,8 +77,8 @@ export class PagepropsService {
     return this.deviceType$;
   }
 
-  public inspect(type: string, node: SyshubConfigItem | SyshubPSetItem, parentRect: DOMRect): void {
-    this.nodeInspectorItem$.next({ type: type, node: node, parentRect: parentRect });
+  public inspect(type: string, node: SyshubConfigItem | SyshubPSetItem | ServerProperties): void {
+    this.nodeInspectorItem$.next({ type: type, node: node });
   }
 
   l10n(phrase: string, params: any[] = []) {

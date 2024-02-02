@@ -117,7 +117,7 @@ mark,
 .mark {
     --bs-text-opacity: 1;
     color: rgba(var(--bs-success-rgb), var(--bs-text-opacity)) !important;
-    background-color: transparent !important;
+    background-color: rgba(yellow, .3) !important;
     font-weight: bold;
     padding: 0 !important;
 }

@@ -51,9 +51,8 @@ export class TreeComponent implements OnInit {
       this.searchResult.result?.parameterset.forEach((item) => this.matchedNodeUuids.push(item.uuid));
   }
 
-  selectNode(node: SyshubConfigItem | SyshubPSetItem, event: MouseEvent): void {
-    let ref = new ElementRef(event.target);
-    this.propsService.inspect(this.treetype, node, (<HTMLElement>(<HTMLElement>ref.nativeElement)?.parentNode).getBoundingClientRect());
+  selectNode(node: SyshubConfigItem | SyshubPSetItem): void {
+    this.propsService.inspect(this.treetype, node);
   }
 
   toggleNode(node: SyshubConfigItem | SyshubPSetItem): void {

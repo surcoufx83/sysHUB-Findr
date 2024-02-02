@@ -151,16 +151,37 @@
                         }
                     </h4>
                 </div>
-                <div class="card-body d-flex">
+                <div class="card-body d-flex justify-content-between">
                     <div>
                         @switch (selectedChapter) {
                         @case ('ConfigItems') {
                         <app-result-config [configByTree]="configByTree" [configUpdate]="configUpdate"
                             [searchResult]="searchResult"></app-result-config>
                         }
+                        @case ('JobTypes') {
+
+                        }
                         @case ('PSetItems') {
                         <app-result-parameterset [psetByTree]="psetByTree" [psetUpdate]="psetUpdate"
                             [searchResult]="searchResult"></app-result-parameterset>
+                        }
+                        @case ('WorkflowItems') {
+
+                        }
+                        @case ('CertStoreItems') {
+
+                        }
+                        @case ('IppDevices') {
+
+                        }
+                        @case ('ServerConfig') {
+                        <app-result-serverprops [searchResult]="searchResult"></app-result-serverprops>
+                        }
+                        @case ('ServerInformation') {
+
+                        }
+                        @case ('Users') {
+
                         }
                         @default {
                         <app-result-overview [searchResult]="searchResult" [totalMatchCount]="totalMatchCount"

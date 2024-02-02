@@ -1,20 +1,18 @@
-import { Point } from '@angular/cdk/drag-drop';
-import { DOCUMENT } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, Inject, Input, OnDestroy, OnInit, QueryList, TemplateRef, ViewChildren } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
 import { PagepropsService } from 'src/app/svc/pageprops.service';
 import { SearchResult } from 'src/app/types';
 import { SyshubConfigItem, SyshubPSetItem } from 'syshub-rest-module';
+import { ServerProperties } from '../result/serverprops/serverprops.component';
 
 @Component({
   selector: 'app-node-inspector',
   templateUrl: './node-inspector.component.html',
   styleUrl: './node-inspector.component.scss'
 })
-export class NodeInspectorComponent implements AfterViewInit, OnDestroy, OnInit {
+export class NodeInspectorComponent implements OnDestroy, OnInit {
 
   @Input({ required: true }) searchResult!: SearchResult;
 
@@ -38,11 +36,7 @@ export class NodeInspectorComponent implements AfterViewInit, OnDestroy, OnInit 
     'card-secondary border-secondary',
   ];
 
-
-  @ViewChildren('nodeitem') nodeitems?: QueryList<ElementRef>;
-
   constructor(private l10nService: L10nService,
-    private cacheService: CacheService,
     private propsService: PagepropsService,
   ) { }
 
@@ -54,17 +48,6 @@ export class NodeInspectorComponent implements AfterViewInit, OnDestroy, OnInit 
     return this.l10nService.ln(phrase, params);
   }
 
-  ngAfterViewInit(): void {
-    console.log(this.nodeitems)
-    this.subs.push(this.nodeitems!.changes.subscribe((nodes: ElementRef[]) => {
-      console.log(nodes);
-      nodes.forEach((node, i) => {
-        console.log(node)
-      })
-      //nodes.
-    }))
-  }
-
   ngOnDestroy(): void {
     this.subs.forEach((sub) => sub.unsubscribe());
     this.subs = [];
@@ -72,20 +55,18 @@ export class NodeInspectorComponent implements AfterViewInit, OnDestroy, OnInit 
 
   ngOnInit(): void {
     this.subs.push(this.propsService.NodeInspectorItem.subscribe((item) => {
-      this.onInspectNewNodeItem(item.type, item.node, item.parentRect);
+      this.onInspectNewNodeItem(item.type, item.node);
     }))
   }
 
-  onInspectNewNodeItem(type: string, node: SyshubConfigItem | SyshubPSetItem, parentRect: DOMRect): void {
+  onInspectNewNodeItem(type: string, node: SyshubConfigItem | SyshubPSetItem | ServerProperties): void {
     if (!this.nodeTypes.includes(type))
       return;
-    const nodeid = `node-${type}${node.uuid}`;
+    const nodeid = `node-${type}${(type == 'ServerConfig' ? (<ServerProperties>node).key : (<SyshubConfigItem | SyshubPSetItem>node).uuid)}`;
     if (this.nodesAdded.includes(nodeid)) {
       this.onReopenNode(nodeid);
       return;
     }
-    console.log(node, parentRect, window.scrollY);
-    console.log()
     this.nodesAdded.push(nodeid);
 
     this.nodeCards.push({
@@ -123,7 +104,7 @@ export type NodeInspectorItem = {
   id: string;
   color: number;
   dispose?: boolean;
-  nodeitem: SyshubConfigItem | SyshubPSetItem;
+  nodeitem: SyshubConfigItem | SyshubPSetItem | ServerProperties;
   type: string;
   zindex: number;
 }

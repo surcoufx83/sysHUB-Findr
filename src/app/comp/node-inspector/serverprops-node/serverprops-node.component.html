@@ -1,0 +1,71 @@
+<div class="card-header d-flex align-items-center justify-content-between">
+    <div>
+        <div class="fs-8 mb-1">
+            <i class="bi bi-c-square-fill me-1"></i>
+            {{ l10nphrase.result.serverProperties.nodeInspector.subject }}
+        </div>
+        <h5 class="mb-0" [innerHTML]="nodeItem.key | highlight: searchResult.search.phrase"></h5>
+    </div>
+    <div>
+        <button type="button" class="btn btn-sm px-2" (click)="onChangeColor.emit()">
+            <i class="bi bi-palette-fill"></i>
+        </button>
+        <ng-content></ng-content>
+    </div>
+</div>
+<div class="card-body p-0">
+    <table class="table table-sm table-hover m-0">
+        <tbody>
+            <tr>
+                <th scope="row">{{ l10nphrase.result.serverProperties.nodeInspector.type }}:</th>
+                <td>
+                    <code>{{nodeItem.properties?.type || ''}}</code>
+                </td>
+                <td style="width: 20px;" class="py-0">
+                    @if (nodeItem.properties?.type) {
+                    <button type="button" class="btn btn-sm px-2" (click)="copy(nodeItem.properties?.type || '')"
+                        [title]="l10nphrase.result.common.nodeInspector.copyTooltip">
+                        <i class="bi bi-copy"></i>
+                    </button>
+                    }
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">{{ l10nphrase.result.serverProperties.nodeInspector.value }}:</th>
+                <td>
+                    <code [innerHTML]="nodeItem.value || '&lt;null&gt;' | highlight: searchResult.search.phrase"></code>
+                </td>
+                <td style="width: 20px;" class="py-0">
+                    <button type="button" class="btn btn-sm px-2" (click)="copy(nodeItem.value || '')"
+                        [title]="l10nphrase.result.common.nodeInspector.copyTooltip">
+                        <i class="bi bi-copy"></i>
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">{{ l10nphrase.result.serverProperties.nodeInspector.description }}:</th>
+                <td>
+                    <code>{{l10nphrase.result.serverProperties.knownPropertiesDescription[nodeItem.key] || ''}}</code>
+                </td>
+                <td style="width: 20px;" class="py-0">
+                    <button type="button" class="btn btn-sm px-2"
+                        (click)="copy(l10nphrase.result.serverProperties.knownPropertiesDescription[nodeItem.key] || '')"
+                        [title]="l10nphrase.result.common.nodeInspector.copyTooltip">
+                        <i class="bi bi-copy"></i>
+                    </button>
+                </td>
+            </tr>
+            @for (item of nodeItem.properties?.refs; track $index) {
+            <tr>
+                @if ($index === 0) {
+                <th scope="row" [rowSpan]="nodeItem.properties?.refs?.length">{{
+                    l10nphrase.result.serverProperties.nodeInspector.refs }}:</th>
+                }
+                <td colspan="2">
+                    <a target="_blank" [href]="item[1]">{{ item[0] }}</a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
