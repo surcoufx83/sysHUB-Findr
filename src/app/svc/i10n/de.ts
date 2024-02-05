@@ -119,37 +119,38 @@ export const L10nDe: L10nLocale = {
             subtitle: `
                 Diese Seite listet die konfigurierten Auftragstypen auf und
                 hebt Treffer sind optisch hervorgehoben.
-                Beim Zeigen mit dem Cursor auf einen Eintrag wird dieser im rechten Bereich
-                dargestellt. Ist die Pinnadel aktiv, findet beim Zeigen kein Wechsel mehr
-                statt, aber beim Klicken.
+                Beim Klicken auf einen Eintrag werden die Details im rechten Bereich dargestellt.
             `,
-            attributes: {
+            toggleSection: ['Klicken um den Abschnitt [0] einzublenden', 'Klicken um den Abschnitt [0] auszublenden'],
+            toggleHideEmptySettings: ['Leere und %-Werte sind ausgeblendet. Klicken um einzublenden', 'Klicken um leere oder %-Werte auszublenden'],
+            nodeInspector: {
                 category: 'Kategorie',
+                classificationGroup: 'Klassifizierung',
                 classifiedworkflowuuid: 'Workflow (nach Klassifizierung)',
                 datatype: 'Datentyp',
                 deldays: 'Löschen nach Tagen',
                 description: 'Beschreibung',
                 initialtextstatus: 'Initialer Textstatus',
                 inputchannel: 'Eingabekanal',
+                jobAttributesGroup: 'Jobattribute zur Klassifizierung',
                 name: 'Name',
                 priority: 'Priorität',
+                processingGroup: 'Verarbeitung',
                 senderhost: 'Sendender Host',
                 sourcefile: 'Quelldatei',
                 starttype: 'Starttyp',
+                starttypes: ['Automatisch', 'Gehalten', 'Zeitlich gehalten'],
+                subject: 'Jobtypes',
                 textstatus: 'Textstatus',
                 ticketfile: 'Ticketdatei',
                 title: 'Titel',
                 userkey: 'Userkey',
                 username: 'Benutzername',
+                uuid: 'Uuid',
+                workflowsGroup: 'Workflows',
                 workflowuuid: 'Workflow (Verarbeitung)',
-                xid: 'Xid'
+                xid: 'Xid',
             },
-            customAttributes: 'Attribute',
-            selected: 'Details zu »[0]«',
-            classifySection: 'Klassifizierung',
-            moreAttributesSection: 'Klassifizierung Jobattribute',
-            processingSection: 'Verarbeitung',
-            workflowsSection: 'Workflows'
         },
         overview: {
             title: 'Zusammenfassung',

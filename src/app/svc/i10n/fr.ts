@@ -115,39 +115,41 @@ export const L10nFr: L10nLocale = {
             `,
         },
         jobtype: {
-            title: 'Correspondances dans les Types de Travail, Recherche de "[0]"',
+            title: 'Correspondances dans les Types de Tâches, Recherche de "[0]"',
             subtitle: `
-                Cette page répertorie les types de travail configurés, et les correspondances sont mises en évidence visuellement.
-                En survolant une entrée avec le curseur, elle est affichée sur le côté droit.
-                Si la punaise est active, il n'y aura pas de changement au survol, mais il y en aura lors de la cliquaison.
+                Cette page répertorie les types de tâches configurés, et les correspondances sont mises en évidence visuellement.
+                En cliquant sur une entrée, les détails sont affichés sur le côté droit.
             `,
-            attributes: {
+            toggleSection: ['Cliquez pour développer la section "[0]"', 'Cliquez pour réduire la section "[0]"'],
+            toggleHideEmptySettings: ['Les valeurs vides et en % sont masquées. Cliquez pour afficher', 'Cliquez pour masquer les valeurs vides ou en %'],
+            nodeInspector: {
                 category: 'Catégorie',
+                classificationGroup: 'Classification',
                 classifiedworkflowuuid: 'Workflow (par Classification)',
                 datatype: 'Type de Données',
                 deldays: 'Supprimer Après Jours',
                 description: 'Description',
                 initialtextstatus: 'Statut Texte Initial',
                 inputchannel: 'Canal d\'Entrée',
+                jobAttributesGroup: 'Attributs de Tâche pour la Classification',
                 name: 'Nom',
                 priority: 'Priorité',
+                processingGroup: 'Traitement',
                 senderhost: 'Hôte Expéditeur',
                 sourcefile: 'Fichier Source',
                 starttype: 'Type de Démarrage',
+                starttypes: ['Automatique', 'Maintenu', 'Maintenu temporellement'],
+                subject: 'Types de Tâches',
                 textstatus: 'Statut Texte',
                 ticketfile: 'Fichier Ticket',
                 title: 'Titre',
-                userkey: 'Clé Utilisateur',
+                userkey: 'Clé de l\'Utilisateur',
                 username: 'Nom d\'Utilisateur',
+                uuid: 'Uuid',
+                workflowsGroup: 'Workflows',
                 workflowuuid: 'Workflow (Traitement)',
-                xid: 'Xid'
+                xid: 'Xid',
             },
-            customAttributes: 'Attributs Personnalisés',
-            selected: 'Détails pour "[0]"',
-            classifySection: 'Classification',
-            moreAttributesSection: 'Attributs de Travail de Classification',
-            processingSection: 'Traitement',
-            workflowsSection: 'Workflows'
         },
         overview: {
             title: 'Résumé',

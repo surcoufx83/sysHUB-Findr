@@ -1,1 +1,14 @@
-<p>jobtypes works!</p>
+<p>{{l10nphrase.result.serverProperties.subtitle}}</p>
+
+<table class="table table-sm table-hover">
+    <tbody>
+        @for (item of jobtypes; track $index) {
+        <tr>
+            <td [ngClass]="{ 'cursor-pointer': true, 'text-success': jobtypesMatched.includes(item.uuid)}"
+                (click)="selectNode(item)">
+                <strong [innerHTML]="item.name | highlight: searchResult.search.phrase"></strong>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

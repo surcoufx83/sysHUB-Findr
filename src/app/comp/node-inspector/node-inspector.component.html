@@ -15,7 +15,15 @@
     </app-node-inspector-config-node>
     }
     @case ('JobTypes') {
-
+    <app-node-inspector-jobtypes-node [nodeItem]="$any(node.nodeitem)" [searchResult]="searchResult"
+        (onChangeColor)="node.color = (node.color == colorpalette.length - 1 ? 0 : node.color + 1)">
+        <button type="button" class="btn btn-sm px-2" cdkDragHandle>
+            <i class="bi bi-arrows-move"></i>
+        </button>
+        <button type="button" class="btn btn-sm px-2" (click)="onRemoveNode($index, node.id)">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </app-node-inspector-jobtypes-node>
     }
     @case ('PSetItems') {
     <app-node-inspector-pset-node [nodeItem]="$any(node.nodeitem)" [searchResult]="searchResult"

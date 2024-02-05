@@ -3,7 +3,7 @@ import { Router, Event as NavigationEvent, NavigationEnd } from '@angular/router
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { L10nService } from './i10n.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
-import { SyshubConfigItem, SyshubPSetItem } from 'syshub-rest-module';
+import { SyshubConfigItem, SyshubJobType, SyshubPSetItem } from 'syshub-rest-module';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class PagepropsService {
 
   private deviceType$: 'mobile' | 'tablet' | 'desktop' = 'desktop';
 
-  private nodeInspectorItem$ = new Subject<{ type: string, node: SyshubConfigItem | SyshubPSetItem }>();
+  private nodeInspectorItem$ = new Subject<{ type: string, node: SyshubConfigItem | SyshubPSetItem | SyshubJobType }>();
   public NodeInspectorItem = this.nodeInspectorItem$.asObservable();
 
   private pages: PageTitleItem[] = [
@@ -75,7 +75,7 @@ export class PagepropsService {
     return this.deviceType$;
   }
 
-  public inspect(type: string, node: SyshubConfigItem | SyshubPSetItem): void {
+  public inspect(type: string, node: SyshubConfigItem | SyshubPSetItem | SyshubJobType): void {
     this.nodeInspectorItem$.next({ type: type, node: node });
   }
 

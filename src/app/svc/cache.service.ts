@@ -614,6 +614,14 @@ export class CacheService {
     }
   }
 
+  toggleJobtypePropertyFilter(newvalue: boolean): void {
+    if (newvalue !== this._userconfig.value.hideJobtypePercentItems) {
+      let obj: UserConfig = { ...this._userconfig.value };
+      obj.hideJobtypePercentItems = newvalue;
+      this._userconfig.next(obj);
+    }
+  }
+
   useCache(newvalue: boolean): void {
     if (newvalue != this._userconfig.value.enableCache) {
       let obj: UserConfig = { ...this._userconfig.value };

@@ -1,0 +1,9 @@
+<th scope="row">{{ title }}:</th>
+<td>
+    <ng-content></ng-content>
+</td>
+<td style="width: 20px;" class="py-0">
+    @if(valueToCopy != undefined){
+    <app-copy-button [valueToCopy]="valueToCopy"></app-copy-button>
+    }
+</td>

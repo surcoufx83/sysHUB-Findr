@@ -99,6 +99,18 @@ code {
         --bs-bg-opacity: 1;
         background-color: rgba(var(--bs-secondary-rgb), var(--bs-bg-opacity)) !important;
     }
+
+    &.node-inspector {
+        .card-body {
+            max-height: clamp(100px, 240px, 40vh);
+            overflow: auto;
+            resize: vertical;
+
+            &[style*="height"] {
+                max-height: unset;
+            }
+        }
+    }
 }
 
 .cursor-pointer {

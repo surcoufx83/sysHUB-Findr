@@ -118,36 +118,38 @@ export const L10nEn: L10nLocale = {
             title: 'Matches in Job Types, Searching for "[0]"',
             subtitle: `
                 This page lists the configured job types, and matches are visually highlighted.
-                When hovering over an entry with the cursor, it is displayed on the right side.
-                If the pin is active, there will be no change when hovering, but when clicking.
+                When clicking on an entry, the details are displayed on the right side.
             `,
-            attributes: {
+            toggleSection: ['Click to expand section "[0]"', 'Click to collapse section "[0]"'],
+            toggleHideEmptySettings: ['Empty and %-values are hidden. Click to show', 'Click to hide empty or %-values'],
+            nodeInspector: {
                 category: 'Category',
+                classificationGroup: 'Classification',
                 classifiedworkflowuuid: 'Workflow (by Classification)',
                 datatype: 'Data Type',
                 deldays: 'Delete After Days',
                 description: 'Description',
                 initialtextstatus: 'Initial Text Status',
                 inputchannel: 'Input Channel',
+                jobAttributesGroup: 'Job Attributes for Classification',
                 name: 'Name',
                 priority: 'Priority',
+                processingGroup: 'Processing',
                 senderhost: 'Sending Host',
                 sourcefile: 'Source File',
                 starttype: 'Start Type',
+                starttypes: ['Automatic', 'Hold', 'Timed hold'],
+                subject: 'Job Types',
                 textstatus: 'Text Status',
                 ticketfile: 'Ticket File',
                 title: 'Title',
                 userkey: 'User Key',
                 username: 'Username',
+                uuid: 'Uuid',
+                workflowsGroup: 'Workflows',
                 workflowuuid: 'Workflow (Processing)',
-                xid: 'Xid'
+                xid: 'Xid',
             },
-            customAttributes: 'Attributes',
-            selected: 'Details for "[0]"',
-            classifySection: 'Classification',
-            moreAttributesSection: 'Classification Job Attributes',
-            processingSection: 'Processing',
-            workflowsSection: 'Workflows'
         },
         overview: {
             title: 'Summary',

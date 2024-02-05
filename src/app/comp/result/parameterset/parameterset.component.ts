@@ -17,7 +17,6 @@ export class ParametersetComponent implements OnDestroy, OnInit {
   psetTreeKeys: string[] = [];
   psetUuids: { [key: string]: [path: string, defaultOpen: boolean, open: boolean] } = {};
   @Input({ required: true }) psetByTree: { [key: string]: SyshubPSetItem[] } = {};
-  @Input({ required: true }) psetUpdate: number | null = null;
   @Input({ required: true }) searchResult!: SearchResult;
 
   subs: Subscription[] = [];

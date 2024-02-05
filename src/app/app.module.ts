@@ -1,3 +1,4 @@
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { APP_BASE_HREF, CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
@@ -6,68 +7,73 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { DeviceDetectorService } from 'ngx-device-detector';
 import { environment } from 'src/environments/environment';
 import { RestService, RestSettings, Settings, SyshubInterceptor } from 'syshub-rest-module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { AboutComponent } from './comp/about/about.component';
+import { HelpComponent } from './comp/help/help.component';
 import { HomeComponent } from './comp/home/home.component';
-import { NavbarComponent } from './comp/main/navbar/navbar.component';
-import { SearchComponent } from './comp/search/search.component';
-import { ToolbarComponent } from './comp/main/toolbar/toolbar.component';
-import { L10nService } from './svc/i10n.service';
-import { PagepropsService } from './svc/pageprops.service';
-import { SearchService } from './svc/search.service';
-import { HighlightPipe } from './utils/highlight.pipe';
-import { ToastsService } from './svc/toasts.service';
-import { ToastsComponent } from './svc/toasts/toasts.component';
 import { LoginComponent } from './comp/login/login.component';
 import { LogoutComponent } from './comp/logout/logout.component';
 import { MainComponent } from './comp/main/main.component';
-import { StatsComponent } from './comp/stats/stats.component';
-import { HelpComponent } from './comp/help/help.component';
-import { AboutComponent } from './comp/about/about.component';
+import { NavbarComponent } from './comp/main/navbar/navbar.component';
 import { ProgressbarComponent } from './comp/main/progressbar/progressbar.component';
-import { ResultComponent } from './comp/result/result.component';
-import { OverviewComponent } from './comp/result/overview/overview.component';
-import { DeviceDetectorService } from 'ngx-device-detector';
-import { ConfigComponent } from './comp/result/config/config.component';
-import { TreeComponent } from './comp/result/tree/tree.component';
-import { ParametersetComponent } from './comp/result/parameterset/parameterset.component';
-import { JobtypesComponent } from './comp/result/jobtypes/jobtypes.component';
-import { NodeInspectorComponent } from './comp/node-inspector/node-inspector.component';
-import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ToolbarComponent } from './comp/main/toolbar/toolbar.component';
 import { NodeInspectorConfigNodeComponent } from './comp/node-inspector/config-node/config-node.component';
+import { NodeInspectorJobtypesNodeComponent } from './comp/node-inspector/jobtypes-node/jobtypes-node.component';
+import { NodeInspectorComponent } from './comp/node-inspector/node-inspector.component';
 import { NodeInspectorPsetNodeComponent } from './comp/node-inspector/pset-node/pset-node.component';
-import { ServerpropsComponent } from './comp/result/serverprops/serverprops.component';
+import { ConfigComponent } from './comp/result/config/config.component';
+import { JobtypesComponent } from './comp/result/jobtypes/jobtypes.component';
+import { OverviewComponent } from './comp/result/overview/overview.component';
+import { ParametersetComponent } from './comp/result/parameterset/parameterset.component';
+import { ResultComponent } from './comp/result/result.component';
 import { ServerinfoComponent } from './comp/result/serverinfo/serverinfo.component';
+import { ServerpropsComponent } from './comp/result/serverprops/serverprops.component';
+import { TreeComponent } from './comp/result/tree/tree.component';
+import { SearchComponent } from './comp/search/search.component';
+import { StatsComponent } from './comp/stats/stats.component';
+import { L10nService } from './svc/i10n.service';
+import { PagepropsService } from './svc/pageprops.service';
+import { SearchService } from './svc/search.service';
+import { ToastsService } from './svc/toasts.service';
+import { ToastsComponent } from './svc/toasts/toasts.component';
+import { HighlightPipe } from './utils/highlight.pipe';
+import { NodeInspectorCommonTableNodeComponent } from './comp/node-inspector/common/table-node/table-node.component';
+import { CopyButtonComponent } from './comp/node-inspector/common/copy-button/copy-button.component';
 
 @NgModule({
   declarations: [
+    AboutComponent,
     AppComponent,
-    NavbarComponent,
-    SearchComponent,
-    HomeComponent,
-    ToolbarComponent,
+    ConfigComponent,
+    HelpComponent,
     HighlightPipe,
-    ToastsComponent,
+    HomeComponent,
+    JobtypesComponent,
     LoginComponent,
     LogoutComponent,
     MainComponent,
-    StatsComponent,
-    HelpComponent,
-    AboutComponent,
-    ProgressbarComponent,
-    ResultComponent,
-    OverviewComponent,
-    ConfigComponent,
-    TreeComponent,
-    ParametersetComponent,
-    JobtypesComponent,
+    NavbarComponent,
     NodeInspectorComponent,
     NodeInspectorConfigNodeComponent,
+    NodeInspectorJobtypesNodeComponent,
     NodeInspectorPsetNodeComponent,
-    ServerpropsComponent,
+    OverviewComponent,
+    ParametersetComponent,
+    ProgressbarComponent,
+    ResultComponent,
+    SearchComponent,
     ServerinfoComponent,
+    ServerpropsComponent,
+    StatsComponent,
+    ToastsComponent,
+    ToolbarComponent,
+    TreeComponent,
+    NodeInspectorCommonTableNodeComponent,
+    CopyButtonComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -76,9 +82,9 @@ import { ServerinfoComponent } from './comp/result/serverinfo/serverinfo.compone
     DragDropModule,
     FormsModule,
     HttpClientModule,
+    NgbModule,
     ReactiveFormsModule,
     RouterModule,
-    NgbModule,
   ],
   providers: [
     { provide: Settings, multi: false, useValue: new Settings(<RestSettings>(environment.api.syshub)) },

@@ -63,6 +63,7 @@ export type UuidModifiedObject = {
 export type UserConfig = {
     enableCache: boolean,
     showMoreFilter?: boolean,
+    hideJobtypePercentItems?: boolean,
 }
 
 export type UuidModifiedTypeObject = {

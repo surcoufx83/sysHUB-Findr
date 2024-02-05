@@ -1,0 +1,231 @@
+<div class="card-header d-flex align-items-center justify-content-between">
+    <div>
+        <div class="fs-8 mb-1">
+            <i class="bi bi-c-square-fill me-1"></i>
+            {{ l10nphrase.result.jobtype.nodeInspector.subject }}
+        </div>
+        <h5 class="mb-0" [innerHTML]="nodeItem.name | highlight: searchResult.search.phrase"></h5>
+    </div>
+    <div>
+        <button type="button" [ngClass]="{'btn btn-sm px-2 me-2': true, 'btn-outline-danger': hidePercentItems}"
+            (click)="togglePercentItems()"
+            [title]="l10nphrase.result.jobtype.toggleHideEmptySettings[hidePercentItems ? 0 : 1]">
+            <i [ngClass]="['bi', !hidePercentItems ? 'bi-arrows-expand' : 'bi-arrows-collapse']"></i>
+        </button>
+        <button type="button" class="btn btn-sm px-2" (click)="onChangeColor.emit()">
+            <i class="bi bi-palette-fill"></i>
+        </button>
+        <ng-content></ng-content>
+    </div>
+</div>
+<div class="card-body p-0">
+    <table class="table table-sm table-hover m-0">
+        <tbody>
+            <tr nodeinspector-common-table-node [title]="l10nphrase.result.jobtype.nodeInspector.uuid"
+                [valueToCopy]="nodeItem.uuid">
+                @if (searchResult.search.filter.includeUuids) {
+                <code [innerHTML]="nodeItem.uuid | highlight: searchResult.search.phrase"></code>
+                }
+                @else {
+                <code>{{nodeItem.uuid}}</code>
+                }
+            </tr>
+            <tr nodeinspector-common-table-node [title]="l10nphrase.result.jobtype.nodeInspector.name"
+                [valueToCopy]="nodeItem.name">
+                <code>{{nodeItem.name}}</code>
+            </tr>
+            <tr nodeinspector-common-table-node [title]="l10nphrase.result.jobtype.nodeInspector.description"
+                [valueToCopy]="nodeItem.description || undefined">
+                @if (nodeItem.description != null) {
+                @if (!searchResult.search.filter.excludeBComments || !nodeItem.description.startsWith('[B]')) {
+                <code [innerHTML]="nodeItem.description | highlight: searchResult.search.phrase"></code>
+                }
+                @else {
+                <code>{{nodeItem.description}}</code>
+                }
+                }
+            </tr>
+            <tr>
+                <th scope="row" colspan="3" class="cursor-pointer"
+                    (click)="showClassificationGroup = !showClassificationGroup"
+                    [title]="l10n(l10nphrase.result.jobtype.toggleSection[showClassificationGroup ? 1 : 0], [l10nphrase.result.jobtype.nodeInspector.classificationGroup])">
+                    <h5 class="my-1"><i
+                            [class]="['bi', showClassificationGroup ? 'bi-caret-down-fill' : 'bi-caret-right-fill']"></i>
+                        {{
+                        l10nphrase.result.jobtype.nodeInspector.classificationGroup }}</h5>
+                </th>
+            </tr>
+            <tr nodeinspector-common-table-node
+                [ngClass]="[ showClassificationGroup && (!isempty(nodeItem.settings.datatype.value) || !hidePercentItems) ? 'd-table-row' : 'd-none' ]"
+                [title]="l10nphrase.result.jobtype.nodeInspector.datatype"
+                [valueToCopy]="nodeItem.settings.datatype.value || undefined">
+                <code
+                    [innerHTML]="nodeItem.settings.datatype.value || '&lt;null&gt;' | highlight: searchResult.search.phrase"></code>
+            </tr>
+            <tr nodeinspector-common-table-node
+                [ngClass]="[ showClassificationGroup && (!isempty(nodeItem.settings.inputchannel.value) || !hidePercentItems) ? 'd-table-row' : 'd-none' ]"
+                [title]="l10nphrase.result.jobtype.nodeInspector.inputchannel"
+                [valueToCopy]="nodeItem.settings.inputchannel.value || undefined">
+                <code
+                    [innerHTML]="nodeItem.settings.inputchannel.value || '&lt;null&gt;' | highlight: searchResult.search.phrase"></code>
+            </tr>
+            <tr nodeinspector-common-table-node
+                [ngClass]="[ showClassificationGroup && (!isempty(nodeItem.settings.senderhost.value) || !hidePercentItems) ? 'd-table-row' : 'd-none' ]"
+                [title]="l10nphrase.result.jobtype.nodeInspector.senderhost"
+                [valueToCopy]="nodeItem.settings.senderhost.value || undefined">
+                <code
+                    [innerHTML]="nodeItem.settings.senderhost.value || '&lt;null&gt;' | highlight: searchResult.search.phrase"></code>
+            </tr>
+            <tr nodeinspector-common-table-node
+                [ngClass]="[ showClassificationGroup && (!isempty(nodeItem.settings.sourcefile.value) || !hidePercentItems) ? 'd-table-row' : 'd-none' ]"
+                [title]="l10nphrase.result.jobtype.nodeInspector.sourcefile"
+                [valueToCopy]="nodeItem.settings.sourcefile.value || undefined">
+                <code
+                    [innerHTML]="nodeItem.settings.sourcefile.value || '&lt;null&gt;' | highlight: searchResult.search.phrase"></code>
+            </tr>
+            <tr nodeinspector-common-table-node
+                [ngClass]="[ showClassificationGroup && (!isempty(nodeItem.settings.textstatus.value) || !hidePercentItems) ? 'd-table-row' : 'd-none' ]"
+                [title]="l10nphrase.result.jobtype.nodeInspector.textstatus"
+                [valueToCopy]="nodeItem.settings.textstatus.value || undefined">
+                <code
+                    [innerHTML]="nodeItem.settings.textstatus.value || '&lt;null&gt;' | highlight: searchResult.search.phrase"></code>
+            </tr>
+            <tr nodeinspector-common-table-node
+                [ngClass]="[ showClassificationGroup && (!isempty(nodeItem.settings.ticketfile.value) || !hidePercentItems) ? 'd-table-row' : 'd-none' ]"
+                [title]="l10nphrase.result.jobtype.nodeInspector.ticketfile"
+                [valueToCopy]="nodeItem.settings.ticketfile.value || undefined">
+                <code
+                    [innerHTML]="nodeItem.settings.ticketfile.value || '&lt;null&gt;' | highlight: searchResult.search.phrase"></code>
+            </tr>
+            <tr nodeinspector-common-table-node
+                [ngClass]="[ showClassificationGroup && (!isempty(nodeItem.settings.title.value) || !hidePercentItems) ? 'd-table-row' : 'd-none' ]"
+                [title]="l10nphrase.result.jobtype.nodeInspector.title"
+                [valueToCopy]="nodeItem.settings.title.value || undefined">
+                <code
+                    [innerHTML]="nodeItem.settings.title.value || '&lt;null&gt;' | highlight: searchResult.search.phrase"></code>
+            </tr>
+            <tr nodeinspector-common-table-node
+                [ngClass]="[ showClassificationGroup && (!isempty(nodeItem.settings.username.value) || !hidePercentItems) ? 'd-table-row' : 'd-none' ]"
+                [title]="l10nphrase.result.jobtype.nodeInspector.username"
+                [valueToCopy]="nodeItem.settings.username.value || undefined">
+                <code
+                    [innerHTML]="nodeItem.settings.username.value || '&lt;null&gt;' | highlight: searchResult.search.phrase"></code>
+            </tr>
+            <tr nodeinspector-common-table-node
+                [ngClass]="[ showClassificationGroup && (!isempty(nodeItem.settings.xid.value) || !hidePercentItems) ? 'd-table-row' : 'd-none' ]"
+                [title]="l10nphrase.result.jobtype.nodeInspector.xid"
+                [valueToCopy]="nodeItem.settings.xid.value || undefined">
+                <code
+                    [innerHTML]="nodeItem.settings.xid.value || '&lt;null&gt;' | highlight: searchResult.search.phrase"></code>
+            </tr>
+            <tr>
+                <th scope="row" colspan="3"
+                    [ngClass]="{ 'cursor-pointer': (nodeItem.settings.PropChildren?.length || 0) > 0 }"
+                    (click)="(nodeItem.settings.PropChildren?.length || 0) > 0 ? showJobAttributesGroup = !showJobAttributesGroup : undefined"
+                    [title]="(nodeItem.settings.PropChildren?.length || 0) > 0 ? l10n(l10nphrase.result.jobtype.toggleSection[showJobAttributesGroup ? 1 : 0], [l10nphrase.result.jobtype.nodeInspector.jobAttributesGroup]) : ''">
+                    <h5 class="my-1"><i
+                            [class]="['bi', (nodeItem.settings.PropChildren?.length || 0) > 0 ? (showJobAttributesGroup ? 'bi-caret-down-fill' : 'bi-caret-right-fill') : (showJobAttributesGroup ? 'bi-caret-down' : 'bi-caret-right')]"></i>
+                        {{ l10nphrase.result.jobtype.nodeInspector.jobAttributesGroup }} ({{
+                        nodeItem.settings.PropChildren?.length || '—' }})</h5>
+                </th>
+            </tr>
+            @for (item of nodeItem.settings.PropChildren; track $index) {
+            <tr
+                [ngClass]="[ showJobAttributesGroup && (!isempty(item.value) || !hidePercentItems) ? 'd-table-row' : 'd-none' ]">
+                <th scope="row"
+                    [innerHTML]="(item.name || '&lt;null&gt;' | highlight: searchResult.search.phrase) + ':'"></th>
+                <td>
+                    <code [innerHTML]="item.value || '&lt;null&gt;' | highlight: searchResult.search.phrase"></code>
+                </td>
+                <td style="width: 20px;" class="py-0">
+                    @if(item.value != undefined){
+                    <app-copy-button [valueToCopy]="item.value"></app-copy-button>
+                    }
+                </td>
+            </tr>
+            }
+            <tr>
+                <th scope="row" colspan="3" class="cursor-pointer" (click)="showProcessingGroup = !showProcessingGroup"
+                    [title]="l10n(l10nphrase.result.jobtype.toggleSection[showProcessingGroup ? 1 : 0], [l10nphrase.result.jobtype.nodeInspector.processingGroup])">
+                    <h5 class="my-1"><i
+                            [class]="['bi', showProcessingGroup ? 'bi-caret-down-fill' : 'bi-caret-right-fill']"></i>
+                        {{
+                        l10nphrase.result.jobtype.nodeInspector.processingGroup }}</h5>
+                </th>
+            </tr>
+            <tr nodeinspector-common-table-node
+                [ngClass]="[ showProcessingGroup && (!isempty(nodeItem.settings.deldays.value) || !hidePercentItems) ? 'd-table-row' : 'd-none' ]"
+                [title]="l10nphrase.result.jobtype.nodeInspector.deldays"
+                [valueToCopy]="nodeItem.settings.deldays.value || undefined">
+                <code
+                    [innerHTML]="nodeItem.settings.deldays.value || '&lt;null&gt;' | highlight: searchResult.search.phrase"></code>
+            </tr>
+            <tr nodeinspector-common-table-node
+                [ngClass]="[ showProcessingGroup && (!isempty(nodeItem.settings.initialtextstatus.value) || !hidePercentItems) ? 'd-table-row' : 'd-none' ]"
+                [title]="l10nphrase.result.jobtype.nodeInspector.initialtextstatus"
+                [valueToCopy]="nodeItem.settings.initialtextstatus.value || undefined">
+                <code
+                    [innerHTML]="nodeItem.settings.initialtextstatus.value || '&lt;null&gt;' | highlight: searchResult.search.phrase"></code>
+            </tr>
+            <tr nodeinspector-common-table-node
+                [ngClass]="[ showProcessingGroup && (!isempty(nodeItem.settings.priority.value) || !hidePercentItems) ? 'd-table-row' : 'd-none' ]"
+                [title]="l10nphrase.result.jobtype.nodeInspector.priority"
+                [valueToCopy]="nodeItem.settings.priority.value || undefined">
+                <code
+                    [innerHTML]="nodeItem.settings.priority.value || '&lt;null&gt;' | highlight: searchResult.search.phrase"></code>
+            </tr>
+            <tr nodeinspector-common-table-node
+                [ngClass]="[ showProcessingGroup && (!isempty(nodeItem.settings.starttype.value) || !hidePercentItems) ? 'd-table-row' : 'd-none' ]"
+                [title]="l10nphrase.result.jobtype.nodeInspector.starttype"
+                [valueToCopy]="nodeItem.settings.starttype.value || undefined">
+                <code>{{ nodeItem.settings.starttype.value != null ? l10nphrase.result.jobtype.nodeInspector.starttypes[+nodeItem.settings.starttype.value] : '&lt;null&gt;' }}</code>
+            </tr>
+            <tr nodeinspector-common-table-node
+                [ngClass]="[ showProcessingGroup && (!isempty(nodeItem.settings.userkey.value) || !hidePercentItems) ? 'd-table-row' : 'd-none' ]"
+                [title]="l10nphrase.result.jobtype.nodeInspector.userkey"
+                [valueToCopy]="nodeItem.settings.userkey.value || undefined">
+                <code
+                    [innerHTML]="nodeItem.settings.userkey.value || '&lt;null&gt;' | highlight: searchResult.search.phrase"></code>
+            </tr>
+            <tr>
+                <th scope="row" colspan="3" class="cursor-pointer" (click)="showWorkflowsGroup = !showWorkflowsGroup"
+                    [title]="l10n(l10nphrase.result.jobtype.toggleSection[showWorkflowsGroup ? 1 : 0], [l10nphrase.result.jobtype.nodeInspector.workflowsGroup])">
+                    <h5 class="my-1"><i
+                            [class]="['bi', showWorkflowsGroup ? 'bi-caret-down-fill' : 'bi-caret-right-fill']"></i>
+                        {{
+                        l10nphrase.result.jobtype.nodeInspector.workflowsGroup }}</h5>
+                </th>
+            </tr>
+            <tr nodeinspector-common-table-node
+                [ngClass]="[ showWorkflowsGroup && (!isempty(nodeItem.settings.classifiedworkflowuuid.value) || classifiedWorkflow != null || !hidePercentItems) ? 'd-table-row' : 'd-none' ]"
+                [title]="l10nphrase.result.jobtype.nodeInspector.classifiedworkflowuuid"
+                [valueToCopy]="nodeItem.settings.classifiedworkflowuuid.value || undefined">
+                @if(classifiedWorkflow == null) {
+                <code [innerHTML]="'&lt;null&gt;'"></code>
+                }
+                @else if (searchResult.search.filter.includeUuids) {
+                <code
+                    [innerHTML]="(classifiedWorkflow.uuid | highlight: searchResult.search.phrase) + ' : ' + classifiedWorkflow.name"></code>
+                }
+                @else {
+                <code>{{classifiedWorkflow.uuid}} : {{classifiedWorkflow.name}}</code>
+                }
+            </tr>
+            <tr nodeinspector-common-table-node
+                [ngClass]="[ showWorkflowsGroup && (!isempty(nodeItem.settings.workflowuuid.value) || processingWorkflow != null || !hidePercentItems) ? 'd-table-row' : 'd-none' ]"
+                [title]="l10nphrase.result.jobtype.nodeInspector.workflowuuid"
+                [valueToCopy]="nodeItem.settings.workflowuuid.value || undefined">
+                @if(processingWorkflow == null) {
+                <code [innerHTML]="'&lt;null&gt;'"></code>
+                }
+                @else if (searchResult.search.filter.includeUuids) {
+                <code
+                    [innerHTML]="(processingWorkflow.uuid | highlight: searchResult.search.phrase) + ' : ' + processingWorkflow.name"></code>
+                }
+                @else {
+                <code>{{processingWorkflow.uuid}} : {{processingWorkflow.name}}</code>
+                }
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -159,10 +159,10 @@
                             [searchResult]="searchResult"></app-result-config>
                         }
                         @case ('JobTypes') {
-
+                        <app-result-jobtypes [searchResult]="searchResult"></app-result-jobtypes>
                         }
                         @case ('PSetItems') {
-                        <app-result-parameterset [psetByTree]="psetByTree" [psetUpdate]="psetUpdate"
+                        <app-result-parameterset [psetByTree]="psetByTree"
                             [searchResult]="searchResult"></app-result-parameterset>
                         }
                         @case ('WorkflowItems') {
