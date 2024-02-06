@@ -30,10 +30,13 @@ export const L10nFr: L10nLocale = {
             fr: 'Français',
         },
         phrases: {
-            none: 'Aucun',
+            no: ['non', 'Non'],
+            none: '»Aucun«',
             okUc: 'OK',
-            toggleItem: 'Basculer [0]'
-        }
+            toggleItem: 'Basculer [0]',
+            toggleSection: ['Cliquez pour développer la section "[0]"', 'Cliquez pour réduire la section "[0]"'],
+            yes: ['oui', 'Oui'],
+        },
     },
     home: {
         moreFilter: 'Filtres avancés',
@@ -120,7 +123,6 @@ export const L10nFr: L10nLocale = {
                 Cette page répertorie les types de tâches configurés, et les correspondances sont mises en évidence visuellement.
                 En cliquant sur une entrée, les détails sont affichés sur le côté droit.
             `,
-            toggleSection: ['Cliquez pour développer la section "[0]"', 'Cliquez pour réduire la section "[0]"'],
             toggleHideEmptySettings: ['Les valeurs vides et en % sont masquées. Cliquez pour afficher', 'Cliquez pour masquer les valeurs vides ou en %'],
             nodeInspector: {
                 category: 'Catégorie',
@@ -192,6 +194,30 @@ export const L10nFr: L10nLocale = {
             `,
         },
         showWorkflow: 'Afficher le Workflow',
+        useraccount: {
+            title: 'Correspondances dans les comptes d\'utilisateur',
+            subtitle: `
+                Ce tableau contient les comptes d'utilisateur enregistrés dans sysHUB.
+                Les correspondances sont mises en évidence.
+            `,
+            toggleHideUnassignedRoles: ['Les rôles non attribués sont masqués. Cliquez pour afficher', 'Cliquez pour masquer les rôles non attribués'],
+            nodeInspector: {
+                email: 'E-Mail',
+                enabled: 'Activé',
+                forcechange: 'Forcer le changement de mot de passe',
+                modified: 'Modifié',
+                name: 'Nom',
+                roles: 'Rôles',
+                subject: 'Compte utilisateur',
+                type: 'Type',
+                types: {
+                    'INTERNAL': 'Utilisateur sysHUB',
+                    'LDAP': 'Utilisateur de domaine',
+                    'WINDOWS': 'Utilisateur Windows',
+                },
+                uuid: 'Uuid',
+            },
+        },
         toolbar: {
             certStore: 'stock. certificats : [0]',
             config: 'config : [0]',

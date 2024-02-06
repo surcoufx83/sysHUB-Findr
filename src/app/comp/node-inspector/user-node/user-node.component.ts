@@ -5,27 +5,22 @@ import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
 import { ToastsService } from 'src/app/svc/toasts.service';
 import { SearchResult } from 'src/app/types';
-import { SyshubJobType, SyshubWorkflow } from 'syshub-rest-module';
+import { SyshubRole, SyshubUserAccount } from 'syshub-rest-module';
 
 @Component({
-  selector: 'app-node-inspector-jobtypes-node',
-  templateUrl: './jobtypes-node.component.html',
-  styleUrl: './jobtypes-node.component.scss'
+  selector: 'app-node-inspector-user-node',
+  templateUrl: './user-node.component.html',
+  styleUrl: './user-node.component.scss'
 })
-export class NodeInspectorJobtypesNodeComponent implements OnDestroy, OnInit {
+export class NodeInspectorUserNodeComponent implements OnDestroy, OnInit {
 
-  @Input({ required: true }) nodeItem!: SyshubJobType;
+  @Input({ required: true }) nodeItem!: SyshubUserAccount;
   @Output() onChangeColor = new EventEmitter<never>();
   @Input({ required: true }) searchResult!: SearchResult;
 
-  classifiedWorkflow: SyshubWorkflow | null = null;
-  processingWorkflow: SyshubWorkflow | null = null;
-
-  hidePercentItems = false;
-  showClassificationGroup = true;
-  showJobAttributesGroup = true;
-  showProcessingGroup = true;
-  showWorkflowsGroup = true;
+  hideUnassignedRoles = false;
+  showRolesGroup = true;
+  userroles: SyshubRole[] = [];
   subs: Subscription[] = [];
 
   constructor(
@@ -64,16 +59,16 @@ export class NodeInspectorJobtypesNodeComponent implements OnDestroy, OnInit {
 
   ngOnInit(): void {
     this.subs.push(this.cacheService.userconfig.subscribe((cfg) => {
-      this.hidePercentItems = cfg.hideJobtypePercentItems || false;
+      this.hideUnassignedRoles = cfg.hideUnassignedRoles || false;
     }));
-    if (this.nodeItem.settings.classifiedworkflowuuid.value !== null)
-      this.classifiedWorkflow = this.cacheService.getWorkflow(`${this.nodeItem.settings.classifiedworkflowuuid.value}`);
-    if (this.nodeItem.settings.workflowuuid.value !== null)
-      this.processingWorkflow = this.cacheService.getWorkflow(`${this.nodeItem.settings.workflowuuid.value}`);
+    if (this.searchResult.result?.system?.roles == undefined || this.searchResult.result?.system?.roles == null || this.searchResult.result?.system?.roles == false)
+      return;
+    let tempuserroles: SyshubRole[] = [];
+    this.userroles = [...this.searchResult.result?.system?.roles.content].sort((a, b) => a.rolename.toLocaleLowerCase() > b.rolename.toLocaleLowerCase() ? 1 : -1);
   }
 
-  togglePercentItems(): void {
-    this.cacheService.toggleJobtypePropertyFilter(!this.hidePercentItems);
+  toggleRolesItems(): void {
+    this.cacheService.toggleUnassignedRolesFilter(!this.hideUnassignedRoles);
   }
 
 }

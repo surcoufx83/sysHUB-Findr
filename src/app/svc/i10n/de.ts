@@ -30,9 +30,12 @@ export const L10nDe: L10nLocale = {
             fr: 'Französisch',
         },
         phrases: {
+            no: ['nein', 'Nein'],
             none: '»Keine«',
             okUc: 'OK',
-            toggleItem: '[0] auf- bzw. zuklappen'
+            toggleItem: '[0] auf- bzw. zuklappen',
+            toggleSection: ['Klicken um den Abschnitt [0] einzublenden', 'Klicken um den Abschnitt [0] auszublenden'],
+            yes: ['ja', 'Ja'],
         }
     },
     home: {
@@ -121,7 +124,6 @@ export const L10nDe: L10nLocale = {
                 hebt Treffer sind optisch hervorgehoben.
                 Beim Klicken auf einen Eintrag werden die Details im rechten Bereich dargestellt.
             `,
-            toggleSection: ['Klicken um den Abschnitt [0] einzublenden', 'Klicken um den Abschnitt [0] auszublenden'],
             toggleHideEmptySettings: ['Leere und %-Werte sind ausgeblendet. Klicken um einzublenden', 'Klicken um leere oder %-Werte auszublenden'],
             nodeInspector: {
                 category: 'Kategorie',
@@ -194,6 +196,30 @@ export const L10nDe: L10nLocale = {
             `,
         },
         showWorkflow: 'Workflow anzeigen',
+        useraccount: {
+            title: 'Treffer in der Benutzerkonten',
+            subtitle: `
+                Die Tabelle enthält die Benuzterkonten die im sysHUB registriert sind.
+                Treffer sind farblich hervorgehoben.
+            `,
+            toggleHideUnassignedRoles: ['Nicht zugewiesene Rollen sind ausgeblendet. Klicken um einzublenden', 'Klicken um nicht zugewiesene Rollen auszublenden'],
+            nodeInspector: {
+                email: 'E-Mail',
+                enabled: 'Freigeschaltet',
+                forcechange: 'Muss Passwort ändern',
+                modified: 'Geändert',
+                name: 'Name',
+                roles: 'Rollen',
+                subject: 'Benutzerkonto',
+                type: 'Art',
+                types: {
+                    'INTERNAL': 'sysHUB Benutzer',
+                    'LDAP': 'Domain-Benutzer',
+                    'WINDOWS': 'Windows-Benutzer',
+                },
+                uuid: 'Uuid',
+            },
+        },
         toolbar: {
             certStore: 'Zertifikatsspeicher: [0]',
             config: 'Konfig: [0]',

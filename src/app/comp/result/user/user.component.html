@@ -1,0 +1,14 @@
+<p>{{l10nphrase.result.useraccount.subtitle}}</p>
+
+<table class="table table-sm table-hover">
+    <tbody>
+        @for (item of user; track $index) {
+        <tr>
+            <td [ngClass]="{ 'cursor-pointer': true, 'text-success': userMatched.includes(item.uuid)}"
+                (click)="selectNode(item)">
+                <strong [innerHTML]="item.name | highlight: searchResult.search.phrase"></strong>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

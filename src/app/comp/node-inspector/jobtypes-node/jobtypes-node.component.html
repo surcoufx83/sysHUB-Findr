@@ -48,7 +48,7 @@
             <tr>
                 <th scope="row" colspan="3" class="cursor-pointer"
                     (click)="showClassificationGroup = !showClassificationGroup"
-                    [title]="l10n(l10nphrase.result.jobtype.toggleSection[showClassificationGroup ? 1 : 0], [l10nphrase.result.jobtype.nodeInspector.classificationGroup])">
+                    [title]="l10n(l10nphrase.common.phrases.toggleSection[showClassificationGroup ? 1 : 0], [l10nphrase.result.jobtype.nodeInspector.classificationGroup])">
                     <h5 class="my-1"><i
                             [class]="['bi', showClassificationGroup ? 'bi-caret-down-fill' : 'bi-caret-right-fill']"></i>
                         {{
@@ -122,7 +122,7 @@
                 <th scope="row" colspan="3"
                     [ngClass]="{ 'cursor-pointer': (nodeItem.settings.PropChildren?.length || 0) > 0 }"
                     (click)="(nodeItem.settings.PropChildren?.length || 0) > 0 ? showJobAttributesGroup = !showJobAttributesGroup : undefined"
-                    [title]="(nodeItem.settings.PropChildren?.length || 0) > 0 ? l10n(l10nphrase.result.jobtype.toggleSection[showJobAttributesGroup ? 1 : 0], [l10nphrase.result.jobtype.nodeInspector.jobAttributesGroup]) : ''">
+                    [title]="(nodeItem.settings.PropChildren?.length || 0) > 0 ? l10n(l10nphrase.common.phrases.toggleSection[showJobAttributesGroup ? 1 : 0], [l10nphrase.result.jobtype.nodeInspector.jobAttributesGroup]) : ''">
                     <h5 class="my-1"><i
                             [class]="['bi', (nodeItem.settings.PropChildren?.length || 0) > 0 ? (showJobAttributesGroup ? 'bi-caret-down-fill' : 'bi-caret-right-fill') : (showJobAttributesGroup ? 'bi-caret-down' : 'bi-caret-right')]"></i>
                         {{ l10nphrase.result.jobtype.nodeInspector.jobAttributesGroup }} ({{
@@ -146,7 +146,7 @@
             }
             <tr>
                 <th scope="row" colspan="3" class="cursor-pointer" (click)="showProcessingGroup = !showProcessingGroup"
-                    [title]="l10n(l10nphrase.result.jobtype.toggleSection[showProcessingGroup ? 1 : 0], [l10nphrase.result.jobtype.nodeInspector.processingGroup])">
+                    [title]="l10n(l10nphrase.common.phrases.toggleSection[showProcessingGroup ? 1 : 0], [l10nphrase.result.jobtype.nodeInspector.processingGroup])">
                     <h5 class="my-1"><i
                             [class]="['bi', showProcessingGroup ? 'bi-caret-down-fill' : 'bi-caret-right-fill']"></i>
                         {{
@@ -189,7 +189,7 @@
             </tr>
             <tr>
                 <th scope="row" colspan="3" class="cursor-pointer" (click)="showWorkflowsGroup = !showWorkflowsGroup"
-                    [title]="l10n(l10nphrase.result.jobtype.toggleSection[showWorkflowsGroup ? 1 : 0], [l10nphrase.result.jobtype.nodeInspector.workflowsGroup])">
+                    [title]="l10n(l10nphrase.common.phrases.toggleSection[showWorkflowsGroup ? 1 : 0], [l10nphrase.result.jobtype.nodeInspector.workflowsGroup])">
                     <h5 class="my-1"><i
                             [class]="['bi', showWorkflowsGroup ? 'bi-caret-down-fill' : 'bi-caret-right-fill']"></i>
                         {{

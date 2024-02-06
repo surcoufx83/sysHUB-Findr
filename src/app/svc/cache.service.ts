@@ -622,6 +622,14 @@ export class CacheService {
     }
   }
 
+  toggleUnassignedRolesFilter(newvalue: boolean): void {
+    if (newvalue !== this._userconfig.value.hideUnassignedRoles) {
+      let obj: UserConfig = { ...this._userconfig.value };
+      obj.hideUnassignedRoles = newvalue;
+      this._userconfig.next(obj);
+    }
+  }
+
   useCache(newvalue: boolean): void {
     if (newvalue != this._userconfig.value.enableCache) {
       let obj: UserConfig = { ...this._userconfig.value };

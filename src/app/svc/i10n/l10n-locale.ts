@@ -30,9 +30,12 @@ export type L10nLocale = {
         },
         locales: { [key: string]: string },
         phrases: {
+            no: string[],
             none: string,
             okUc: string,
-            toggleItem: string
+            toggleItem: string,
+            toggleSection: string[],
+            yes: string[],
         }
     },
     home: {
@@ -101,7 +104,6 @@ export type L10nLocale = {
         jobtype: {
             title: string,
             subtitle: string,
-            toggleSection: string[],
             toggleHideEmptySettings: string[],
             nodeInspector: {
                 category: string,
@@ -161,6 +163,23 @@ export type L10nLocale = {
             subtitle: string,
         },
         showWorkflow: string,
+        useraccount: {
+            title: string,
+            subtitle: string,
+            toggleHideUnassignedRoles: string[],
+            nodeInspector: {
+                email: string,
+                enabled: string,
+                forcechange: string,
+                modified: string,
+                name: string,
+                roles: string,
+                subject: string,
+                type: string,
+                types: { [key: string]: string },
+                uuid: string,
+            },
+        },
         toolbar: {
             certStore: string,
             config: string,

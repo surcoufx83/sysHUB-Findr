@@ -30,10 +30,13 @@ export const L10nEn: L10nLocale = {
             fr: 'French',
         },
         phrases: {
-            none: 'None',
+            no: ['no', 'No'],
+            none: '»None«',
             okUc: 'OK',
-            toggleItem: 'Toggle [0]'
-        }
+            toggleItem: 'Toggle [0]',
+            toggleSection: ['Click to expand section "[0]"', 'Click to collapse section "[0]"'],
+            yes: ['yes', 'Yes'],
+        },
     },
     home: {
         moreFilter: 'Advanced Filters',
@@ -120,7 +123,6 @@ export const L10nEn: L10nLocale = {
                 This page lists the configured job types, and matches are visually highlighted.
                 When clicking on an entry, the details are displayed on the right side.
             `,
-            toggleSection: ['Click to expand section "[0]"', 'Click to collapse section "[0]"'],
             toggleHideEmptySettings: ['Empty and %-values are hidden. Click to show', 'Click to hide empty or %-values'],
             nodeInspector: {
                 category: 'Category',
@@ -192,6 +194,30 @@ export const L10nEn: L10nLocale = {
             `,
         },
         showWorkflow: 'Show Workflow',
+        useraccount: {
+            title: 'Treffer in den Benutzerkonten',
+            subtitle: `
+                Die Tabelle enthält die Benutzerkonten, die im sysHUB registriert sind.
+                Treffer sind farblich hervorgehoben.
+            `,
+            toggleHideUnassignedRoles: ['Unassigned roles are hidden. Click to show', 'Click to hide unassigned roles'],
+            nodeInspector: {
+                email: 'E-Mail',
+                enabled: 'Freigeschaltet',
+                forcechange: 'Muss Passwort ändern',
+                modified: 'Geändert',
+                name: 'Name',
+                roles: 'Rollen',
+                subject: 'Benutzerkonto',
+                type: 'Art',
+                types: {
+                    'INTERNAL': 'sysHUB User',
+                    'LDAP': 'Domain User',
+                    'WINDOWS': 'Windows User',
+                },
+                uuid: 'Uuid',
+            },
+        },
         toolbar: {
             certStore: 'cert. store: [0]',
             config: 'config: [0]',

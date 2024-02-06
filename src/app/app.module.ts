@@ -43,6 +43,8 @@ import { ToastsComponent } from './svc/toasts/toasts.component';
 import { HighlightPipe } from './utils/highlight.pipe';
 import { NodeInspectorCommonTableNodeComponent } from './comp/node-inspector/common/table-node/table-node.component';
 import { CopyButtonComponent } from './comp/node-inspector/common/copy-button/copy-button.component';
+import { NodeInspectorUserNodeComponent } from './comp/node-inspector/user-node/user-node.component';
+import { UserComponent } from './comp/result/user/user.component';
 
 @NgModule({
   declarations: [
@@ -74,6 +76,8 @@ import { CopyButtonComponent } from './comp/node-inspector/common/copy-button/co
     TreeComponent,
     NodeInspectorCommonTableNodeComponent,
     CopyButtonComponent,
+    NodeInspectorUserNodeComponent,
+    UserComponent,
   ],
   imports: [
     AppRoutingModule,

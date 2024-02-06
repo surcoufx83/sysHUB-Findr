@@ -1,4 +1,4 @@
-import { SyshubCategory, SyshubCertStoreItem, SyshubIppDevice, SyshubServerInformation, SyshubUserAccount } from "syshub-rest-module";
+import { SyshubCategory, SyshubCertStoreItem, SyshubIppDevice, SyshubRole, SyshubServerInformation, SyshubUserAccount } from "syshub-rest-module";
 
 export type SearchConfig = {
     phrase: string,
@@ -14,6 +14,7 @@ export type SearchConfig = {
             serverInfo: boolean,
             ippDevices: boolean,
             users: boolean,
+            userRoles: boolean,
         }
     },
     filter: {
@@ -47,6 +48,7 @@ export type SearchResultUuids = {
         serverInfo?: { matches: number, content: SyshubServerInformation } | null | false,
         ippDevices?: { matches: number, content: SyshubIppDevice[] } | null | false,
         users?: { matches: number, content: SyshubUserAccount[] } | null | false,
+        roles?: { matches: number, content: SyshubRole[] } | null | false,
     }
 }
 
@@ -64,6 +66,7 @@ export type UserConfig = {
     enableCache: boolean,
     showMoreFilter?: boolean,
     hideJobtypePercentItems?: boolean,
+    hideUnassignedRoles?: boolean,
 }
 
 export type UuidModifiedTypeObject = {

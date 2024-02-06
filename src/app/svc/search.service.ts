@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Response, RestService, SyshubCertStoreItem, SyshubIppDevice, SyshubServerInformation, SyshubUserAccount } from 'syshub-rest-module';
+import { Response, RestService, SyshubCertStoreItem, SyshubIppDevice, SyshubRole, SyshubServerInformation, SyshubUserAccount } from 'syshub-rest-module';
 import { SearchConfig, SearchResultUuids } from '../types';
 import { CacheService } from './cache.service';
 import { ToastsService } from './toasts.service';
@@ -45,6 +45,20 @@ export class SearchService {
     return `${content}`.toLocaleLowerCase().includes(search.phrase.toLocaleLowerCase());
   }
 
+  private matchIncludeDescription(description: string | null, search: SearchConfig): string {
+    if (description === null)
+      return '';
+    if (!description.startsWith('[B]') || !search.filter.excludeBComments)
+      return description;
+    return '';
+  }
+
+  private matchIncludeUuid(uuid: string | null, search: SearchConfig): string {
+    if (uuid === null)
+      return '';
+    return search.filter.includeUuids ? uuid : '';
+  }
+
   public matchCertStoreItem(content: SyshubCertStoreItem, search: SearchConfig): boolean {
     return this.match(`${content.algorithm}${content.alias}${content.certX509IssuerDN}${content.certX509SubjectDN}${content.subjectAlternativeName}`, search);
   }
@@ -54,7 +68,11 @@ export class SearchService {
   }
 
   public matchUser(content: SyshubUserAccount, search: SearchConfig): boolean {
-    return this.match(`${content.email}${content.name}${search.filter.includeUuids ? content.uuid : ''}`, search);
+    return this.match(`${content.email}${content.name}${this.matchIncludeUuid(content.uuid, search)}`, search);
+  }
+
+  public matchUserRole(content: SyshubRole, search: SearchConfig): boolean {
+    return this.match(`${content.rolename}${this.matchIncludeDescription(content.description, search)}${this.matchIncludeUuid(content.uuid, search)}`, search);
   }
 
   get l10nphrase(): L10nLocale {
@@ -208,8 +226,29 @@ export class SearchService {
     return subject;
   }
 
+  private searchStep2_UserRoles(enabled: boolean, phrase: string): Observable<SyshubRole[] | null | false> {
+    let subject = new Subject<SyshubRole[] | null | false>;
+    setTimeout(() => {
+      if (!enabled) {
+        subject.next(null);
+        subject.complete();
+        return;
+      }
+      this.restapi.getRoles().subscribe((items) => {
+        if (items instanceof Error) {
+          subject.next(false);
+          subject.complete();
+          return;
+        }
+        subject.next(items);
+        subject.complete();
+      });
+    }, 1);
+    return subject;
+  }
+
   private searchStep2(search: SearchConfig, result: SearchResultUuids): void {
-    let systemTopics = search.topics.system.certstore || search.topics.system.ippDevices || search.topics.system.serverConfig || search.topics.system.serverInfo || search.topics.system.users;
+    let systemTopics = search.topics.system.certstore || search.topics.system.ippDevices || search.topics.system.serverConfig || search.topics.system.serverInfo || search.topics.system.users || search.topics.system.userRoles;
 
     if (result.system == undefined) {
       result.system = {}
@@ -218,23 +257,27 @@ export class SearchService {
     // Query individual Rest API endpoints. If search is not active, method will return null.
     this.searchStep2_CertStore(search.topics.system.certstore, search.phrase).subscribe((r) => {
       result.system!.certstore = (r === null || r === false) ? r : { matches: this.searchstep2_MatchCertStore(search, r), content: r };
-      this._searchProgress.next(this._searchProgress.value + 10);
+      this._searchProgress.next(this._searchProgress.value + 8);
     });
     this.searchStep2_IppDevices(search.topics.system.ippDevices, search.phrase).subscribe((r) => {
       result.system!.ippDevices = (r === null || r === false) ? r : { matches: this.searchstep2_MatchDevice(search, r), content: r };
-      this._searchProgress.next(this._searchProgress.value + 10);
+      this._searchProgress.next(this._searchProgress.value + 8);
     });
     this.searchStep2_ServerConfig(search.topics.system.serverConfig, search.phrase).subscribe((r) => {
       result.system!.serverConfig = (r === null || r === false) ? r : { matches: this.searchstep2_MatchContent(search, JSON.stringify(r).toLocaleLowerCase()), content: r };
-      this._searchProgress.next(this._searchProgress.value + 10);
+      this._searchProgress.next(this._searchProgress.value + 8);
     });
     this.searchStep2_ServerInfo(search.topics.system.serverInfo, search.phrase).subscribe((r) => {
       result.system!.serverInfo = (r === null || r === false) ? r : { matches: this.searchstep2_MatchContent(search, JSON.stringify(r).toLocaleLowerCase()), content: r };
-      this._searchProgress.next(this._searchProgress.value + 10);
+      this._searchProgress.next(this._searchProgress.value + 8);
     });
     this.searchStep2_User(search.topics.system.users, search.phrase).subscribe((r) => {
       result.system!.users = (r === null || r === false) ? r : { matches: this.searchstep2_MatchUser(search, r), content: r };
-      this._searchProgress.next(this._searchProgress.value + 10);
+      this._searchProgress.next(this._searchProgress.value + 8);
+    });
+    this.searchStep2_UserRoles(search.topics.system.users || search.topics.system.userRoles, search.phrase).subscribe((r) => {
+      result.system!.roles = (r === null || r === false) ? r : { matches: this.searchstep2_MatchRole(search, r), content: r };
+      this._searchProgress.next(this._searchProgress.value + 8);
     });
 
     // Wait for individual Rest API calls finished with a timeout of 20 seconds
@@ -269,6 +312,12 @@ export class SearchService {
     return count;
   }
 
+  private searchstep2_MatchRole(search: SearchConfig, content: SyshubRole[]): number {
+    let count = 0;
+    content.forEach((role) => count += this.matchUserRole(role, search) ? 1 : 0);
+    return count;
+  }
+
   private searchstep2Timeout = 20000;
   private searchstep2_loop(search: SearchConfig, searchSystemTopics: boolean, result: SearchResultUuids): void {
     console.log(result);
@@ -299,7 +348,8 @@ export const defaultSearchConfig: SearchConfig = {
       serverConfig: false,
       serverInfo: false,
       ippDevices: false,
-      users: false
+      users: false,
+      userRoles: false,
     }
   },
   filter: {
