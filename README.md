@@ -40,13 +40,13 @@ In der Datei müssen entweder Basic- oder OAuth Credentials angegeben und anschl
 | syshub.oauth.scope        | String (`'private' \| 'public' \| 'private+public' \| 'public+private'`) | Das scope, so wie im Client konfiguriert. Für den Findr muss im sysHUB `private;public` konfiguriert werden. Daher muss dieser Parameter entweder als `private+public` oder `public+private` gesetzt sein. <br/>⚠️Ist OAuth aktiviert und dieser Parameter nicht korrekt konfiguriert, wird eine Fehlermeldung angezeigt und sämtliche Suchfunktionen im Findr sind deaktiviert. |
 
 ### Theme
-<img style="float: right; margin-left: 1rem;" src="docs/theme-switch.png" alt="Wechsel des Themas (hell/dunkel) über das Menü">
+<img float="right" style="float: right; margin-left: 1rem;" src="docs/theme-switch.png" alt="Wechsel des Themas (hell/dunkel) über das Menü">
 Der Findr enthält einen automatischen Design-Wechsel zwischen hellem und dunklem Modus abhängig von den Benutzerpräferenzen, eingestellt im Betriebssystem. über das Bürger-Menü rechts oben kann durch den Benutzer auch manuell ein Thema festgelegt werden.
 <br clear="all"/>
 
 ### Lokalisierung (L10N)
-<img style="float: left; margin-right: 1rem;" src="docs/locale-switch.png" alt="Wechsel der Sprache über das Menü">
-Der Findr ist übersetzt in die Sprachen Deutsch, Englisch, Französisch. Beim Laden der Seite bestimmt die Browser-Standardeinstellung (i.d.R. = Betriebssystem-Sprache), welche Sprache angezeigt wird. Anwender können über das Bürger-Menü rechts oben eine andere Sprache auswählen.
+<img float=left style="float: left; margin-right: 1rem;" src="docs/locale-switch.png" alt="Wechsel der Sprache über das Menü">
+ Der Findr ist übersetzt in die Sprachen Deutsch, Englisch, Französisch. Beim Laden der Seite bestimmt die Browser-Standardeinstellung (i.d.R. = Betriebssystem-Sprache), welche Sprache angezeigt wird. Anwender können über das Bürger-Menü rechts oben eine andere Sprache auswählen.
 <br clear="all"/>
 
 ### Sucheinstellungen auf der Startseite
