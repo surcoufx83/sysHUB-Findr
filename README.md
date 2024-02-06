@@ -111,8 +111,8 @@ Wie auch im sysHUB Client sind die Eigenschaften thematisch gruppiert (Klassifiz
 
 
 <p>
-    <img src="docs/result-jobtypes-desktop-nofilter.png" >
-    <img src="docs/result-jobtypes-desktop-filter.png" >
+    <img src="docs/result-jobtypes-desktop-nofilter.png" width="326">
+    <img src="docs/result-jobtypes-desktop-filter.png" width="300">
 </p>
 
 ## Ergebnisliste exportieren und importieren ⚠️ 
