@@ -238,7 +238,6 @@ export class SearchService {
         return;
       }
       this.restapi.getRoles().subscribe((items) => {
-        console.log(items)
         if (items instanceof Error) {
           subject.next(false);
           subject.complete();
@@ -324,7 +323,6 @@ export class SearchService {
 
   private searchstep2Timeout = 20000;
   private searchstep2_loop(search: SearchConfig, searchSystemTopics: boolean, result: SearchResultUuids): void {
-    console.log(result);
     if (!searchSystemTopics || this.searchstep2Timeout <= 0 || (result.system!.certstore !== undefined && result.system!.ippDevices !== undefined && result.system!.serverConfig !== undefined && result.system!.serverInfo !== undefined && result.system!.users !== undefined)) {
       this.cache.setResult(search.token, result);
       this._searchBusy.next(false);
