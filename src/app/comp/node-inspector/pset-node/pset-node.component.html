@@ -16,87 +16,39 @@
 <div class="card-body p-0">
     <table class="table table-sm table-hover m-0">
         <tbody>
-            <tr>
-                <th scope="row">{{ l10nphrase.result.parameterset.nodeInspector.path }}:</th>
-                <td>
-                    <code>{{psetPath}}</code>
-                </td>
-                <td style="width: 20px;" class="py-0">
-                    <button type="button" class="btn btn-sm px-2" (click)="copyPath(psetPath)"
-                        [title]="l10nphrase.result.common.nodeInspector.copyTooltip">
-                        <i class="bi bi-copy"></i>
-                    </button>
-                </td>
+            <tr nodeinspector-common-table-node [title]="l10nphrase.result.config.nodeInspector.path"
+                [valueToCopy]="getValueToCopy(psetPath)">
+                <code>{{psetPath}}</code>
             </tr>
-            <tr>
-                <th scope="row">{{ l10nphrase.result.parameterset.nodeInspector.uuid }}:</th>
-                <td>
-                    @if (searchResult.search.filter.includeUuids) {
-                    <code [innerHTML]="nodeItem.uuid | highlight: searchResult.search.phrase"></code>
-                    }
-                    @else {
-                    <code>{{nodeItem.uuid}}</code>
-                    }
-                </td>
-                <td style="width: 20px;" class="py-0">
-                    <button type="button" class="btn btn-sm px-2" (click)="copy(nodeItem.uuid)"
-                        [title]="l10nphrase.result.common.nodeInspector.copyTooltip">
-                        <i class="bi bi-copy"></i>
-                    </button>
-                </td>
+            <tr nodeinspector-common-table-node [title]="l10nphrase.result.config.nodeInspector.uuid"
+                [valueToCopy]="nodeItem.uuid">
+                @if (searchResult.search.filter.includeUuids) {
+                <code [innerHTML]="nodeItem.uuid | highlight: searchResult.search.phrase"></code>
+                }
+                @else {
+                <code>{{nodeItem.uuid}}</code>
+                }
             </tr>
-            <tr>
-                <th scope="row">{{ l10nphrase.result.parameterset.nodeInspector.type }}:</th>
-                <td>
-                    <code>{{nodeItem.type}}</code>
-                </td>
-                <td style="width: 20px;" class="py-0">
-                    <button type="button" class="btn btn-sm px-2" (click)="copy(nodeItem.type)"
-                        [title]="l10nphrase.result.common.nodeInspector.copyTooltip">
-                        <i class="bi bi-copy"></i>
-                    </button>
-                </td>
+            <tr nodeinspector-common-table-node [title]="l10nphrase.result.config.nodeInspector.type"
+                [valueToCopy]="nodeItem.type">
+                <code>{{nodeItem.type}}</code>
             </tr>
-            <tr>
-                <th scope="row">{{ l10nphrase.result.parameterset.nodeInspector.value }}:</th>
-                <td>
-                    <code [innerHTML]="nodeItem.value || '&lt;null&gt;' | highlight: searchResult.search.phrase"></code>
-                </td>
-                <td style="width: 20px;" class="py-0">
-                    <button type="button" class="btn btn-sm px-2" (click)="copy(nodeItem.value || '')"
-                        [title]="l10nphrase.result.common.nodeInspector.copyTooltip">
-                        <i class="bi bi-copy"></i>
-                    </button>
-                </td>
+            <tr nodeinspector-common-table-node [title]="l10nphrase.result.config.nodeInspector.value"
+                [valueToCopy]="nodeItem.value || undefined">
+                <code [innerHTML]="nodeItem.value || '&lt;null&gt;' | highlight: searchResult.search.phrase"></code>
             </tr>
-            <tr>
-                <th scope="row">{{ l10nphrase.result.parameterset.nodeInspector.description }}:</th>
-                <td>
-                    @if (!searchResult.search.filter.excludeBComments || !nodeItem.description?.startsWith('[B]')) {
-                    <code [innerHTML]="nodeItem.description | highlight: searchResult.search.phrase"></code>
-                    }
-                    @else {
-                    <code>{{nodeItem.description}}</code>
-                    }
-                </td>
-                <td style="width: 20px;" class="py-0">
-                    <button type="button" class="btn btn-sm px-2" (click)="copy(nodeItem.description || '')"
-                        [title]="l10nphrase.result.common.nodeInspector.copyTooltip">
-                        <i class="bi bi-copy"></i>
-                    </button>
-                </td>
+            <tr nodeinspector-common-table-node [title]="l10nphrase.result.config.nodeInspector.description"
+                [valueToCopy]="nodeItem.description || undefined">
+                @if (!searchResult.search.filter.excludeBComments || !nodeItem.description?.startsWith('[B]')) {
+                <code [innerHTML]="nodeItem.description | highlight: searchResult.search.phrase"></code>
+                }
+                @else {
+                <code>{{nodeItem.description}}</code>
+                }
             </tr>
-            <tr>
-                <th scope="row">{{ l10nphrase.result.parameterset.nodeInspector.modified }}:</th>
-                <td>
-                    <code>{{nodeItem.modifiedtime}}</code>
-                </td>
-                <td style="width: 20px;" class="py-0">
-                    <button type="button" class="btn btn-sm px-2"
-                        [title]="l10nphrase.result.common.nodeInspector.copyTooltip">
-                        <i class="bi bi-copy"></i>
-                    </button>
-                </td>
+            <tr nodeinspector-common-table-node [title]="l10nphrase.result.config.nodeInspector.modified"
+                [valueToCopy]="nodeItem.modifiedtime || undefined">
+                <code>{{nodeItem.modifiedtime}}</code>
             </tr>
         </tbody>
     </table>

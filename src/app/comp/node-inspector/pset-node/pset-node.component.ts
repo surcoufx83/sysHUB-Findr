@@ -25,16 +25,8 @@ export class NodeInspectorPsetNodeComponent implements OnInit {
     private toastsService: ToastsService,
   ) { }
 
-  copy(text: string) {
-    navigator.clipboard.writeText(text);
-    this.toastsService.addToast({
-      delay: 2500,
-      message: this.l10n(this.l10nphrase.result.common.nodeInspector.copied, [text]),
-    });
-  }
-
-  copyPath(text: string) {
-    this.copy(text.replace(/\s\/\s/gi, '/'));
+  getValueToCopy(text: string) {
+    return text.replace(/\s\/\s/gi, '/');
   }
 
   get l10nphrase(): L10nLocale {
