@@ -9,7 +9,7 @@ Um diese Software nutzen zu können und dürfen ist folgendes erforderlich:
 - NT-ware uniFLOW sysHUB ab Version 2022.1.0
 - sysHUB Lizenz REST API
 
-## Erforderliche Berechtigung für Anwender <span style="color:red">Incomplete</span>
+## Erforderliche Berechtigung für Anwender ⚠️ 
 Nutzer des Findr müssen im sysHUB mindestens die folgenden Berechtigungen besitzen:
 - Rolle gem. Vorgabe Authorisierungsserver
 - Permission PERM_IADMINSERVICE_GETWORKFLOWITEM: Erforderlich für die Ausführung des Workflows der die Suchanfrage bearbeitet und das sysHUB durchsucht.
@@ -50,7 +50,7 @@ Der Findr ist übersetzt in die Sprachen Deutsch, Englisch, Französisch. Beim L
 <br clear="all"/>
 
 ### Sucheinstellungen auf der Startseite
-Über die Startseite können Sucheinstellungen vorgenommen werden, die über die Suche in der Navigationsleiste aus Platzgründen nicht verfügbar sind.  Diese zusätzlichen Einstellungen sind im Findr als "erweiterte Filter" bezeichnet. In diese sind folgende Optionen enthalten:
+Über die Startseite können Sucheinstellungen vorgenommen werden, die über die Suche in der Navigationsleiste aus Platzgründen nicht verfügbar sind. Diese zusätzlichen Einstellungen sind im Findr als "erweiterte Filter" bezeichnet. In diese sind folgende Optionen enthalten:
 - Suchen nur in Elementen die einer Kategorie zugeordnet sind
 - `[B]`-Kommentare ignorieren (Standard-Kommentare in Prozessen und Beschreibungstexten)
 - UUID's durchsuchen
@@ -64,59 +64,53 @@ In den Findr Standardeinstellungen sind diese wie folgt gesetzt:
 
 Werden diese Einstellungen durch den Anwender auf der Startseite geändert und dann eine Suche ausgeführt, so werden diese Einstellungen für den Anwender als neuer Standard im Browser gespeichert. Ebenso verwendet die Suche in der Navigationsleiste zukünftig diese Einstellungen.
 
-## Vorschau auf die Funktionalitäten <span style="color:red">Incomplete</span>
+## Vorschau auf die Funktionalitäten
 
-### Anmeldeseite<span style="color:red">Incomplete</span>
+### Anmeldeseite ⚠️ 
 
 ### Startseite
 Die Startseite dient der Konfiguration einer Suchanfrage. Die Suchanfrage wird für das nächste mal im Browsercache gespeichert. Das Suchfeld in der obersten Navigationsleiste bietet jederzeit den schnellsten Weg eine weitere Suche zu starten (Einstellungen der vorherigen Suche werden übernommen).
 
-| Desktopansicht                                              | Mobile Ansicht                                                                               |
-| ----------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| ![Startseite in der Desktop-Ansicht](docs/home-desktop.png) | <img src="docs/home-mobile.png" alt="Startseite in der Ansicht für Mobilgeräte" width="85%"> |
+![Startseite in der Desktop-Ansicht](docs/home-desktop.png)
 
 ### Suche läuft
 Nachdem die Suche gestartet wird, wird der Anwender auf eine Seite zum Status der Suche weitergeleitet. Diese wird zusammen mit einem sich bewegenden Balken angezeigt, bis das Ergebnis der Suche vom sysHUB zurückgemeldet und aufbereitet wurde.
 Wurde bei der Suche eine der Optionen Zertifikatsspeicher, Server properties, Server infos, Drucker oder Benutzer gewählt, führt das dazu, dass nach der herkömlichen Suche die entsprechenden Rest API Endpoints aufgerufen und untersucht werden.
 
-| Desktopansicht                                                    | Mobile Ansicht                                                                              |
-| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| ![Suche läuft in der Desktop-Ansicht](docs/searching-desktop.png) | <img src="docs/searching-mobile.png" alt="Suche läuft in der mobilen Ansicht" width="100%"> |
+![Suche läuft in der Desktop-Ansicht](docs/searching-desktop.png)
 
-### Ergebnis-Zusammenfassung<span style="color:red">Incomplete</span>
+### Ergebnis-Zusammenfassung  
 Sobald das Suchergebnis verarbeitet wurde, wird dem Anwender eine Zusammenfassung angezeigt. In der Trefferliste werden jeweils für Konfiguration, Parameterset, Auftragstypen, Workflows, Zertifikatsspeicher, Server properties, Server infos, Drucker und Benutzer listenartig dargestellt, welche Treffer ermittelt wurden. In dieser Zusammenfassung gibt es für Konfiguration und Parameterset keine Baumdarstellung.
 
 An jeder Stelle der Ergebnisse werden Treffer innerhalb eines Wertes mit einem blassen gelb hinterlegt.
 
-über die Navigationsleiste (oberhalb der Zusammenfassung) springt der Anwender in die jeweilige Detailansicht. Die Buttons sind ausgegraut dargestellt, wenn in dem Bereich der Suchbegriff nicht gefunden wurde. 
+Über die Navigationsleiste (oberhalb der Zusammenfassung) springt der Anwender in die jeweilige Detailansicht. Die Buttons sind ausgegraut dargestellt, wenn in dem Bereich der Suchbegriff nicht gefunden wurde. 
 Zusätzlich lässt sich die Trefferliste exportieren. Der Export enthält eine Json-Datei welche die Suchanfrage inkl. der Ergebnisse beinhaltet. Der Export kann zum Beispiel zu Diagnosezwecken in einem anderen Findr importiert werden.
 
-| Desktopansicht                                                                                     | Mobile Ansicht                                                                                                              |
-| -------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| ![Trefferliste Config in der Desktop-Ansicht](docs/result-overview-desktop.png)                    | <img src="docs/result-overview-mobile.png" alt="Trefferliste Config in der mobilen Ansicht" width="91%">                    |
-| ![Trefferliste Parameterset in der Desktop-Ansicht](docs/result-overview-parameterset-desktop.png) | <img src="docs/result-overview-parameterset-mobile.png" alt="Trefferliste Parameterset in der mobilen Ansicht" width="91%"> |
-| ![Trefferliste Auftragstypen in der Desktop-Ansicht](docs/result-overview-jobtypes-desktop.png)    | <img src="docs/result-overview-jobtypes-mobile.png" alt="Trefferliste Auftragstypen in der mobilen Ansicht" width="91%">    |
-| ![Trefferliste Workflows in der Desktop-Ansicht](docs/result-overview-workflows-desktop.png)       | <img src="docs/result-overview-workflows-mobile.png" alt="Trefferliste Workflows in der mobilen Ansicht" width="91%">       |
+![Trefferliste Config in der Desktop-Ansicht](docs/result-overview-desktop.png)
 
-### Ergebnisansicht Konfiguration und Parametersets
-Nach dem Klick auf einen Listeneintrag, zum Beispiel ein Zweig in der Expertenkonfiguration, öffnet sich ein kleines Eigenschaftenfenster auf der rechten Seite der Ergebnisansicht. Diese Fenster können farblich eingefärbt und frei auf der Seite verschoben werden. Mit dem `X`-Icon wird das Fenster geschlossen.
+In der Zusammenfassung der Suchergebnisse sind für jedes Thema mit Treffer die Elemente aufgelistet. In dieser Ansicht gibt es keine Baumstruktur oder Ergebnisdetails, es soll ausschließlich eine Kurzzusammenfassung bieten. Für detaillierte Informationen bitte auf den Button für das entsprechende Thema klicken.
 
-In der Mobilen Ansicht werden die Eigenschaften i.d.R. direkt unterhalb des Elements eingeblendet. Eine Hervorhebung oder das Verschieben ist dafür nicht vorgesehen.
+### Ergebnisansicht Konfiguration und Parametersets 
+Die Expertenkonfiguration und die Parametersets werden in einer Baumstruktur dargestellt. Zweige die einen Treffer enthalten sind automatisch aufgeklappt. Über die `+`- und `-`-Symbole in der Baumstruktur können beliebige andere Ordner aufgeklappt werden. Elemente die keine Unterelemente enthalten, haben ein Symbol das dem gewählten Datentyp entspricht.
+
+Nach dem Klick auf den Namen oder Wert eines Eintrags, öffnet sich ein kleines Eigenschaftenfenster auf der rechten Seite. Je nach Bildschirmauflösung können mehrere Fenster dargestellt werden. Diese Fenster können farblich eingefärbt, frei auf der Seite verschoben und vertikal verkleinert und vergrößert werden. Mit dem `X`-Icon wird das Fenster geschlossen.
+
+**In der 📱 mobilen Ansicht gibt es kein Eigenschaftenfenster!**
 
 Die Eigenschaftenfenster enthalten jeweils neben einem Wert immer auch ein kleines `Copy`-Icon. Wird darauf geklickt, so wird der Textinhalt der Eigenschaft (z.B. die Uuid) in die Zwischenablage übernommen.
 
+![Eigenschaftenfenster eines Elements](docs/result-config-desktop.png)
 
-| Desktopansicht                                                         | Mobile Ansicht                                                                                  |
-| ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| ![Eigenschaftenfenster eines Elements](docs/result-config-desktop.png) | <img src="docs/result-config-mobile.png" alt="Eigenschaftenfenster eines Elements" width="91%"> |
+### Weitere Ergebnisansichten ⚠️ 
+Die Ergebnisansicht der Auftragstypen, Workflows, etc stellen mögliche Elemente und Treffer in einer sortierten Liste dar. Nach dem Klick auf einen Listeneintrag wird auch wieder ein zusätzliches Eigenschaftenfenster dargestellt. 
 
-### Ergebnisansicht Auftragstypen<span style="color:red">Incomplete</span>
-Die Ergebnisansicht der Auftragstypen ist nur wenig anders, als die der Konfig. Es gibt natürlich keine Baumstruktur, stattdessen werden die Elemente als Liste dargestellt. Wie auch bei Konfig und Parameterset gibt es im rechten Bereich die Detailinformationen zu einem Auftragstypen inkl. der Jobattribute-Klassifizierung.
+Je nach Thema weitere Funktionen in der Titelleiste des Zusatzfensters. Für Jobtypen gibt es eine Funktion um Einträge die nur ein `%` enthalten oder leer sind, auszublenden. Da Jobtypen sehr viele Eigenschaften für die Klassifizierung enthalten, bei denen die meisten Werte nur dem Prozentzeichen entsprechen, erhöht sich mit aktivem Filter die Übersichtlichkeit. Die Filtereinstellung wird im Browser gespeichert und bleibt auch nach dem Schließen des Browsers erhalten.
 
-| Desktopansicht                                                                            | Mobile Ansicht                                                                                                     |
-| ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| ![Ergebnisansicht Auftragstypen in der Desktop-Ansicht](docs/result-jobtypes-desktop.png) | <img src="docs/result-jobtypes-mobile.png" alt="Ergebnisansicht Auftragstypen in der mobilen Ansicht" width="91%"> |
+Wie auch im sysHUB Client sind die Eigenschaften thematisch gruppiert (Klassifizierung, Jobattribute, Verarbeitung, Workflows). Diese Gruppen können zu- und auch wieder aufgeklappt werden um mehr Platz zu sparen. Standardmäßig sind alle Gruppen immer aufgeklappt.
 
-## Ergebnisliste exportieren und importieren <span style="color:red">Incomplete</span>
+![Eigenschaftenfenster Jobtypen](docs/result-jobtypes-desktop-nofilter.png)
 
-## Fehlerdiagnose Findr <span style="color:red">Incomplete</span>
+## Ergebnisliste exportieren und importieren ⚠️ 
+
+## Fehlerdiagnose Findr ⚠️ >
