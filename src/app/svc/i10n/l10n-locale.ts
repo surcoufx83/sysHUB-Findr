@@ -45,6 +45,11 @@ export type L10nLocale = {
         welcomeSubtitleNoUser: string,
         welcomeSubtitleUser: string,
         welcomeTitle: string,
+        disabledFindr: {
+            title: string,
+            description: string,
+            documentationLink: string,
+        }
     },
     login: {
         title: string,

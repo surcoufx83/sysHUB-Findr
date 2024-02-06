@@ -24,6 +24,8 @@ export class SearchService {
   private _searchProgress: BehaviorSubject<number> = new BehaviorSubject<number>(100);
   public searchProgress = this._searchProgress.asObservable();
 
+  private missingScope: boolean;
+
   constructor(
     private cache: CacheService,
     private l10nService: L10nService,
@@ -37,6 +39,7 @@ export class SearchService {
       this._searchConfig.next({ ...cfg });
     }
     this.searchConfig.subscribe((config) => localStorage.setItem(environment.storage?.searchconfigKey ?? 'findr-searchconfig', JSON.stringify(config)));
+    this.missingScope = (environment.api.syshub.oauth?.scope != 'private+public' && environment.api.syshub.oauth?.scope == 'public+private') || true;
   }
 
   public match(content: any, search: SearchConfig): boolean {
@@ -235,6 +238,7 @@ export class SearchService {
         return;
       }
       this.restapi.getRoles().subscribe((items) => {
+        console.log(items)
         if (items instanceof Error) {
           subject.next(false);
           subject.complete();

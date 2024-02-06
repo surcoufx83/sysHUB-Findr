@@ -45,6 +45,7 @@ import { NodeInspectorCommonTableNodeComponent } from './comp/node-inspector/com
 import { CopyButtonComponent } from './comp/node-inspector/common/copy-button/copy-button.component';
 import { NodeInspectorUserNodeComponent } from './comp/node-inspector/user-node/user-node.component';
 import { UserComponent } from './comp/result/user/user.component';
+import { ScopeWarningBarComponent } from './comp/main/scope-warning-bar/scope-warning-bar.component';
 
 @NgModule({
   declarations: [
@@ -78,6 +79,7 @@ import { UserComponent } from './comp/result/user/user.component';
     CopyButtonComponent,
     NodeInspectorUserNodeComponent,
     UserComponent,
+    ScopeWarningBarComponent,
   ],
   imports: [
     AppRoutingModule,

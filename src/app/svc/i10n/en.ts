@@ -45,6 +45,11 @@ export const L10nEn: L10nLocale = {
         welcomeSubtitleNoUser: 'Hello, what would you like to find today?',
         welcomeSubtitleUser: 'Hello [0], what would you like to find today?',
         welcomeTitle: 'sysHUBFindr',
+        disabledFindr: {
+            title: 'Findr disabled!',
+            description: 'Findr requires a specific configuration for searching and displaying results.',
+            documentationLink: 'See Readme on Github, Configuration Parameters section, Parameter syshub.oauth.scope'
+        }
     },
     login: {
         title: 'Login',

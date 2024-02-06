@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { L10nService } from './i10n.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { SyshubConfigItem, SyshubJobType, SyshubPSetItem, SyshubUserAccount } from 'syshub-rest-module';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -71,6 +72,19 @@ export class PagepropsService {
     );
   }
 
+  public applyTheme(theme: 'light' | 'dark' | null): void {
+    if (theme == null) {
+      const deviceMode = window.matchMedia("(prefers-color-scheme: dark)");
+      document.body.setAttribute('data-bs-theme', deviceMode.matches ? 'dark' : 'light');
+      this.appTheme$.next('auto');
+      localStorage.removeItem(`findr-syshub-theme`);
+      return;
+    }
+    document.body.setAttribute('data-bs-theme', theme);
+    this.appTheme$.next(theme);
+    localStorage.setItem(`findr-syshub-theme`, theme);
+  }
+
   public get DeviceType(): 'mobile' | 'tablet' | 'desktop' {
     return this.deviceType$;
   }
@@ -90,19 +104,6 @@ export class PagepropsService {
       return;
     }
     this.applyTheme(null);
-  }
-
-  public applyTheme(theme: 'light' | 'dark' | null): void {
-    if (theme == null) {
-      const deviceMode = window.matchMedia("(prefers-color-scheme: dark)");
-      document.body.setAttribute('data-bs-theme', deviceMode.matches ? 'dark' : 'light');
-      this.appTheme$.next('auto');
-      localStorage.removeItem(`findr-syshub-theme`);
-      return;
-    }
-    document.body.setAttribute('data-bs-theme', theme);
-    this.appTheme$.next(theme);
-    localStorage.setItem(`findr-syshub-theme`, theme);
   }
 
 }

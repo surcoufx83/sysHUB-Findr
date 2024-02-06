@@ -45,6 +45,11 @@ export const L10nFr: L10nLocale = {
         welcomeSubtitleNoUser: 'Bonjour, que souhaitez-vous trouver aujourd\'hui ?',
         welcomeSubtitleUser: 'Bonjour [0], que souhaitez-vous trouver aujourd\'hui ?',
         welcomeTitle: 'sysHUBFindr',
+        disabledFindr: {
+            title: 'Findr désactivé !',
+            description: 'Le Findr nécessite une configuration spécifique pour effectuer des recherches et afficher les résultats.',
+            documentationLink: 'Consultez le Readme sur Github, section Paramètres de configuration, Paramètre syshub.oauth.scope'
+        }
     },
     login: {
         title: 'Connexion',
