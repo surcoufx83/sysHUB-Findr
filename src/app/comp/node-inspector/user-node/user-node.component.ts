@@ -29,22 +29,6 @@ export class NodeInspectorUserNodeComponent implements OnDestroy, OnInit {
     private toastsService: ToastsService,
   ) { }
 
-  copy(text: string | number) {
-    navigator.clipboard.writeText(`${text}`);
-    this.toastsService.addToast({
-      delay: 2500,
-      message: this.l10n(this.l10nphrase.result.common.nodeInspector.copied, [text]),
-    });
-  }
-
-  copyPath(text: string) {
-    this.copy(text.replace(/\s\/\s/gi, '/'));
-  }
-
-  isempty(value: string | number | null | undefined): boolean {
-    return value === undefined || value === null || value === '' || value === '%';
-  }
-
   get l10nphrase(): L10nLocale {
     return this.l10nService.locale;
   }

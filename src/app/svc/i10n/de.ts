@@ -97,7 +97,7 @@ export const L10nDe: L10nLocale = {
             }
         },
         config: {
-            title: 'Treffer in der Expertenkonfiguration',
+            title: 'Expertenkonfiguration',
             subtitle: `
                 Auf dieser Seite wird die komplette Baumstruktur der Expertenkonfiguration
                 dargestellt und Treffer sind optisch hervorgehoben und automatisch aufgeklappt.
@@ -122,8 +122,29 @@ export const L10nDe: L10nLocale = {
                 Grauer Button = kein Treffer in diesem Bereich.
             `
         },
+        ippDevice: {
+            title: 'IPP Drucker',
+            subtitle: `
+                Die folgende Auflistung enthält die in sysHUB registrierten Drucker (IPP Devices).
+                Suchtreffer sind farblich hervorgehoben, und beim Klicken auf einen Eintrag werden die Details im rechten Bereich dargestellt.
+            `,
+            nodeInspector: {
+                desc: 'Beschreibung',
+                form: 'Formular',
+                location: 'Standort',
+                maxInputQueueSize: 'Limit Input Queue',
+                name: 'Name',
+                outputThreshold: 'Ausgabe Schwellwert',
+                queueSettingsGroup: 'Auftragswarteschlange',
+                si: 'Spool-in',
+                so: 'Spool-out',
+                state: 'Aktiv',
+                subject: 'IPP Device',
+                uri: 'Adresse',
+            }
+        },
         jobtype: {
-            title: 'Treffer bei den Auftragstypen, Suche nach »[0]«',
+            title: 'Auftragstypen',
             subtitle: `
                 Diese Seite listet die konfigurierten Auftragstypen auf und
                 hebt Treffer sind optisch hervorgehoben.
@@ -168,7 +189,7 @@ export const L10nDe: L10nLocale = {
             propertyType: 'Typ: [0]'
         },
         parameterset: {
-            title: 'Treffer im Parameterset',
+            title: 'Parameterset',
             subtitle: `
                 Auf dieser Seite wird die komplette Baumstruktur des Parametersets
                 dargestellt und Treffer sind optisch hervorgehoben und automatisch aufgeklappt.
@@ -186,14 +207,14 @@ export const L10nDe: L10nLocale = {
             },
         },
         serverInfo: {
-            title: 'Treffer in den Serverinformationen',
+            title: 'Serverinformationen',
             subtitle: `
                 Die folgende Auflistung enthält Informationen, welche der Server 
                 zurückgeliefert hat.Treffer sind farblich hervorgehoben.
             `,
         },
         serverProperties: {
-            title: 'Treffer in der Serverkonfiguration (server.properties)',
+            title: 'Serverkonfiguration (server.properties)',
             subtitle: `
                 Die folgende Auflistung enthält alle Konfigurationseinträge, welche der Server 
                 zurückgeliefert hat und entspricht der server.properties-Datei.
@@ -202,7 +223,7 @@ export const L10nDe: L10nLocale = {
         },
         showWorkflow: 'Workflow anzeigen',
         useraccount: {
-            title: 'Treffer in der Benutzerkonten',
+            title: 'Benutzerkonten',
             subtitle: `
                 Die Tabelle enthält die Benuzterkonten die im sysHUB registriert sind.
                 Treffer sind farblich hervorgehoben.

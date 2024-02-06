@@ -97,7 +97,7 @@ export const L10nFr: L10nLocale = {
             }
         },
         config: {
-            title: 'Correspondances dans la Configuration d\'Expert',
+            title: 'Configuration d\'Expert',
             subtitle: `
                 Cette page affiche la structure complète de l'arborescence de la configuration d'expert,
                 avec les correspondances mises en évidence et automatiquement dépliées.
@@ -122,8 +122,29 @@ export const L10nFr: L10nLocale = {
                 Bouton gris = aucune correspondance dans cette section.
             `,
         },
+        ippDevice: {
+            title: 'Imprimantes IPP',
+            subtitle: `
+                La liste suivante contient les imprimantes enregistrées dans sysHUB (Périphériques IPP).
+                Les résultats de la recherche sont mis en évidence, et en cliquant sur une entrée, les détails s'affichent dans le panneau de droite.
+            `,
+            nodeInspector: {
+                desc: 'Description',
+                form: 'Formulaire',
+                location: 'Emplacement',
+                maxInputQueueSize: 'Limite de la file d\'attente d\'entrée',
+                name: 'Nom',
+                outputThreshold: 'Seuil de sortie',
+                queueSettingsGroup: 'File d\'attente des tâches',
+                si: 'Spool-in',
+                so: 'Spool-out',
+                state: 'Actif',
+                subject: 'Périphérique IPP',
+                uri: 'Adresse',
+            }
+        },
         jobtype: {
-            title: 'Correspondances dans les Types de Tâches, Recherche de "[0]"',
+            title: 'Types de Tâches',
             subtitle: `
                 Cette page répertorie les types de tâches configurés, et les correspondances sont mises en évidence visuellement.
                 En cliquant sur une entrée, les détails sont affichés sur le côté droit.
@@ -167,7 +188,7 @@ export const L10nFr: L10nLocale = {
             propertyType: 'Type : [0]'
         },
         parameterset: {
-            title: 'Correspondances dans le Paramétrage',
+            title: 'Paramétrage',
             subtitle: `
                 Cette page affiche la structure complète de l'arborescence du paramétrage,
                 avec les correspondances mises en évidence et automatiquement dépliées.
@@ -185,14 +206,14 @@ export const L10nFr: L10nLocale = {
             }
         },
         serverInfo: {
-            title: 'Correspondances dans les Informations du Serveur',
+            title: 'Informations du Serveur',
             subtitle: `
                 La liste suivante contient les informations fournies par le serveur.
                 Les correspondances sont mises en évidence en couleur.
             `,
         },
         serverProperties: {
-            title: 'Correspondances dans la Configuration Serveur (server.properties)',
+            title: 'Configuration Serveur (server.properties)',
             subtitle: `
                 La liste suivante contient toutes les entrées de configuration renvoyées par le serveur,
                 correspondant au fichier server.properties. Les correspondances sont mises en évidence en couleur.
@@ -200,20 +221,20 @@ export const L10nFr: L10nLocale = {
         },
         showWorkflow: 'Afficher le Workflow',
         useraccount: {
-            title: 'Correspondances dans les comptes d\'utilisateur',
+            title: 'Comptes Utilisateur',
             subtitle: `
-                Ce tableau contient les comptes d'utilisateur enregistrés dans sysHUB.
-                Les correspondances sont mises en évidence.
+                Le tableau contient les comptes utilisateur enregistrés dans sysHUB.
+                Les correspondances sont mises en évidence en couleur.
             `,
-            toggleHideUnassignedRoles: ['Les rôles non attribués sont masqués. Cliquez pour afficher', 'Cliquez pour masquer les rôles non attribués'],
+            toggleHideUnassignedRoles: ['Les rôles non assignés sont cachés. Cliquez pour afficher', 'Cliquez pour masquer les rôles non assignés'],
             nodeInspector: {
-                email: 'E-Mail',
+                email: 'E-mail',
                 enabled: 'Activé',
-                forcechange: 'Forcer le changement de mot de passe',
+                forcechange: 'Doit changer le mot de passe',
                 modified: 'Modifié',
                 name: 'Nom',
                 roles: 'Rôles',
-                subject: 'Compte utilisateur',
+                subject: 'Compte Utilisateur',
                 type: 'Type',
                 types: {
                     'INTERNAL': 'Utilisateur sysHUB',

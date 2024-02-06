@@ -44,7 +44,8 @@
             </tr>
             <tr nodeinspector-common-table-node [title]="l10nphrase.result.useraccount.nodeInspector.type"
                 [valueToCopy]="nodeItem.type || undefined">
-                <code>{{l10nphrase.result.useraccount.nodeInspector.types[nodeItem.type]}}</code>
+                <code
+                    [innerHTML]="(l10nphrase.result.useraccount.nodeInspector.types[nodeItem.type] + ' (' + nodeItem.type + ')') | highlight: searchResult.search.phrase"></code>
             </tr>
             <tr nodeinspector-common-table-node [title]="l10nphrase.result.useraccount.nodeInspector.modified"
                 [valueToCopy]="nodeItem.modifiedtime">

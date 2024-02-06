@@ -243,6 +243,11 @@ body[data-bs-theme="dark"] {
     .hide-toggler:not(:focus):not(:hover):not(:active) {
         color: #dee2e6 !important;
     }
+
+    mark,
+    .mark {
+        background-color: rgba(rgb(111, 111, 26), .5) !important;
+    }
 }
 
 body[data-bs-theme="light"] {

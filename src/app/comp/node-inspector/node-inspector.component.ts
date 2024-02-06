@@ -4,7 +4,7 @@ import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
 import { PagepropsService } from 'src/app/svc/pageprops.service';
 import { SearchResult } from 'src/app/types';
-import { SyshubConfigItem, SyshubJobType, SyshubPSetItem, SyshubUserAccount } from 'syshub-rest-module';
+import { SyshubConfigItem, SyshubIppDevice, SyshubJobType, SyshubPSetItem, SyshubUserAccount } from 'syshub-rest-module';
 
 @Component({
   selector: 'app-node-inspector',
@@ -58,10 +58,10 @@ export class NodeInspectorComponent implements OnDestroy, OnInit {
     }))
   }
 
-  onInspectNewNodeItem(type: string, node: SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount): void {
+  onInspectNewNodeItem(type: string, node: SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubIppDevice): void {
     if (!this.nodeTypes.includes(type))
       return;
-    const nodeid = `node-${type}${node.uuid}`;
+    const nodeid = type === 'IppDevices' ? `node-${type}${encodeURIComponent((<SyshubIppDevice>node).name)}` : `node-${type}${(<SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount>node).uuid}`;
     if (this.nodesAdded.includes(nodeid)) {
       this.onReopenNode(nodeid);
       return;
@@ -103,7 +103,7 @@ export type NodeInspectorItem = {
   id: string;
   color: number;
   dispose?: boolean;
-  nodeitem: SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount;
+  nodeitem: SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubIppDevice;
   type: string;
   zindex: number;
 }

@@ -45,6 +45,13 @@ export class SearchService {
   public match(content: any, search: SearchConfig): boolean {
     if (!content)
       return false;
+    if (Array.isArray(content)) {
+      for (let i = 0; i < content.length; i++) {
+        if (this.match(content[i], search))
+          return true;
+      }
+      return false;
+    }
     return `${content}`.toLocaleLowerCase().includes(search.phrase.toLocaleLowerCase());
   }
 
@@ -63,19 +70,51 @@ export class SearchService {
   }
 
   public matchCertStoreItem(content: SyshubCertStoreItem, search: SearchConfig): boolean {
-    return this.match(`${content.algorithm}${content.alias}${content.certX509IssuerDN}${content.certX509SubjectDN}${content.subjectAlternativeName}`, search);
+    return this.match([
+      content.algorithm,
+      content.alias,
+      content.certX509IssuerDN,
+      content.certX509SubjectDN,
+      content.subjectAlternativeName
+    ], search);
   }
 
   public matchIppDevice(content: SyshubIppDevice, search: SearchConfig): boolean {
-    return this.match(`${content.name}${content.desc}${content.form}${content.location}${content.uri}`, search);
+    return this.match([
+      this.matchIncludeDescription(content.desc, search),
+      content.deviceState,
+      content.form,
+      content.inputQueueSize,
+      content.internalState,
+      content.location,
+      content.maxInputQueueSize,
+      content.monitoredJobs,
+      content.name,
+      content.outputQueueSize,
+      content.outputThreshold,
+      content.si,
+      content.so,
+      content.state,
+      content.uri
+    ], search);
   }
 
   public matchUser(content: SyshubUserAccount, search: SearchConfig): boolean {
-    return this.match(`${content.email}${content.name}${this.matchIncludeUuid(content.uuid, search)}`, search);
+    return this.match([
+      content.email,
+      content.name,
+      content.type,
+      this.matchIncludeUuid(content.uuid, search),
+      search.filter.includeUuids ? content.roles : '',
+    ], search);
   }
 
   public matchUserRole(content: SyshubRole, search: SearchConfig): boolean {
-    return this.match(`${content.rolename}${this.matchIncludeDescription(content.description, search)}${this.matchIncludeUuid(content.uuid, search)}`, search);
+    return this.match([
+      content.rolename,
+      this.matchIncludeDescription(content.description, search),
+      this.matchIncludeUuid(content.uuid, search),
+    ], search);
   }
 
   get l10nphrase(): L10nLocale {

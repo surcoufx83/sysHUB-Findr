@@ -145,6 +145,30 @@
                         @case ('ConfigItems') {
                         {{l10nphrase.result.config.title}}
                         }
+                        @case ('JobTypes') {
+                        {{l10nphrase.result.jobtype.title}}
+                        }
+                        @case ('PSetItems') {
+                        {{l10nphrase.result.parameterset.title}}
+                        }
+                        @case ('WorkflowItems') {
+
+                        }
+                        @case ('CertStoreItems') {
+
+                        }
+                        @case ('IppDevices') {
+                        {{l10nphrase.result.ippDevice.title}}
+                        }
+                        @case ('ServerConfig') {
+                        {{l10nphrase.result.serverProperties.title}}
+                        }
+                        @case ('ServerInformation') {
+                        {{l10nphrase.result.serverInfo.title}}
+                        }
+                        @case ('Users') {
+                        {{l10nphrase.result.useraccount.title}}
+                        }
                         @default {
                         {{ l10nphrase.result.overview.title }}
                         }
@@ -172,7 +196,7 @@
 
                         }
                         @case ('IppDevices') {
-
+                        <app-result-ippdevice [searchResult]="searchResult"></app-result-ippdevice>
                         }
                         @case ('ServerConfig') {
                         <app-result-serverprops [searchResult]="searchResult"></app-result-serverprops>

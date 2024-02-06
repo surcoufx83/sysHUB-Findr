@@ -97,7 +97,7 @@ export const L10nEn: L10nLocale = {
             }
         },
         config: {
-            title: 'Matches in Expert Configuration',
+            title: 'Expert Configuration',
             subtitle: `
                 This page displays the complete tree structure of the expert configuration,
                 with matches visually highlighted and automatically expanded.
@@ -122,8 +122,29 @@ export const L10nEn: L10nLocale = {
                 Gray button = no results in this section.
             `,
         },
+        ippDevice: {
+            title: 'sysHUB IPP Printers',
+            subtitle: `
+                The following list contains printers registered in sysHUB (IPP Devices).
+                Search results are highlighted, and clicking on an entry will display the details in the right panel.
+            `,
+            nodeInspector: {
+                desc: 'Description',
+                form: 'Form',
+                location: 'Location',
+                maxInputQueueSize: 'Limit Input Queue',
+                name: 'Name',
+                outputThreshold: 'Output Threshold',
+                queueSettingsGroup: 'Job Queue',
+                si: 'Spool-in',
+                so: 'Spool-out',
+                state: 'Active',
+                subject: 'IPP Device',
+                uri: 'Address',
+            }
+        },
         jobtype: {
-            title: 'Matches in Job Types, Searching for "[0]"',
+            title: 'Job Types',
             subtitle: `
                 This page lists the configured job types, and matches are visually highlighted.
                 When clicking on an entry, the details are displayed on the right side.
@@ -167,7 +188,7 @@ export const L10nEn: L10nLocale = {
             propertyType: 'Type: [0]'
         },
         parameterset: {
-            title: 'Matches in Parameter Set',
+            title: 'Parameter Set',
             subtitle: `
                 This page displays the complete tree structure of the parameter set,
                 with matches visually highlighted and automatically expanded.
@@ -185,14 +206,14 @@ export const L10nEn: L10nLocale = {
             }
         },
         serverInfo: {
-            title: 'Matches in Server Information',
+            title: 'Server Information',
             subtitle: `
                 The following list contains information provided by the server.
                 Matches are highlighted in color.
             `,
         },
         serverProperties: {
-            title: 'Matches in Server Configuration (server.properties)',
+            title: 'Server Configuration (server.properties)',
             subtitle: `
                 The following list contains all configuration entries returned by the server,
                 corresponding to the server.properties file. Matches are highlighted in color.
@@ -200,21 +221,21 @@ export const L10nEn: L10nLocale = {
         },
         showWorkflow: 'Show Workflow',
         useraccount: {
-            title: 'Treffer in den Benutzerkonten',
+            title: 'User Accounts',
             subtitle: `
-                Die Tabelle enthält die Benutzerkonten, die im sysHUB registriert sind.
-                Treffer sind farblich hervorgehoben.
+                The table contains user accounts registered in sysHUB.
+                Matches are highlighted in color.
             `,
             toggleHideUnassignedRoles: ['Unassigned roles are hidden. Click to show', 'Click to hide unassigned roles'],
             nodeInspector: {
-                email: 'E-Mail',
-                enabled: 'Freigeschaltet',
-                forcechange: 'Muss Passwort ändern',
-                modified: 'Geändert',
+                email: 'Email',
+                enabled: 'Enabled',
+                forcechange: 'Must change password',
+                modified: 'Modified',
                 name: 'Name',
-                roles: 'Rollen',
-                subject: 'Benutzerkonto',
-                type: 'Art',
+                roles: 'Roles',
+                subject: 'User Account',
+                type: 'Type',
                 types: {
                     'INTERNAL': 'sysHUB User',
                     'LDAP': 'Domain User',

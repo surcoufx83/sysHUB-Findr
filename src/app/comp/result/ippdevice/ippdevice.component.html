@@ -1,10 +1,10 @@
-<p>{{l10nphrase.result.jobtype.subtitle}}</p>
+<p>{{l10nphrase.result.ippDevice.subtitle}}</p>
 
 <table class="table table-sm table-hover">
     <tbody>
-        @for (item of jobtypes; track $index) {
+        @for (item of devices; track $index) {
         <tr>
-            <td [ngClass]="{ 'cursor-pointer': true, 'text-success': jobtypesMatched.includes(item.uuid)}"
+            <td [ngClass]="{ 'cursor-pointer': true, 'text-success': devicesMatched.includes(item.name)}"
                 (click)="selectNode(item)">
                 <strong [innerHTML]="item.name | highlight: searchResult.search.phrase"></strong>
             </td>

@@ -106,6 +106,24 @@ export type L10nLocale = {
             title: string,
             subtitle: string
         },
+        ippDevice: {
+            title: string,
+            subtitle: string,
+            nodeInspector: {
+                desc: string,
+                form: string,
+                location: string,
+                maxInputQueueSize: string,
+                name: string,
+                outputThreshold: string,
+                queueSettingsGroup: string,
+                si: string,
+                so: string,
+                state: string,
+                subject: string,
+                uri: string,
+            },
+        },
         jobtype: {
             title: string,
             subtitle: string,
