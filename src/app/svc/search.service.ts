@@ -126,6 +126,8 @@ export class SearchService {
   }
 
   public search(search: SearchConfig): boolean {
+    if (this.missingScope)
+      return false;
     if (search.phrase == '' || search.phrase.trim().length < (environment.app?.minPhraseLength ?? 3) || this._searchBusy.value == true)
       return false;
     this._searchBusy.next(true);

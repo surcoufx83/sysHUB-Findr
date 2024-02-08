@@ -251,6 +251,11 @@ body[data-bs-theme="dark"] {
 }
 
 body[data-bs-theme="light"] {
+    .bg-primary {
+        --bs-text-opacity: 1;
+        color: rgba(var(--bs-light-rgb), var(--bs-text-opacity)) !important;
+    }
+
     .hide-toggler:not(:focus):not(:hover):not(:active) {
         color: #212529 !important;
     }

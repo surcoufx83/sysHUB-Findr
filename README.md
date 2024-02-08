@@ -117,4 +117,19 @@ Wie auch im sysHUB Client sind die Eigenschaften thematisch gruppiert (Klassifiz
 
 ## Ergebnisliste exportieren und importieren ⚠️ 
 
-## Fehlerdiagnose Findr ⚠️ >
+## Fehlerdiagnose Findr ⚠️
+
+### Findr deaktiviert
+Wird in einem roten Banner die Meldung "Findr deaktiviert!" angezeigt, bedeutet das schlicht, dass in der [Konfiguration](#konfigurationsparameter) für OAuth entweder kein `syshub.oauth.scope` oder ein unzureichender Wert angegeben wurde.
+Damit der Findr alle Aufgaben erfüllen kann, benötigt er Zugriff auf die öffentlichen wie auch internen Rest API Endpunkte. Erreicht wird das, in dem beim das scope auf `private+public` gesetzt wird (bzw. `public+private`) und im sysHUB im Autorisierungsserver `private;public` oder bei Basic Auth im Api-Server.
+
+Ohne den Zugriff auf die internen Endpunkte ("private"), ist kein Abruf des Konfig- und des ParametersetB-Baums möglich.
+
+#### Beheben der Meldung:
+1. Bei OAuth:
+   1. In der sysHUB Expertenkonfiguration im Bereich Autorisierungsserver den Oauth-Client wählen und prüfen dass Scope `private;public` oder `public;private` ist. Falls nicht, ändern.
+   2. In der `environment.prod.ts` ebenfalls den Wert eintragen unter `api.syshub.oauth.scope`. Hier wird allerdings statt des `;` ein `+`-Zeichen erwartet.
+   3. Neu kompilieren und testen.
+2. Bei Basic Auth:
+
+   *Stand 8.2.24: sysHUB prüft das Scope bei Basic auth nicht. Es gibt also aktuell nichts zu tun.*
