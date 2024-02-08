@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Response, RestService, SyshubCertStoreItem, SyshubIppDevice, SyshubRole, SyshubServerInformation, SyshubUserAccount } from 'syshub-rest-module';
+import { NetworkError, Response, RestService, SyshubCertStoreItem, SyshubIppDevice, SyshubRole, SyshubServerInformation, SyshubUserAccount } from 'syshub-rest-module';
 import { SearchConfig, SearchResultUuids } from '../types';
 import { CacheService } from './cache.service';
 import { ToastsService } from './toasts.service';
@@ -39,7 +39,7 @@ export class SearchService {
       this._searchConfig.next({ ...cfg });
     }
     this.searchConfig.subscribe((config) => localStorage.setItem(environment.storage?.searchconfigKey ?? 'findr-searchconfig', JSON.stringify(config)));
-    this.missingScope = (environment.api.syshub.oauth?.scope != 'private+public' && environment.api.syshub.oauth?.scope == 'public+private') || true;
+    this.missingScope = (environment.api.syshub.basic?.enabled || false) === true ? false : (environment.api.syshub.oauth?.scope !== 'private+public' && environment.api.syshub.oauth?.scope !== 'public+private');
   }
 
   public match(content: any, search: SearchConfig): boolean {
@@ -147,7 +147,7 @@ export class SearchService {
       }
       else {
         this.toastsService.addDangerToast({
-          message: this.l10n(this.l10nphrase.api.errorCommon, [reply.content['message'] ?? 'Unknown error, see browser console']),
+          message: this.l10n((reply.status == 0) ? this.l10nphrase.api.failed.serverUnavailable : this.l10nphrase.api.errorCommon, [reply.content['message'] ?? 'Unknown error, see browser console']),
         });
         this._searchBusy.next(false);
         this._searchProgress.next(100);

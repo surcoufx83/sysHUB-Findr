@@ -6,6 +6,7 @@ export const L10nEn: L10nLocale = {
             badRequest: 'Invalid request.',
             forbidden: 'Unauthorized access.',
             notFound: 'Resource not available.',
+            serverUnavailable: 'Unable to connect to the server. Please check if the server is running and available.',
             unauthorized: 'Login failed.',
             unknown: 'Unknown error.'
         },

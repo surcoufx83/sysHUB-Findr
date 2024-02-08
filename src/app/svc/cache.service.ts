@@ -1,13 +1,11 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { isEqual, parseISO, toDate } from 'date-fns';
-import { BehaviorSubject, Subject, config } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { RestService, SyshubCategory, SyshubConfigItem, SyshubJobType, SyshubPSetItem, SyshubWorkflow, UnauthorizedError } from 'syshub-rest-module';
-import { L10nService } from './i10n.service';
-import { ToastsService } from './toasts.service';
+import { NetworkError, RestService, SyshubCategory, SyshubConfigItem, SyshubJobType, SyshubPSetItem, SyshubWorkflow, UnauthorizedError } from 'syshub-rest-module';
 import { SearchConfig, SearchResult, SearchResultUuids, UserConfig, UuidModifiedTypeObject } from '../types';
+import { L10nService } from './i10n.service';
 import { L10nLocale } from './i10n/l10n-locale';
+import { ToastsService } from './toasts.service';
 
 @Injectable({
   providedIn: 'root'
@@ -521,10 +519,11 @@ export class CacheService {
     let svc = this;
     this.restapi.getCategories().subscribe((reply) => {
       if (reply instanceof Error) {
-        if (!(reply instanceof UnauthorizedError))
-          this.toastService.addDangerToast({
-            message: this.l10n(this.l10nphrase.api.errorCommon, [reply.message])
-          });
+        if (reply instanceof UnauthorizedError)
+          return;
+        this.toastService.addDangerToast({
+          message: this.l10n((reply instanceof NetworkError) ? this.l10nphrase.api.failed.serverUnavailable : this.l10nphrase.api.errorCommon, [reply.message])
+        });
         return;
       }
       this.categories$.next(reply.sort((a, b) => a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1));
@@ -535,10 +534,11 @@ export class CacheService {
     let svc = this;
     this.restapi.getConfigChildren('').subscribe((reply) => {
       if (reply instanceof Error) {
-        if (!(reply instanceof UnauthorizedError))
-          this.toastService.addDangerToast({
-            message: this.l10n(this.l10nphrase.api.errorCommon, [reply.message])
-          });
+        if (reply instanceof UnauthorizedError)
+          return;
+        this.toastService.addDangerToast({
+          message: this.l10n((reply instanceof NetworkError) ? this.l10nphrase.api.failed.serverUnavailable : this.l10nphrase.api.errorCommon, [reply.message])
+        });
         return;
       }
       this.config$.next(this.reloadConfig_SortChilds(reply));
@@ -555,10 +555,11 @@ export class CacheService {
   reloadJobtypes(): void {
     this.restapi.getJobTypes().subscribe((reply) => {
       if (reply instanceof Error) {
-        if (!(reply instanceof UnauthorizedError))
-          this.toastService.addDangerToast({
-            message: this.l10n(this.l10nphrase.api.errorCommon, [reply.message])
-          });
+        if (reply instanceof UnauthorizedError)
+          return;
+        this.toastService.addDangerToast({
+          message: this.l10n((reply instanceof NetworkError) ? this.l10nphrase.api.failed.serverUnavailable : this.l10nphrase.api.errorCommon, [reply.message])
+        });
         return;
       }
       this.jobtypes$.next([...reply].sort((a, b) => a.name > b.name ? 1 : -1));
@@ -569,10 +570,11 @@ export class CacheService {
     let svc = this;
     this.restapi.getPsetChildren('').subscribe((reply) => {
       if (reply instanceof Error) {
-        if (!(reply instanceof UnauthorizedError))
-          this.toastService.addDangerToast({
-            message: this.l10n(this.l10nphrase.api.errorCommon, [reply.message])
-          });
+        if (reply instanceof UnauthorizedError)
+          return;
+        this.toastService.addDangerToast({
+          message: this.l10n((reply instanceof NetworkError) ? this.l10nphrase.api.failed.serverUnavailable : this.l10nphrase.api.errorCommon, [reply.message])
+        });
         return;
       }
       this.parameterset$.next(this.reloadParameterset_SortChilds(reply));
@@ -589,10 +591,11 @@ export class CacheService {
   reloadWorkflows(): void {
     this.restapi.getWorkflows({}).subscribe((reply) => {
       if (reply instanceof Error) {
-        if (!(reply instanceof UnauthorizedError))
-          this.toastService.addDangerToast({
-            message: this.l10n(this.l10nphrase.api.errorCommon, [reply.message])
-          });
+        if (reply instanceof UnauthorizedError)
+          return;
+        this.toastService.addDangerToast({
+          message: this.l10n((reply instanceof NetworkError) ? this.l10nphrase.api.failed.serverUnavailable : this.l10nphrase.api.errorCommon, [reply.message])
+        });
         return;
       }
       this.workflows$.next([...reply].sort((a, b) => a.name > b.name ? 1 : -1));

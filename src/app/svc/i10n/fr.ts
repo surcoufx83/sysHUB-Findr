@@ -6,6 +6,7 @@ export const L10nFr: L10nLocale = {
             badRequest: 'Requête invalide.',
             forbidden: 'Accès non autorisé.',
             notFound: 'Ressource introuvable.',
+            serverUnavailable: 'Impossible de se connecter au serveur. Veuillez vérifier si le serveur est en cours d\'exécution et disponible.',
             unauthorized: 'Échec de la connexion.',
             unknown: 'Erreur inconnue.'
         },

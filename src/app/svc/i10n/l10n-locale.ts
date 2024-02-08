@@ -10,6 +10,7 @@ export type L10nLocale = {
             badRequest: string,
             forbidden: string,
             notFound: string,
+            serverUnavailable: string,
             unauthorized: string,
             unknown: string
         },
