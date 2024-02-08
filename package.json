@@ -27,7 +27,7 @@
     "flag-icons": "^7.1.0",
     "ngx-device-detector": "^7.0.0",
     "rxjs": "^7.8.1",
-    "syshub-rest-module": "^3.1.0",
+    "syshub-rest-module": "^3.2.0",
     "titleize": "^4.0.0",
     "tslib": "^2.6.2",
     "zone.js": "~0.14.3"
