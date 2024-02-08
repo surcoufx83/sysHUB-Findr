@@ -91,9 +91,7 @@ export class HomeComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    this.subs.push(this.restapi.getCurrentUser().subscribe((reply) => {
-      this.username = reply instanceof Error ? '' : reply.name;
-    }));
+    this.subs.push(this.restapi.getCurrentUser().subscribe((reply) => this.username = reply instanceof Error ? '' : reply.name));
     this.subs.push(this.restapi.isLoggedIn.subscribe((v) => this.loggedin = v));
     this.subs.push(this.cacheService.Categories.subscribe((categories) => this.categories = categories));
     this.subs.push(this.cacheService.userconfig.subscribe((uc) => {
