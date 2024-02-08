@@ -132,10 +132,40 @@ export class CacheService {
    */
   private parametersetLoaded$ = false;
 
+  /**
+   * Holds information about previous searches (0 = search token, 1 = phrase).
+   * This is persisted to sessionStorage and used to remove oldest entries if sessionstorage quota is exceeded.
+   */
+  private searchhistory: [number, string][] = [];
+
+  /**
+   * Contains the current loaded search result to be shown on the website.
+   */
+  private _searchresult: BehaviorSubject<SearchResult | null> = new BehaviorSubject<SearchResult | null>(null);
+
+  /**
+   * Subscribe to get the current search configuration and result.
+   */
+  public searchresult = this._searchresult.asObservable();
+
+  /**
+   * Object to keep track of the current modification time of objects.
+   */
   private uuids: { [key: string]: UuidModifiedTypeObject } = {};
 
+  /**
+   * Contains Findr specific page settings that are persisted in the browser cache.
+   */
   private _userconfig: BehaviorSubject<UserConfig> = new BehaviorSubject<UserConfig>({ enableCache: environment.app?.useCache ?? true });
+
+  /**
+   * Tracks whether user settings have been loaded.
+   */
   private userconfigLoaded = false;
+
+  /**
+   * Subscribe to get the user settings as soon as they have been loaded.
+   */
   public userconfig = this._userconfig.asObservable();
 
   /**
@@ -168,9 +198,9 @@ export class CacheService {
    */
   private workflowsLoaded$ = false;
 
-  private _searchresult: BehaviorSubject<SearchResult | null> = new BehaviorSubject<SearchResult | null>(null);
-  public searchresult = this._searchresult.asObservable();
-
+  /**
+   * Tracks whether an user is logged in to the Rest API.
+   */
   private userIsLoggedin$: boolean | null = null;
 
   constructor(
@@ -178,7 +208,6 @@ export class CacheService {
     private restapi: RestService,
     private toastService: ToastsService,) {
     this.loadSubscriptions();
-    this.loadCache();
   }
 
   /**
@@ -329,6 +358,7 @@ export class CacheService {
   }
 
   private loadCache(): void {
+    this.loadSearchesCache();
     this.loadUserConfig();
     this.loadCategoriesCache();
     this.loadConfigCache();
@@ -368,6 +398,13 @@ export class CacheService {
       this.parameterset$.next(<SyshubPSetItem[]>JSON.parse(olddata));
     this.reloadParameterset();
     this.parametersetLoaded$ = true;
+  }
+
+  private loadSearchesCache(): void {
+    let olddata = sessionStorage.getItem('findr-history');
+    if (olddata != null) {
+      this.searchhistory = (<[number, string][]>JSON.parse(olddata)).sort((a, b) => a[0] - b[0]);
+    }
   }
 
   loadSubscriptions(): void {
@@ -602,11 +639,31 @@ export class CacheService {
     });
   }
 
+  private addToSearchHistory(token: string, phrase: string): CacheService {
+    this.searchhistory.push([+token, phrase]);
+    if (this.searchhistory.length >= 5) {
+      const firstitem = this.searchhistory.splice(0, 1);
+      firstitem.forEach((item) => {
+        try {
+          sessionStorage.removeItem(`${item[0]}`);
+        } catch (error) { }
+      });
+    }
+    sessionStorage.setItem('findr-history', JSON.stringify(this.searchhistory));
+    return this;
+  }
+
+  private saveSearchResult(token: string): CacheService {
+    sessionStorage.setItem(token, JSON.stringify({ ...this._searchresult.value }));
+    return this;
+  }
+
   setResult(token: string, result: SearchResultUuids): void {
     if (!this._searchresult.value || this._searchresult.value!.search.token != token)
       return;
     this._searchresult.value.result = { ...result };
-    sessionStorage.setItem(token, JSON.stringify({ ...this._searchresult.value }));
+    this.addToSearchHistory(token, this._searchresult.value.search.phrase)
+      .saveSearchResult(token);
   }
 
   showMoreFilter(newvalue: boolean): void {
