@@ -7,6 +7,11 @@
         <h5 class="mb-0" [innerHTML]="nodeItem.name | highlight: searchResult.search.phrase"></h5>
     </div>
     <div>
+        <a target="_blank" class="me-2" [href]="'#workflow?uuid=' + nodeItem.uuid">
+            <button type="button" class="btn btn-sm px-2" [title]="l10nphrase.result.showWorkflow">
+                <i class="bi bi-box-arrow-up-right"></i>
+            </button>
+        </a>
         <button type="button" class="btn btn-sm px-2" (click)="onChangeColor.emit()">
             <i class="bi bi-palette-fill"></i>
         </button>
