@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { environment } from 'src/environments/environment';
 import { NetworkError, RestService, SyshubCategory, SyshubConfigItem, SyshubJobType, SyshubPSetItem, SyshubWorkflow, UnauthorizedError } from 'syshub-rest-module';
 import { SearchConfig, SearchResult, SearchResultUuids, UserConfig, UuidModifiedTypeObject } from '../types';
+import { AppInitService } from './app-init.service';
 import { L10nService } from './i10n.service';
 import { L10nLocale } from './i10n/l10n-locale';
 import { ToastsService } from './toasts.service';
@@ -156,7 +156,7 @@ export class CacheService {
   /**
    * Contains Findr specific page settings that are persisted in the browser cache.
    */
-  private _userconfig: BehaviorSubject<UserConfig> = new BehaviorSubject<UserConfig>({ enableCache: environment.app?.useCache ?? true });
+  private _userconfig: BehaviorSubject<UserConfig>;
 
   /**
    * Tracks whether user settings have been loaded.
@@ -166,7 +166,7 @@ export class CacheService {
   /**
    * Subscribe to get the user settings as soon as they have been loaded.
    */
-  public userconfig = this._userconfig.asObservable();
+  public userconfig;
 
   /**
    * Contains the workflows as an array in a subscribable subject.
@@ -204,9 +204,12 @@ export class CacheService {
   private userIsLoggedin$: boolean | null = null;
 
   constructor(
+    private appInitService: AppInitService,
     private l10nService: L10nService,
     private restapi: RestService,
     private toastService: ToastsService,) {
+    this._userconfig = new BehaviorSubject<UserConfig>({ enableCache: this.appInitService.environment.app?.useCache ?? true });
+    this.userconfig = this._userconfig.asObservable();
     this.loadSubscriptions();
   }
 
@@ -227,12 +230,12 @@ export class CacheService {
     this.parameterset$.next([]);
     this.workflows$.next([]);
     this._searchresult.next(null);
-    localStorage.removeItem(environment.storage?.categoriesKey ?? 'findr-syshub-cat');
-    localStorage.removeItem(environment.storage?.configKey ?? 'findr-syshub-config');
-    localStorage.removeItem(environment.storage?.jobtypesKey ?? 'findr-syshub-jobtypes');
-    localStorage.removeItem(environment.storage?.configKey ?? 'findr-syshub-parameterset');
-    localStorage.removeItem(environment.storage?.workflowsKey ?? 'findr-syshub-workflows');
-    localStorage.removeItem(environment.storage?.searchconfigKey ?? 'findr-syshub-searchconfig');
+    localStorage.removeItem(this.appInitService.environment.storage?.categoriesKey ?? 'findr-syshub-cat');
+    localStorage.removeItem(this.appInitService.environment.storage?.configKey ?? 'findr-syshub-config');
+    localStorage.removeItem(this.appInitService.environment.storage?.jobtypesKey ?? 'findr-syshub-jobtypes');
+    localStorage.removeItem(this.appInitService.environment.storage?.configKey ?? 'findr-syshub-parameterset');
+    localStorage.removeItem(this.appInitService.environment.storage?.workflowsKey ?? 'findr-syshub-workflows');
+    localStorage.removeItem(this.appInitService.environment.storage?.searchconfigKey ?? 'findr-syshub-searchconfig');
     if (fullclear) {
       sessionStorage.clear();
     }
@@ -372,7 +375,7 @@ export class CacheService {
   }
 
   private loadCategoriesCache(): void {
-    let olddata = localStorage.getItem(environment.storage?.categoriesKey ?? 'findr-syshub-cat');
+    let olddata = localStorage.getItem(this.appInitService.environment.storage?.categoriesKey ?? 'findr-syshub-cat');
     if (olddata != null)
       this.categories$.next(<SyshubCategory[]>JSON.parse(olddata));
     this.reloadCategories();
@@ -380,7 +383,7 @@ export class CacheService {
   }
 
   private loadConfigCache(): void {
-    let olddata = localStorage.getItem(environment.storage?.configKey ?? 'findr-syshub-config');
+    let olddata = localStorage.getItem(this.appInitService.environment.storage?.configKey ?? 'findr-syshub-config');
     if (olddata != null)
       this.config$.next(<SyshubConfigItem[]>JSON.parse(olddata));
     this.reloadConfig();
@@ -388,7 +391,7 @@ export class CacheService {
   }
 
   private loadJobtypesCache(): void {
-    let olddata = localStorage.getItem(environment.storage?.jobtypesKey ?? 'findr-syshub-jobtypes');
+    let olddata = localStorage.getItem(this.appInitService.environment.storage?.jobtypesKey ?? 'findr-syshub-jobtypes');
     if (olddata != null)
       this.jobtypes$.next(<SyshubJobType[]>JSON.parse(olddata));
     else
@@ -397,7 +400,7 @@ export class CacheService {
   }
 
   private loadParametersetCache(): void {
-    let olddata = localStorage.getItem(environment.storage?.parametersetKey ?? 'findr-syshub-parameterset');
+    let olddata = localStorage.getItem(this.appInitService.environment.storage?.parametersetKey ?? 'findr-syshub-parameterset');
     if (olddata != null)
       this.parameterset$.next(<SyshubPSetItem[]>JSON.parse(olddata));
     this.reloadParameterset();
@@ -440,7 +443,7 @@ export class CacheService {
         indexed[cat.uuid] = i;
       });
       if (this.categoriesLoaded$ && this._userconfig.value.enableCache)
-        localStorage.setItem(environment.storage?.categoriesKey ?? 'findr-syshub-cat', JSON.stringify(categories));
+        localStorage.setItem(this.appInitService.environment.storage?.categoriesKey ?? 'findr-syshub-cat', JSON.stringify(categories));
       this.categoryUuid2Index$ = indexed;
     });
   }
@@ -453,7 +456,7 @@ export class CacheService {
       });
       configitems = configitems.sort((a, b) => a.type == 'Group/Folder' && b.type != 'Group/Folder' ? 1 : b.type == 'Group/Folder' && a.type != 'Group/Folder' ? -1 : a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1);
       if (this.configLoaded$ && this._userconfig.value.enableCache)
-        localStorage.setItem(environment.storage?.configKey ?? 'findr-syshub-config', JSON.stringify(configitems));
+        localStorage.setItem(this.appInitService.environment.storage?.configKey ?? 'findr-syshub-config', JSON.stringify(configitems));
       this.configUuid2Ref$ = { ...indexed };
       this.configUpdated$.next(Date.now());
     });
@@ -476,7 +479,7 @@ export class CacheService {
   loadSubscriptions_Jobtypes(): void {
     this.Jobtypes.subscribe((jobtypes) => {
       if (this.jobtypesLoaded$ && this._userconfig.value.enableCache)
-        localStorage.setItem(environment.storage?.jobtypesKey ?? 'findr-syshub-jobtypes', JSON.stringify(jobtypes));
+        localStorage.setItem(this.appInitService.environment.storage?.jobtypesKey ?? 'findr-syshub-jobtypes', JSON.stringify(jobtypes));
       let indexed: { [key: string]: number } = {};
       jobtypes.forEach((type, i) => indexed[type.uuid] = i);
       this.jobtypeUuid2Index$ = indexed;
@@ -492,7 +495,7 @@ export class CacheService {
       });
       parameterset = parameterset.sort((a, b) => a.type == 'Group/Folder' && b.type != 'Group/Folder' ? 1 : b.type == 'Group/Folder' && a.type != 'Group/Folder' ? -1 : a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1);
       if (this.parametersetLoaded$ && this._userconfig.value.enableCache)
-        localStorage.setItem(environment.storage?.parametersetKey ?? 'findr-syshub-parameterset', JSON.stringify(parameterset));
+        localStorage.setItem(this.appInitService.environment.storage?.parametersetKey ?? 'findr-syshub-parameterset', JSON.stringify(parameterset));
       this.parametersetUuid2Ref$ = { ...indexed };
       this.parametersetUpdated$.next(Date.now());
     });
@@ -515,7 +518,7 @@ export class CacheService {
   loadSubscriptions_Workflows(): void {
     this.Workflows.subscribe((workflows) => {
       if (this.workflowsLoaded$ && this._userconfig.value.enableCache)
-        localStorage.setItem(environment.storage?.workflowsKey ?? 'findr-syshub-workflows', JSON.stringify(workflows));
+        localStorage.setItem(this.appInitService.environment.storage?.workflowsKey ?? 'findr-syshub-workflows', JSON.stringify(workflows));
       let indexed: { [key: string]: number } = {};
       workflows.forEach((wf, i) => {
         indexed[wf.uuid] = i;
@@ -533,16 +536,16 @@ export class CacheService {
   private loadUserConfig(): void {
     this.userconfig.subscribe((userconfig) => {
       if (this.userconfigLoaded)
-        localStorage.setItem(environment.storage?.userconfigKey ?? 'findr-usercfg', JSON.stringify(userconfig));
+        localStorage.setItem(this.appInitService.environment.storage?.userconfigKey ?? 'findr-usercfg', JSON.stringify(userconfig));
     });
-    let olddata = localStorage.getItem(environment.storage?.userconfigKey ?? 'findr-usercfg');
+    let olddata = localStorage.getItem(this.appInitService.environment.storage?.userconfigKey ?? 'findr-usercfg');
     if (olddata != null)
       this._userconfig.next(<UserConfig>JSON.parse(olddata));
     this.userconfigLoaded = true;
   }
 
   private loadWorkflowCache(): void {
-    let olddata = localStorage.getItem(environment.storage?.workflowsKey ?? 'findr-syshub-workflows');
+    let olddata = localStorage.getItem(this.appInitService.environment.storage?.workflowsKey ?? 'findr-syshub-workflows');
     if (olddata != null)
       this.workflows$.next(<SyshubWorkflow[]>JSON.parse(olddata));
     this.reloadWorkflows();

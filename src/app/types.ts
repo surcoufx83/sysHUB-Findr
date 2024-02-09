@@ -1,4 +1,31 @@
-import { SyshubCategory, SyshubCertStoreItem, SyshubIppDevice, SyshubRole, SyshubServerInformation, SyshubUserAccount } from "syshub-rest-module";
+import { Env, SyshubCategory, SyshubCertStoreItem, SyshubIppDevice, SyshubRole, SyshubServerInformation, SyshubUserAccount } from "syshub-rest-module";
+
+export type FindrEnvironment = {
+    api: Env,
+    app?: {
+        baseUrl?: string,
+        promotionLink?: string,
+        minPhraseLength?: number,
+        useCache?: boolean,
+        webclientLink?: string,
+    },
+    i10n?: {
+        fallback?: 'de' | 'en',
+        locales?: string[],
+    },
+    storage?: {
+        categoriesKey?: string,
+        configKey?: string,
+        jobtypesKey?: string,
+        l10nKey?: string,
+        parametersetKey?: string,
+        searchconfigKey?: string,
+        tokenKey?: string,
+        userconfigKey?: string,
+        userdataKey?: string,
+        workflowsKey?: string,
+    },
+}
 
 export type SearchConfig = {
     phrase: string,

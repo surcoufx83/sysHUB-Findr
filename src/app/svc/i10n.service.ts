@@ -1,19 +1,19 @@
-import { Injectable, OnInit } from '@angular/core';
-import { format, formatDuration, intervalToDuration, parseISO } from 'date-fns'
+import { Injectable } from '@angular/core';
+import { format, parseISO } from 'date-fns';
 import { de, enUS, fr } from 'date-fns/locale';
 import { BehaviorSubject } from 'rxjs';
-import { L10nLocale } from './i10n/l10n-locale';
-import { L10nEn } from './i10n/en';
+import { AppInitService } from './app-init.service';
 import { L10nDe } from './i10n/de';
-import { environment } from 'src/environments/environment';
+import { L10nEn } from './i10n/en';
 import { L10nFr } from './i10n/fr';
+import { L10nLocale } from './i10n/l10n-locale';
 
 @Injectable({
   providedIn: 'root'
 })
 export class L10nService {
 
-  private fallbackLocale = environment.i10n?.fallback ?? 'en';
+  private fallbackLocale: string;
 
   private userLocaleSub$: BehaviorSubject<string> = new BehaviorSubject<string>('');
   public userLocaleSub = this.userLocaleSub$.asObservable();
@@ -31,8 +31,11 @@ export class L10nService {
     'fr-FR': L10nFr,
   }
 
-  constructor() {
-    let olddata: string | null | L10nStorage = localStorage.getItem(environment.storage?.l10nKey ?? 'kbL10n');
+  constructor(
+    appInitService: AppInitService,
+  ) {
+    this.fallbackLocale = appInitService.environment.i10n?.fallback ?? 'en';
+    let olddata: string | null | L10nStorage = localStorage.getItem(appInitService.environment.storage?.l10nKey ?? 'kbL10n');
     if (olddata != null) {
       olddata = <L10nStorage>JSON.parse(olddata);
       this.userLocale = olddata.activeLocale;
@@ -65,7 +68,7 @@ export class L10nService {
           break;
       }
       if (this.userLocale != '')
-        localStorage.setItem(environment.storage?.l10nKey ?? 'kbL10n', JSON.stringify(<L10nStorage>{
+        localStorage.setItem(appInitService.environment.storage?.l10nKey ?? 'kbL10n', JSON.stringify(<L10nStorage>{
           activeLocale: this.userLocale,
           browserLocale: this.browserLocale,
         }));

@@ -3,7 +3,7 @@ import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
 import { PagepropsService } from 'src/app/svc/pageprops.service';
-import { SimpleKeyValue, SearchResult } from 'src/app/types';
+import { SearchResult, SimpleKeyValue } from 'src/app/types';
 
 @Component({
   selector: 'app-result-serverinfo',

@@ -1,12 +1,11 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Component, Input } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
 import { SearchService } from 'src/app/svc/search.service';
-import { SearchConfig, SearchResult, SearchResultCertStoreContent, SimpleKeyValue } from 'src/app/types';
-import { SyshubCertStoreItem, SyshubConfigItem, SyshubIppDevice, SyshubJobType, SyshubPSetItem, SyshubUserAccount, SyshubWorkflow } from 'syshub-rest-module';
+import { SearchResult, SearchResultCertStoreContent, SimpleKeyValue } from 'src/app/types';
+import { SyshubConfigItem, SyshubIppDevice, SyshubJobType, SyshubPSetItem, SyshubUserAccount, SyshubWorkflow } from 'syshub-rest-module';
 import titleize from 'titleize';
 
 @Component({

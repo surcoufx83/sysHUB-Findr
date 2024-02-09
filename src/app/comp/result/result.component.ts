@@ -1,7 +1,6 @@
-import { Component, Inject, OnDestroy, OnInit, SecurityContext } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';

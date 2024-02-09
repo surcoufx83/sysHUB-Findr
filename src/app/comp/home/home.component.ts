@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { AppInitService } from 'src/app/svc/app-init.service';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
 import { SearchService, defaultSearchConfig } from 'src/app/svc/search.service';
 import { ToastsService } from 'src/app/svc/toasts.service';
 import { SearchConfig } from 'src/app/types';
-import { environment } from 'src/environments/environment';
 import { RestService, SyshubCategory } from 'syshub-rest-module';
 
 @Component({
@@ -18,9 +18,9 @@ import { RestService, SyshubCategory } from 'syshub-rest-module';
 export class HomeComponent implements OnDestroy, OnInit {
 
   currentLocale: string;
-  enableCache: boolean = environment.app?.useCache ?? true;
+  enableCache: boolean = true;
   loggedin: boolean = false;
-  minPhraseLength: number = environment.app?.minPhraseLength ?? 3;
+  minPhraseLength: number = 3;
   phraseInput: string = '';
   searchBusy: boolean = false;
   searchConfig?: SearchConfig;
@@ -48,6 +48,7 @@ export class HomeComponent implements OnDestroy, OnInit {
   });
 
   constructor(
+    appInitService: AppInitService,
     private l10nService: L10nService,
     private restapi: RestService,
     private searchService: SearchService,
@@ -55,6 +56,8 @@ export class HomeComponent implements OnDestroy, OnInit {
     private toastsService: ToastsService,
   ) {
     this.currentLocale = l10nService.lang.length > 2 ? l10nService.lang.substring(0, 2) : l10nService.lang;
+    this.enableCache = appInitService.environment.app?.useCache ?? true;
+    this.minPhraseLength = appInitService.environment.app?.minPhraseLength ?? 3;
   }
 
   changeCacheCheckbox(): void {

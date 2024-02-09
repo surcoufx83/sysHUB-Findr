@@ -1,16 +1,14 @@
-import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
+import { HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { NetworkError, Response, RestService, SyshubCertStoreItem, SyshubIppDevice, SyshubRole, SyshubServerInformation, SyshubUserAccount } from 'syshub-rest-module';
+import { Response, RestService, SyshubCertStoreItem, SyshubIppDevice, SyshubRole, SyshubServerInformation, SyshubUserAccount } from 'syshub-rest-module';
 import { SearchConfig, SearchResultUuids } from '../types';
+import { AppInitService } from './app-init.service';
 import { CacheService } from './cache.service';
-import { ToastsService } from './toasts.service';
 import { L10nService } from './i10n.service';
 import { L10nLocale } from './i10n/l10n-locale';
-import { sub } from 'date-fns';
-import { ControlContainer } from '@angular/forms';
+import { ToastsService } from './toasts.service';
 
 @Injectable({
   providedIn: 'root'
@@ -27,19 +25,20 @@ export class SearchService {
   private missingScope: boolean;
 
   constructor(
+    private appInitService: AppInitService,
     private cache: CacheService,
     private l10nService: L10nService,
     private restapi: RestService,
     private toastsService: ToastsService,
     private router: Router) {
-    let oldconfig = localStorage.getItem(environment.storage?.searchconfigKey ?? 'findr-searchconfig');
+    let oldconfig = localStorage.getItem(appInitService.environment.storage?.searchconfigKey ?? 'findr-searchconfig');
     if (oldconfig != null) {
       let cfg: SearchConfig = <SearchConfig>JSON.parse(oldconfig);
       cfg.phrase = '';
       this._searchConfig.next({ ...cfg });
     }
-    this.searchConfig.subscribe((config) => localStorage.setItem(environment.storage?.searchconfigKey ?? 'findr-searchconfig', JSON.stringify(config)));
-    this.missingScope = (environment.api.syshub.basic?.enabled || false) === true ? false : (environment.api.syshub.oauth?.scope !== 'private+public' && environment.api.syshub.oauth?.scope !== 'public+private');
+    this.searchConfig.subscribe((config) => localStorage.setItem(appInitService.environment.storage?.searchconfigKey ?? 'findr-searchconfig', JSON.stringify(config)));
+    this.missingScope = (appInitService.environment.api.syshub.basic?.enabled || false) === true ? false : (appInitService.environment.api.syshub.oauth?.scope !== 'private+public' && appInitService.environment.api.syshub.oauth?.scope !== 'public+private');
   }
 
   public match(content: any, search: SearchConfig): boolean {
@@ -128,7 +127,7 @@ export class SearchService {
   public search(search: SearchConfig): boolean {
     if (this.missingScope)
       return false;
-    if (search.phrase == '' || search.phrase.trim().length < (environment.app?.minPhraseLength ?? 3) || this._searchBusy.value == true)
+    if (search.phrase == '' || search.phrase.trim().length < (this.appInitService.environment.app?.minPhraseLength ?? 3) || this._searchBusy.value == true)
       return false;
     this._searchBusy.next(true);
     this._searchProgress.next(0);

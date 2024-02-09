@@ -1,0 +1,41 @@
+{
+    "api": {
+        "syshub": {
+            "host": "http://localhost:8088/",
+            "version": 3,
+            "basic": {
+                "enabled": false,
+                "username": "<basic user name>",
+                "password": "<basic password>",
+                "provider": "<basic api server name>"
+            },
+            "oauth": {
+                "enabled": true,
+                "clientId": "<oauth provider>",
+                "clientSecret": "<oauth secret>",
+                "scope": "public+private"
+            }
+        }
+    },
+    "app": {
+        "baseUrl": "/findr/",
+        "promotionLink": "https://github.com/surcoufx83/sysHUB-Findr",
+        "minPhraseLength": 3,
+        "useCache": true,
+        "webclientLink": "https://localhost:8443/webclient"
+    },
+    "i10n": {
+        "fallback": "de"
+    },
+    "storage": {
+        "categoriesKey": "findr-syshub-cat",
+        "configKey": "findr-syshub-config",
+        "jobtypesKey": "findr-syshub-jobtypes",
+        "l10nKey": "findr-l10n",
+        "parametersetKey": "findr-syshub-parameterset",
+        "searchconfigKey": "findr-searchconfig",
+        "userconfigKey": "findr-usercfg",
+        "userdataKey": "findr-userdata",
+        "workflowsKey": "findr-syshub-workflows"
+    }
+}

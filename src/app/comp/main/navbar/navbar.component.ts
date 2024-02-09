@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NavigationEnd, Router } from '@angular/router';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { AppInitService } from 'src/app/svc/app-init.service';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
@@ -9,7 +10,6 @@ import { PagepropsService } from 'src/app/svc/pageprops.service';
 import { SearchService, defaultSearchConfig } from 'src/app/svc/search.service';
 import { ToastsService } from 'src/app/svc/toasts.service';
 import { SearchConfig } from 'src/app/types';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-navbar',
@@ -23,11 +23,11 @@ export class NavbarComponent implements OnInit {
   appTheme: 'light' | 'dark' | 'auto' | null = null;
   deviceType: 'mobile' | 'tablet' | 'desktop' = 'desktop';
   currentLocale: string;
-  locales: string[] = environment.i10n?.locales ?? ['en', 'de', 'fr'];
+  locales: string[];
   localesLocalized: { [key: string]: string } = {};
-  minPhraseLength: number = environment.app?.minPhraseLength ?? 3;
-  promolink: string = environment.app?.promotionLink ?? '';
-  webclientlink: string = environment.app?.webclientLink ?? '';
+  minPhraseLength: number = 3;
+  promolink: string;
+  webclientlink: string;
   phraseInput: string = '';
   searchBusy: boolean = false;
   searchConfig?: SearchConfig;
@@ -49,6 +49,7 @@ export class NavbarComponent implements OnInit {
   });
 
   constructor(
+    appInitService: AppInitService,
     private l10nService: L10nService,
     private cacheService: CacheService,
     private searchService: SearchService,
@@ -57,6 +58,10 @@ export class NavbarComponent implements OnInit {
     router: Router
   ) {
     this.deviceType = pagepropsService.DeviceType;
+    this.locales = appInitService.environment.i10n?.locales ?? ['en', 'de', 'fr'];
+    this.minPhraseLength = appInitService.environment.app?.minPhraseLength ?? 3;
+    this.promolink = appInitService.environment.app?.promotionLink ?? '';
+    this.webclientlink = appInitService.environment.app?.webclientLink ?? '';
     router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.url = event.url;

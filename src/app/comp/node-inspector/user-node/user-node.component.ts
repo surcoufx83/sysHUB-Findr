@@ -3,7 +3,6 @@ import { Subscription } from 'rxjs';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
-import { ToastsService } from 'src/app/svc/toasts.service';
 import { SearchResult } from 'src/app/types';
 import { SyshubRole, SyshubUserAccount } from 'syshub-rest-module';
 
@@ -26,7 +25,6 @@ export class NodeInspectorUserNodeComponent implements OnDestroy, OnInit {
   constructor(
     private l10nService: L10nService,
     private cacheService: CacheService,
-    private toastsService: ToastsService,
   ) { }
 
   get l10nphrase(): L10nLocale {

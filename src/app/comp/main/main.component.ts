@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { environment } from 'src/environments/environment';
+import { AppInitService } from 'src/app/svc/app-init.service';
 
 @Component({
   selector: 'app-main',
@@ -10,8 +10,10 @@ export class MainComponent {
 
   missingScope: boolean;
 
-  constructor() {
-    this.missingScope = (environment.api.syshub.basic?.enabled || false) === true ? false : (environment.api.syshub.oauth?.scope !== 'private+public' && environment.api.syshub.oauth?.scope !== 'public+private');
+  constructor(
+    appInitService: AppInitService,
+  ) {
+    this.missingScope = (appInitService.environment.api.syshub.basic?.enabled || false) === true ? false : (appInitService.environment.api.syshub.oauth?.scope !== 'private+public' && appInitService.environment.api.syshub.oauth?.scope !== 'public+private');
   }
 
 }

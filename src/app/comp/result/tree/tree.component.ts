@@ -1,9 +1,8 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
 import { PagepropsService } from 'src/app/svc/pageprops.service';
-import { ToastsService } from 'src/app/svc/toasts.service';
 import { SearchResult } from 'src/app/types';
 import { SyshubConfigItem, SyshubPSetItem } from 'syshub-rest-module';
 

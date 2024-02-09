@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Router, Event as NavigationEvent, NavigationEnd } from '@angular/router';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { L10nService } from './i10n.service';
+import { NavigationEnd, Event as NavigationEvent, Router } from '@angular/router';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { SyshubConfigItem, SyshubIppDevice, SyshubJobType, SyshubPSetItem, SyshubUserAccount, SyshubWorkflow } from 'syshub-rest-module';
-import { environment } from 'src/environments/environment';
+import { L10nService } from './i10n.service';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +29,7 @@ export class PagepropsService {
   constructor(
     private i10nService: L10nService,
     private router: Router,
-    private device: DeviceDetectorService,
+    device: DeviceDetectorService,
   ) {
 
     this.deviceType$ = device.isDesktop() ? 'desktop' : device.isMobile() ? 'mobile' : 'tablet';
