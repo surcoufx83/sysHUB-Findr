@@ -221,6 +221,21 @@ export const L10nEn: L10nLocale = {
             `,
         },
         showWorkflow: 'Show Workflow',
+        toolbar: {
+            certStore: 'cert. store: [0]',
+            config: 'config: [0]',
+            exportResults: 'export search results',
+            ippDevices: 'printers: [0]',
+            jobtypes: 'job types: [0]',
+            matches: 'matches',
+            noMatches: 'no matches',
+            overview: 'overview',
+            parameterset: 'param. set: [0]',
+            serverConfig: 'server props: [0]',
+            serverInfo: 'server info: [0]',
+            users: 'users: [0]',
+            workflows: 'workflows: [0]',
+        },
         useraccount: {
             title: 'User Accounts',
             subtitle: `
@@ -245,20 +260,25 @@ export const L10nEn: L10nLocale = {
                 uuid: 'Uuid',
             },
         },
-        toolbar: {
-            certStore: 'cert. store: [0]',
-            config: 'config: [0]',
-            exportResults: 'export search results',
-            ippDevices: 'printers: [0]',
-            jobtypes: 'job types: [0]',
-            matches: 'matches',
-            noMatches: 'no matches',
-            overview: 'overview',
-            parameterset: 'param. set: [0]',
-            serverConfig: 'server props: [0]',
-            serverInfo: 'server info: [0]',
-            users: 'users: [0]',
-            workflows: 'workflows: [0]',
+        workflow: {
+            title: 'Workflows',
+            subtitle: `
+                In the list, workflows are highlighted in color if there is a match in the metadata or the workflow itself.
+                Click on an entry to see the details or on the flowchart icon to display the workflow.
+            `,
+            nodeInspector: {
+                cacheable: 'Cache active',
+                categoryName: 'Category',
+                description: 'Description',
+                format: 'Format',
+                formats: ['Native Client', 'Webclient'],
+                lockedByUser: 'Locked',
+                modified: 'Modified',
+                name: 'Name',
+                subject: 'Workflow',
+                uuid: 'Uuid',
+                version: 'Version',
+            },
         },
     },
     search: {

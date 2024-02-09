@@ -221,6 +221,21 @@ export const L10nFr: L10nLocale = {
             `,
         },
         showWorkflow: 'Afficher le Workflow',
+        toolbar: {
+            certStore: 'stock. certificats : [0]',
+            config: 'config : [0]',
+            exportResults: 'export résultats recherche',
+            ippDevices: 'impr. : [0]',
+            jobtypes: 'types travail : [0]',
+            matches: 'correspondances',
+            noMatches: 'aucune correspondance',
+            overview: 'vue d\'ensemble',
+            parameterset: 'param. set : [0]',
+            serverConfig: 'props serveur : [0]',
+            serverInfo: 'info serveur : [0]',
+            users: 'utilisateurs : [0]',
+            workflows: 'workflows : [0]',
+        },
         useraccount: {
             title: 'Comptes Utilisateur',
             subtitle: `
@@ -245,20 +260,25 @@ export const L10nFr: L10nLocale = {
                 uuid: 'Uuid',
             },
         },
-        toolbar: {
-            certStore: 'stock. certificats : [0]',
-            config: 'config : [0]',
-            exportResults: 'export résultats recherche',
-            ippDevices: 'impr. : [0]',
-            jobtypes: 'types travail : [0]',
-            matches: 'correspondances',
-            noMatches: 'aucune correspondance',
-            overview: 'vue d\'ensemble',
-            parameterset: 'param. set : [0]',
-            serverConfig: 'props serveur : [0]',
-            serverInfo: 'info serveur : [0]',
-            users: 'utilisateurs : [0]',
-            workflows: 'workflows : [0]',
+        workflow: {
+            title: 'Flux de travail',
+            subtitle: `
+                Dans la liste, les flux de travail sont mis en évidence en couleur s'il y a une correspondance dans les métadonnées ou dans le flux de travail lui-même.
+                Cliquez sur une entrée pour voir les détails ou sur l'icône du diagramme de flux pour afficher le flux de travail.
+            `,
+            nodeInspector: {
+                cacheable: 'Cache activé',
+                categoryName: 'Catégorie',
+                description: 'Description',
+                format: 'Format',
+                formats: ['Client Natif', 'Client Web'],
+                lockedByUser: 'Verrouillé par l\'utilisateur',
+                modified: 'Modifié',
+                name: 'Nom',
+                subject: 'Workflow',
+                uuid: 'Uuid',
+                version: 'Version',
+            },
         },
     },
     search: {

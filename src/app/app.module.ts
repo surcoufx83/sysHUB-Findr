@@ -48,6 +48,9 @@ import { SearchService } from './svc/search.service';
 import { ToastsService } from './svc/toasts.service';
 import { ToastsComponent } from './svc/toasts/toasts.component';
 import { HighlightPipe } from './utils/highlight.pipe';
+import { WorkflowsComponent } from './comp/result/workflows/workflows.component';
+import { NodeInspectorWorkflowsNodeComponent } from './comp/node-inspector/workflows-node/workflows-node.component';
+import { WorkflowUiComponent } from './comp/workflow-ui/workflow-ui.component';
 
 @NgModule({
   declarations: [
@@ -84,6 +87,9 @@ import { HighlightPipe } from './utils/highlight.pipe';
     ToolbarComponent,
     TreeComponent,
     UserComponent,
+    WorkflowsComponent,
+    NodeInspectorWorkflowsNodeComponent,
+    WorkflowUiComponent,
   ],
   imports: [
     AppRoutingModule,

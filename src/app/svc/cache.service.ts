@@ -349,6 +349,10 @@ export class CacheService {
     return this.workflowUuid2Index$[uuid] != undefined ? this.workflows$.value[this.workflowUuid2Index$[uuid]] : null;
   }
 
+  getWorkflows(): SyshubWorkflow[] {
+    return this.workflows$.value;
+  }
+
   get l10nphrase(): L10nLocale {
     return this.l10nService.locale;
   }
@@ -541,8 +545,7 @@ export class CacheService {
     let olddata = localStorage.getItem(environment.storage?.workflowsKey ?? 'findr-syshub-workflows');
     if (olddata != null)
       this.workflows$.next(<SyshubWorkflow[]>JSON.parse(olddata));
-    else
-      this.reloadWorkflows();
+    this.reloadWorkflows();
     this.workflowsLoaded$ = true;
   }
 
@@ -635,7 +638,7 @@ export class CacheService {
         });
         return;
       }
-      this.workflows$.next([...reply].sort((a, b) => a.name > b.name ? 1 : -1));
+      this.workflows$.next([...reply].sort((a, b) => a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : b.name.toLocaleLowerCase() > a.name.toLocaleLowerCase() ? -1 : 0));
     });
   }
 

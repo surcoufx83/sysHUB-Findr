@@ -9,6 +9,7 @@ import { StatsComponent } from './comp/stats/stats.component';
 import { HelpComponent } from './comp/help/help.component';
 import { AboutComponent } from './comp/about/about.component';
 import { ResultComponent } from './comp/result/result.component';
+import { WorkflowUiComponent } from './comp/workflow-ui/workflow-ui.component';
 
 const routes: Routes = [
   { path: 'about', component: AboutComponent, canActivate: [routeGuard] },
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'result', component: ResultComponent, canActivate: [routeGuard] },
   { path: 'search', component: SearchComponent, canActivate: [routeGuard] },
   { path: 'stats', component: StatsComponent, canActivate: [routeGuard] },
+  { path: 'workflow', component: WorkflowUiComponent, canActivate: [routeGuard] },
   { path: '**', component: HomeComponent },
 ];
 

@@ -1,0 +1,63 @@
+<div class="card-header d-flex align-items-center justify-content-between">
+    <div>
+        <div class="fs-8 mb-1">
+            <i class="bi bi-diagram-2-fill me-1"></i>
+            {{ l10nphrase.result.workflow.nodeInspector.subject }}
+        </div>
+        <h5 class="mb-0" [innerHTML]="nodeItem.name | highlight: searchResult.search.phrase"></h5>
+    </div>
+    <div>
+        <button type="button" class="btn btn-sm px-2" (click)="onChangeColor.emit()">
+            <i class="bi bi-palette-fill"></i>
+        </button>
+        <ng-content></ng-content>
+    </div>
+</div>
+<div class="card-body p-0">
+    <table class="table table-sm table-hover m-0">
+        <tbody>
+            <tr nodeinspector-common-table-node [title]="l10nphrase.result.workflow.nodeInspector.uuid"
+                [valueToCopy]="nodeItem.uuid">
+                @if (searchResult.search.filter.includeUuids) {
+                <code [innerHTML]="nodeItem.uuid | highlight: searchResult.search.phrase"></code>
+                }
+                @else {
+                <code>{{nodeItem.uuid}}</code>
+                }
+            </tr>
+            <tr nodeinspector-common-table-node [title]="l10nphrase.result.workflow.nodeInspector.description"
+                [valueToCopy]="nodeItem.description || undefined">
+                @if (!searchResult.search.filter.excludeBComments || !nodeItem.description?.startsWith('[B]')) {
+                <code [innerHTML]="nodeItem.description | highlight: searchResult.search.phrase"></code>
+                }
+                @else {
+                <code>{{nodeItem.description}}</code>
+                }
+            </tr>
+            <tr nodeinspector-common-table-node [title]="l10nphrase.result.workflow.nodeInspector.categoryName"
+                [valueToCopy]="nodeItem.categoryName ? nodeItem.categoryName : undefined">
+                <code>{{nodeItem.categoryName}}</code>
+            </tr>
+            <tr nodeinspector-common-table-node [title]="l10nphrase.result.workflow.nodeInspector.cacheable"
+                [valueToCopy]="undefined">
+                <code>{{nodeItem.cacheable == 'YES' ? l10nphrase.common.phrases.yes[0] : l10nphrase.common.phrases.no[0] }}</code>
+            </tr>
+            <tr nodeinspector-common-table-node [title]="l10nphrase.result.workflow.nodeInspector.format"
+                [valueToCopy]="undefined">
+                <code>{{nodeItem.format == 'VERSION1' ? l10nphrase.result.workflow.nodeInspector.formats[0] : l10nphrase.result.workflow.nodeInspector.formats[1] }}</code>
+            </tr>
+            <tr nodeinspector-common-table-node [title]="l10nphrase.result.workflow.nodeInspector.version"
+                [valueToCopy]="nodeItem.major + '.' + nodeItem.minor">
+                <code>{{nodeItem.major}}.{{nodeItem.minor}}</code>
+            </tr>
+            <tr nodeinspector-common-table-node [title]="l10nphrase.result.workflow.nodeInspector.lockedByUser"
+                [valueToCopy]="nodeItem.lockedByUser || undefined">
+                <code>{{nodeItem.lockedByUser}}</code>
+            </tr>
+            <tr nodeinspector-common-table-node [title]="l10nphrase.result.workflow.nodeInspector.modified"
+                [valueToCopy]="nodeItem.modifiedTime || undefined">
+                <code>{{nodeItem.modifiedTime}}</code>
+            </tr>
+        </tbody>
+    </table>
+</div>

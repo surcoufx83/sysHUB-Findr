@@ -152,7 +152,7 @@
                         {{l10nphrase.result.parameterset.title}}
                         }
                         @case ('WorkflowItems') {
-
+                        {{l10nphrase.result.workflow.title}}
                         }
                         @case ('CertStoreItems') {
 
@@ -175,8 +175,8 @@
                         }
                     </h4>
                 </div>
-                <div class="card-body d-flex justify-content-between">
-                    <div>
+                <div class="card-body row">
+                    <div class="col-12 col-lg-8">
                         @switch (selectedChapter) {
                         @case ('ConfigItems') {
                         <app-result-config [configByTree]="configByTree" [configUpdate]="configUpdate"
@@ -190,7 +190,7 @@
                             [searchResult]="searchResult"></app-result-parameterset>
                         }
                         @case ('WorkflowItems') {
-
+                        <app-result-workflows [searchResult]="searchResult"></app-result-workflows>
                         }
                         @case ('CertStoreItems') {
 
@@ -217,7 +217,7 @@
                         }
                         }
                     </div>
-                    <div class="d-none d-lg-block" style="max-width: 50vw;">
+                    <div class="col-12 col-lg-4 d-none d-lg-block">
                         <div class="sticky-top pe-3" style="top: 2rem; z-index: 99;">
                             <app-node-inspector [searchResult]="searchResult"></app-node-inspector>
                         </div>

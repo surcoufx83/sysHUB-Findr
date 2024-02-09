@@ -1,0 +1,22 @@
+<p>{{l10nphrase.result.workflow.subtitle}}</p>
+
+<table class="table table-sm table-hover">
+    <tbody>
+        @for (item of workflows; track $index) {
+        <tr>
+            <td [ngClass]="{ 'cursor-pointer': true, 'text-success': workflowsMatched.includes(item.uuid)}"
+                (click)="selectNode(item)">
+                <strong [innerHTML]="item.name | highlight: searchResult.search.phrase"></strong>
+            </td>
+            <td>
+                <a target="_blank" [href]="'#workflow?uuid=' + item.uuid">
+                    <button type="button" class="btn btn-sm">
+                        <i class="bi bi-diagram-2-fill me-1"></i>
+                        Workflow anzeigen
+                    </button>
+                </a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

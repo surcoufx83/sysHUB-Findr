@@ -222,6 +222,21 @@ export const L10nDe: L10nLocale = {
                 Treffer sind farblich hervorgehoben.
             `,
         },
+        toolbar: {
+            certStore: 'Zertifikatsspeicher: [0]',
+            config: 'Konfig: [0]',
+            exportResults: 'Trefferliste exportieren',
+            ippDevices: 'Drucker: [0]',
+            jobtypes: 'Jobtypes: [0]',
+            matches: 'Treffer',
+            noMatches: 'keine Treffer',
+            overview: 'Übersicht',
+            parameterset: 'Parameterset: [0]',
+            serverConfig: 'Server properties: [0]',
+            serverInfo: 'Server infos: [0]',
+            users: 'Benutzer: [0]',
+            workflows: 'Workflows: [0]',
+        },
         showWorkflow: 'Workflow anzeigen',
         useraccount: {
             title: 'Benutzerkonten',
@@ -247,20 +262,25 @@ export const L10nDe: L10nLocale = {
                 uuid: 'Uuid',
             },
         },
-        toolbar: {
-            certStore: 'Zertifikatsspeicher: [0]',
-            config: 'Konfig: [0]',
-            exportResults: 'Trefferliste exportieren',
-            ippDevices: 'Drucker: [0]',
-            jobtypes: 'Jobtypes: [0]',
-            matches: 'Treffer',
-            noMatches: 'keine Treffer',
-            overview: 'Übersicht',
-            parameterset: 'Parameterset: [0]',
-            serverConfig: 'Server properties: [0]',
-            serverInfo: 'Server infos: [0]',
-            users: 'Benutzer: [0]',
-            workflows: 'Workflows: [0]',
+        workflow: {
+            title: 'Workflows',
+            subtitle: `
+                In der Auflistung sind die Workflows farblich hervorgehoben, bei denen ein Treffer in den Metadaten oder dem Workflow ansich enthalten ist.
+                Anklicken eines Eintrags um die Details zu sehen oder auf das Flowchart-Icon um den Workflow anzuzeigen.
+            `,
+            nodeInspector: {
+                cacheable: 'Cache aktiv',
+                categoryName: 'Kategorie',
+                description: 'Beschreibung',
+                format: 'Format',
+                formats: ['Native Client', 'Webclient'],
+                lockedByUser: 'Gesperrt',
+                modified: 'Geändert',
+                name: 'Name',
+                subject: 'Workflow',
+                uuid: 'Uuid',
+                version: 'Version',
+            },
         },
     },
     search: {
