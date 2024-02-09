@@ -82,7 +82,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     this.subs.push(this.cacheService.searchresult.subscribe((result) => {
       this.ngOnInit_updateItems(result);
     }));
-    this.route.queryParamMap.subscribe((map) => {
+    this.subs.push(this.route.queryParamMap.subscribe((map) => {
       if (map.has('t')) {
         if (!this.cacheService.loadSearchResult(map.get('t')!))
           this.router.navigate(['/']);
@@ -91,7 +91,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       let view = map.get('view') ?? '';
       if (view == '' || view == 'ConfigItems' || view == 'JobTypes' || view == 'PSetItems' || view == 'WorkflowItems' || view == 'CertStoreItems' || view == 'IppDevices' || view == 'ServerConfig' || view == 'ServerInformation' || view == 'Users')
         this.selectedChapter = view;
-    })
+    }));
   }
 
   ngOnInit_updateItems(result: SearchResult | null): void {
