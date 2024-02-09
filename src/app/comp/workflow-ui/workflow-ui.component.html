@@ -1,1 +1,12 @@
-<p>workflow-ui works!</p>
+@if (loaded && workflow && model && references && startpoints && versions && workflowUuid) {
+<article class="container-fluid">
+    <section>
+        <h1>{{ l10n(l10nphrase.workflowUi.title, [workflow.name]) }}</h1>
+    </section>
+    <section>
+        <div>
+
+        </div>
+    </section>
+</article>
+}

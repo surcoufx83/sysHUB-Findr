@@ -290,5 +290,15 @@ export type L10nLocale = {
         title: string,
         cardTitle: string,
         progress: { [key: string]: string }
+    },
+    workflowUi: {
+        title: string,
+        subtitle: string,
+        failed: {
+            noCache: string,
+            noUuid: string,
+        },
+        failedBackToFindr: string,
+        failedCommon: string,
     }
 }

@@ -340,7 +340,7 @@ export const L10nEn: L10nLocale = {
     },
     searching: {
         title: '',
-        cardTitle: 'Searching for "[0]"',
+        cardTitle: 'Searching for »[0]«',
         progress: {
             done: 'All done. Redirecting to the results view...',
             evaluatingResults: 'The results have been loaded from the server and are being prepared for display...',
@@ -348,5 +348,15 @@ export const L10nEn: L10nLocale = {
             preparingResultView: 'Preparing the result view...',
             waitingForResults: 'The search request has been sent to the server. Waiting for the results...',
         }
-    }
+    },
+    workflowUi: {
+        title: 'Workflow »[0]«',
+        subtitle: '',
+        failed: {
+            noCache: 'No workflow could be found under the specified workflow ID.',
+            noUuid: 'The called URL is faulty.',
+        },
+        failedBackToFindr: 'Back to homepage',
+        failedCommon: 'Error displaying the workflow: ',
+    },
 };

@@ -41,6 +41,10 @@ export class SearchService {
     this.missingScope = (appInitService.environment.api.syshub.basic?.enabled || false) === true ? false : (appInitService.environment.api.syshub.oauth?.scope !== 'private+public' && appInitService.environment.api.syshub.oauth?.scope !== 'public+private');
   }
 
+  public getProgress(): number {
+    return this._searchProgress.value;
+  }
+
   public match(content: any, search: SearchConfig): boolean {
     if (!content)
       return false;
@@ -373,6 +377,11 @@ export class SearchService {
       this.searchstep2Timeout -= 1000;
       this.searchstep2_loop(search, searchSystemTopics, result);
     }, 1000);
+  }
+
+  public setProgress(value: number): void {
+    this._searchBusy.next(value > 0 && value < 100);
+    this._searchProgress.next(value > 0 && value < 100 ? value : 0);
   }
 
 }
