@@ -20,6 +20,7 @@ import { NavbarComponent } from './comp/main/navbar/navbar.component';
 import { ProgressbarComponent } from './comp/main/progressbar/progressbar.component';
 import { ScopeWarningBarComponent } from './comp/main/scope-warning-bar/scope-warning-bar.component';
 import { ToolbarComponent } from './comp/main/toolbar/toolbar.component';
+import { NodeInspectorCertstoreNodeComponent } from './comp/node-inspector/certstore-node/certstore-node.component';
 import { CopyButtonComponent } from './comp/node-inspector/common/copy-button/copy-button.component';
 import { NodeInspectorCommonTableNodeComponent } from './comp/node-inspector/common/table-node/table-node.component';
 import { NodeInspectorConfigNodeComponent } from './comp/node-inspector/config-node/config-node.component';
@@ -29,6 +30,7 @@ import { NodeInspectorComponent } from './comp/node-inspector/node-inspector.com
 import { NodeInspectorPsetNodeComponent } from './comp/node-inspector/pset-node/pset-node.component';
 import { NodeInspectorUserNodeComponent } from './comp/node-inspector/user-node/user-node.component';
 import { NodeInspectorWorkflowsNodeComponent } from './comp/node-inspector/workflows-node/workflows-node.component';
+import { CertstoreComponent } from './comp/result/certstore/certstore.component';
 import { ConfigComponent } from './comp/result/config/config.component';
 import { IppdeviceComponent } from './comp/result/ippdevice/ippdevice.component';
 import { JobtypesComponent } from './comp/result/jobtypes/jobtypes.component';
@@ -43,18 +45,19 @@ import { WorkflowsComponent } from './comp/result/workflows/workflows.component'
 import { SearchComponent } from './comp/search/search.component';
 import { StatsComponent } from './comp/stats/stats.component';
 import { WorkflowUiComponent } from './comp/workflow-ui/workflow-ui.component';
+import { AppInitService } from './svc/app-init.service';
 import { L10nService } from './svc/i10n.service';
 import { PagepropsService } from './svc/pageprops.service';
 import { SearchService } from './svc/search.service';
 import { ToastsService } from './svc/toasts.service';
 import { ToastsComponent } from './svc/toasts/toasts.component';
 import { HighlightPipe } from './utils/highlight.pipe';
-import { AppInitService } from './svc/app-init.service';
 
 @NgModule({
   declarations: [
     AboutComponent,
     AppComponent,
+    CertstoreComponent,
     ConfigComponent,
     CopyButtonComponent,
     HelpComponent,
@@ -66,6 +69,7 @@ import { AppInitService } from './svc/app-init.service';
     LogoutComponent,
     MainComponent,
     NavbarComponent,
+    NodeInspectorCertstoreNodeComponent,
     NodeInspectorCommonTableNodeComponent,
     NodeInspectorComponent,
     NodeInspectorConfigNodeComponent,

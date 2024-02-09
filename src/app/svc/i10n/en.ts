@@ -90,12 +90,36 @@ export const L10nEn: L10nLocale = {
         webclientLink: 'sysHUB web client'
     },
     result: {
+        certStoreItem: {
+            title: 'Certificate Store',
+            subtitle: `
+                The certificate store is divided into Keystore and Truststore.
+                The Keystore stores private keys used for encryption, authentication, and integrity verification.
+                The Truststore contains trusted public keys used for verifying the authenticity of remote systems or peers.
+                If the search term is found in a certificate, the corresponding entry is highlighted.
+            `,
+            nodeInspector: {
+                alias: 'Alias',
+                certX509IssuerDN: 'Issued by',
+                certX509NotAfter: 'Valid until',
+                certX509NotBefore: 'Valid from',
+                certX509PrivateKey: 'Private Key',
+                certX509PublicKey: 'Public Key',
+                certX509SerialNumber: 'Serial Number',
+                certX509SignatureAlogorithm: 'Algorithm',
+                certX509SubjectDN: 'Issued to',
+                fingerprintSHA1: 'SHA-1 Hash',
+                subject: 'Certificate',
+                subjectAlternativeName: 'Alternative Names',
+                version: 'Version',
+            },
+        },
         common: {
             clickToOpenDialog: 'Click to open details for entry "[0]"',
             nodeInspector: {
                 copyTooltip: 'Copy to clipboard',
-                copied: 'Text "[0]" has been copied to the clipboard.'
-            }
+                copied: 'Text "[0]" has been copied to the clipboard.',
+            },
         },
         config: {
             title: 'Expert Configuration',

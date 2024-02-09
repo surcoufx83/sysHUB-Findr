@@ -169,14 +169,14 @@ export class SearchService {
           subject.complete();
           return;
         }
-        certstore.keystore = [...store1];
+        certstore.keystore = [...store1].sort((a, b) => a.certX509SubjectDN.toLocaleLowerCase() > b.certX509SubjectDN.toLocaleLowerCase() ? 1 : -1);
         this.restapi.getCertStoreItems('truststore').subscribe((store2) => {
           if (store2 instanceof Error) {
             subject.next(false);
             subject.complete();
             return;
           }
-          certstore.truststore = [...store2];
+          certstore.truststore = [...store2].sort((a, b) => a.certX509SubjectDN.toLocaleLowerCase() > b.certX509SubjectDN.toLocaleLowerCase() ? 1 : -1);
           subject.next(certstore);
           subject.complete();
         });

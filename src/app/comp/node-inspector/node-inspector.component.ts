@@ -4,7 +4,7 @@ import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
 import { PagepropsService } from 'src/app/svc/pageprops.service';
 import { SearchResult } from 'src/app/types';
-import { SyshubConfigItem, SyshubIppDevice, SyshubJobType, SyshubPSetItem, SyshubUserAccount, SyshubWorkflow } from 'syshub-rest-module';
+import { SyshubCertStoreItem, SyshubConfigItem, SyshubIppDevice, SyshubJobType, SyshubPSetItem, SyshubUserAccount, SyshubWorkflow } from 'syshub-rest-module';
 
 @Component({
   selector: 'app-node-inspector',
@@ -58,10 +58,10 @@ export class NodeInspectorComponent implements OnDestroy, OnInit {
     }))
   }
 
-  onInspectNewNodeItem(type: string, node: SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubIppDevice | SyshubWorkflow): void {
+  onInspectNewNodeItem(type: string, node: SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubIppDevice | SyshubWorkflow | SyshubCertStoreItem): void {
     if (!this.nodeTypes.includes(type))
       return;
-    const nodeid = type === 'IppDevices' ? `node-${type}${encodeURIComponent((<SyshubIppDevice>node).name)}` : `node-${type}${(<SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubWorkflow>node).uuid}`;
+    const nodeid = type === 'IppDevices' ? `node-${type}${encodeURIComponent((<SyshubIppDevice>node).name)}` : type === 'CertStoreItems' ? `node-${type}${encodeURIComponent((<SyshubCertStoreItem>node).alias)}` : `node-${type}${(<SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubWorkflow>node).uuid}`;
     if (this.nodesAdded.includes(nodeid)) {
       this.onReopenNode(nodeid);
       return;
@@ -103,7 +103,7 @@ export type NodeInspectorItem = {
   id: string;
   color: number;
   dispose?: boolean;
-  nodeitem: SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubIppDevice | SyshubWorkflow;
+  nodeitem: SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubIppDevice | SyshubWorkflow | SyshubCertStoreItem;
   type: string;
   zindex: number;
 }

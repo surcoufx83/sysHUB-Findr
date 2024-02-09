@@ -48,7 +48,15 @@
     </app-node-inspector-workflows-node>
     }
     @case ('CertStoreItems') {
-
+    <app-node-inspector-certstore-node [nodeItem]="$any(node.nodeitem)" [searchResult]="searchResult"
+        (onChangeColor)="node.color = (node.color == colorpalette.length - 1 ? 0 : node.color + 1)">
+        <button type="button" class="btn btn-sm px-2" cdkDragHandle>
+            <i class="bi bi-arrows-move"></i>
+        </button>
+        <button type="button" class="btn btn-sm px-2" (click)="onRemoveNode($index, node.id)">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </app-node-inspector-certstore-node>
     }
     @case ('IppDevices') {
     <app-node-inspector-ippdevice-node [nodeItem]="$any(node.nodeitem)" [searchResult]="searchResult"

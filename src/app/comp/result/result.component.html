@@ -155,7 +155,7 @@
                         {{l10nphrase.result.workflow.title}}
                         }
                         @case ('CertStoreItems') {
-
+                        {{l10nphrase.result.certStoreItem.title}}
                         }
                         @case ('IppDevices') {
                         {{l10nphrase.result.ippDevice.title}}
@@ -193,7 +193,7 @@
                         <app-result-workflows [searchResult]="searchResult"></app-result-workflows>
                         }
                         @case ('CertStoreItems') {
-
+                        <app-result-certstore [searchResult]="searchResult"></app-result-certstore>
                         }
                         @case ('IppDevices') {
                         <app-result-ippdevice [searchResult]="searchResult"></app-result-ippdevice>

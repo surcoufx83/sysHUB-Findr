@@ -90,6 +90,30 @@ export const L10nDe: L10nLocale = {
         webclientLink: 'sysHUB web client'
     },
     result: {
+        certStoreItem: {
+            title: 'Zertifikatsspeicher',
+            subtitle: `
+                Der Zertifikatsspeicher unterteilt sich in Keystore und Truststore.
+                Der Keystore speichert private Schlüssel, die für Verschlüsselung, Authentifizierung und Integritätsprüfung verwendet werden.
+                Der Truststore enthält vertrauenswürdige öffentliche Schlüssel, die zur Überprüfung der Authentizität entfernter Systeme oder Peers verwendet werden.
+                Wird der Suchbegriff in einem Zertifikat gefunden, ist der entsprechende Eintrag hervorgehoben.
+            `,
+            nodeInspector: {
+                alias: 'Alias',
+                certX509IssuerDN: 'Ausgestellt von',
+                certX509NotAfter: 'Gültig bis',
+                certX509NotBefore: 'Gültig ab',
+                certX509PrivateKey: 'Privater Schlüssel',
+                certX509PublicKey: 'Öffentlicher Schlüssel',
+                certX509SerialNumber: 'Seriennummer',
+                certX509SignatureAlogorithm: 'Algorithmus',
+                certX509SubjectDN: 'Ausgestellt für',
+                fingerprintSHA1: 'SHA-1 Hash',
+                subject: 'Zertifikat',
+                subjectAlternativeName: 'Alternative Namen',
+                version: 'Version',
+            },
+        },
         common: {
             clickToOpenDialog: 'Klicken um Details zu Eintrag "[0]" anzuzeigen',
             nodeInspector: {

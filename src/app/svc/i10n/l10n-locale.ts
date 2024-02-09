@@ -82,6 +82,25 @@ export type L10nLocale = {
         webclientLink: string
     },
     result: {
+        certStoreItem: {
+            title: string,
+            subtitle: string,
+            nodeInspector: {
+                alias: string,
+                certX509IssuerDN: string,
+                certX509NotAfter: string,
+                certX509NotBefore: string,
+                certX509PrivateKey: string,
+                certX509PublicKey: string,
+                certX509SerialNumber: string,
+                certX509SignatureAlogorithm: string,
+                certX509SubjectDN: string,
+                fingerprintSHA1: string,
+                subject: string,
+                subjectAlternativeName: string,
+                version: string,
+            },
+        },
         common: {
             clickToOpenDialog: string,
             nodeInspector: {

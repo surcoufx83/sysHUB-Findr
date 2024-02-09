@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
 import { PagepropsService } from 'src/app/svc/pageprops.service';
@@ -19,13 +18,8 @@ export class IppdeviceComponent implements OnInit {
   @Input({ required: true }) searchResult!: SearchResult;
 
   constructor(private l10nService: L10nService,
-    private cacheService: CacheService,
     private searchService: SearchService,
     private propsService: PagepropsService,) { }
-
-  getIcon(type: string, value: any = null) {
-    return this.cacheService.getIcon(type, value);
-  }
 
   get l10nphrase(): L10nLocale {
     return this.l10nService.locale;
@@ -48,4 +42,5 @@ export class IppdeviceComponent implements OnInit {
   selectNode(node: SyshubIppDevice): void {
     this.propsService.inspect('IppDevices', node);
   }
+
 }

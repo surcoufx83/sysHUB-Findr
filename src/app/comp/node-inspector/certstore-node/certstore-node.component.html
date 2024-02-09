@@ -1,0 +1,76 @@
+<div class="card-header d-flex align-items-center justify-content-between">
+    <div>
+        <div class="fs-8 mb-1">
+            <i class="bi bi-award-fill me-1"></i>
+            {{ l10nphrase.result.certStoreItem.nodeInspector.subject }}
+        </div>
+        <h5 class="mb-0 text-truncate" [innerHTML]="nodeItem.alias | highlight: searchResult.search.phrase"></h5>
+    </div>
+    <div>
+        <button type="button" class="btn btn-sm px-2" (click)="onChangeColor.emit()">
+            <i class="bi bi-palette-fill"></i>
+        </button>
+        <ng-content></ng-content>
+    </div>
+</div>
+<div class="card-body p-0">
+    <table class="table table-sm table-hover m-0">
+        <tbody>
+            <tr nodeinspector-common-table-node [title]="l10nphrase.result.certStoreItem.nodeInspector.alias"
+                [valueToCopy]="nodeItem.alias || undefined">
+                <code [innerHTML]="nodeItem.alias | highlight: searchResult.search.phrase"></code>
+            </tr>
+            <tr nodeinspector-common-table-node [title]="l10nphrase.result.certStoreItem.nodeInspector.certX509IssuerDN"
+                [valueToCopy]="nodeItem.certX509IssuerDN || undefined">
+                <code [innerHTML]="nodeItem.certX509IssuerDN | highlight: searchResult.search.phrase"></code>
+            </tr>
+            <tr nodeinspector-common-table-node
+                [title]="l10nphrase.result.certStoreItem.nodeInspector.certX509SubjectDN"
+                [valueToCopy]="nodeItem.certX509SubjectDN || undefined">
+                <code [innerHTML]="nodeItem.certX509SubjectDN | highlight: searchResult.search.phrase"></code>
+            </tr>
+            <tr nodeinspector-common-table-node
+                [title]="l10nphrase.result.certStoreItem.nodeInspector.subjectAlternativeName"
+                [valueToCopy]="nodeItem.subjectAlternativeName || undefined">
+                <code [innerHTML]="nodeItem.subjectAlternativeName | highlight: searchResult.search.phrase"></code>
+            </tr>
+            <tr nodeinspector-common-table-node [title]="l10nphrase.result.certStoreItem.nodeInspector.version"
+                [valueToCopy]="nodeItem.certX509Version || undefined">
+                <code [innerHTML]="nodeItem.certX509Version | highlight: searchResult.search.phrase"></code>
+            </tr>
+            <tr nodeinspector-common-table-node
+                [title]="l10nphrase.result.certStoreItem.nodeInspector.certX509SerialNumber"
+                [valueToCopy]="nodeItem.certX509SerialNumber || undefined">
+                <code [innerHTML]="nodeItem.certX509SerialNumber | highlight: searchResult.search.phrase"></code>
+            </tr>
+            <tr nodeinspector-common-table-node
+                [title]="l10nphrase.result.certStoreItem.nodeInspector.certX509NotBefore"
+                [valueToCopy]="nodeItem.certX509NotBefore || undefined">
+                <code [innerHTML]="nodeItem.certX509NotBefore | highlight: searchResult.search.phrase"></code>
+            </tr>
+            <tr nodeinspector-common-table-node [title]="l10nphrase.result.certStoreItem.nodeInspector.certX509NotAfter"
+                [valueToCopy]="nodeItem.certX509NotAfter || undefined">
+                <code [innerHTML]="nodeItem.certX509NotAfter | highlight: searchResult.search.phrase"></code>
+            </tr>
+            <tr nodeinspector-common-table-node
+                [title]="l10nphrase.result.certStoreItem.nodeInspector.certX509PublicKey"
+                [valueToCopy]="nodeItem.certX509PublicKey || undefined">
+                <code [innerHTML]="nodeItem.certX509PublicKey | highlight: searchResult.search.phrase"></code>
+            </tr>
+            <tr nodeinspector-common-table-node
+                [title]="l10nphrase.result.certStoreItem.nodeInspector.certX509PrivateKey"
+                [valueToCopy]="nodeItem.certX509PrivateKey || undefined">
+                <code [innerHTML]="nodeItem.certX509PrivateKey | highlight: searchResult.search.phrase"></code>
+            </tr>
+            <tr nodeinspector-common-table-node
+                [title]="l10nphrase.result.certStoreItem.nodeInspector.certX509SignatureAlogorithm"
+                [valueToCopy]="nodeItem.certX509SignatureAlogorithm || undefined">
+                <code [innerHTML]="nodeItem.certX509SignatureAlogorithm | highlight: searchResult.search.phrase"></code>
+            </tr>
+            <tr nodeinspector-common-table-node [title]="l10nphrase.result.certStoreItem.nodeInspector.fingerprintSHA1"
+                [valueToCopy]="nodeItem.fingerprintSHA1 || undefined">
+                <code [innerHTML]="nodeItem.fingerprintSHA1 | highlight: searchResult.search.phrase"></code>
+            </tr>
+        </tbody>
+    </table>
+</div>

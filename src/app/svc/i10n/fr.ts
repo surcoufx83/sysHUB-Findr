@@ -90,12 +90,36 @@ export const L10nFr: L10nLocale = {
         webclientLink: 'Client web sysHUB'
     },
     result: {
+        certStoreItem: {
+            title: 'Magasin de certificats',
+            subtitle: `
+                Le magasin de certificats est divisé en Keystore et Truststore.
+                Le Keystore stocke des clés privées utilisées pour le chiffrement, l'authentification et la vérification de l'intégrité.
+                Le Truststore contient des clés publiques de confiance utilisées pour vérifier l'authenticité des systèmes ou pairs distants.
+                Si le terme de recherche est trouvé dans un certificat, l'entrée correspondante est mise en surbrillance.
+            `,
+            nodeInspector: {
+                alias: 'Alias',
+                certX509IssuerDN: 'Délivré par',
+                certX509NotAfter: 'Valide jusqu\'au',
+                certX509NotBefore: 'Valide à partir de',
+                certX509PrivateKey: 'Clé privée',
+                certX509PublicKey: 'Clé publique',
+                certX509SerialNumber: 'Numéro de série',
+                certX509SignatureAlogorithm: 'Algorithme',
+                certX509SubjectDN: 'Délivré à',
+                fingerprintSHA1: 'Hash SHA-1',
+                subject: 'Certificat',
+                subjectAlternativeName: 'Noms alternatifs',
+                version: 'Version',
+            },
+        },
         common: {
             clickToOpenDialog: 'Cliquez pour ouvrir les détails de l\'entrée "[0]"',
             nodeInspector: {
                 copyTooltip: 'Copier dans le presse-papiers',
-                copied: 'Le texte "[0]" a été copié dans le presse-papiers.'
-            }
+                copied: 'Le texte "[0]" a été copié dans le presse-papiers.',
+            },
         },
         config: {
             title: 'Configuration d\'Expert',
