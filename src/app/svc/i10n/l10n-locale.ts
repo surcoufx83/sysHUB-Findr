@@ -300,5 +300,6 @@ export type L10nLocale = {
         },
         failedBackToFindr: string,
         failedCommon: string,
+        errorConnector: string,
     }
 }

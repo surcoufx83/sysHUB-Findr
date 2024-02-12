@@ -7,6 +7,7 @@ import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
 import { SearchService } from 'src/app/svc/search.service';
 import { ToastsService } from 'src/app/svc/toasts.service';
+import { SearchResult } from 'src/app/types';
 import { RestService, SyshubVersion, SyshubWorkflow, SyshubWorkflowModel, SyshubWorkflowReference, SyshubWorkflowVersion } from 'syshub-rest-module';
 
 @Component({
@@ -21,6 +22,7 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
 
   loaded: boolean = false;
   progress: number = 0;
+  searchResult?: SearchResult;
 
   subs: Subscription[] = [];
 

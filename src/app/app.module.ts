@@ -52,6 +52,8 @@ import { SearchService } from './svc/search.service';
 import { ToastsService } from './svc/toasts.service';
 import { ToastsComponent } from './svc/toasts/toasts.component';
 import { HighlightPipe } from './utils/highlight.pipe';
+import { CanvasComponent } from './comp/workflow-ui/canvas/canvas.component';
+import { TooltipComponent } from './comp/workflow-ui/tooltip/tooltip.component';
 
 @NgModule({
   declarations: [
@@ -93,6 +95,8 @@ import { HighlightPipe } from './utils/highlight.pipe';
     UserComponent,
     WorkflowsComponent,
     WorkflowUiComponent,
+    CanvasComponent,
+    TooltipComponent,
   ],
   imports: [
     AppRoutingModule,

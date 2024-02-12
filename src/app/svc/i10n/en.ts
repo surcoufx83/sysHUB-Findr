@@ -358,5 +358,6 @@ export const L10nEn: L10nLocale = {
         },
         failedBackToFindr: 'Back to homepage',
         failedCommon: 'Error displaying the workflow: ',
+        errorConnector: 'On Error',
     },
 };

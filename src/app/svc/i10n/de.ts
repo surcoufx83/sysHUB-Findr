@@ -361,5 +361,6 @@ export const L10nDe: L10nLocale = {
         },
         failedBackToFindr: 'Zurück zur Startseite',
         failedCommon: 'Fehler beim Anzeigen des Workflows: ',
+        errorConnector: 'On Error',
     }
 };

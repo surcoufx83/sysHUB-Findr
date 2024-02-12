@@ -1,0 +1,79 @@
+.workflow-container {
+    background-color: #efefef;
+    height: 100%;
+    width: 100%;
+}
+
+svg.workflow {
+
+    rect.annotation-box,
+    text,
+    tspan {
+        pointer-events: auto;
+    }
+
+    g.element-group {
+        stroke: none;
+
+        image {
+            cursor: pointer;
+        }
+
+        rect.annotation-box {
+            stroke-width: 1;
+            stroke: #000;
+        }
+
+        rect.proc-box {
+            cursor: pointer;
+            fill: rgba($color: #efefef, $alpha: .1);
+            stroke-width: 2;
+            stroke: none;
+
+            &.has-match {
+                stroke: #16DB93;
+                fill: rgba($color: #16DB93, $alpha: .15);
+            }
+        }
+
+        &:hover {
+            rect.proc-box {
+                stroke: red;
+                stroke-width: 2;
+                fill: none;
+            }
+        }
+    }
+
+    g.workflow-paths {
+        path {
+            stroke: #444;
+            stroke-width: 2;
+            fill: none;
+
+            &:hover {
+                stroke-width: 3;
+                stroke: red;
+            }
+        }
+    }
+
+    rect.cursor {
+        fill: rgba(0, 0, 0, .5)
+    }
+
+    text.proc-description {
+        font-size: 8pt;
+        font-style: italic;
+    }
+
+    text.proc-title,
+    text.proc-loop-name {
+        font-size: 10pt;
+    }
+
+    text.ruler {
+        font-size: 6pt;
+        fill: rgba(0, 0, 0, .5);
+    }
+}
