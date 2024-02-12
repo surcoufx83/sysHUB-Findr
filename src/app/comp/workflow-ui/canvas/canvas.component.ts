@@ -8,6 +8,7 @@ import { SearchService } from 'src/app/svc/search.service';
 import { SearchResult } from 'src/app/types';
 import { Subscription } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
+import { PagepropsService } from 'src/app/svc/pageprops.service';
 
 @Component({
   selector: 'app-workflow-ui-canvas',
@@ -25,9 +26,8 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   connectorTitles: SvgConnectorText[] = [];
   nodes: SvgElement[] = [];
   nodeUUids: { [key: string]: number } = {};
-  hovernode?: SvgElement;
+  nodesToggled: string[] = [];
   hoverpath?: number;
-  hovernodePinned: boolean = false;
   ruler: number[] = [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800];
 
   svgGrid = { width: 10, height: 10, strokeColor: 'rgba(0, 0, 0, .1)' };
@@ -40,9 +40,9 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   subs: Subscription[] = [];
 
   constructor(private l10nService: L10nService,
-    private cacheService: CacheService,
     private searchService: SearchService,
-    @Inject(DOCUMENT) private document: Document) {
+    @Inject(DOCUMENT) private document: Document,
+    private propsService: PagepropsService,) {
     this.window = document.defaultView!;
     this.pageSize = { width: this.window.innerWidth, height: this.window.innerHeight - 64 };
   }
@@ -284,39 +284,19 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.hovernode = undefined;
     this.nodes = [];
     this.onErrorHandlerNodes = [];
     this.nodeUUids = {};
-    this.hovernodePinned = false;
     this.connectorTitles = [];
-  }
-
-  onMouseLeaveElement(): void {
-    if (this.toggleTooltipTimeout)
-      clearTimeout(this.toggleTooltipTimeout);
-    this.toggleTooltipTimeout = setTimeout(() => {
-      this.showTooltip('');
-    }, 100);
   }
 
   onMouseLeaveSvg(): void {
     this.svgCursor = { x: 0, y: 0 };
   }
 
-  toggleTooltipTimeout: any;
-  onMouseOverElement(elementuuid: string, event: MouseEvent): void {
-    if (this.toggleTooltipTimeout)
-      clearTimeout(this.toggleTooltipTimeout);
-    this.toggleTooltipTimeout = setTimeout(() => {
-      this.showTooltip(elementuuid, event.offsetX, event.offsetY);
-    }, 100);
-  }
-
   onMouseMoveOverSvg(event: MouseEvent): void {
-    const x = event.clientX + (this.document.documentElement.scrollLeft)
-    const y = event.clientY + (this.document.documentElement.scrollTop) - (this.document.documentElement.clientTop)
-    console.log(event.clientX, this.document.documentElement.scrollLeft, this.document.documentElement.clientLeft, x)
+    const x = event.clientX + (this.document.documentElement.scrollLeft);
+    const y = event.clientY + (this.document.documentElement.scrollTop) - (this.document.documentElement.clientTop);
     this.svgCursor = { x: x, y: y - 132 };
   }
 
@@ -399,26 +379,26 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     this.drawPaths();
   }
 
-  showTooltip(uuid?: string, x?: number, y?: number) {
-    if (this.hovernodePinned)
-      return;
-    if (uuid) {
-      if (this.hovernode == undefined || this.hovernode.uuid != uuid) {
-        let node = this.nodes[this.nodeUUids[uuid]];
-        if (node.modeldata.category != 'start' && node.modeldata.category != 'end') {
-          this.hovernode = node;
-          this.tooltipLeft = (x! <= this.pageSize.width / 2);
-          this.tooltipLocation = {
-            x: (this.tooltipLeft ? x! + 80 : this.pageSize.width - x! + 54),
-            y: y!
-          };
-        }
-        else
-          this.hovernode = undefined;
-      }
+  hoverNode(node: SvgElement): void {
+    if (node.modeldata.category != 'start' && node.modeldata.category != 'end' && node.modeldata.category != 'annotation') {
+      this.propsService.inspect('SvgNode', node);
     }
-    else
-      this.hovernode = undefined;
+  }
+
+  leaveNode(node: SvgElement): void {
+    if (this.nodesToggled.includes(node.modeldata.key))
+      return;
+    if (node.modeldata.category != 'start' && node.modeldata.category != 'end' && node.modeldata.category != 'annotation') {
+      this.propsService.inspect('SvgNode', node, true);
+    }
+  }
+
+  selectNode(node: SvgElement): void {
+    if (node.modeldata.category != 'start' && node.modeldata.category != 'end' && node.modeldata.category != 'annotation') {
+      if (!this.nodesToggled.includes(node.modeldata.key))
+        this.nodesToggled.push(node.modeldata.key);
+      this.propsService.inspect('SvgNode', node);
+    }
   }
 
 

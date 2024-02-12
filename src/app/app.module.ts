@@ -53,7 +53,7 @@ import { ToastsService } from './svc/toasts.service';
 import { ToastsComponent } from './svc/toasts/toasts.component';
 import { HighlightPipe } from './utils/highlight.pipe';
 import { CanvasComponent } from './comp/workflow-ui/canvas/canvas.component';
-import { TooltipComponent } from './comp/workflow-ui/tooltip/tooltip.component';
+import { NodeInspectorWfProcessNodeComponent } from './comp/node-inspector/wf-process-node/wf-process-node.component';
 
 @NgModule({
   declarations: [
@@ -96,7 +96,7 @@ import { TooltipComponent } from './comp/workflow-ui/tooltip/tooltip.component';
     WorkflowsComponent,
     WorkflowUiComponent,
     CanvasComponent,
-    TooltipComponent,
+    NodeInspectorWfProcessNodeComponent,
   ],
   imports: [
     AppRoutingModule,

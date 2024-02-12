@@ -4,6 +4,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { SyshubCertStoreItem, SyshubConfigItem, SyshubIppDevice, SyshubJobType, SyshubPSetItem, SyshubUserAccount, SyshubWorkflow } from 'syshub-rest-module';
 import { L10nService } from './i10n.service';
+import { SvgElement } from '../comp/workflow-ui/canvas/element';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class PagepropsService {
 
   private deviceType$: 'mobile' | 'tablet' | 'desktop' = 'desktop';
 
-  private nodeInspectorItem$ = new Subject<{ type: string, node: SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubIppDevice | SyshubWorkflow | SyshubCertStoreItem }>();
+  private nodeInspectorItem$ = new Subject<{ type: string, node: SvgElement | SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubIppDevice | SyshubWorkflow | SyshubCertStoreItem, remove?: boolean }>();
   public NodeInspectorItem = this.nodeInspectorItem$.asObservable();
 
   private pages: PageTitleItem[] = [
@@ -88,8 +89,8 @@ export class PagepropsService {
     return this.deviceType$;
   }
 
-  public inspect(type: string, node: SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubIppDevice | SyshubWorkflow | SyshubCertStoreItem): void {
-    this.nodeInspectorItem$.next({ type: type, node: node });
+  public inspect(type: string, node: SvgElement | SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubIppDevice | SyshubWorkflow | SyshubCertStoreItem, remove?: boolean): void {
+    this.nodeInspectorItem$.next({ type: type, node: node, remove: remove });
   }
 
   l10n(phrase: string, params: any[] = []) {

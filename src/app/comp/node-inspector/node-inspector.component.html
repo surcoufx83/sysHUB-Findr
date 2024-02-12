@@ -1,7 +1,7 @@
 @for (node of nodeCards; track $index) {
 @if (node.dispose !== true) {
-<div [ngClass]="['card', 'node-inspector', 'ms-2', 'mb-2', colorpalette[node.color]]"
-    [ngStyle]="{ 'z-index': node.zindex}" [id]="node.id" cdkDrag (click)="onReopenNode(node.id)">
+<div [ngClass]="['card', 'shadow', 'node-inspector', 'ms-2', 'mb-2', colorpalette[node.color], (node.type == 'SvgNode' ? 'position-absolute' : '')]"
+    [ngStyle]="{ 'z-index': node.zindex }" [id]="node.id" cdkDrag (click)="onReopenNode(node.id)">
     @switch (node.type) {
     @case ('ConfigItems') {
     <app-node-inspector-config-node [nodeItem]="$any(node.nodeitem)" [searchResult]="searchResult"
@@ -79,6 +79,25 @@
             <i class="bi bi-x-lg"></i>
         </button>
     </app-node-inspector-user-node>
+    }
+    @case ('SvgNode') {
+    @switch($any(node.nodeitem).modeldata.category) {
+    @case ('process') {
+    <app-node-inspector-workflow-process-node [nodeItem]="$any(node.nodeitem)" [searchResult]="searchResult"
+        (onChangeColor)="node.color = (node.color == colorpalette.length - 1 ? 0 : node.color + 1)">
+        <button type="button" class="btn btn-sm px-2" cdkDragHandle>
+            <i class="bi bi-arrows-move"></i>
+        </button>
+        <button type="button" class="btn btn-sm px-2" (click)="onRemoveNode($index, node.id)">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </app-node-inspector-workflow-process-node>
+    }
+    @default {
+
+    {{node.nodeitem|json}}
+    }
+    }
     }
     }
 </div>

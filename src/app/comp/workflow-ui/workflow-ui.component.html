@@ -1,3 +1,8 @@
+@if(searchResult) {
+<div class="position-absolute">
+    <app-node-inspector [searchResult]="searchResult"></app-node-inspector>
+</div>
+}
 @if (loaded && workflow && model && references && startpoints && versions && workflowUuid) {
 <article class="container-fluid">
     <section>

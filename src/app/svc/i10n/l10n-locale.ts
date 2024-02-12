@@ -301,5 +301,9 @@ export type L10nLocale = {
         failedBackToFindr: string,
         failedCommon: string,
         errorConnector: string,
-    }
+        process: {
+            parameterGroup: string,
+            subject: string,
+        },
+    },
 }
