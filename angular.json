@@ -52,10 +52,13 @@
             ],
             "styles": [
               "node_modules/bootstrap-icons/font/bootstrap-icons.css",
+              "node_modules/prismjs/themes/prism-okaidia.css",
               "src/styles.scss"
             ],
             "scripts": [
-              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
+              "node_modules/prismjs/prism.js",
+              "node_modules/prismjs/components/prism-sql.min.js"
             ]
           },
           "configurations": {

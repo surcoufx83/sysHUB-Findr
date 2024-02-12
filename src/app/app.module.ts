@@ -54,6 +54,7 @@ import { ToastsComponent } from './svc/toasts/toasts.component';
 import { HighlightPipe } from './utils/highlight.pipe';
 import { CanvasComponent } from './comp/workflow-ui/canvas/canvas.component';
 import { NodeInspectorWfProcessNodeComponent } from './comp/node-inspector/wf-process-node/wf-process-node.component';
+import { MarkdownModule } from 'ngx-markdown';
 
 @NgModule({
   declarations: [
@@ -105,6 +106,7 @@ import { NodeInspectorWfProcessNodeComponent } from './comp/node-inspector/wf-pr
     DragDropModule,
     FormsModule,
     HttpClientModule,
+    MarkdownModule.forRoot(),
     NgbModule,
     ReactiveFormsModule,
     RouterModule,

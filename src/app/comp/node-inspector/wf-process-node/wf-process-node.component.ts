@@ -16,16 +16,11 @@ export class NodeInspectorWfProcessNodeComponent implements OnInit {
   @Output() onChangeColor = new EventEmitter<never>();
   @Input({ required: true }) searchResult!: SearchResult;
 
-  showParametersGroup = true;
   parameters: [string, string][] = [];
 
   constructor(
     private l10nService: L10nService,
-  ) {
-    setTimeout(() => {
-      console.log(this.nodeItem)
-    }, 10);
-  }
+  ) { }
 
   getValueToCopy(text: string) {
     return text.replace(/\s\/\s/gi, '/');

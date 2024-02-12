@@ -101,14 +101,12 @@ code {
     }
 
     &.node-inspector {
-        .card-body {
-            max-height: clamp(100px, 240px, 40vh);
-            overflow: auto;
-            resize: vertical;
+        max-height: clamp(100px, 280px, 40vh);
+        overflow: auto;
+        resize: both;
 
-            &[style*="height"] {
-                max-height: unset;
-            }
+        &[style*="height"] {
+            max-height: unset;
         }
     }
 }

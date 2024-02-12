@@ -1,87 +1,45 @@
-<div class="card-header d-flex align-items-center justify-content-between">
-    <div>
-        <div class="fs-8 mb-1">
-            <i class="bi bi-gear me-1"></i>
-            {{ l10nphrase.workflowUi.process.subject }}
+<div class="card-header d-flex flex-column">
+    <div class="d-flex align-items-center justify-content-between">
+        <div>
+            <div class="fs-8 mb-1">
+                <i class="bi bi-gear me-1"></i>
+                {{ l10nphrase.workflowUi.process.subject }}
+            </div>
+            <h5 class="mb-0" [innerHTML]="nodeItem.title | highlight: searchResult.search.phrase"></h5>
         </div>
-        <h5 class="mb-0" [innerHTML]="nodeItem.title | highlight: searchResult.search.phrase"></h5>
+        <div>
+            <button type="button" class="btn btn-sm px-2" (click)="onChangeColor.emit()">
+                <i class="bi bi-palette-fill"></i>
+            </button>
+            <ng-content></ng-content>
+        </div>
     </div>
-    <div>
-        <button type="button" class="btn btn-sm px-2" (click)="onChangeColor.emit()">
-            <i class="bi bi-palette-fill"></i>
-        </button>
-        <ng-content></ng-content>
-    </div>
-</div>
-<div class="card-header py-0">
     <p class="mb-0 fst-italic" [innerHTML]="nodeItem.description | highlight: searchResult.search.phrase"></p>
 </div>
 <div class="card-body p-0">
     <table class="table table-sm table-hover m-0">
         <tbody>
-            <tr>
-                <th scope="row" colspan="3" class="cursor-pointer" (click)="showParametersGroup = !showParametersGroup"
-                    [title]="l10n(l10nphrase.common.phrases.toggleSection[showParametersGroup ? 1 : 0], [l10nphrase.workflowUi.process.parameterGroup])">
-                    <h5 class="my-1"><i
-                            [class]="['bi', showParametersGroup ? 'bi-caret-down-fill' : 'bi-caret-right-fill']"></i>
-                        {{
-                        l10nphrase.workflowUi.process.parameterGroup }}</h5>
-                </th>
-            </tr>
             @for (item of parameters; track $index) {
-            <tr [ngClass]="[ showParametersGroup ? 'd-table-row' : 'd-none' ]">
+            <tr>
                 <th scope="row" [innerHTML]="(item[0] || '&lt;null&gt;' | highlight: searchResult.search.phrase) + ':'">
                 </th>
                 <td>
+                    @if(item[0] === 'query' && $any(nodeItem.modeldata).command == 'com.oce.epos.procs.ExecuteQuery') {
+                    <markdown ngPreserveWhitespaces>
+                        ```sql
+                        {{item[1]}}
+                        ```
+                    </markdown>
+                    }
+                    @else {
                     <code [innerHTML]="item[1] || '&lt;null&gt;' | highlight: searchResult.search.phrase"></code>
+                    }
                 </td>
                 <td style="width: 20px;" class="py-0">
                     <app-copy-button [valueToCopy]="item[1]"></app-copy-button>
                 </td>
             </tr>
             }
-            <!-- <tr nodeinspector-common-table-node [title]="l10nphrase.result.workflow.nodeInspector.description"
-                [valueToCopy]="nodeItem.description || undefined">
-                @if (!searchResult.search.filter.excludeBComments || !nodeItem.description?.startsWith('[B]')) {
-                <code [innerHTML]="nodeItem.description | highlight: searchResult.search.phrase"></code>
-                }
-                @else {
-                <code>{{nodeItem.description}}</code>
-                }
-            </tr> -->
-            <!-- <tr nodeinspector-common-table-node [title]="l10nphrase.result.workflow.nodeInspector.categoryName"
-                [valueToCopy]="nodeItem.categoryName ? nodeItem.categoryName : undefined">
-                <code>{{nodeItem.categoryName}}</code>
-            </tr>
-            <tr nodeinspector-common-table-node [title]="l10nphrase.result.workflow.nodeInspector.cacheable"
-                [valueToCopy]="undefined">
-                <code>{{nodeItem.cacheable == 'YES' ? l10nphrase.common.phrases.yes[0] : l10nphrase.common.phrases.no[0] }}</code>
-            </tr>
-            <tr nodeinspector-common-table-node [title]="l10nphrase.result.workflow.nodeInspector.format"
-                [valueToCopy]="undefined">
-                <code>{{nodeItem.format == 'VERSION1' ? l10nphrase.result.workflow.nodeInspector.formats[0] : l10nphrase.result.workflow.nodeInspector.formats[1] }}</code>
-            </tr>
-            <tr nodeinspector-common-table-node [title]="l10nphrase.result.workflow.nodeInspector.version"
-                [valueToCopy]="nodeItem.major + '.' + nodeItem.minor">
-                <code>{{nodeItem.major}}.{{nodeItem.minor}}</code>
-            </tr>
-            <tr nodeinspector-common-table-node [title]="l10nphrase.result.workflow.nodeInspector.lockedByUser"
-                [valueToCopy]="nodeItem.lockedByUser || undefined">
-                <code>{{nodeItem.lockedByUser}}</code>
-            </tr>
-            <tr nodeinspector-common-table-node [title]="l10nphrase.result.workflow.nodeInspector.modified"
-                [valueToCopy]="nodeItem.modifiedTime || undefined">
-                <code>{{nodeItem.modifiedTime}}</code>
-            </tr> -->
-            <tr nodeinspector-common-table-node [title]="l10nphrase.result.workflow.nodeInspector.uuid"
-                [valueToCopy]="nodeItem.uuid">
-                @if (searchResult.search.filter.includeUuids) {
-                <code [innerHTML]="nodeItem.uuid | highlight: searchResult.search.phrase"></code>
-                }
-                @else {
-                <code>{{nodeItem.uuid}}</code>
-                }
-            </tr>
         </tbody>
     </table>
 </div>
