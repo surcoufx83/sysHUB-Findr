@@ -1,4 +1,6 @@
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { L10nService } from 'src/app/svc/i10n.service';
@@ -15,7 +17,13 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   title: string = 'sysHUB Findr';
   isLoggedIn?: boolean;
+  loginBusy: boolean = false;
   subs: Subscription[] = [];
+
+  inputs = new FormGroup({
+    username: new FormControl(null, { validators: [Validators.required] }),
+    password: new FormControl(null, { validators: [Validators.required] }),
+  });
 
   constructor(
     private restapi: RestService,
@@ -38,10 +46,40 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subs.push(this.restapi.isLoggedIn.subscribe((v) => {
-      console.log(v);
       if (v)
         this.router.navigate(['/']);
     }));
+  }
+
+  onSubmitForm(): void {
+    if (this.loginBusy)
+      return;
+    if (!this.inputs.valid) {
+      this.toastService.addDangerToast({
+        message: this.l10nphrase.login.inputInvalidToast
+      });
+    }
+    this.loginBusy = true;
+    this.restapi.login(this.inputs.controls.username.value!, this.inputs.controls.password.value!).subscribe((reply) => {
+      if (reply === true || reply === null)
+        return;
+      if (reply instanceof HttpErrorResponse) {
+        switch (reply.status) {
+          case 0:
+            this.toastService.addDangerToast({
+              message: this.l10nphrase.login.inputServerNotAvailableToast
+            });
+            break;
+          case HttpStatusCode.Forbidden:
+          default:
+            this.toastService.addDangerToast({
+              message: this.l10nphrase.login.inputCredentialsToast
+            });
+            break;
+        }
+      }
+      this.loginBusy = false;
+    });
   }
 
 }

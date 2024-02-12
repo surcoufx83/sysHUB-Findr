@@ -1,113 +1,85 @@
-import { FlatTreeControl } from '@angular/cdk/tree';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-//import { MatTreeFlattener, MatTreeFlatDataSource } from '@angular/material/tree';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
-import { SearchResult, SyshubParameterset } from 'src/app/types';
+import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
+import { SearchResult } from 'src/app/types';
+import { SyshubPSetItem } from 'syshub-rest-module';
 
 @Component({
   selector: 'app-result-parameterset',
   templateUrl: './parameterset.component.html',
-  styleUrls: ['./parameterset.component.scss']
+  styleUrl: './parameterset.component.scss'
 })
-export class ResultParametersetComponent implements OnInit, OnDestroy {
+export class ParametersetComponent implements OnDestroy, OnInit {
 
-  @Input() searchPhrase!: string;
-  @Input() searchResult!: SearchResult;
-  @Input() parametersetItems: { [key: string]: number } = {};
-  @Input() parametersetItemSorter: SyshubParameterset[] = [];
-  @Output() appcopy: EventEmitter<string> = new EventEmitter<string>();
-  parametersetTree: SyshubParameterset[] = [];
-  parametersetItemsExpanded: string[] = [];
-  activeNode: FlatparametersetTreeNode | null = null;
-  pinned: boolean = false;
-  subscription?: Subscription;
+  fullPsetTree: SyshubPSetItem[] = [];
+  psetTreeKeys: string[] = [];
+  psetUuids: { [key: string]: [path: string, defaultOpen: boolean, open: boolean] } = {};
+  @Input({ required: true }) psetByTree: { [key: string]: SyshubPSetItem[] } = {};
+  @Input({ required: true }) searchResult!: SearchResult;
 
-  private _transformer = (node: SyshubParameterset, level: number) => {
-    return {
-      expandable: !!node.children && node.children.length > 0,
-      hasMatch: (this.parametersetItems[node.uuid] != undefined),
-      childHasMatch: (this.parametersetItemsExpanded.indexOf(node.uuid) != -1),
-      obj: node,
-      uuid: node.uuid,
-      level: level,
-    };
-  };
+  subs: Subscription[] = [];
 
-  copyToClipboard(content: string): void {
-    this.appcopy.emit(content);
+  constructor(private l10nService: L10nService,
+    private cacheService: CacheService,) { }
+
+  getIcon(type: string, value: any = null) {
+    return this.cacheService.getIcon(type, value);
   }
 
-  treeControl = new FlatTreeControl<FlatparametersetTreeNode>(
-    node => node.level,
-    node => node.expandable,
-  );
-
-  /* treeFlattener = new MatTreeFlattener(
-    this._transformer,
-    node => node.level,
-    node => node.expandable,
-    node => node.children,
-  ); */
-
-  //dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
-
-  constructor(private i10nService: L10nService,
-    private cacheService: CacheService) {
-    //this.dataSource.data = [];
+  getPsetItemByUuid(uuid: string): SyshubPSetItem | null {
+    return this.cacheService.getPsetItemByUuid(uuid);
   }
 
-  getIcon(type: string, value: any = null, fallback: string = 'folder'): string {
-    return this.cacheService.getIcon(type, value, fallback);
+  getPsetTree(uuid: string | null, includeUuids: boolean = false): string {
+    return this.cacheService.getPsetTree(uuid, includeUuids);
   }
 
-  hasChild = (_: number, node: FlatparametersetTreeNode) => node.expandable;
+  get l10nphrase(): L10nLocale {
+    return this.l10nService.locale;
+  }
 
   l10n(phrase: string, params: any[] = []) {
-    return this.i10nService.ln(phrase, params);
+    return this.l10nService.ln(phrase, params);
+  }
+
+  private matchTree(tree: string): boolean {
+    for (let i = 0; i < this.psetTreeKeys.length; i++) {
+      if (this.psetTreeKeys[i].indexOf(tree) === 0)
+        return true;
+    }
+    return false;
   }
 
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-      this.subscription = undefined;
-    }
+    this.subs.forEach((s) => s.unsubscribe());
+    this.subs = [];
   }
 
   ngOnInit(): void {
-    this.subscription = this.cacheService.parameterset.subscribe((parameterset) => {
-      this.parametersetItemsExpanded = [];
-      this.parametersetTree = parameterset;
-      parameterset.forEach((parametersetitem) => this.ngOnInitLoopItems(parametersetitem));
-      //this.dataSource.data = parameterset;
-      this.treeControl.dataNodes.forEach((node) => {
-        if (this.parametersetItemsExpanded.indexOf(node.uuid) != -1)
-          this.treeControl.expand(node);
-      });
-    });
+    this.subs.push(this.cacheService.Parameterset.subscribe((psettree) => {
+      if (JSON.stringify(psettree) === JSON.stringify(this.fullPsetTree) && Object.keys(this.psetUuids).length > 0)
+        return;
+      let psetTreeKeys: string[] = [];
+      let temppaths: { [key: string]: [path: string, defaultOpen: boolean, open: boolean] } = {};
+      Object.keys(this.psetByTree).forEach((key) => {
+        this.psetByTree[key].forEach((item) => psetTreeKeys.push(this.getPsetTree(item.uuid, true)));
+      })
+      this.psetTreeKeys = [...psetTreeKeys];
+      this.ngOnInit_loopTree(temppaths, psettree);
+      this.fullPsetTree = [...psettree];
+      this.psetUuids = { ...temppaths };
+    }));
   }
 
-  ngOnInitLoopItems(parametersetitem: SyshubParameterset): void {
-    if (this.parametersetItems[parametersetitem.uuid] != undefined && this.parametersetItemsExpanded.indexOf(parametersetitem.uuid) == -1) {
-      this.ngOnInitLoopItemsExpand(parametersetitem);
-    }
-    parametersetitem.children.forEach((childitem) => this.ngOnInitLoopItems(childitem));
+  ngOnInit_loopTree(temppaths: { [key: string]: [path: string, defaultOpen: boolean, open: boolean] }, children: SyshubPSetItem[]) {
+    children.forEach((item) => {
+      const tree = this.getPsetTree(item.uuid, true);
+      const match = this.matchTree(tree);
+      temppaths[item.uuid] = [tree, match, match];
+      this.ngOnInit_loopTree(temppaths, item.children);
+    })
   }
 
-  ngOnInitLoopItemsExpand(parametersetitem: SyshubParameterset): void {
-    this.parametersetItemsExpanded.push(parametersetitem.uuid);
-    if (parametersetitem.parentRef != undefined)
-      this.ngOnInitLoopItemsExpand(parametersetitem.parentRef);
-  }
-
-}
-
-interface FlatparametersetTreeNode {
-  expandable: boolean;
-  hasMatch: boolean;
-  childHasMatch: boolean;
-  obj: SyshubParameterset;
-  uuid: string;
-  level: number;
 }

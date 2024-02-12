@@ -1,0 +1,96 @@
+<div class="workflow-container">
+    <div class="overflow-visible " (mousemove)="onMouseMoveOverSvg($event)" (mouseleave)="onMouseLeaveSvg()">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink"
+            xmlns:svgjs="http://svgjs.dev/svgjs" width="2200" height="2200" #workflowSvgContainer
+            class="absolute workflow">
+            <defs>
+                <pattern x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse" id="background-pattern">
+                    <rect width="10" height="10" fill="transparent" stroke="rgba(0, 0, 0, .1)"></rect>
+                </pattern>
+                <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4"
+                    orient="auto-start-reverse" stroke="#444" fill="#444" stroke-width="1">
+                    <path d="M 0 0 L 10 5 L 0 10 z" />
+                </marker>
+                <marker id="arrowred" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="3" markerHeight="3"
+                    orient="auto-start-reverse" stroke="red" fill="red" stroke-width="1">
+                    <path d="M 0 0 L 10 5 L 0 10 z" />
+                </marker>
+            </defs>
+            <rect width="100%" height="100%" fill="url(&quot;#background-pattern&quot;)"></rect>
+            @for (point of ruler; track $index) {
+            <g>
+                <text class="ruler" [attr.x]="point" y="8" dominant-baseline="bottom" text-anchor="middle"> {{ point }}
+                </text>
+                <text class="ruler" x="8" [attr.y]="point" dominant-baseline="bottom" text-anchor="middle"
+                    [attr.transform]="'rotate(-90 8,' + point + ')'"> {{ point }} </text>
+            </g>
+            }
+            @for (node of nodes; track $index) {
+            <g class="element-group" [id]="node.uuid" [ngStyle]="{'z-index': node.z}">
+                @if (node.image != '') {
+                <image [attr.width]="node.imagewidth" [attr.height]="node.imageheight"
+                    [attr.x]="node.x + (node.width / 2) - (node.imagewidth / 2)" [attr.y]="node.y + 2"
+                    [attr.xlink:href]="'assets/syshub/' + node.image + '.png'"
+                    (mousemove)="onMouseOverElement(node.uuid, $event)" (mouseleave)="onMouseLeaveElement()"
+                    (click)="hovernodePinned = !hovernodePinned; onMouseLeaveElement()" />
+                }
+                @if(node.isAnnotation) {
+                <rect [attr.width]="node.width" [attr.height]="node.height" [attr.x]="node.x" [attr.y]="node.y" rx="1"
+                    ry="1" class="annotation-box resize-to-parent" [attr.fill]="node.annotationBgColor"></rect>
+                }
+                @if (!node.isAnnotation && node.title != '') {
+                <text class="proc-title" [attr.x]="node.x + (node.width / 2)" [attr.y]="node.y + node.imageheight + 16"
+                    text-anchor="middle">{{ node.title }}</text>
+                }
+                @if (!node.isAnnotation && node.description && node.description.indexOf('+') === 0) {
+                <text class="proc-description" [attr.x]="node.x + (node.width / 2)"
+                    [attr.y]="node.y + node.imageheight + 32" text-anchor="middle">{{
+                    node.description.substring(1).trim() }}</text>
+                }
+                @if(hasOwnProperty(node.modeldata, 'loopName')) {
+                <text class="proc-loop-name" [attr.x]="node.x - (node.width / 2) + 18" [attr.y]="node.y + 12"
+                    text-anchor="end" dominant-baseline="hanging">{{ $any(node.modeldata).loopName.trim() }}</text>
+                }
+                @if (node.isAnnotation && node.annotationText.length > 0) {
+                <text class="proc-title" [attr.width]="node.width > 0 ? node.width - 6 : undefined"
+                    [attr.height]="node.height > 0 ? node.height - 6 : undefined" [attr.x]="node.x + 3"
+                    [attr.y]="node.y + 16">
+                    @for(item of node.annotationText; track $index) {
+                    <tspan [attr.x]="item.x != undefined ? node.x + 3 + item.x : undefined" [attr.dx]="item.dx"
+                        [attr.dy]="item.dy" [attr.fill]="node.annotationTextColor">{{ item.text }}</tspan>
+                    }
+                </text>
+                }
+                <rect [attr.width]="node.width" [attr.height]="node.height" [attr.x]="node.x" [attr.y]="node.y" rx="5"
+                    ry="5" [ngClass]="{'proc-box': true, 'resize-to-parent': true, 'has-match': node.hasMatch}">
+                </rect>
+            </g>
+            }
+            <g class="workflow-paths">
+                @for (connection of graphModel.linkDataArray; track connection; let i = $index) {
+                <path [attr.i]="i" [attr.marker-end]="hoverpath == i ? 'url(#arrowred)' : 'url(#arrow)'"
+                    (mousemove)="hoverpath = i" (mouseleave)="hoverpath = undefined"></path>
+                }
+            </g>
+            <g class="connector-notes">
+                @for (item of connectorTitles; track $index) {
+                <text class="proc-description connector-description" [attr.x]="item.x" [attr.y]="item.y"
+                    dominant-baseline="bottom" text-anchor="middle">{{ item.text }}</text>
+                }
+            </g>
+            <g>
+                <rect width="3" height="8" [attr.x]="svgCursor.x - 1" y="0"
+                    [ngClass]="{'cursor': true, 'invisible': svgCursor.x < 1 || svgCursor.y < 1}"></rect>
+                <rect width="8" height="3" [attr.y]="svgCursor.y - 1" x="0"
+                    [ngClass]="{'cursor': true, 'invisible': svgCursor.x < 1 || svgCursor.y < 1}"></rect>
+                <text x="2" y="8" [ngClass]="{'ruler': true, 'invisible': svgCursor.x < 1 || svgCursor.y < 1}">{{
+                    svgCursor.x }}, {{ svgCursor.y }}</text>
+            </g>
+        </svg>
+    </div>
+</div>
+
+<app-workflow-ui-tooltip [node]="hovernode" [searchResult]="searchResult" [tooltipLocation]="tooltipLocation"
+    [tooltipLeft]="tooltipLeft" [tooltipPinned]="hovernodePinned"
+    (onUnpinTooltip)="hovernodePinned = !hovernodePinned; onMouseLeaveElement()">
+</app-workflow-ui-tooltip>

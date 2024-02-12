@@ -1,0 +1,106 @@
+<div class="workflow-tooltip w-full md:w-auto" [ngStyle]="{ 
+    top: tooltipLocation.y + 'px', 
+    left: tooltipLeft ? tooltipLocation.x + 'px' :  undefined, 
+    right: !tooltipLeft ? tooltipLocation.x + 'px' :  undefined, 
+    maxWidth: '600px' }" *ngIf="node">
+    <div class="p-3">
+        <!-- <mat-card class="p-1">
+            <mat-card-header class="w-full">
+                <mat-card-title class="!flex justify-between items-start">
+                    <div class="grow">
+                        <span class="mr-1">
+                            <mat-icon class="align-middle" *ngIf="node.modeldata.category == 'celement'">
+                                developer_board</mat-icon>
+                            <mat-icon class="align-middle" *ngIf="node.modeldata.category == 'decision'">
+                                help
+                            </mat-icon>
+                            <mat-icon class="align-middle" *ngIf="node.modeldata.category == 'end'">
+                                stop_circle
+                            </mat-icon>
+                            <mat-icon class="align-middle" *ngIf="node.modeldata.category == 'process'">
+                                offline_bolt
+                            </mat-icon>
+                            <mat-icon class="align-middle" *ngIf="node.modeldata.category == 'start'">
+                                play_circle
+                            </mat-icon>
+                            <mat-icon class="align-middle" *ngIf="node.modeldata.category == 'workflow'">
+                                change_circle
+                            </mat-icon>
+                        </span>
+                        <span [innerHTML]="node.title | highlight:searchPhrase"></span>
+                    </div>
+                    <div class="w-6 h-6">
+                        <button mat-mini-fab [color]="tooltipPinned ? 'primary' : ''" (click)="onPinClicked()">
+                            <mat-icon class="transition-all"
+                                [style]="tooltipPinned ? 'transform: rotate(5deg) translateY(8px)' : 'transform: rotate(45deg)'">
+                                push_pin</mat-icon>
+                        </button>
+                    </div>
+                </mat-card-title>
+                <mat-card-subtitle *ngIf="node.description">
+                    <span [innerHTML]="node.description | highlight:searchPhrase"></span>
+                </mat-card-subtitle>
+            </mat-card-header>
+            <mat-divider inset *ngIf="node.modeldata.parameter && node.modeldata.parameter.length > 0">
+            </mat-divider>
+            <mat-card-content *ngIf="node.modeldata.parameter && node.modeldata.parameter.length > 0" class="!mb-0">
+                <table class="table">
+                    <tbody>
+                        <tr *ngIf="node.modeldata.category == 'process'">
+                            <td class="font-bold" colspan="2">{{ l10n('workflowgui.parameter') }}</td>
+                        </tr>
+                        <tr *ngFor="let keyvaluepair of node.modeldata.parameter">
+                            <th class="text-left w-1/5" [innerHTML]="keyvaluepair.name | highlight:searchPhrase"></th>
+                            <td class="break-all" [innerHTML]="keyvaluepair.value | highlight:searchPhrase">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </mat-card-content>
+            <mat-divider inset *ngIf="node.modeldata.parameterSetPath || node.modeldata.parameterSetUuid">
+            </mat-divider>
+            <mat-card-content *ngIf="node.modeldata.parameterSetPath || node.modeldata.parameterSetUuid" class="!mb-0">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td class="font-bold" colspan="2">{{ l10n('workflowgui.dynamicParameter') }}</td>
+                        </tr>
+                        <tr *ngIf="node.modeldata.parameterSetPath">
+                            <th class="text-left w-1/5">{{ l10n('workflowgui.parameterset') }}</th>
+                            <td class="break-all"
+                                [innerHTML]="node.modeldata.parameterSetPath | highlight:searchPhrase">
+                            </td>
+                        </tr>
+                        <tr
+                            *ngIf="!node.modeldata.parameterSetPath && (node.modeldata.parameterSetUuid && getParametersetItem(node.modeldata.parameterSetUuid) != null)">
+                            <th class="text-left w-1/5">{{ l10n('workflowgui.parameterset') }}</th>
+                            <td class="break-all"
+                                [innerHTML]="getParametersetItem(node.modeldata.parameterSetUuid)!.path2copy | highlight:searchPhrase">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </mat-card-content>
+            <mat-divider inset *ngIf="node.modeldata.category == 'process'">
+            </mat-divider>
+            <mat-card-content class="!mb-0" *ngIf="node.modeldata.category == 'process'">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th class="text-left w-1/5">{{ l10n('workflowgui.category') }}</th>
+                            <td class="break-all">{{ node.modeldata.categoryName }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-left w-1/5">{{ l10n('workflowgui.type') }}</th>
+                            <td class="break-all">{{ node.modeldata.type }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-left w-1/5">{{ l10n('workflowgui.command') }}</th>
+                            <td class="break-all">{{ node.modeldata.command }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </mat-card-content>
+        </mat-card> -->
+    </div>
+</div>

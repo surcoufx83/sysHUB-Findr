@@ -1,0 +1,11 @@
+@if (loaded && workflow && model && references && startpoints && versions && workflowUuid) {
+<article class="container-fluid">
+    <section>
+        <h1>{{ l10n(l10nphrase.workflowUi.title, [workflow.name]) }}</h1>
+    </section>
+    <div style="margin-left: -24px;">
+        <app-workflow-ui-canvas [graphModel]="model" [searchResult]="searchResult"
+            [workflow]="workflow"></app-workflow-ui-canvas>
+    </div>
+</article>
+}

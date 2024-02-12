@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Router, Event as NavigationEvent, NavigationEnd } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { NavigationEnd, Event as NavigationEvent, Router } from '@angular/router';
+import { DeviceDetectorService } from 'ngx-device-detector';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { SyshubCertStoreItem, SyshubConfigItem, SyshubIppDevice, SyshubJobType, SyshubPSetItem, SyshubUserAccount, SyshubWorkflow } from 'syshub-rest-module';
 import { L10nService } from './i10n.service';
 
 @Injectable({
@@ -8,18 +10,31 @@ import { L10nService } from './i10n.service';
 })
 export class PagepropsService {
 
+  private appTheme$: BehaviorSubject<'light' | 'dark' | 'auto' | null> = new BehaviorSubject<'light' | 'dark' | 'auto' | null>(null);
+  public AppTheme = this.appTheme$.asObservable();
+
+  private deviceType$: 'mobile' | 'tablet' | 'desktop' = 'desktop';
+
+  private nodeInspectorItem$ = new Subject<{ type: string, node: SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubIppDevice | SyshubWorkflow | SyshubCertStoreItem }>();
+  public NodeInspectorItem = this.nodeInspectorItem$.asObservable();
+
   private pages: PageTitleItem[] = [
     { pattern: new RegExp(/^\/$/), text: 'sysHUB Findr' },
     { pattern: new RegExp(/^\/result/), i10n: 'app.titles.resultView' },
     { pattern: new RegExp(/^\/search$/), i10n: 'app.titles.searchOngoing' },
   ];
   private _pagetitle: BehaviorSubject<string> = new BehaviorSubject<string>('sysHUB Findr');
-  public pagetitle: Observable<string> = this._pagetitle.asObservable();
+  public pagetitle = this._pagetitle.asObservable();
 
-  constructor(private i10nService: L10nService, private router: Router) {
+  constructor(
+    private i10nService: L10nService,
+    private router: Router,
+    device: DeviceDetectorService,
+  ) {
 
-    const deviceMode = window.matchMedia("(prefers-color-scheme: dark)");
-    document.body.setAttribute('data-bs-theme', deviceMode.matches ? 'dark' : 'light');
+    this.deviceType$ = device.isDesktop() ? 'desktop' : device.isMobile() ? 'mobile' : 'tablet';
+
+    this.loadDefaultTheme();
 
     this.router.events.subscribe(
       (event: NavigationEvent) => {
@@ -56,8 +71,38 @@ export class PagepropsService {
     );
   }
 
+  public applyTheme(theme: 'light' | 'dark' | null): void {
+    if (theme == null) {
+      const deviceMode = window.matchMedia("(prefers-color-scheme: dark)");
+      document.body.setAttribute('data-bs-theme', deviceMode.matches ? 'dark' : 'light');
+      this.appTheme$.next('auto');
+      localStorage.removeItem(`findr-syshub-theme`);
+      return;
+    }
+    document.body.setAttribute('data-bs-theme', theme);
+    this.appTheme$.next(theme);
+    localStorage.setItem(`findr-syshub-theme`, theme);
+  }
+
+  public get DeviceType(): 'mobile' | 'tablet' | 'desktop' {
+    return this.deviceType$;
+  }
+
+  public inspect(type: string, node: SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubIppDevice | SyshubWorkflow | SyshubCertStoreItem): void {
+    this.nodeInspectorItem$.next({ type: type, node: node });
+  }
+
   l10n(phrase: string, params: any[] = []) {
     return this.i10nService.ln(phrase, params);
+  }
+
+  private loadDefaultTheme(): void {
+    const storemode: string | null = localStorage.getItem(`findr-syshub-theme`);
+    if (storemode == null || storemode === 'dark' || storemode === 'light') {
+      this.applyTheme(storemode);
+      return;
+    }
+    this.applyTheme(null);
   }
 
 }

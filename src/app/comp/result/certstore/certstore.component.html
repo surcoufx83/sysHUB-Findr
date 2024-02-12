@@ -1,0 +1,29 @@
+<p>{{l10nphrase.result.certStoreItem.subtitle}}</p>
+
+<table class="table table-sm table-hover" style="table-layout: fixed;">
+    <tbody>
+        @for (item of certstore.keystore; track $index) {
+        <tr>
+            <td [ngClass]="{ 'cursor-pointer': true, 'text-success': itemsMatched.keystore.includes(item.certX509SubjectDN)}"
+                (click)="selectNode(item)">
+                <div class="text-truncate">
+                    <i class="bi bi-key-fill me-2"
+                        [title]="l10nphrase.result.certStoreItem.nodeInspector.subject[0]"></i>
+                    <span [innerHTML]="item.certX509SubjectDN | highlight: searchResult.search.phrase"></span>
+                </div>
+            </td>
+        </tr>
+        }
+        @for (item of certstore.truststore; track $index) {
+        <tr>
+            <td [ngClass]="{ 'cursor-pointer': true, 'text-success': itemsMatched.truststore.includes(item.certX509SubjectDN)}"
+                (click)="selectNode(item)">
+                <div class="text-truncate">
+                    <i class="bi bi-award me-2" [title]="l10nphrase.result.certStoreItem.nodeInspector.subject[1]"></i>
+                    <span [innerHTML]="item.certX509SubjectDN | highlight: searchResult.search.phrase"></span>
+                </div>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

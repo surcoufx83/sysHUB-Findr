@@ -1,0 +1,124 @@
+<article class="container" *ngIf="currentLocale === 'de'">
+    <section>
+        <h1>Hilfe</h1>
+        <p>
+            sysHUBFindr richtet sich vorrangig an Entwickler eines sysHUB Servers. Viele der in diesem Tool verwendeten
+            Begriffe setzen ein grundlegendes Verständnis des Servers voraus. Diese Hilfeseite versucht die wichtigsten
+            Funktionen zu erklären.
+        </p>
+    </section>
+    <section>
+        <h2>Allgemeine Benutztungshinweise</h2>
+        <p>
+            <img src="/assets/help/sec1-navbar-left.png"
+                alt="Screenshot der Navigationsleiste links oben, mit den Verknüpfungen zur Startseite und den Statistiken"
+                class="float-end ms-3 border shadow-sm">
+            Im oberen Bereich der Webseite befindet sich die Navigationsleiste. Dort finden sich auf der linke Seite
+            Verknüpfungen zur Startseite und zu einer Statistik-Seite. Von der Startseite aus kann auch die Suche
+            gestartet werden.
+        </p>
+        <br clear="all" />
+        <p>
+            <img src="/assets/help/sec1-navbar-right.png"
+                alt="Screenshot der Navigationsleiste rechts oben, mit der Suchleiste und dem Dropdown für weitere Optionen"
+                class="float-end ms-3 border shadow-sm">
+            Auf der rechten Seite der Navigationsleiste befinden sich zum einen die Suchleiste mit einem
+            Optionen-Dropdown und dem Button zum Starten der Suche. Das Optionen-Dropdown ermöglicht die Angabe, in
+            welchen Bereichen eines sysHUB-Servers überhaupt gesucht werden soll.
+            <br />
+            Ganz rechts befindet sich ein sogenanntes Burger-Menü, das Symbol mit den drei Streifen. Dieses Menü öffnet
+            weitere Optionen, unter anderem um zu dieser Hilfeseite zu gelangen.
+        </p>
+        <ul>
+            <li>
+                <i>Cache leeren:</i> Findr speichert viele Daten aus dem sysHUB im Browser zwischen. Damit müssen viel
+                weniger Daten nach einer erfolgten Suche neu heruntergeladen werden und das Ergebniss kann schneller
+                angezeigt werden.
+            </li>
+            <li>
+                <i>Deutsch/Englisch:</i> Ändert die Anzeigesprache des Findr. Sämtliche Elemente aus dem sysHUB (z.B.
+                Workflownamen) werden nicht übersetzt.
+            </li>
+            <li>
+                <i>Hilfe:</i> Öffnet diese Hilfe.
+            </li>
+            <li>
+                <i>Über:</i> Öffnet eine Seite mit weiteren Informationen, was Findr überhaupt ist und wo die
+                Weiterentwicklung stattfindet.
+            </li>
+            <li>
+                <i>Findr auf Github:</i> Öffnet einen neuen Browser-Tab zur Code-Plattform Github. Je nach Konfiguration
+                des Findr steht diese Option nicht zur Verfügung.
+            </li>
+            <li>
+                <i>sysHUB web client:</i> Startet den sysHUB web client in einem neuen Browser-Tab. Je nach
+                Konfiguration
+                des Findr steht diese Option nicht zur Verfügung.
+            </li>
+            <li>
+                <i>Abmelden:</i> Meldet Dich vom Server ab und beendet die Sitzung im Findr, du wirst dann auf die
+                Anmeldeseite zurückgeschickt. Je nach Konfiguration des Findr steht diese Option nicht zur Verfügung.
+            </li>
+        </ul>
+    </section>
+</article>
+
+<article class="container" *ngIf="currentLocale !== 'de'">
+    <section>
+        <h1>Help</h1>
+        <p>
+            sysHUB Findr is primarily targeted at developers of a sysHUB server. Many terms used in this tool presuppose
+            a basic understanding of the server. This help page aims to explain the key features.
+        </p>
+    </section>
+    <section>
+        <h2>General Usage Tips</h2>
+        <p>
+            <img src="/assets/help/sec1-navbar-left.png"
+                alt="Screenshot of the top left navigation bar, with links to the homepage and statistics"
+                class="float-end ms-3 border shadow-sm">
+            At the top of the webpage is the navigation bar. On the left side, you'll find links to the homepage and a
+            statistics page. The search function can also be initiated from the homepage.
+        </p>
+        <br clear="all" />
+        <p>
+            <img src="/assets/help/sec1-navbar-right.png"
+                alt="Screenshot of the top right navigation bar, with the search bar and dropdown for additional options"
+                class="float-end ms-3 border shadow-sm">
+            On the right side of the navigation bar are the search bar with an options dropdown and the button to start
+            the search. The options dropdown allows you to specify which areas of a sysHUB server to search in.
+            <br />
+            On the far right is a so-called burger menu, the icon with three stripes. This menu opens additional
+            options, including access to this help page.
+        </p>
+        <ul>
+            <li>
+                <i>Clear cache:</i> Findr stores many sysHUB data in the browser. This reduces the amount of data that
+                needs to be re-downloaded after a search, allowing faster display of results.
+            </li>
+            <li>
+                <i>German/English:</i> Changes the display language of Findr. All sysHUB elements (e.g., workflow names)
+                remain untranslated.
+            </li>
+            <li>
+                <i>Help:</i> Opens this help page.
+            </li>
+            <li>
+                <i>About:</i> Opens a page with more information about what Findr is and where its development takes
+                place.
+            </li>
+            <li>
+                <i>Findr on Github:</i> Opens a new browser tab to the code platform Github. This option may not be
+                available depending on the configuration of Findr.
+            </li>
+            <li>
+                <i>sysHUB web client:</i> Launches the sysHUB web client in a new browser tab. This option may not be
+                available depending on the configuration of Findr.
+            </li>
+            <li>
+                <i>Logout:</i> Logs you out of the server and ends your session in Findr, redirecting you to the login
+                page. This option may not be available depending on the configuration of Findr.
+            </li>
+        </ul>
+    </section>
+</article>

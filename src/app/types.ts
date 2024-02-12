@@ -1,150 +1,104 @@
+import { Env, SyshubCategory, SyshubCertStoreItem, SyshubIppDevice, SyshubRole, SyshubServerInformation, SyshubUserAccount } from "syshub-rest-module";
 
-export interface SyshubCategory {
-    description: string;
-    modifiedby: string | null;
-    modifiedtime: number;
-    name: string;
-    uuid: string;
+export type FindrEnvironment = {
+    api: Env,
+    app?: {
+        baseUrl?: string,
+        promotionLink?: string,
+        minPhraseLength?: number,
+        useCache?: boolean,
+        webclientLink?: string,
+    },
+    i10n?: {
+        fallback?: 'de' | 'en',
+        locales?: string[],
+    },
+    storage?: {
+        categoriesKey?: string,
+        configKey?: string,
+        jobtypesKey?: string,
+        l10nKey?: string,
+        parametersetKey?: string,
+        searchconfigKey?: string,
+        tokenKey?: string,
+        userconfigKey?: string,
+        userdataKey?: string,
+        workflowsKey?: string,
+    },
 }
 
-export interface RestApiCategoryListReply {
-    children: SyshubCategory[];
+export type SearchConfig = {
+    phrase: string,
+    token: string,
+    topics: {
+        config: boolean,
+        jobtypes: boolean,
+        parameterset: boolean,
+        workflows: boolean,
+        system: {
+            certstore: boolean,
+            serverConfig: boolean,
+            serverInfo: boolean,
+            ippDevices: boolean,
+            users: boolean,
+            userRoles: boolean,
+        }
+    },
+    filter: {
+        categoryFilter: SyshubCategory | null,
+        excludeBComments: boolean,
+        includeUuids: boolean,
+        searchWorkflowContent: boolean,
+    },
+    options: {},
 }
 
-export interface SearchConfig {
-    phrase: string;
-    token: string;
-    topics: SearchConfigTopics;
-    filter: SearchConfigFilter;
-    options: SearchConfigOptions;
+export type SearchResult = {
+    search: SearchConfig,
+    result?: SearchResultUuids,
 }
 
-export interface SearchConfigFilter {
-    categoryFilter: SyshubCategory | null;
-    excludeBComments: boolean;
-    includeUuids: boolean;
-    searchWorkflowContent: boolean;
+export type SearchResultCertStoreContent = {
+    keystore: SyshubCertStoreItem[],
+    truststore: SyshubCertStoreItem[],
 }
 
-export interface SearchConfigOptions {
+export type SearchResultUuids = {
+    result: {};
+    config: UuidModifiedObject[],
+    jobtypes: UuidModifiedObject[],
+    parameterset: UuidModifiedObject[],
+    workflows: UuidModifiedObject[],
+    system?: {
+        certstore?: { matches: number, content: SearchResultCertStoreContent } | null | false,
+        serverConfig?: { matches: number, content: { [key: string]: string } } | null | false,
+        serverInfo?: { matches: number, content: SyshubServerInformation } | null | false,
+        ippDevices?: { matches: number, content: SyshubIppDevice[] } | null | false,
+        users?: { matches: number, content: SyshubUserAccount[] } | null | false,
+        roles?: { matches: number, content: SyshubRole[] } | null | false,
+    }
 }
 
-export interface SearchConfigTopics {
-    config: boolean;
-    jobtypes: boolean;
-    parameterset: boolean;
-    workflows: boolean;
+export type SimpleKeyValue = {
+    key: string,
+    value: any
 }
 
-export interface SearchResult {
-    search: SearchConfig;
-    result?: SearchResultUuids;
+export type UuidModifiedObject = {
+    uuid: string,
+    modifiedtime: string,
 }
 
-export interface SearchResultUuids {
-    config: UuidModifiedObject[];
-    jobtypes: UuidModifiedObject[];
-    parameterset: UuidModifiedObject[];
-    workflows: UuidModifiedObject[];
+export type UserConfig = {
+    enableCache: boolean,
+    showMoreFilter?: boolean,
+    hideJobtypePercentItems?: boolean,
+    hideUnassignedRoles?: boolean,
 }
 
-export interface SyshubConfig {
-    children: SyshubConfig[];
-    description: string | null;
-    modifiedtime: string;
-    name: string;
-    parent: string|null;
-    parentRef?: SyshubConfig;
-    path: string;
-    path2copy: string;
-    type: string
-    uuid: string;
-    value: string;
-}
-
-export interface SyshubJobtype {
-    category: SyshubCategory | null;
-    description: string | null;
-    name: string;
-    settings: SyshubJobtypeSettings;
-    uuid: string;
-}
-
-export interface RestApiJobtypeListReply {
-    children: SyshubJobtype[];
-}
-
-export interface SyshubJobtypeSettings {
-    classifiedworkflowuuid: SyshubValueItem;
-    datatype: SyshubValueItem;
-    deldays: SyshubValueItem;
-    initialtextstatus: SyshubValueItem;
-    inputchannel: SyshubValueItem;
-    priority: SyshubValueItem;
-    PropChildren?: SyshubNameValueItem[];
-    senderhost: SyshubValueItem;
-    sourcefile: SyshubValueItem;
-    starttype: SyshubValueItem;
-    textstatus: SyshubValueItem;
-    ticketfile: SyshubValueItem;
-    title: SyshubValueItem;
-    userkey: SyshubValueItem;
-    username: SyshubValueItem;
-    workflowuuid: SyshubValueItem;
-    xid: SyshubValueItem;
-}
-
-export interface SyshubNameValueItem {
-    name: string;
-    value: string;
-}
-
-export interface SyshubValueItem {
-    value: string | number | null;
-}
-
-export interface SyshubParameterset {
-    children: SyshubParameterset[];
-    description: string | null;
-    modifiedtime: string;
-    name: string;
-    parent: string | null;
-    parentRef?: SyshubParameterset;
-    path: string;
-    path2copy: string;
-    type: string
-    uuid: string;
-    value: string;
-}
-
-export interface SyshubWorkflow {
-    activatedBy: string;
-    activatedTime: string;
-    cacheable: string;
-    categoryName: string;
-    description: string;
-    flag: string;
-    format: string;
-    lockedByUser: string;
-    major: string;
-    majorBase: string;
-    minor: string;
-    minorBase: string;
-    modifiedBy: string;
-    modifiedTime: string;
-    name: string;
-    uuid: string;
-}
-
-export interface UserConfig {
-    enableCache: boolean;
-}
-
-export interface UuidModifiedObject {
-    uuid: string;
-    modifiedtime: string;
-}
-
-export interface Workflow {
-
+export type UuidModifiedTypeObject = {
+    uuid: string,
+    modifiedtime: number | string | null,
+    path?: string,
+    type: 'SyshubCategory' | 'SyshubConfigItem' | 'SyshubJobType' | 'SyshubPSetItem' | 'SyshubWorkflow',
 }

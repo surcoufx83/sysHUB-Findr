@@ -1,0 +1,6 @@
+<div class="progress rounded-0 " role="progressbar" aria-label="Animated striped example"
+    [attr.aria-valuenow]="progressCurrent" aria-valuemin="0" aria-valuemax="100" style="height: 5px;">
+    <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary "
+        [ngStyle]="{ width: searchBusy ? progressRel : 0 }">
+    </div>
+</div>

@@ -1,0 +1,16 @@
+<p>{{l10nphrase.result.serverProperties.subtitle}}</p>
+
+<table class="table table-sm table-hover">
+    <tbody>
+        @for (item of serverProperties; track $index) {
+        <tr>
+            <td>
+                <strong [innerHTML]="item.key | highlight: searchResult.search.phrase"></strong>
+            </td>
+            <td>
+                <span [innerHTML]="item.value | highlight: searchResult.search.phrase"></span>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

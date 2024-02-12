@@ -1,0 +1,224 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            <a class="navbar-brand d-flex align-items-center" [routerLink]="['/']">
+                <img src="/assets/android-icon-36x36.png" style="width: 36px; height: 36px;">
+                <span class="ms-2 fs-3 d-none d-lg-inline">
+                    {{ l10nphrase.app.title }}
+                </span>
+            </a>
+            <ul class="navbar-nav d-none d-lg-flex">
+                <li class="nav-item">
+                    <a [ngClass]="{'nav-link': true, 'active': url === '/' || url === '/search'}"
+                        [routerLink]="['/']">{{
+                        l10nphrase.navbar.homeLink }}</a>
+                </li>
+                <li class="nav-item">
+                    <a [ngClass]="{'nav-link': true, 'active': url === '/stats'}" [routerLink]="['/stats']">{{
+                        l10nphrase.navbar.statsLink }}</a>
+                </li>
+                <li class="nav-item" *ngIf="url === '/about'">
+                    <a [ngClass]="{'nav-link': true, 'active': true}" [routerLink]="['/about']">{{
+                        l10nphrase.navbar.aboutLink }}</a>
+                </li>
+                <li class="nav-item" *ngIf="url === '/help'">
+                    <a [ngClass]="{'nav-link': true, 'active': true}" [routerLink]="['/help']">{{
+                        l10nphrase.navbar.helpLink }}</a>
+                </li>
+                <li class="nav-item" *ngIf="url.startsWith('/result')">
+                    <a [ngClass]="{'nav-link': true, 'active': true}" [routerLink]="url">{{
+                        l10nphrase.navbar.resultLink }}</a>
+                </li>
+            </ul>
+        </div>
+        <div class="d-flex align-items-center">
+            <form class="d-flex me-3 me-lg-4 me-xl-5" role="search" [formGroup]="searchForm"
+                (submit)="onSubmitSearch()">
+                <div class="input-group me-2">
+                    <input class="form-control search" type="search" [placeholder]="l10nphrase.navbar.searchPlaceholder"
+                        formControlName="phrase" name="navbar-search-phrase" id="navbar-search-phrase"
+                        [attr.aria-label]="l10nphrase.navbar.searchBtn" [attr.data-devicetype]="deviceType"
+                        autocomplete="off">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        data-bs-auto-close="outside" aria-expanded="false">
+                        <span class="d-inline d-lg-none"><i ngClass="bi bi-sliders"></i></span>
+                        <span class="d-none d-lg-inline">{{ l10nphrase.navbar.searchOptions }}</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li class="dropdown-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" formControlName="searchConfig"
+                                    id="navbar-search-config" name="navbar-search-config">
+                                <label class="form-check-label" for="navbar-search-config">
+                                    {{ l10nphrase.search.topics.config }}
+                                </label>
+                            </div>
+                        </li>
+                        <li class="dropdown-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" formControlName="searchJobtypes"
+                                    id="navbar-search-jobtypes" name="navbar-search-jobtypes">
+                                <label class="form-check-label" for="navbar-search-jobtypes">
+                                    {{ l10nphrase.search.topics.jobtypes }}
+                                </label>
+                            </div>
+                        </li>
+                        <li class="dropdown-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" formControlName="searchPSet"
+                                    id="navbar-search-parameterset" name="navbar-search-parameterset">
+                                <label class="form-check-label" for="navbar-search-parameterset">
+                                    {{ l10nphrase.search.topics.parameterset }}
+                                </label>
+                            </div>
+                        </li>
+                        <li class="dropdown-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" formControlName="searchWorkflows"
+                                    id="navbar-search-workflows" name="navbar-search-workflows">
+                                <label class="form-check-label" for="navbar-search-workflows">
+                                    {{ l10nphrase.search.topics.workflows }}
+                                </label>
+                            </div>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="dropdown-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" formControlName="searchCertstore"
+                                    id="navbar-search-certstore" name="navbar-search-certstore">
+                                <label class="form-check-label" for="navbar-search-certstore">
+                                    {{ l10nphrase.search.topics.certstore }}
+                                </label>
+                            </div>
+                        </li>
+                        <li class="dropdown-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" formControlName="searchServerConfig"
+                                    id="navbar-search-serverConfig" name="navbar-search-serverConfig">
+                                <label class="form-check-label" for="navbar-search-serverConfig">
+                                    {{ l10nphrase.search.topics.serverConfig }}
+                                </label>
+                            </div>
+                        </li>
+                        <li class="dropdown-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" formControlName="searchServerInfo"
+                                    id="navbar-search-serverInfo" name="navbar-search-serverInfo">
+                                <label class="form-check-label" for="navbar-search-serverInfo">
+                                    {{ l10nphrase.search.topics.serverInfo }}
+                                </label>
+                            </div>
+                        </li>
+                        <li class="dropdown-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" formControlName="searchIppDevices"
+                                    id="navbar-search-ippDevices" name="navbar-search-ippDevices">
+                                <label class="form-check-label" for="navbar-search-ippDevices">
+                                    {{ l10nphrase.search.topics.ippDevices }}
+                                </label>
+                            </div>
+                        </li>
+                        <li class="dropdown-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" formControlName="searchUsers"
+                                    id="navbar-search-users" name="navbar-search-users">
+                                <label class="form-check-label" for="navbar-search-users">
+                                    {{ l10nphrase.search.topics.users }}
+                                </label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <button class="btn btn-success text-nowrap" [disabled]="searchBusy" type="submit">
+                    <span class="d-inline d-lg-none"><i ngClass="bi bi-binoculars"></i></span>
+                    <span class="d-none d-lg-inline">{{ searchBusy ? l10nphrase.navbar.searchBtnBusy :
+                        l10nphrase.navbar.searchBtn }}</span>
+                </button>
+            </form>
+
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary border-0 dropdown-toggle hide-toggler" type="button"
+                    data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                    <i class="bi-list"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li class="dropdown-item cursor-pointer" (click)="onClearCache()">
+                        <i class="bi bi-arrow-repeat me-2"></i>
+                        {{ l10nphrase.navbar.clearCacheLink }}
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    @for(locale of locales; track $index) {
+                    <li class="dropdown-item cursor-pointer" (click)="onSwitchLocale(locale)">
+                        @if(locale !== currentLocale) {
+                        <span
+                            [ngClass]="[ 'fi', 'me-1', 'fi-' + (locale != 'en' ? locale : 'us').toLowerCase()]"></span>
+                        }
+                        @else {
+                        <i class="bi bi-check2-circle text-success me-2"></i>
+                        }
+                        {{ localesLocalized[locale] }}
+                    </li>
+                    }
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li class="dropdown-item cursor-pointer" (click)="applyTheme('light')">
+                        <i
+                            [ngClass]="{ 'bi me-2': true, 'bi-brightness-high-fill text-success': appTheme == 'light', 'bi-brightness-high': appTheme != 'light' }"></i>
+                        hell
+                    </li>
+                    <li class="dropdown-item cursor-pointer" (click)="applyTheme('dark')">
+                        <i
+                            [ngClass]="{ 'bi me-2': true, 'bi-moon-fill text-success': appTheme == 'dark', 'bi-moon': appTheme != 'dark' }"></i>
+                        dunkel
+                    </li>
+                    <li class="dropdown-item cursor-pointer" (click)="applyTheme(null)">
+                        <i
+                            [ngClass]="{ 'bi me-2': true, 'bi-circle-half text-success': appTheme == 'auto' || appTheme == null, 'bi-brightness-high':appTheme != 'auto' && appTheme != null }"></i>
+                        automatisch
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <a class="dropdown-item" [routerLink]="['/help']">
+                            <i class="bi bi-question-circle me-2"></i>
+                            {{ l10nphrase.navbar.helpLink }}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" [routerLink]="['/about']">
+                            <i class="bi bi-info-circle me-2"></i>
+                            {{ l10nphrase.navbar.aboutLink }}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" target="_blank" [href]="promolink" *ngIf="promolink">
+                            <i class="bi bi-git me-2"></i>
+                            {{ l10nphrase.navbar.promoLink }}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" target="_blank" [href]="webclientlink" *ngIf="webclientlink">
+                            <i class="bi bi-browser-edge me-2"></i>
+                            {{ l10nphrase.navbar.webclientLink }}
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <a class="dropdown-item" [routerLink]="['/logout']">
+                            <i class="bi bi-box-arrow-left me-2"></i>
+                            {{ l10nphrase.navbar.logoutLink }}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>

@@ -1,112 +1,86 @@
-import { FlatTreeControl } from '@angular/cdk/tree';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
-import { SearchResult, SyshubConfig } from 'src/app/types';
+import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
+import { SearchResult } from 'src/app/types';
+import { SyshubConfigItem } from 'syshub-rest-module';
 
 @Component({
   selector: 'app-result-config',
   templateUrl: './config.component.html',
-  styleUrls: ['./config.component.scss']
+  styleUrl: './config.component.scss'
 })
-export class ResultConfigComponent implements OnInit, OnDestroy {
+export class ConfigComponent implements OnDestroy, OnInit {
 
-  @Input() searchPhrase!: string;
-  @Input() searchResult!: SearchResult;
-  @Input() configItems: { [key: string]: number } = {};
-  @Input() configItemSorter: SyshubConfig[] = [];
-  @Output() appcopy: EventEmitter<string> = new EventEmitter<string>();
-  configTree: SyshubConfig[] = [];
-  configItemsExpanded: string[] = [];
-  activeNode: FlatConfigTreeNode | null = null;
-  pinned: boolean = false;
-  subscription?: Subscription;
+  fullConfigTree: SyshubConfigItem[] = [];
+  configTreeKeys: string[] = [];
+  configUuids: { [key: string]: [path: string, defaultOpen: boolean, open: boolean] } = {};
+  @Input({ required: true }) configByTree: { [key: string]: SyshubConfigItem[] } = {};
+  @Input({ required: true }) configUpdate: number | null = null;
+  @Input({ required: true }) searchResult!: SearchResult;
 
-  private _transformer = (node: SyshubConfig, level: number) => {
-    return {
-      expandable: !!node.children && node.children.length > 0,
-      hasMatch: (this.configItems[node.uuid] != undefined),
-      childHasMatch: (this.configItemsExpanded.indexOf(node.uuid) != -1),
-      obj: node,
-      uuid: node.uuid,
-      level: level,
-    };
-  };
+  subs: Subscription[] = [];
 
-  copyToClipboard(content: string): void {
-    this.appcopy.emit(content);
+  constructor(private l10nService: L10nService,
+    private cacheService: CacheService,) { }
+
+  getIcon(type: string, value: any = null) {
+    return this.cacheService.getIcon(type, value);
   }
 
-  treeControl = new FlatTreeControl<FlatConfigTreeNode>(
-    node => node.level,
-    node => node.expandable,
-  );
-
-  /* treeFlattener = new MatTreeFlattener(
-    this._transformer,
-    node => node.level,
-    node => node.expandable,
-    node => node.children,
-  );
-
-  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener); */
-
-  constructor(private i10nService: L10nService,
-    private cacheService: CacheService) {
-    //this.dataSource.data = [];
+  getConfigItemByUuid(uuid: string): SyshubConfigItem | null {
+    return this.cacheService.getConfigItemByUuid(uuid);
   }
 
-  getIcon(type: string, value: any = null, fallback: string = 'folder'): string {
-    return this.cacheService.getIcon(type, value, fallback);
+  getConfigTree(uuid: string | null, includeUuids: boolean = false): string {
+    return this.cacheService.getConfigTree(uuid, includeUuids);
   }
 
-  hasChild = (_: number, node: FlatConfigTreeNode) => node.expandable;
+  get l10nphrase(): L10nLocale {
+    return this.l10nService.locale;
+  }
 
   l10n(phrase: string, params: any[] = []) {
-    return this.i10nService.ln(phrase, params);
+    return this.l10nService.ln(phrase, params);
+  }
+
+  private matchTree(tree: string): boolean {
+    for (let i = 0; i < this.configTreeKeys.length; i++) {
+      if (this.configTreeKeys[i].indexOf(tree) === 0)
+        return true;
+    }
+    return false;
   }
 
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-      this.subscription = undefined;
-    }
+    this.subs.forEach((s) => s.unsubscribe());
+    this.subs = [];
   }
 
   ngOnInit(): void {
-    this.subscription = this.cacheService.config.subscribe((config) => {
-      this.configItemsExpanded = [];
-      this.configTree = config;
-      config.forEach((configitem) => this.ngOnInitLoopItems(configitem));
-      //this.dataSource.data = config;
-      this.treeControl.dataNodes.forEach((node) => {
-        if (this.configItemsExpanded.indexOf(node.uuid) != -1)
-          this.treeControl.expand(node);
-      });
-    });
+    this.subs.push(this.cacheService.Config.subscribe((configtree) => {
+      if (JSON.stringify(configtree) === JSON.stringify(this.fullConfigTree) && Object.keys(this.configUuids).length > 0)
+        return;
+      let configTreeKeys: string[] = [];
+      let temppaths: { [key: string]: [path: string, defaultOpen: boolean, open: boolean] } = {};
+      Object.keys(this.configByTree).forEach((key) => {
+        this.configByTree[key].forEach((item) => configTreeKeys.push(this.getConfigTree(item.uuid, true)));
+      })
+      this.configTreeKeys = [...configTreeKeys];
+      this.ngOnInit_loopTree(temppaths, configtree);
+      this.fullConfigTree = [...configtree];
+      this.configUuids = { ...temppaths };
+    }));
   }
 
-  ngOnInitLoopItems(configitem: SyshubConfig): void {
-    if (this.configItems[configitem.uuid] != undefined && this.configItemsExpanded.indexOf(configitem.uuid) == -1) {
-      this.ngOnInitLoopItemsExpand(configitem);
-    }
-    configitem.children.forEach((childitem) => this.ngOnInitLoopItems(childitem));
+  ngOnInit_loopTree(temppaths: { [key: string]: [path: string, defaultOpen: boolean, open: boolean] }, children: SyshubConfigItem[]) {
+    children.forEach((item) => {
+      const tree = this.getConfigTree(item.uuid, true);
+      const match = this.matchTree(tree);
+      temppaths[item.uuid] = [tree, match, match];
+      this.ngOnInit_loopTree(temppaths, item.children);
+    })
   }
 
-  ngOnInitLoopItemsExpand(configitem: SyshubConfig): void {
-    this.configItemsExpanded.push(configitem.uuid);
-    if (configitem.parentRef != undefined)
-      this.ngOnInitLoopItemsExpand(configitem.parentRef);
-  }
-
-}
-
-interface FlatConfigTreeNode {
-  expandable: boolean;
-  hasMatch: boolean;
-  childHasMatch: boolean;
-  obj: SyshubConfig;
-  uuid: string;
-  level: number;
 }

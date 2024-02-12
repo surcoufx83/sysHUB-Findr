@@ -1,64 +1,232 @@
-<!-- <mat-toolbar color="primary" class="flex justify-between items-center">
-    <header>
-        <a [routerLink]="['/result', 'home']">
-            <button mat-raised-button *ngIf="url == '/result/home'">{{ i10n('result.toolbar.overview') }}</button>
-            <button mat-flat-button color="primary" *ngIf="url != '/result/home'">{{ i10n('result.toolbar.overview')
-                }}</button>
-        </a>
-        <a [routerLink]="['/result', 'config']" class="md:ml-2">
-            <button mat-raised-button *ngIf="url.indexOf('/result/config') === 0">{{ i10n('result.toolbar.config',
-                [''+searchResult?.result?.config?.length]) }}</button>
-            <button mat-flat-button color="primary" *ngIf="url.indexOf('/result/config') !== 0">{{
-                i10n('result.toolbar.config',
-                [''+searchResult?.result?.config?.length]) }}</button>
-        </a>
-        <a [routerLink]="['/result', 'parameterset']" class="md:ml-2">
-            <button mat-raised-button *ngIf="url.indexOf('/result/parameterset') === 0">{{
-                i10n('result.toolbar.parameterset',
-                [''+searchResult?.result?.parameterset?.length]) }}</button>
-            <button mat-flat-button color="primary" *ngIf="url.indexOf('/result/parameterset') !== 0">{{
-                i10n('result.toolbar.parameterset', [''+searchResult?.result?.parameterset?.length]) }}</button>
-        </a>
-        <a [routerLink]="['/result', 'jobtypes']" class="md:ml-2">
-            <button mat-raised-button *ngIf="url.indexOf('/result/jobtypes') === 0">{{ i10n('result.toolbar.jobtypes',
-                [''+searchResult?.result?.jobtypes?.length]) }}</button>
-            <button mat-flat-button color="primary" *ngIf="url.indexOf('/result/jobtypes') !== 0">{{
-                i10n('result.toolbar.jobtypes',
-                [''+searchResult?.result?.jobtypes?.length]) }}</button>
-        </a>
-        <a [routerLink]="['/result', 'workflows']" class="md:ml-2">
-            <button mat-raised-button *ngIf="url == '/result/workflows'">{{ i10n('result.toolbar.workflows',
-                [''+searchResult?.result?.workflows?.length]) }}</button>
-            <button mat-flat-button color="primary" *ngIf="url != '/result/workflows'">{{
-                i10n('result.toolbar.workflows', [''+searchResult?.result?.workflows?.length]) }}</button>
-        </a>
-    </header>
-</mat-toolbar>
+@if (searchResult) {
+<article class="container-fluid">
+    <section>
+        <h1>{{ l10n(l10nphrase.result.header.title, [searchResult.search.phrase]) }}</h1>
+        <p>
+            {{ l10nphrase.result.header.subtitle }}
+        </p>
+    </section>
+    <section>
+        <div class="d-flex flex-column">
 
-<ng-container *ngIf="url == '/result/home' && searchResult != null && searchResult.result != undefined">
-    <app-result-home [searchPhrase]="searchResult.search.phrase" [searchResult]="searchResult"
-        [configItemSorter]="configItemSorter" [jobtypeItemSorter]="jobtypeItemSorter"
-        [jobtypeAttributesMatched]="jobtypeAttributesMatched"
-        [jobtypeCustomAttributesMatched]="jobtypeCustomAttributesMatched"
-        [parametersetItemSorter]="parametersetItemSorter" [workflowItemSorter]="workflowItemSorter"></app-result-home>
-</ng-container>
+            <!-- result header buttons to select chapter -->
+            <div class="card mb-3 mb-lg-4">
+                <div class="card-body">
+                    <div class="d-flex flex-column flex-md-row justify-content-between">
+                        <div>
+                            <a [routerLink]="['/result']"
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token}">
+                                <button type="button"
+                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == '', 'btn-outline-success': selectedChapter != '' }">
+                                    <i class="bi bi-view-list me-2"></i>
+                                    {{ l10nphrase.result.toolbar.overview }}
+                                </button>
+                            </a>
+                            <a [routerLink]="['/result']"
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'ConfigItems'}">
+                                <button type="button"
+                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'ConfigItems', 'btn-outline-success': selectedChapter != 'ConfigItems' && searchResult.result!.config.length > 0, 'btn-outline-secondary': selectedChapter != 'ConfigItems' && searchResult.result!.config.length == 0 }">
+                                    <i class="bi bi-c-square-fill me-2"></i>
+                                    {{ l10n(l10nphrase.result.toolbar.config, [ searchResult.result?.config?.length]) }}
+                                    <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
+                                </button>
+                            </a>
+                            <a [routerLink]="['/result']"
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'JobTypes'}">
+                                <button type="button"
+                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'JobTypes', 'btn-outline-success': selectedChapter != 'JobTypes' && searchResult.result!.jobtypes.length > 0, 'btn-outline-secondary': selectedChapter != 'JobTypes' && searchResult.result!.jobtypes.length == 0 }">
+                                    <i class="bi bi-fonts me-2"></i>
+                                    {{ l10n(l10nphrase.result.toolbar.jobtypes, [
+                                    searchResult.result?.jobtypes?.length]) }}
+                                    <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
+                                </button>
+                            </a>
+                            <a [routerLink]="['/result']"
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'PSetItems'}">
+                                <button type="button"
+                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'PSetItems', 'btn-outline-success': selectedChapter != 'PSetItems' && searchResult.result!.parameterset.length > 0, 'btn-outline-secondary': selectedChapter != 'PSetItems' && searchResult.result!.parameterset.length == 0 }">
+                                    <i class="bi bi-p-square-fill me-2"></i>
+                                    {{ l10n(l10nphrase.result.toolbar.parameterset, [
+                                    searchResult.result?.parameterset?.length]) }}
+                                    <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
+                                </button>
+                            </a>
+                            <a [routerLink]="['/result']"
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'WorkflowItems'}">
+                                <button type="button"
+                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'WorkflowItems', 'btn-outline-success': selectedChapter != 'WorkflowItems' && searchResult.result!.workflows.length > 0, 'btn-outline-secondary': selectedChapter != 'WorkflowItems' && searchResult.result!.workflows.length == 0 }">
+                                    <i class="bi bi-diagram-2-fill me-2"></i>
+                                    {{ l10n(l10nphrase.result.toolbar.workflows, [
+                                    searchResult.result?.workflows?.length]) }}
+                                    <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
+                                </button>
+                            </a>
+                            @if (searchResult.result?.system != undefined) {
+                            @if (searchResult.result?.system?.certstore) {
+                            <a [routerLink]="['/result']"
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'CertStoreItems'}">
+                                <button type="button"
+                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'CertStoreItems', 'btn-outline-success': selectedChapter != 'CertStoreItems' && getMatches(searchResult.result?.system?.certstore) > 0, 'btn-outline-secondary': selectedChapter != 'CertStoreItems' && getMatches(searchResult.result?.system?.certstore) == 0 }">
+                                    <i class="bi bi-award-fill me-2"></i>
+                                    {{ l10n(l10nphrase.result.toolbar.certStore,
+                                    [getMatches(searchResult.result?.system?.certstore)]) }}
+                                    <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
+                                </button>
+                            </a>
+                            }
+                            @if (searchResult.result?.system?.ippDevices) {
+                            <a [routerLink]="['/result']"
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'IppDevices'}">
+                                <button type="button"
+                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'IppDevices', 'btn-outline-success': selectedChapter != 'IppDevices' && getMatches(searchResult.result?.system?.ippDevices) > 0, 'btn-outline-secondary': selectedChapter != 'IppDevices' && getMatches(searchResult.result?.system?.ippDevices) == 0 }">
+                                    <i class="bi bi-printer-fill me-2"></i>
+                                    {{ l10n(l10nphrase.result.toolbar.ippDevices,
+                                    [getMatches(searchResult.result?.system?.ippDevices)]) }}
+                                    <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
+                                </button>
+                            </a>
+                            }
+                            @if (searchResult.result?.system?.serverConfig) {
+                            <a [routerLink]="['/result']"
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'ServerConfig'}">
+                                <button type="button"
+                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'ServerConfig', 'btn-outline-success': selectedChapter != 'ServerConfig' && getMatches(searchResult.result?.system?.serverConfig) > 0, 'btn-outline-secondary': selectedChapter != 'ServerConfig' && getMatches(searchResult.result?.system?.serverConfig) == 0 }">
+                                    <i class="bi bi-sliders2-vertical me-2"></i>
+                                    {{ l10n(l10nphrase.result.toolbar.serverConfig,
+                                    [getMatches(searchResult.result?.system?.serverConfig)])
+                                    }}
+                                    <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
+                                </button>
+                            </a>
+                            }
+                            @if (searchResult.result?.system?.serverInfo) {
+                            <a [routerLink]="['/result']"
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'ServerInformation'}">
+                                <button type="button"
+                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'ServerInformation', 'btn-outline-success': selectedChapter != 'ServerInformation' && getMatches(searchResult.result?.system?.serverInfo) > 0, 'btn-outline-secondary': selectedChapter != 'ServerInformation' && getMatches(searchResult.result?.system?.serverInfo) == 0 }">
+                                    <i class="bi bi-server me-2"></i>
+                                    {{ l10n(l10nphrase.result.toolbar.serverInfo,
+                                    [getMatches(searchResult.result?.system?.serverInfo)]) }}
+                                    <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
+                                </button>
+                            </a>
+                            }
+                            @if (searchResult.result?.system?.users) {
+                            <a [routerLink]="['/result']"
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'Users'}">
+                                <button type="button"
+                                    [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'Users', 'btn-outline-success': selectedChapter != 'Users' && getMatches(searchResult.result?.system?.users) > 0, 'btn-outline-secondary': selectedChapter != 'Users' && getMatches(searchResult.result?.system?.users) == 0 }">
+                                    <i class="bi bi-people-fill me-2"></i>
+                                    {{ l10n(l10nphrase.result.toolbar.users,
+                                    [getMatches(searchResult.result?.system?.users)]) }}
+                                    <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
+                                </button>
+                            </a>
+                            }
+                            }
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-sm text-nowrap btn-outline-secondary"
+                                (click)="onExportResultBtnClick()">
+                                <i class="bi bi-floppy-fill me-2"></i>
+                                {{ l10nphrase.result.toolbar.exportResults }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- result header buttons to select chapter -->
 
-<ng-container *ngIf="url.indexOf('/result/config') === 0 && searchResult != null && searchResult.result != undefined">
-    <app-result-config [searchPhrase]="searchResult.search.phrase" [searchResult]="searchResult"
-        [configItemSorter]="configItemSorter" [configItems]="configItems" (appcopy)="copyToClipboard($event)">
-    </app-result-config>
-</ng-container>
+            <!-- result container based on selected chapter -->
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        @switch (selectedChapter) {
+                        @case ('ConfigItems') {
+                        {{l10nphrase.result.config.title}}
+                        }
+                        @case ('JobTypes') {
+                        {{l10nphrase.result.jobtype.title}}
+                        }
+                        @case ('PSetItems') {
+                        {{l10nphrase.result.parameterset.title}}
+                        }
+                        @case ('WorkflowItems') {
+                        {{l10nphrase.result.workflow.title}}
+                        }
+                        @case ('CertStoreItems') {
+                        {{l10nphrase.result.certStoreItem.title}}
+                        }
+                        @case ('IppDevices') {
+                        {{l10nphrase.result.ippDevice.title}}
+                        }
+                        @case ('ServerConfig') {
+                        {{l10nphrase.result.serverProperties.title}}
+                        }
+                        @case ('ServerInformation') {
+                        {{l10nphrase.result.serverInfo.title}}
+                        }
+                        @case ('Users') {
+                        {{l10nphrase.result.useraccount.title}}
+                        }
+                        @default {
+                        {{ l10nphrase.result.overview.title }}
+                        }
+                        }
+                    </h4>
+                </div>
+                <div class="card-body row">
+                    <div class="col-12 col-lg-8">
+                        @switch (selectedChapter) {
+                        @case ('ConfigItems') {
+                        <app-result-config [configByTree]="configByTree" [configUpdate]="configUpdate"
+                            [searchResult]="searchResult"></app-result-config>
+                        }
+                        @case ('JobTypes') {
+                        <app-result-jobtypes [searchResult]="searchResult"></app-result-jobtypes>
+                        }
+                        @case ('PSetItems') {
+                        <app-result-parameterset [psetByTree]="psetByTree"
+                            [searchResult]="searchResult"></app-result-parameterset>
+                        }
+                        @case ('WorkflowItems') {
+                        <app-result-workflows [searchResult]="searchResult"></app-result-workflows>
+                        }
+                        @case ('CertStoreItems') {
+                        <app-result-certstore [searchResult]="searchResult"></app-result-certstore>
+                        }
+                        @case ('IppDevices') {
+                        <app-result-ippdevice [searchResult]="searchResult"></app-result-ippdevice>
+                        }
+                        @case ('ServerConfig') {
+                        <app-result-serverprops [searchResult]="searchResult"></app-result-serverprops>
+                        }
+                        @case ('ServerInformation') {
+                        <app-result-serverinfo [searchResult]="searchResult"></app-result-serverinfo>
+                        }
+                        @case ('Users') {
+                        <app-result-user [searchResult]="searchResult"></app-result-user>
+                        }
+                        @default {
+                        <app-result-overview [searchResult]="searchResult" [totalMatchCount]="totalMatchCount"
+                            [certstore]="certstore" [configByTree]="configByTree" [configTreeKeys]="configTreeKeys"
+                            [ippDevices]="ippDevices" [jobtypes]="jobtypes" [psetByTree]="psetByTree"
+                            [psetTreeKeys]="psetTreeKeys" [serverInfo]="serverInfo"
+                            [serverProperties]="serverProperties" [user]="user"
+                            [workflows]="workflows"></app-result-overview>
+                        }
+                        }
+                    </div>
+                    <div class="col-12 col-lg-4 d-none d-lg-block">
+                        <div class="sticky-top pe-3" style="top: 2rem; z-index: 99;">
+                            <app-node-inspector [searchResult]="searchResult"></app-node-inspector>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- result container based on selected chapter -->
 
-<ng-container
-    *ngIf="url.indexOf('/result/parameterset') === 0 && searchResult != null && searchResult.result != undefined">
-    <app-result-parameterset [searchPhrase]="searchResult.search.phrase" [searchResult]="searchResult"
-        [parametersetItemSorter]="parametersetItemSorter" [parametersetItems]="parametersetItems"
-        (appcopy)="copyToClipboard($event)">
-    </app-result-parameterset>
-</ng-container>
-
-<ng-container *ngIf="url.indexOf('/result/jobtypes') === 0 && searchResult != null && searchResult.result != undefined">
-    <app-result-jobtypes [searchPhrase]="searchResult.search.phrase" [searchResult]="searchResult"
-        [jobtypeItemSorter]="jobtypeItemSorter" [jobtypeItems]="jobtypeItems" (appcopy)="copyToClipboard($event)">
-    </app-result-jobtypes>
-</ng-container> -->
+        </div>
+    </section>
+</article>
+}

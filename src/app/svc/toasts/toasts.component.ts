@@ -13,7 +13,14 @@ export class ToastsComponent {
   constructor(
     private toastService: ToastsService,
   ) {
-    this.toastService.toasts.subscribe((toast) => this.toasts.push(toast));
+    this.toastService.toasts.subscribe((toast) => {
+      // Prevent multiple toasts of the same content and configuration at the same time.
+      const temptoast = JSON.stringify(toast);
+      let match = false;
+      this.toasts.forEach((t) => match = match || JSON.stringify(t) === temptoast);
+      if (!match)
+        this.toasts.push(toast);
+    });
   }
 
   removeAt(i: number) {

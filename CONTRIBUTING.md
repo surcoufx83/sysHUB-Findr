@@ -6,8 +6,11 @@ Es gibt zwei klare Vorgaben für das Einbringen einer eigenen Entwicklung zum Fi
 
 Viele Schritte der Entwicklung basieren auf Kommandozeilenbefehlen. Diese sind in diesem Guide entsprechend markiert, zum Beispiel: `node -v` um die Version des installierten Node.JS zu ermitteln.
 
+## ⚠️ Work in progress
+Diese Software und ebenso der Contributing guide befindet sich noch in der Entwicklung.
+
 ## Voraussetzungen
-Der Findr basiert auf Angular (14.x) und Node.JS. Entsprechende Resourcen müssen installiert sein um entwickeln zu können.
+Der Findr basiert auf Angular (17.x) und Node.JS. Entsprechende Resourcen müssen installiert sein um entwickeln zu können.
 1. NodeJS installiert inkl. npm: https://nodejs.org/en/download/
 2. Mit den Kommandozeilen-Befehlen `node -v` und `npm -v` sicherstellen, dass beides installiert ist
 3. Angular CLI installieren: `npm install -g @angular/cli`

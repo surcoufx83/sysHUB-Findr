@@ -1,0 +1,86 @@
+@for (node of nodeCards; track $index) {
+@if (node.dispose !== true) {
+<div [ngClass]="['card', 'node-inspector', 'ms-2', 'mb-2', colorpalette[node.color]]"
+    [ngStyle]="{ 'z-index': node.zindex}" [id]="node.id" cdkDrag (click)="onReopenNode(node.id)">
+    @switch (node.type) {
+    @case ('ConfigItems') {
+    <app-node-inspector-config-node [nodeItem]="$any(node.nodeitem)" [searchResult]="searchResult"
+        (onChangeColor)="node.color = (node.color == colorpalette.length - 1 ? 0 : node.color + 1)">
+        <button type="button" class="btn btn-sm px-2" cdkDragHandle>
+            <i class="bi bi-arrows-move"></i>
+        </button>
+        <button type="button" class="btn btn-sm px-2" (click)="onRemoveNode($index, node.id)">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </app-node-inspector-config-node>
+    }
+    @case ('JobTypes') {
+    <app-node-inspector-jobtypes-node [nodeItem]="$any(node.nodeitem)" [searchResult]="searchResult"
+        (onChangeColor)="node.color = (node.color == colorpalette.length - 1 ? 0 : node.color + 1)">
+        <button type="button" class="btn btn-sm px-2" cdkDragHandle>
+            <i class="bi bi-arrows-move"></i>
+        </button>
+        <button type="button" class="btn btn-sm px-2" (click)="onRemoveNode($index, node.id)">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </app-node-inspector-jobtypes-node>
+    }
+    @case ('PSetItems') {
+    <app-node-inspector-pset-node [nodeItem]="$any(node.nodeitem)" [searchResult]="searchResult"
+        (onChangeColor)="node.color = (node.color == colorpalette.length - 1 ? 0 : node.color + 1)">
+        <button type="button" class="btn btn-sm px-2" cdkDragHandle>
+            <i class="bi bi-arrows-move"></i>
+        </button>
+        <button type="button" class="btn btn-sm px-2" (click)="onRemoveNode($index, node.id)">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </app-node-inspector-pset-node>
+    }
+    @case ('WorkflowItems') {
+    <app-node-inspector-workflows-node [nodeItem]="$any(node.nodeitem)" [searchResult]="searchResult"
+        (onChangeColor)="node.color = (node.color == colorpalette.length - 1 ? 0 : node.color + 1)">
+        <button type="button" class="btn btn-sm px-2" cdkDragHandle>
+            <i class="bi bi-arrows-move"></i>
+        </button>
+        <button type="button" class="btn btn-sm px-2" (click)="onRemoveNode($index, node.id)">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </app-node-inspector-workflows-node>
+    }
+    @case ('CertStoreItems') {
+    <app-node-inspector-certstore-node [nodeItem]="$any(node.nodeitem)" [searchResult]="searchResult"
+        (onChangeColor)="node.color = (node.color == colorpalette.length - 1 ? 0 : node.color + 1)">
+        <button type="button" class="btn btn-sm px-2" cdkDragHandle>
+            <i class="bi bi-arrows-move"></i>
+        </button>
+        <button type="button" class="btn btn-sm px-2" (click)="onRemoveNode($index, node.id)">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </app-node-inspector-certstore-node>
+    }
+    @case ('IppDevices') {
+    <app-node-inspector-ippdevice-node [nodeItem]="$any(node.nodeitem)" [searchResult]="searchResult"
+        (onChangeColor)="node.color = (node.color == colorpalette.length - 1 ? 0 : node.color + 1)">
+        <button type="button" class="btn btn-sm px-2" cdkDragHandle>
+            <i class="bi bi-arrows-move"></i>
+        </button>
+        <button type="button" class="btn btn-sm px-2" (click)="onRemoveNode($index, node.id)">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </app-node-inspector-ippdevice-node>
+    }
+    @case ('Users') {
+    <app-node-inspector-user-node [nodeItem]="$any(node.nodeitem)" [searchResult]="searchResult"
+        (onChangeColor)="node.color = (node.color == colorpalette.length - 1 ? 0 : node.color + 1)">
+        <button type="button" class="btn btn-sm px-2" cdkDragHandle>
+            <i class="bi bi-arrows-move"></i>
+        </button>
+        <button type="button" class="btn btn-sm px-2" (click)="onRemoveNode($index, node.id)">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </app-node-inspector-user-node>
+    }
+    }
+</div>
+}
+}

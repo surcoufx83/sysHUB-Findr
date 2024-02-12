@@ -1,0 +1,33 @@
+.app-navbar[color="primary"] {
+    a {
+        color: #fff;
+        text-decoration: none;
+    }
+}
+
+.hide-toggler {
+    &:not(:focus):not(:hover):not(:active) {
+
+        background-color: transparent !important;
+    }
+
+    &::after {
+        display: none !important;
+    }
+}
+
+input#navbar-search-phrase {
+    width: 420px;
+}
+
+@media (max-width: 575.98px) {
+    input#navbar-search-phrase {
+        width: 180px;
+    }
+}
+
+@media (max-width: 1199.98px) {
+    input#navbar-search-phrase {
+        width: 240px;
+    }
+}

@@ -1,10 +1,8 @@
-<!-- <app-toolbar [title]="i10n('searching.title')"></app-toolbar>
-
-<div class="container mx-auto justify-center mt-4">
-    <mat-card appearance="outlined" class="w-full">
-        <mat-card-title>{{ i10n('searching.cardTitle', [searchConfig?.phrase ?? '']) }}</mat-card-title>
-        <mat-card-subtitle>
-            {{ i10n('searching.progress.' + searchProgressTitle) }}
-        </mat-card-subtitle>
-    </mat-card>
-</div> -->
+<article class="container">
+    <section>
+        <h1>{{ l10n(l10nphrase.searching.cardTitle, [searchConfig?.phrase ?? '']) }}</h1>
+        <p>
+            {{ l10nphrase.searching.progress[searchProgressTitle] }}
+        </p>
+    </section>
+</article>

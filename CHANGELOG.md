@@ -8,5 +8,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Basic functionality
-- Angular Framework and Angular Material
+- Angular 17 Framework and Angular Material
 - REST API via native endpoints and not execute workflow endpoints

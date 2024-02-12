@@ -1,16 +1,23 @@
+export type L10nLocaleInput = {
+    label: string,
+    placeholder: string,
+    invalidFeedback: string,
+};
+
 export type L10nLocale = {
     api: {
         failed: {
             badRequest: string,
             forbidden: string,
             notFound: string,
+            serverUnavailable: string,
             unauthorized: string,
             unknown: string
         },
         errorCommon: string
     },
     app: {
-        promotion: string,
+        title: string,
         titles: {
             home: string,
             searchOngoing: string,
@@ -22,102 +29,232 @@ export type L10nLocale = {
         clipboard: {
             confirm: string
         },
+        locales: { [key: string]: string },
         phrases: {
+            no: string[],
             none: string,
             okUc: string,
-            toggleItem: string
+            toggleItem: string,
+            toggleSection: string[],
+            yes: string[],
         }
     },
     home: {
-        title: string,
-        welcomeTitle: string,
-        welcomeSubtitleUser: string,
-        welcomeSubtitleNoUser: string,
-        enterPhrase: string,
+        moreFilter: string,
+        moreFilterToggle: string,
         runSearch: string,
-        tabs: {
-            topics: string,
-            filter: string,
-            options: string
+        welcomeSubtitleNoUser: string,
+        welcomeSubtitleUser: string,
+        welcomeTitle: string,
+        disabledFindr: {
+            title: string,
+            description: string,
+            documentationLink: string,
         }
     },
     login: {
         title: string,
-        unlockDescription: string
-    }
+        unlockDescription: string,
+        usernameField: L10nLocaleInput,
+        passwordField: L10nLocaleInput,
+        submitBtn: string,
+        submitBtnBusy: string,
+        inputInvalidToast: string,
+        inputCredentialsToast: string,
+        inputServerNotAvailableToast: string
+    },
+    logout: {
+        logoutOngoingMsg: string,
+    },
     navbar: {
-        placeholder: string
+        aboutLink: string,
+        clearCacheLink: string,
+        helpLink: string,
+        homeLink: string,
+        logoutLink: string,
+        promoLink: string,
+        resultLink: string,
+        searchBtn: string,
+        searchBtnBusy: string,
+        searchOptions: string,
+        searchPlaceholder: string,
+        statsLink: string,
+        webclientLink: string
     },
     result: {
+        certStoreItem: {
+            title: string,
+            subtitle: string,
+            nodeInspector: {
+                alias: string,
+                certX509IssuerDN: string,
+                certX509NotAfter: string,
+                certX509NotBefore: string,
+                certX509PrivateKey: string,
+                certX509PublicKey: string,
+                certX509SerialNumber: string,
+                certX509SignatureAlogorithm: string,
+                certX509SubjectDN: string,
+                fingerprintSHA1: string,
+                subject: string,
+                subjectAlternativeName: string,
+                version: string,
+            },
+        },
+        common: {
+            clickToOpenDialog: string,
+            nodeInspector: {
+                copyTooltip: string,
+                copied: string,
+            }
+        },
         config: {
             title: string,
             subtitle: string,
-            properties: {
+            nodeInspector: {
                 description: string,
-                name: string,
+                modified: string,
+                parentUuid: string,
                 path: string,
+                subject: string,
                 type: string,
                 uuid: string,
                 value: string,
+            }
+        },
+        header: {
+            title: string,
+            subtitle: string
+        },
+        ippDevice: {
+            title: string,
+            subtitle: string,
+            nodeInspector: {
+                desc: string,
+                form: string,
+                location: string,
+                maxInputQueueSize: string,
+                name: string,
+                outputThreshold: string,
+                queueSettingsGroup: string,
+                si: string,
+                so: string,
+                state: string,
+                subject: string,
+                uri: string,
             },
-            selected: string
         },
         jobtype: {
-            attributes: {
+            title: string,
+            subtitle: string,
+            toggleHideEmptySettings: string[],
+            nodeInspector: {
                 category: string,
+                classificationGroup: string,
                 classifiedworkflowuuid: string,
                 datatype: string,
                 deldays: string,
                 description: string,
                 initialtextstatus: string,
                 inputchannel: string,
+                jobAttributesGroup: string,
                 name: string,
                 priority: string,
+                processingGroup: string,
                 senderhost: string,
                 sourcefile: string,
                 starttype: string,
+                starttypes: string[],
+                subject: string,
                 textstatus: string,
                 ticketfile: string,
                 title: string,
                 userkey: string,
                 username: string,
+                uuid: string,
+                workflowsGroup: string,
                 workflowuuid: string,
                 xid: string
             },
-            classifySection: string,
-            customAttributes: string,
-            moreAttributesSection: string,
-            processingSection: string,
-            selected: string,
-            subtitle: string,
-            title: string,
-            workflowsSection: string
         },
         overview: {
             title: string,
-            subtitle: string
+            subtitle1: string,
+            subtitle2: string,
+            propertyType: string
         },
         parameterset: {
-            properties: {
+            title: string,
+            subtitle: string,
+            nodeInspector: {
                 description: string,
-                name: string,
+                modified: string,
+                parentUuid: string,
                 path: string,
+                subject: string,
                 type: string,
                 uuid: string,
-                value: string
-            },
-            selected: string,
+                value: string,
+            }
+        },
+        serverInfo: {
+            title: string,
             subtitle: string,
-            title: string
+        },
+        serverProperties: {
+            title: string,
+            subtitle: string,
         },
         showWorkflow: string,
         toolbar: {
-            overview: string,
+            certStore: string,
             config: string,
+            exportResults: string,
+            ippDevices: string,
             jobtypes: string,
+            matches: string,
+            noMatches: string,
+            overview: string,
             parameterset: string,
-            workflows: string
-        }
+            serverConfig: string,
+            serverInfo: string,
+            users: string,
+            workflows: string,
+        },
+        useraccount: {
+            title: string,
+            subtitle: string,
+            toggleHideUnassignedRoles: string[],
+            nodeInspector: {
+                email: string,
+                enabled: string,
+                forcechange: string,
+                modified: string,
+                name: string,
+                roles: string,
+                subject: string,
+                type: string,
+                types: { [key: string]: string },
+                uuid: string,
+            },
+        },
+        workflow: {
+            title: string,
+            subtitle: string,
+            nodeInspector: {
+                cacheable: string,
+                categoryName: string,
+                description: string,
+                format: string,
+                formats: string[],
+                lockedByUser: string,
+                modified: string,
+                name: string,
+                subject: string,
+                uuid: string,
+                version: string,
+            },
+        },
     },
     search: {
         errors: {
@@ -126,11 +263,9 @@ export type L10nLocale = {
         filter: {
             categoryFilter: string,
             categoryFilterNone: string,
-            categoryFilterDescription: string,
             excludeBComments: string,
             includeUuids: string,
-            searchWorkflowContent: string,
-            searchWorkflowContentDescription: string
+            searchWorkflowContent: string
         },
         options: {
             enableCache: string,
@@ -138,21 +273,33 @@ export type L10nLocale = {
         },
         topics: {
             categories: string,
+            certstore: string,
             config: string,
+            ippDevices: string,
             jobtypes: string,
+            keystore: string,
             parameterset: string,
+            serverConfig: string,
+            serverInfo: string,
+            truststore: string,
+            users: string,
             workflows: string
         }
     },
     searching: {
         title: string,
         cardTitle: string,
-        progress: {
-            done: string,
-            evaluatingResults: string,
-            queryingObjects: string,
-            preparingResultView: string,
-            waitingForResults: string
-        }
+        progress: { [key: string]: string }
+    },
+    workflowUi: {
+        title: string,
+        subtitle: string,
+        failed: {
+            noCache: string,
+            noUuid: string,
+        },
+        failedBackToFindr: string,
+        failedCommon: string,
+        errorConnector: string,
     }
 }

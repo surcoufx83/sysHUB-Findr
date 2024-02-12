@@ -1,0 +1,199 @@
+<span [innerHTML]="l10n(l10nphrase.result.overview.subtitle1, [totalMatchCount])"></span><br />
+{{l10nphrase.result.overview.subtitle2}}
+<br clear="all" />
+<br clear="all" />
+
+<!-- Config tree summary list -->
+@if (searchResult.result?.config?.length || 0 > 0) {
+<div class="py-3">
+    <h5><strong>{{l10nphrase.search.topics.config}} ({{ searchResult.result?.config?.length == 0 ? 'keine' :
+            searchResult.result?.config?.length }} {{ l10nphrase.result.toolbar.matches
+            }})</strong></h5>
+    <ul>
+        @for (path of configTreeKeys ; track $index) {
+        @for (configitem of configByTree[path] ; track $index) {
+        <li>
+            <i [ngClass]="['bi me-2', getIcon(configitem.type, configitem.value)]"
+                [title]="l10n(l10nphrase.result.overview.propertyType, [configitem.type])"></i>
+            <span [innerHTML]="path | highlight: searchResult.search.phrase"></span> : <span
+                [innerHTML]="configitem.value | highlight: searchResult.search.phrase"></span>
+        </li>
+        }
+        }
+    </ul>
+</div>
+}
+<!-- Config tree summary list -->
+
+<!-- Jobtypes summary list -->
+@if (searchResult.result?.jobtypes?.length || 0 > 0) {
+<div class="py-3">
+    <h5><strong>{{l10nphrase.search.topics.jobtypes}} ({{ searchResult.result?.jobtypes?.length == 0 ? 'keine' :
+            searchResult.result?.jobtypes?.length }} {{ l10nphrase.result.toolbar.matches
+            }})</strong></h5>
+    <ul>
+        @for (jtitem of jobtypes ; track $index) {
+        <li>
+            <i class="bi bi-fonts me-2"
+                [title]="l10n(l10nphrase.result.overview.propertyType, [l10nphrase.search.topics.jobtypes])"></i>
+            <span [innerHTML]="jtitem.name | highlight: searchResult.search.phrase"></span>
+        </li>
+        }
+    </ul>
+</div>
+}
+<!-- Jobtypes summary list -->
+
+<!-- Parameterset tree summary list -->
+@if (searchResult.result?.parameterset?.length || 0 > 0) {
+<div class="py-3">
+    <h5><strong>{{l10nphrase.search.topics.parameterset}} ({{ searchResult.result?.parameterset?.length }} {{
+            l10nphrase.result.toolbar.matches
+            }})</strong></h5>
+    <ul>
+        @for (path of psetTreeKeys ; track $index) {
+        @for (psetitem of psetByTree[path] ; track $index) {
+        <li>
+            <i [ngClass]="['bi me-2', getIcon(psetitem.type, psetitem.value)]"
+                [title]="l10n(l10nphrase.result.overview.propertyType, [psetitem.type])"></i>
+            <span [innerHTML]="path | highlight: searchResult.search.phrase"></span> : <span
+                [innerHTML]="psetitem.value | highlight: searchResult.search.phrase"></span>
+        </li>
+        }
+        }
+    </ul>
+</div>
+}
+<!-- Parameterset tree summary list -->
+
+<!-- Workflows summary list -->
+@if (searchResult.result?.workflows?.length || 0 > 0) {
+<div class="py-3">
+    <h5><strong>{{l10nphrase.search.topics.workflows}} ({{ searchResult.result?.workflows?.length == 0 ? 'keine' :
+            searchResult.result?.workflows?.length }} {{ l10nphrase.result.toolbar.matches
+            }})</strong></h5>
+    <ul>
+        @for (wfitem of workflows ; track $index) {
+        <li>
+            <i class="bi bi-diagram-2-fill me-2"></i>
+            <span [innerHTML]="wfitem.name | highlight: searchResult.search.phrase"></span>
+        </li>
+        }
+    </ul>
+</div>
+}
+<!-- Workflows summary list -->
+
+<!-- Cert store summary list -->
+@if (certstore.keystore.length > 0 || certstore.truststore.length > 0) {
+<div class="py-3">
+    <h5><strong>{{l10nphrase.search.topics.certstore}} ({{ certstore.keystore.length + certstore.truststore.length == 0
+            ? 'keine' :
+            certstore.keystore.length + certstore.truststore.length }} {{ l10nphrase.result.toolbar.matches
+            }})</strong></h5>
+    @if (certstore.keystore.length > 0) {
+    <h6>{{l10nphrase.search.topics.keystore}} ({{ certstore.keystore.length == 0 ? 'keine' :
+        certstore.keystore.length }} {{ l10nphrase.result.toolbar.matches
+        }})</h6>
+    <ul>
+        @for (certitem of certstore.keystore ; track $index) {
+        <li>
+            <i class="bi bi-award-fill me-2"></i>
+            <span [innerHTML]="certitem.alias| highlight: searchResult.search.phrase"></span>
+            (<span [innerHTML]="certitem.subjectAlternativeName| highlight: searchResult.search.phrase"></span>)
+        </li>
+        }
+    </ul>
+    }
+    @if (certstore.truststore.length > 0) {
+    <h6>{{l10nphrase.search.topics.truststore}} ({{ certstore.truststore.length == 0 ? 'keine' :
+        certstore.truststore.length }} {{ l10nphrase.result.toolbar.matches
+        }})</h6>
+    <ul>
+        @for (certitem of certstore.truststore ; track $index) {
+        <li>
+            <i class="bi bi-award-fill me-2"></i>
+            <span [innerHTML]="certitem.alias| highlight: searchResult.search.phrase"></span>
+            (<span [innerHTML]="certitem.certX509IssuerDN| highlight: searchResult.search.phrase"></span>)
+        </li>
+        }
+    </ul>
+    }
+</div>
+}
+<!-- Cert store summary list -->
+
+<!-- Ippdevices summary list -->
+@if (ippDevices.length || 0 > 0) {
+<div class="py-3">
+    <h5><strong>{{l10nphrase.search.topics.ippDevices}} ({{ ippDevices.length }} {{ l10nphrase.result.toolbar.matches
+            }})</strong></h5>
+    <ul>
+        @for (devitem of ippDevices ; track $index) {
+        <li>
+            <i class="bi bi-printer-fill me-2"></i>
+            <span [innerHTML]="devitem.name | highlight: searchResult.search.phrase"></span>
+            (<span [innerHTML]="devitem.uri | highlight: searchResult.search.phrase"></span>)
+        </li>
+        }
+    </ul>
+</div>
+}
+<!-- Ippdevices summary list -->
+
+<!-- Server properties summary list -->
+@if (serverProperties.length || 0 > 0) {
+<div class="py-3">
+    <h5><strong>{{l10nphrase.search.topics.serverConfig}} ({{ serverProperties.length }} {{
+            l10nphrase.result.toolbar.matches
+            }})</strong></h5>
+    <ul>
+        @for (prop of serverProperties ; track $index) {
+        <li>
+            <i class="bi bi-sliders2-vertical me-2"></i>
+            <span [innerHTML]="prop.key| highlight: searchResult.search.phrase"></span> : <span
+                [innerHTML]="prop.value | highlight: searchResult.search.phrase"></span>
+        </li>
+        }
+    </ul>
+</div>
+}
+<!-- Server properties summary list -->
+
+<!-- Server info summary list -->
+@if (serverInfo.length || 0 > 0) {
+<div class="py-3">
+    <h5><strong>{{l10nphrase.search.topics.serverInfo}} ({{ serverInfo.length }} {{
+            l10nphrase.result.toolbar.matches
+            }})</strong></h5>
+    <ul>
+        @for (prop of serverInfo ; track $index) {
+        <li>
+            <i class="bi bi-server me-2"></i>
+            <span [innerHTML]="prop.key| highlight: searchResult.search.phrase"></span> : <span
+                [innerHTML]="prop.value | highlight: searchResult.search.phrase"></span>
+        </li>
+        }
+    </ul>
+</div>
+}
+<!-- Server info summary list -->
+
+<!-- User summary list -->
+@if (user.length || 0 > 0) {
+<div class="py-3">
+    <h5><strong>{{l10nphrase.search.topics.users}} ({{ user.length }} {{
+            l10nphrase.result.toolbar.matches
+            }})</strong></h5>
+    <ul>
+        @for (useritem of user ; track $index) {
+        <li>
+            <i class="bi bi-people-fill me-2"></i>
+            <span [innerHTML]="useritem.name | highlight: searchResult.search.phrase"></span>
+            (<span>{{ fixcase(useritem.type) }}{{ useritem.email ? ', ' + useritem.email : '' }}</span>)
+        </li>
+        }
+    </ul>
+</div>
+}
+<!-- User summary list -->

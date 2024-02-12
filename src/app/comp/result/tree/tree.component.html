@@ -1,0 +1,26 @@
+@for (item of tree; track $index) {
+<li
+    [ngClass]="{ 'has-children': item.children.length > 0 , 'open': isOpen(item), 'has-match': this.matchedNodeUuids.includes(item.uuid)}">
+    <div class="header interaction-reminder" [title]="l10n(l10nphrase.result.common.clickToOpenDialog, [item.name])"
+        (click)="selectNode(item)" [id]="'drag-root-' + item.uuid">
+        @if (item.children.length > 0) {
+        <i [ngClass]="['bi me-2', isOpen(item) ? 'bi-dash-square' : 'bi-plus-square']"
+            (click)="toggleNode(item); $event.stopImmediatePropagation()"></i>
+        }
+        @else {
+        <i [ngClass]="['bi me-2', getIcon(item)]"></i>
+        }
+        <span class="name" [innerHTML]="item.name | highlight: searchResult.search.phrase"></span>
+        @if(item.value){
+        <span class="mx-2">:</span>
+        <span class="value" [innerHTML]="item.value | highlight: searchResult.search.phrase"></span>
+        }
+    </div>
+    @if (item.children.length > 0) {
+    <ul [ngClass]="{ 'branch': true, 'd-none': !isOpen(item) }">
+        <app-result-tree [tree]="item.children" [treeUuids]="treeUuids" [searchResult]="searchResult"
+            [treetype]="treetype"></app-result-tree>
+    </ul>
+    }
+</li>
+}

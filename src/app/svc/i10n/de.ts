@@ -1,4 +1,4 @@
-import { L10nLocale } from "./l10n-locale";
+import { L10nLocale } from './l10n-locale';
 
 export const L10nDe: L10nLocale = {
     api: {
@@ -6,13 +6,14 @@ export const L10nDe: L10nLocale = {
             badRequest: 'Ungültige Anfrage.',
             forbidden: 'Keine Berechtigung.',
             notFound: 'Resource nicht verfügbar.',
+            serverUnavailable: 'Es kann keine Verbindung zum Server hergestellt werden. Prüfen Sie, ob der Server läuft und verfügbar ist.',
             unauthorized: 'Anmeldung fehlgeschlagen.',
             unknown: 'Unbekannter Fehler.'
         },
-        errorCommon: 'Fehler beim Abrufen der Daten vom Server: {0}'
+        errorCommon: 'Fehler beim Abrufen der Daten vom Server: [0]'
     },
     app: {
-        promotion: 'Den sysHUB Findr Sourcecode findest Du auf Gitlab!',
+        title: 'Findr',
         titles: {
             home: 'sysHUB Findr',
             searchOngoing: 'Suche läuft...',
@@ -24,144 +25,298 @@ export const L10nDe: L10nLocale = {
         clipboard: {
             confirm: 'Wert wurde in die Zwischenablage kopiert'
         },
+        locales: {
+            de: 'Deutsch',
+            en: 'Englisch',
+            fr: 'Französisch',
+        },
         phrases: {
+            no: ['nein', 'Nein'],
             none: '»Keine«',
             okUc: 'OK',
-            toggleItem: '{0} auf- bzw. zuklappen'
+            toggleItem: '[0] auf- bzw. zuklappen',
+            toggleSection: ['Klicken um den Abschnitt [0] einzublenden', 'Klicken um den Abschnitt [0] auszublenden'],
+            yes: ['ja', 'Ja'],
         }
     },
     home: {
-        title: 'Suchkonfiguration',
-        welcomeTitle: 'sysHUB Findr Start',
-        welcomeSubtitleUser: 'Hallo {0}, nach was möchtest du heute suchen?',
-        welcomeSubtitleNoUser: 'Hallo, wonach möchtest du heute suchen?',
-        enterPhrase: 'Gib deinen Suchbegriff ein',
+        moreFilter: 'Erweiterte Filter',
+        moreFilterToggle: 'Suche mit erweiterten Filtern',
         runSearch: 'Suche starten',
-        tabs: {
-            topics: 'Suchbereiche',
-            filter: 'Einschränkungen',
-            options: 'Optionen',
+        welcomeSubtitleNoUser: 'Hallo, was möchtest du heute finden?',
+        welcomeSubtitleUser: 'Hallo [0], was möchtest du heute finden?',
+        welcomeTitle: 'sysHUBFindr',
+        disabledFindr: {
+            title: 'Findr deaktiviert!',
+            description: 'Der Findr benötigt zur Suche und zur Ergebnisdarstellung eine bestimmte Konfiguration.',
+            documentationLink: 'Siehe Readme auf Github, Abschnitt Konfigurationsparameter, Parameter syshub.oauth.scope'
         }
     },
     login: {
         title: 'Anmeldung',
-        unlockDescription: 'Bitte geben Sie Ihre sysHUB Zugangsdaten für Zugriff auf den Server an.'
+        unlockDescription: 'Bitte gib deine sysHUB Zugangsdaten für Zugriff auf den Server an.',
+        usernameField: {
+            label: 'sysHUB Benutzername',
+            placeholder: 'username',
+            invalidFeedback: 'Bitte einen Benutzernamen angeben.'
+        },
+        passwordField: {
+            label: 'Passwort',
+            placeholder: 'password',
+            invalidFeedback: 'Bitte ein Passwort eingeben.'
+        },
+        submitBtn: 'Anmelden',
+        submitBtnBusy: 'Anmeldung läuft...',
+        inputInvalidToast: 'Die Zugangsdaten sind unvollständig. Bitte prüfe deine Eingaben.',
+        inputCredentialsToast: 'Anmeldung vom Server abgewiesen. Bitte prüfe deine Eingaben und versuche es nochmal.',
+        inputServerNotAvailableToast: 'Anmeldung fehlgeschlagen. Der Server ist gerade nicht erreichbar.'
+    },
+    logout: {
+        logoutOngoingMsg: 'Du wirst abgemeldet...',
     },
     navbar: {
-        placeholder: 'Suchbegriff...'
+        aboutLink: 'Über',
+        searchPlaceholder: '🔍 Suchbegriff, z.B. currentjob',
+        clearCacheLink: 'Cache leeren',
+        helpLink: 'Hilfe',
+        homeLink: 'Start',
+        logoutLink: 'Abmelden',
+        resultLink: 'Suchergebnis',
+        searchBtn: 'Suchen',
+        searchBtnBusy: 'Suche läuft...',
+        searchOptions: 'Optionen',
+        statsLink: 'Statistiken',
+        promoLink: 'Findr auf Github',
+        webclientLink: 'sysHUB web client'
     },
     result: {
+        certStoreItem: {
+            title: 'Zertifikatsspeicher',
+            subtitle: `
+                Der Zertifikatsspeicher unterteilt sich in Keystore und Truststore.
+                Der Keystore speichert private Schlüssel, die für Verschlüsselung, Authentifizierung und Integritätsprüfung verwendet werden.
+                Der Truststore enthält vertrauenswürdige öffentliche Schlüssel, die zur Überprüfung der Authentizität entfernter Systeme oder Peers verwendet werden.
+                Wird der Suchbegriff in einem Zertifikat gefunden, ist der entsprechende Eintrag hervorgehoben.
+            `,
+            nodeInspector: {
+                alias: 'Alias',
+                certX509IssuerDN: 'Ausgestellt von',
+                certX509NotAfter: 'Gültig bis',
+                certX509NotBefore: 'Gültig ab',
+                certX509PrivateKey: 'Privater Schlüssel',
+                certX509PublicKey: 'Öffentlicher Schlüssel',
+                certX509SerialNumber: 'Seriennummer',
+                certX509SignatureAlogorithm: 'Algorithmus',
+                certX509SubjectDN: 'Ausgestellt für',
+                fingerprintSHA1: 'SHA-1 Hash',
+                subject: 'Zertifikat',
+                subjectAlternativeName: 'Alternative Namen',
+                version: 'Version',
+            },
+        },
+        common: {
+            clickToOpenDialog: 'Klicken um Details zu Eintrag "[0]" anzuzeigen',
+            nodeInspector: {
+                copyTooltip: 'In Zwischenablage',
+                copied: 'Der Text "[0]" wurde in die Zwischenablage kopiert.'
+            }
+        },
         config: {
-            title: 'Treffer in der Konfiguration, Suche nach »{0}«',
+            title: 'Expertenkonfiguration',
             subtitle: `
                 Auf dieser Seite wird die komplette Baumstruktur der Expertenkonfiguration
-                dargestellt und Treffer sind optisch hervorgehoben.
-                Beim Zeigen mit dem Cursor auf einen Eintrag wird dieser im rechten Bereich
-                dargestellt. Ist die Pinnadel aktiv, findet beim Zeigen kein Wechsel mehr
-                statt, aber beim Klicken.
+                dargestellt und Treffer sind optisch hervorgehoben und automatisch aufgeklappt.
+                Beim Klicken auf einen Eintrag werden die Details im rechten Bereich dargestellt.
             `,
-            properties: {
+            nodeInspector: {
                 description: 'Beschreibung',
-                name: 'Name',
+                modified: 'Geändert',
+                parentUuid: 'Parent',
                 path: 'Pfad',
-                type: 'Elementtyp',
+                subject: 'Expertenkonfiguration',
+                type: 'Typ',
                 uuid: 'Uuid',
                 value: 'Wert',
             },
-            selected: 'Details zu »{0}«'
+        },
+        header: {
+            title: 'Trefferliste für die Suche nach »[0]«',
+            subtitle: `
+                Die übersicht zeigt eine kurze Zusammenfassung der Treffer. Mehr Details
+                findest du nach dem Klicken auf die Buttons der jeweiligen Kategorien. 
+                Grauer Button = kein Treffer in diesem Bereich.
+            `
+        },
+        ippDevice: {
+            title: 'IPP Drucker',
+            subtitle: `
+                Die folgende Auflistung enthält die in sysHUB registrierten Drucker (IPP Devices).
+                Suchtreffer sind farblich hervorgehoben, und beim Klicken auf einen Eintrag werden die Details im rechten Bereich dargestellt.
+            `,
+            nodeInspector: {
+                desc: 'Beschreibung',
+                form: 'Formular',
+                location: 'Standort',
+                maxInputQueueSize: 'Limit Input Queue',
+                name: 'Name',
+                outputThreshold: 'Ausgabe Schwellwert',
+                queueSettingsGroup: 'Auftragswarteschlange',
+                si: 'Spool-in',
+                so: 'Spool-out',
+                state: 'Aktiv',
+                subject: 'IPP Device',
+                uri: 'Adresse',
+            }
         },
         jobtype: {
-            title: 'Treffer bei den Auftragstypen, Suche nach »{0}«',
+            title: 'Auftragstypen',
             subtitle: `
                 Diese Seite listet die konfigurierten Auftragstypen auf und
                 hebt Treffer sind optisch hervorgehoben.
-                Beim Zeigen mit dem Cursor auf einen Eintrag wird dieser im rechten Bereich
-                dargestellt. Ist die Pinnadel aktiv, findet beim Zeigen kein Wechsel mehr
-                statt, aber beim Klicken.
+                Beim Klicken auf einen Eintrag werden die Details im rechten Bereich dargestellt.
             `,
-            attributes: {
+            toggleHideEmptySettings: ['Leere und %-Werte sind ausgeblendet. Klicken um einzublenden', 'Klicken um leere oder %-Werte auszublenden'],
+            nodeInspector: {
                 category: 'Kategorie',
+                classificationGroup: 'Klassifizierung',
                 classifiedworkflowuuid: 'Workflow (nach Klassifizierung)',
                 datatype: 'Datentyp',
                 deldays: 'Löschen nach Tagen',
                 description: 'Beschreibung',
                 initialtextstatus: 'Initialer Textstatus',
                 inputchannel: 'Eingabekanal',
+                jobAttributesGroup: 'Jobattribute zur Klassifizierung',
                 name: 'Name',
                 priority: 'Priorität',
+                processingGroup: 'Verarbeitung',
                 senderhost: 'Sendender Host',
                 sourcefile: 'Quelldatei',
                 starttype: 'Starttyp',
+                starttypes: ['Automatisch', 'Gehalten', 'Zeitlich gehalten'],
+                subject: 'Jobtypes',
                 textstatus: 'Textstatus',
                 ticketfile: 'Ticketdatei',
                 title: 'Titel',
                 userkey: 'Userkey',
                 username: 'Benutzername',
+                uuid: 'Uuid',
+                workflowsGroup: 'Workflows',
                 workflowuuid: 'Workflow (Verarbeitung)',
-                xid: 'Xid'
+                xid: 'Xid',
             },
-            customAttributes: 'Attribute',
-            selected: 'Details zu »{0}«',
-            classifySection: 'Klassifizierung',
-            moreAttributesSection: 'Klassifizierung Jobattribute',
-            processingSection: 'Verarbeitung',
-            workflowsSection: 'Workflows'
         },
         overview: {
-            title: 'Trefferliste für die Suche nach »{0}«',
-            subtitle: `
-                Die folgende Liste stellt nur eine kurze Zusammenfassung dar. Ausführliche
-                Ergebnisse und die grafische Repräsentation (Baumstruktur und Workflow-Designer)
-                können über die Buttons oben erreicht werden.
-            `
+            title: 'Zusammenfassung',
+            subtitle1: 'Die Suche hat insgesamt <strong>[0]</strong> Treffer ergeben.',
+            subtitle2: `
+                Nachfolgend findest du eine Auflistung aller Treffer. Wenn du diese in einer Baumstruktur (z.B. für Konfig und
+                Parameterset) sehen möchtest, verwende die obenstehenden Buttons um an die entsprechende Stelle zu navigieren.`,
+            propertyType: 'Typ: [0]'
         },
         parameterset: {
-            title: 'Treffer im Parameterset, Suche nach »{0}«',
+            title: 'Parameterset',
             subtitle: `
                 Auf dieser Seite wird die komplette Baumstruktur des Parametersets
-                dargestellt und Treffer sind optisch hervorgehoben.
-                Beim Zeigen mit dem Cursor auf einen Eintrag wird dieser im rechten Bereich
-                dargestellt. Ist die Pinnadel aktiv, findet beim Zeigen kein Wechsel mehr
-                statt, aber beim Klicken.
+                dargestellt und Treffer sind optisch hervorgehoben und automatisch aufgeklappt.
+                Beim Klicken auf einen Eintrag werden die Details im rechten Bereich dargestellt.
             `,
-            properties: {
+            nodeInspector: {
                 description: 'Beschreibung',
-                name: 'Name',
+                modified: 'Geändert',
+                parentUuid: 'Parent',
                 path: 'Pfad',
-                type: 'Elementtyp',
+                subject: 'Parameterset',
+                type: 'Typ',
                 uuid: 'Uuid',
                 value: 'Wert',
             },
-            selected: 'Details zu »{0}«'
+        },
+        serverInfo: {
+            title: 'Serverinformationen',
+            subtitle: `
+                Die folgende Auflistung enthält Informationen, welche der Server 
+                zurückgeliefert hat.Treffer sind farblich hervorgehoben.
+            `,
+        },
+        serverProperties: {
+            title: 'Serverkonfiguration (server.properties)',
+            subtitle: `
+                Die folgende Auflistung enthält alle Konfigurationseinträge, welche der Server 
+                zurückgeliefert hat und entspricht der server.properties-Datei.
+                Treffer sind farblich hervorgehoben.
+            `,
         },
         toolbar: {
+            certStore: 'Zertifikatsspeicher: [0]',
+            config: 'Konfig: [0]',
+            exportResults: 'Trefferliste exportieren',
+            ippDevices: 'Drucker: [0]',
+            jobtypes: 'Jobtypes: [0]',
+            matches: 'Treffer',
+            noMatches: 'keine Treffer',
             overview: 'Übersicht',
-            config: 'Konfig: {0}',
-            jobtypes: 'Jobtypes: {0}',
-            parameterset: 'Parameterset: {0}',
-            workflows: 'Workflows: {0}',
+            parameterset: 'Parameterset: [0]',
+            serverConfig: 'Server properties: [0]',
+            serverInfo: 'Server infos: [0]',
+            users: 'Benutzer: [0]',
+            workflows: 'Workflows: [0]',
         },
-        showWorkflow: 'Workflow anzeigen'
+        showWorkflow: 'Workflow anzeigen',
+        useraccount: {
+            title: 'Benutzerkonten',
+            subtitle: `
+                Die Tabelle enthält die Benuzterkonten die im sysHUB registriert sind.
+                Treffer sind farblich hervorgehoben.
+            `,
+            toggleHideUnassignedRoles: ['Nicht zugewiesene Rollen sind ausgeblendet. Klicken um einzublenden', 'Klicken um nicht zugewiesene Rollen auszublenden'],
+            nodeInspector: {
+                email: 'E-Mail',
+                enabled: 'Freigeschaltet',
+                forcechange: 'Muss Passwort ändern',
+                modified: 'Geändert',
+                name: 'Name',
+                roles: 'Rollen',
+                subject: 'Benutzerkonto',
+                type: 'Art',
+                types: {
+                    'INTERNAL': 'sysHUB Benutzer',
+                    'LDAP': 'Domain-Benutzer',
+                    'WINDOWS': 'Windows-Benutzer',
+                },
+                uuid: 'Uuid',
+            },
+        },
+        workflow: {
+            title: 'Workflows',
+            subtitle: `
+                In der Auflistung sind die Workflows farblich hervorgehoben, bei denen ein Treffer in den Metadaten oder dem Workflow ansich enthalten ist.
+                Anklicken eines Eintrags um die Details zu sehen oder auf das Flowchart-Icon um den Workflow anzuzeigen.
+            `,
+            nodeInspector: {
+                cacheable: 'Cache aktiv',
+                categoryName: 'Kategorie',
+                description: 'Beschreibung',
+                format: 'Format',
+                formats: ['Native Client', 'Webclient'],
+                lockedByUser: 'Gesperrt',
+                modified: 'Geändert',
+                name: 'Name',
+                subject: 'Workflow',
+                uuid: 'Uuid',
+                version: 'Version',
+            },
+        },
     },
     search: {
         errors: {
-            phraseEmpty: 'Bitte einen Suchbegriff mit mindestens {0} Zeichen eingeben.'
+            phraseEmpty: 'Bitte einen Suchbegriff mit mindestens [0] Zeichen eingeben.'
         },
         filter: {
-            categoryFilter: 'Kategorie filtern',
-            categoryFilterNone: 'Nicht gefiltert',
-            categoryFilterDescription: `
-                Kategorie filtern: Wenn eingestellt, so werden
-                ausschließlich Objekte ermittelt, welche dieser Kategorie
-                zugeordnet sind. Alle anderen Objekte werden ignoriert.
-            `,
+            categoryFilter: 'Filtern nach Kategorie',
+            categoryFilterNone: 'Nicht angewendet',
             excludeBComments: '[B]-Kommentare ignorieren',
             includeUuids: 'UUID\'s durchsuchen',
             searchWorkflowContent: 'Inklusive Workflowinhalte',
-            searchWorkflowContentDescription: `
-                Das Durchsuchen der Workflowinhalte dauert deutlich länger und erzeugt
-                viel Last auf System und Datenbank.
-            `
         },
         options: {
             enableCache: 'Browser-Cache verwenden',
@@ -173,15 +328,22 @@ export const L10nDe: L10nLocale = {
         },
         topics: {
             categories: 'Kategorien',
+            certstore: 'Zertifikatsspeicher',
             config: 'Konfiguration',
+            ippDevices: 'Drucker',
             jobtypes: 'Auftragstypen',
+            keystore: 'Keystore',
             parameterset: 'Parameterset',
+            serverConfig: 'Server properties',
+            serverInfo: 'Server Infos',
+            truststore: 'Truststore',
+            users: 'Benutzer',
             workflows: 'Workflows',
         }
     },
     searching: {
         title: '',
-        cardTitle: 'Suchen nach {0}',
+        cardTitle: 'Suchen nach »[0]«',
         progress: {
             done: 'Alles erledigt. Weiterleitung zur Ergebnisansicht...',
             evaluatingResults: 'Die Ergebnisse wurden vom Server geladen und werden für die Anzeige vorbereitet...',
@@ -189,5 +351,16 @@ export const L10nDe: L10nLocale = {
             preparingResultView: 'Die Ergebnis-Ansicht wird vorbereitet...',
             waitingForResults: 'Die Suchanfrage wurde an den Server gesendet. Warten auf das Ergebnis...',
         }
+    },
+    workflowUi: {
+        title: 'Workflow »[0]«',
+        subtitle: '',
+        failed: {
+            noCache: 'Unter der angegebenen Workflow-Id konnte kein Workflow gefunden werden.',
+            noUuid: 'Die aufgerufene Url ist fehlerhaft.',
+        },
+        failedBackToFindr: 'Zurück zur Startseite',
+        failedCommon: 'Fehler beim Anzeigen des Workflows: ',
+        errorConnector: 'On Error',
     }
 };
