@@ -3,9 +3,9 @@
     <section>
         <h1>{{ l10n(l10nphrase.workflowUi.title, [workflow.name]) }}</h1>
     </section>
-    <section>
+    <div style="margin-left: -24px;">
         <app-workflow-ui-canvas [graphModel]="model" [searchResult]="searchResult"
             [workflow]="workflow"></app-workflow-ui-canvas>
-    </section>
+    </div>
 </article>
 }

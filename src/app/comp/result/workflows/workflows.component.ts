@@ -44,7 +44,6 @@ export class WorkflowsComponent implements OnDestroy, OnInit {
         return;
       this.workflows = [...this.cacheService.getWorkflows()];
       this.workflowsUpdated = timestamp;
-      console.log(this.workflows);
     }));
     this.searchResult.result?.workflows.forEach((item) => this.workflowsMatched.push(item.uuid));
   }

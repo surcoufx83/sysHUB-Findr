@@ -248,6 +248,15 @@ body[data-bs-theme="dark"] {
     .mark {
         background-color: rgba(rgb(111, 111, 26), .5) !important;
     }
+
+    .workflow-container {
+        background-color: #898989;
+
+        svg.workflow g.element-group rect.proc-box {
+            fill: rgba($color: #898989, $alpha: .1) !important;
+        }
+    }
+
 }
 
 body[data-bs-theme="light"] {

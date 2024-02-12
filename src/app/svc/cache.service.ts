@@ -63,11 +63,6 @@ export class CacheService {
   private configPath2Uuid$: { [key: string]: string } = {};
 
   /**
-   * Saves whether the config items have already been initially loaded from the browser cache.
-   */
-  private configLoaded$ = false;
-
-  /**
    * Contains the job types as an array in a subscribeable subject.
    */
   private jobtypes$: BehaviorSubject<SyshubJobType[]> = new BehaviorSubject<SyshubJobType[]>([]);
@@ -91,11 +86,6 @@ export class CacheService {
    * Saves the uuid of a job type together with the index from the jobtypes$ array.
    */
   private jobtypeUuid2Index$: { [key: string]: number } = {};
-
-  /**
-   * Saves whether the job types have already been initially loaded from the browser cache.
-   */
-  private jobtypesLoaded$ = false;
 
   /**
    * Contains the parameter set items as an array in a subscribeable subject.
@@ -128,15 +118,10 @@ export class CacheService {
   private parametersetPath2Uuid$: { [key: string]: string } = {};
 
   /**
-   * Saves whether the parameter set items have already been initially loaded from the browser cache.
-   */
-  private parametersetLoaded$ = false;
-
-  /**
-   * Holds information about previous searches (0 = search token, 1 = phrase).
+   * Holds information about previous searches (key = search token, value[0] = phrase, value[1] = search configuration).
    * This is persisted to sessionStorage and used to remove oldest entries if sessionstorage quota is exceeded.
    */
-  private searchhistory: [number, string][] = [];
+  private searchhistory: { [key: string]: [string, SearchResult] } = {};
 
   /**
    * Contains the current loaded search result to be shown on the website.
@@ -194,11 +179,6 @@ export class CacheService {
   private workflowUuid2Index$: { [key: string]: number } = {};
 
   /**
-   * Saves whether the workflows have already been initially loaded from the browser cache.
-   */
-  private workflowsLoaded$ = false;
-
-  /**
    * Tracks whether an user is logged in to the Rest API.
    */
   private userIsLoggedin$: boolean | null = null;
@@ -213,6 +193,16 @@ export class CacheService {
     this.loadSubscriptions();
   }
 
+  private addToSearchHistory(token: string, phrase: string, searchResult: SearchResult): CacheService {
+    this.searchhistory[token] = [phrase, searchResult];
+    if (Object.keys(this.searchhistory).length > 5) {
+      const firstkey = Object.keys(this.searchhistory).sort((a, b) => a > b ? 1 : -1)[0];
+      delete this.searchhistory[firstkey];
+    }
+    localStorage.setItem('findr-history', JSON.stringify(this.searchhistory));
+    return this;
+  }
+
   /**
    * Clears the local storage and forces a full cache reload.
    */
@@ -223,7 +213,7 @@ export class CacheService {
   /**
    * Clears the local storage and forces a full cache reload.
    */
-  private clearInternal(reload?: boolean, fullclear?: boolean): void {
+  private clearInternal(reload?: boolean): void {
     this.categories$.next([]);
     this.config$.next([]);
     this.jobtypes$.next([]);
@@ -231,14 +221,7 @@ export class CacheService {
     this.workflows$.next([]);
     this._searchresult.next(null);
     localStorage.removeItem(this.appInitService.environment.storage?.categoriesKey ?? 'findr-syshub-cat');
-    localStorage.removeItem(this.appInitService.environment.storage?.configKey ?? 'findr-syshub-config');
-    localStorage.removeItem(this.appInitService.environment.storage?.jobtypesKey ?? 'findr-syshub-jobtypes');
-    localStorage.removeItem(this.appInitService.environment.storage?.configKey ?? 'findr-syshub-parameterset');
-    localStorage.removeItem(this.appInitService.environment.storage?.workflowsKey ?? 'findr-syshub-workflows');
     localStorage.removeItem(this.appInitService.environment.storage?.searchconfigKey ?? 'findr-syshub-searchconfig');
-    if (fullclear) {
-      sessionStorage.clear();
-    }
     if (reload)
       this.loadCache();
   }
@@ -306,9 +289,8 @@ export class CacheService {
   }
 
   loadSearchResult(token: string): boolean {
-    let result: string | null = sessionStorage.getItem(token);
-    if (result !== null) {
-      this._searchresult.next(<SearchResult>JSON.parse(result));
+    if (this.searchhistory[token]) {
+      this._searchresult.next(this.searchhistory[token][1]);
       this.loadSearchResult_reloadOutdatedItems(this._searchresult.value!.result!);
       return true;
     }
@@ -368,10 +350,10 @@ export class CacheService {
     this.loadSearchesCache();
     this.loadUserConfig();
     this.loadCategoriesCache();
-    this.loadConfigCache();
-    this.loadJobtypesCache();
-    this.loadParametersetCache();
-    this.loadWorkflowCache();
+    this.reloadConfig();
+    this.reloadJobtypes();
+    this.reloadParameterset();
+    this.reloadWorkflows();
   }
 
   private loadCategoriesCache(): void {
@@ -382,42 +364,17 @@ export class CacheService {
     this.categoriesLoaded$ = true;
   }
 
-  private loadConfigCache(): void {
-    let olddata = localStorage.getItem(this.appInitService.environment.storage?.configKey ?? 'findr-syshub-config');
-    if (olddata != null)
-      this.config$.next(<SyshubConfigItem[]>JSON.parse(olddata));
-    this.reloadConfig();
-    this.configLoaded$ = true;
-  }
-
-  private loadJobtypesCache(): void {
-    let olddata = localStorage.getItem(this.appInitService.environment.storage?.jobtypesKey ?? 'findr-syshub-jobtypes');
-    if (olddata != null)
-      this.jobtypes$.next(<SyshubJobType[]>JSON.parse(olddata));
-    else
-      this.reloadJobtypes();
-    this.jobtypesLoaded$ = true;
-  }
-
-  private loadParametersetCache(): void {
-    let olddata = localStorage.getItem(this.appInitService.environment.storage?.parametersetKey ?? 'findr-syshub-parameterset');
-    if (olddata != null)
-      this.parameterset$.next(<SyshubPSetItem[]>JSON.parse(olddata));
-    this.reloadParameterset();
-    this.parametersetLoaded$ = true;
-  }
-
   private loadSearchesCache(): void {
-    let olddata = sessionStorage.getItem('findr-history');
+    let olddata = localStorage.getItem('findr-history');
     if (olddata != null) {
-      this.searchhistory = (<[number, string][]>JSON.parse(olddata)).sort((a, b) => a[0] - b[0]);
+      this.searchhistory = (<{ [key: string]: [string, SearchResult] }>JSON.parse(olddata));
     }
   }
 
   loadSubscriptions(): void {
     this.restapi.isLoggedIn.subscribe((state) => {
       if (state === false && this.userIsLoggedin$ === true) {
-        this.clearInternal(false, true);
+        this.clearInternal(false);
       }
       this.userIsLoggedin$ = state;
       if (state === true) {
@@ -455,8 +412,6 @@ export class CacheService {
         this.loadSubscriptions_ConfigItem(cfg, indexed);
       });
       configitems = configitems.sort((a, b) => a.type == 'Group/Folder' && b.type != 'Group/Folder' ? 1 : b.type == 'Group/Folder' && a.type != 'Group/Folder' ? -1 : a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1);
-      if (this.configLoaded$ && this._userconfig.value.enableCache)
-        localStorage.setItem(this.appInitService.environment.storage?.configKey ?? 'findr-syshub-config', JSON.stringify(configitems));
       this.configUuid2Ref$ = { ...indexed };
       this.configUpdated$.next(Date.now());
     });
@@ -478,8 +433,6 @@ export class CacheService {
 
   loadSubscriptions_Jobtypes(): void {
     this.Jobtypes.subscribe((jobtypes) => {
-      if (this.jobtypesLoaded$ && this._userconfig.value.enableCache)
-        localStorage.setItem(this.appInitService.environment.storage?.jobtypesKey ?? 'findr-syshub-jobtypes', JSON.stringify(jobtypes));
       let indexed: { [key: string]: number } = {};
       jobtypes.forEach((type, i) => indexed[type.uuid] = i);
       this.jobtypeUuid2Index$ = indexed;
@@ -494,8 +447,6 @@ export class CacheService {
         this.loadSubscriptions_PSetItem(item, indexed);
       });
       parameterset = parameterset.sort((a, b) => a.type == 'Group/Folder' && b.type != 'Group/Folder' ? 1 : b.type == 'Group/Folder' && a.type != 'Group/Folder' ? -1 : a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1);
-      if (this.parametersetLoaded$ && this._userconfig.value.enableCache)
-        localStorage.setItem(this.appInitService.environment.storage?.parametersetKey ?? 'findr-syshub-parameterset', JSON.stringify(parameterset));
       this.parametersetUuid2Ref$ = { ...indexed };
       this.parametersetUpdated$.next(Date.now());
     });
@@ -517,8 +468,6 @@ export class CacheService {
 
   loadSubscriptions_Workflows(): void {
     this.Workflows.subscribe((workflows) => {
-      if (this.workflowsLoaded$ && this._userconfig.value.enableCache)
-        localStorage.setItem(this.appInitService.environment.storage?.workflowsKey ?? 'findr-syshub-workflows', JSON.stringify(workflows));
       let indexed: { [key: string]: number } = {};
       workflows.forEach((wf, i) => {
         indexed[wf.uuid] = i;
@@ -544,14 +493,6 @@ export class CacheService {
     this.userconfigLoaded = true;
   }
 
-  private loadWorkflowCache(): void {
-    let olddata = localStorage.getItem(this.appInitService.environment.storage?.workflowsKey ?? 'findr-syshub-workflows');
-    if (olddata != null)
-      this.workflows$.next(<SyshubWorkflow[]>JSON.parse(olddata));
-    this.reloadWorkflows();
-    this.workflowsLoaded$ = true;
-  }
-
   prepareSearch(search: SearchConfig): string {
     search.token = '' + Math.floor(Date.now() / 1000) / 1000;
     this._searchresult.next({ search: search });
@@ -559,7 +500,6 @@ export class CacheService {
   }
 
   reloadCategories(): void {
-    let svc = this;
     this.restapi.getCategories().subscribe((reply) => {
       if (reply instanceof Error) {
         if (reply instanceof UnauthorizedError)
@@ -574,7 +514,6 @@ export class CacheService {
   }
 
   reloadConfig(): void {
-    let svc = this;
     this.restapi.getConfigChildren('').subscribe((reply) => {
       if (reply instanceof Error) {
         if (reply instanceof UnauthorizedError)
@@ -610,7 +549,6 @@ export class CacheService {
   }
 
   reloadParameterset(): void {
-    let svc = this;
     this.restapi.getPsetChildren('').subscribe((reply) => {
       if (reply instanceof Error) {
         if (reply instanceof UnauthorizedError)
@@ -645,31 +583,11 @@ export class CacheService {
     });
   }
 
-  private addToSearchHistory(token: string, phrase: string): CacheService {
-    this.searchhistory.push([+token, phrase]);
-    if (this.searchhistory.length >= 5) {
-      const firstitem = this.searchhistory.splice(0, 1);
-      firstitem.forEach((item) => {
-        try {
-          sessionStorage.removeItem(`${item[0]}`);
-        } catch (error) { }
-      });
-    }
-    sessionStorage.setItem('findr-history', JSON.stringify(this.searchhistory));
-    return this;
-  }
-
-  private saveSearchResult(token: string): CacheService {
-    sessionStorage.setItem(token, JSON.stringify({ ...this._searchresult.value }));
-    return this;
-  }
-
   setResult(token: string, result: SearchResultUuids): void {
     if (!this._searchresult.value || this._searchresult.value!.search.token != token)
       return;
     this._searchresult.value.result = { ...result };
-    this.addToSearchHistory(token, this._searchresult.value.search.phrase)
-      .saveSearchResult(token);
+    this.addToSearchHistory(token, this._searchresult.value.search.phrase, this._searchresult.value);
   }
 
   showMoreFilter(newvalue: boolean): void {

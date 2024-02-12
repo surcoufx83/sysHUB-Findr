@@ -9,7 +9,7 @@
                 <strong [innerHTML]="item.name | highlight: searchResult.search.phrase"></strong>
             </td>
             <td class="text-end">
-                <a target="_blank" [href]="'#workflow?uuid=' + item.uuid">
+                <a target="_blank" [href]="'#workflow?uuid=' + item.uuid + '&t=' + searchResult.search.token">
                     <button type="button" class="btn btn-sm">
                         <i class="bi bi-box-arrow-up-right me-1"></i>
                         {{ l10nphrase.result.showWorkflow }}

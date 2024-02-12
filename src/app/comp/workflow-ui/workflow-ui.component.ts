@@ -1,4 +1,3 @@
-import { HttpStatusCode } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -8,7 +7,7 @@ import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
 import { SearchService } from 'src/app/svc/search.service';
 import { ToastsService } from 'src/app/svc/toasts.service';
 import { SearchResult } from 'src/app/types';
-import { RestService, SyshubVersion, SyshubWorkflow, SyshubWorkflowModel, SyshubWorkflowReference, SyshubWorkflowVersion } from 'syshub-rest-module';
+import { RestService, SyshubWorkflow, SyshubWorkflowModel, SyshubWorkflowReference, SyshubWorkflowVersion } from 'syshub-rest-module';
 
 @Component({
   selector: 'app-workflow-ui',
@@ -57,11 +56,15 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
 
   debounce: any;
   ngOnInit(): void {
+    this.subs.push(this.cacheService.searchresult.subscribe((result) => this.searchResult = result ?? undefined));
     this.subs.push(this.route.queryParamMap.subscribe((map) => {
       if (!map.has('uuid')) {
         this.failedState = 'noUuid';
         this.toastsService.addDangerToast({ message: this.l10nphrase.workflowUi.failedCommon + this.l10nphrase.workflowUi.failed.noUuid, autohide: false });
         return;
+      }
+      if (map.has('t')) {
+        this.cacheService.loadSearchResult(map.get('t')!);
       }
       this.workflowUuid = map.get('uuid') ?? undefined;
       clearTimeout(this.debounce);
@@ -82,10 +85,8 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
     if (this.workflowUuid == undefined)
       return;
     const tempworkflow = this.cacheService.getWorkflow(this.workflowUuid);
-    if (tempworkflow == null) {
-      this.toastsService.addDangerToast({ message: this.l10nphrase.workflowUi.failedCommon + this.l10nphrase.workflowUi.failed.noCache, autohide: false });
+    if (tempworkflow == null)
       return;
-    }
     if (this.workflow != undefined && JSON.stringify(this.workflow) === JSON.stringify(tempworkflow))
       return;
 
@@ -93,7 +94,6 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
     this.workflow = { ...tempworkflow };
 
     this.subs.push(this.restapi.getWorkflowReferences(tempworkflow.uuid).subscribe((reply) => {
-      console.log('getWorkflowReferences', reply)
       if (reply instanceof Error) {
         this.toastsService.addDangerToast({
           message: this.l10n(this.l10nphrase.api.errorCommon, [reply.message]),
@@ -109,7 +109,6 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
     }));
 
     this.subs.push(this.restapi.getWorkflowModel(tempworkflow.uuid).subscribe((reply) => {
-      console.log('getWorkflowModel', reply)
       if (reply instanceof Error) {
         this.toastsService.addDangerToast({
           message: this.l10n(this.l10nphrase.api.errorCommon, [reply.message]),
@@ -125,7 +124,6 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
     }));
 
     this.subs.push(this.restapi.getWorkflowStartpoints(tempworkflow.uuid).subscribe((reply) => {
-      console.log('getWorkflowStartpoints', reply)
       if (reply instanceof Error) {
         this.toastsService.addDangerToast({
           message: this.l10n(this.l10nphrase.api.errorCommon, [reply.message]),
@@ -141,7 +139,6 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
     }));
 
     this.subs.push(this.restapi.getWorkflowVersions(tempworkflow.uuid).subscribe((reply) => {
-      console.log('getWorkflowVersions', reply)
       if (reply instanceof Error) {
         this.toastsService.addDangerToast({
           message: this.l10n(this.l10nphrase.api.errorCommon, [reply.message]),

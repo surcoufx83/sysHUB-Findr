@@ -1,8 +1,8 @@
 <div class="workflow-container">
-    <div class="overflow-scroll">
+    <div class="overflow-visible " (mousemove)="onMouseMoveOverSvg($event)" (mouseleave)="onMouseLeaveSvg()">
         <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink"
-            xmlns:svgjs="http://svgjs.dev/svgjs" width="2000" height="2000" #workflowSvgContainer
-            class="absolute workflow" (mousemove)="onMouseMoveOverSvg($event)" (mouseleave)="onMouseLeaveSvg()">
+            xmlns:svgjs="http://svgjs.dev/svgjs" width="2200" height="2200" #workflowSvgContainer
+            class="absolute workflow">
             <defs>
                 <pattern x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse" id="background-pattern">
                     <rect width="10" height="10" fill="transparent" stroke="rgba(0, 0, 0, .1)"></rect>
@@ -17,14 +17,6 @@
                 </marker>
             </defs>
             <rect width="100%" height="100%" fill="url(&quot;#background-pattern&quot;)"></rect>
-            <g>
-                <rect width="3" height="8" [attr.x]="svgCursor.x - 1" y="0"
-                    [ngClass]="{'cursor': true, 'invisible': svgCursor.x < 1 || svgCursor.y < 1}"></rect>
-                <rect width="8" height="3" [attr.y]="svgCursor.y - 1" x="0"
-                    [ngClass]="{'cursor': true, 'invisible': svgCursor.x < 1 || svgCursor.y < 1}"></rect>
-                <text x="2" y="8" [ngClass]="{'ruler': true, 'invisible': svgCursor.x < 1 || svgCursor.y < 1}">{{
-                    svgCursor.x }}, {{ svgCursor.y }}</text>
-            </g>
             @for (point of ruler; track $index) {
             <g>
                 <text class="ruler" [attr.x]="point" y="8" dominant-baseline="bottom" text-anchor="middle"> {{ point }}
@@ -85,6 +77,14 @@
                 <text class="proc-description connector-description" [attr.x]="item.x" [attr.y]="item.y"
                     dominant-baseline="bottom" text-anchor="middle">{{ item.text }}</text>
                 }
+            </g>
+            <g>
+                <rect width="3" height="8" [attr.x]="svgCursor.x - 1" y="0"
+                    [ngClass]="{'cursor': true, 'invisible': svgCursor.x < 1 || svgCursor.y < 1}"></rect>
+                <rect width="8" height="3" [attr.y]="svgCursor.y - 1" x="0"
+                    [ngClass]="{'cursor': true, 'invisible': svgCursor.x < 1 || svgCursor.y < 1}"></rect>
+                <text x="2" y="8" [ngClass]="{'ruler': true, 'invisible': svgCursor.x < 1 || svgCursor.y < 1}">{{
+                    svgCursor.x }}, {{ svgCursor.y }}</text>
             </g>
         </svg>
     </div>

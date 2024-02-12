@@ -42,7 +42,7 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(private l10nService: L10nService,
     private cacheService: CacheService,
     private searchService: SearchService,
-    @Inject(DOCUMENT) document: Document) {
+    @Inject(DOCUMENT) private document: Document) {
     this.window = document.defaultView!;
     this.pageSize = { width: this.window.innerWidth, height: this.window.innerHeight - 64 };
   }
@@ -314,7 +314,10 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onMouseMoveOverSvg(event: MouseEvent): void {
-    this.svgCursor = { x: event.clientX, y: event.clientY - 64 };
+    const x = event.clientX + (this.document.documentElement.scrollLeft)
+    const y = event.clientY + (this.document.documentElement.scrollTop) - (this.document.documentElement.clientTop)
+    console.log(event.clientX, this.document.documentElement.scrollLeft, this.document.documentElement.clientLeft, x)
+    this.svgCursor = { x: x, y: y - 132 };
   }
 
   resizeTimeout: any;
