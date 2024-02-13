@@ -363,9 +363,11 @@ export const L10nDe: L10nLocale = {
         failedCommon: 'Fehler beim Anzeigen des Workflows: ',
         errorConnector: 'On Error',
         process: {
-            loop: 'Looparray',
-            parameterGroup: 'Parameter',
             subject: ['Prozess', 'Loop-Prozess'],
+        },
+        shared: {
+            loop: 'Looparray',
+            parametersetRef: 'Parameterset',
         },
     }
 };

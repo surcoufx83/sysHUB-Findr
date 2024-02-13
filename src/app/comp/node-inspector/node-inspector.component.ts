@@ -98,6 +98,7 @@ export class NodeInspectorComponent implements OnDestroy, OnInit {
         element.style.left = `${Math.floor((<SvgElement>node).x + (<SvgElement>node).width * 2 + 16)}px`;
         element.style.top = `${(<SvgElement>node).y + 48}px`;
       }
+      this.propsService.NodesOpened.next({ id: nodeid, type: type, node: node });
     }, 1);
 
   }
@@ -117,7 +118,7 @@ export class NodeInspectorComponent implements OnDestroy, OnInit {
           if (node.id === nodeid)
             node.dispose = true;
           if (manual === true)
-            this.propsService.NodesClosed.next({ type: node.type, node: node.nodeitem });
+            this.propsService.NodesClosed.next({ id: nodeid, type: node.type, node: node.nodeitem });
         });
         return;
       }

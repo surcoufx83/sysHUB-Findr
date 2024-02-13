@@ -302,9 +302,11 @@ export type L10nLocale = {
         failedCommon: string,
         errorConnector: string,
         process: {
-            loop: string,
-            parameterGroup: string,
             subject: string[],
+        },
+        shared: {
+            loop: string,
+            parametersetRef: string,
         },
     },
 }

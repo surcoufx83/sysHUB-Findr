@@ -360,9 +360,11 @@ export const L10nFr: L10nLocale = {
         failedCommon: 'Erreur lors de l\'affichage du workflow : ',
         errorConnector: 'On Error',
         process: {
-            loop: 'Boucle tableau',
-            parameterGroup: 'Paramètre',
             subject: ['Processus', 'Processus en boucle'],
+        },
+        shared: {
+            loop: 'Boucle tableau',
+            parametersetRef: 'Ensemble de paramètres',
         },
     },
 };

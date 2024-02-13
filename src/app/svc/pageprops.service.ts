@@ -18,7 +18,8 @@ export class PagepropsService {
 
   private nodeInspectorItem$ = new Subject<{ type: string, node: SvgElement | SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubIppDevice | SyshubWorkflow | SyshubCertStoreItem, remove?: boolean }>();
   public NodeInspectorItem = this.nodeInspectorItem$.asObservable();
-  public NodesClosed = new Subject<{ type: string, node: SvgElement | SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubIppDevice | SyshubWorkflow | SyshubCertStoreItem }>();
+  public NodesOpened = new Subject<{ id: string, type: string, node: SvgElement | SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubIppDevice | SyshubWorkflow | SyshubCertStoreItem }>();
+  public NodesClosed = new Subject<{ id: string, type: string, node: SvgElement | SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubIppDevice | SyshubWorkflow | SyshubCertStoreItem }>();
 
   private pages: PageTitleItem[] = [
     { pattern: new RegExp(/^\/$/), text: 'sysHUB Findr' },
