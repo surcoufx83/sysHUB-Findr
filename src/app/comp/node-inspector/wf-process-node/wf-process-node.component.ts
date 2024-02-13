@@ -51,7 +51,6 @@ export class NodeInspectorWfProcessNodeComponent implements OnDestroy, OnInit {
   ngOnInit(): void {
     const obj = (<GraphModelProcessObject>this.nodeItem.modeldata);
     const parms = obj.parameters.split(';');
-    console.log(obj)
     parms.forEach((kvpair) => {
       if (kvpair != '') {
         const key = kvpair.substring(0, kvpair.indexOf('='));
@@ -60,14 +59,10 @@ export class NodeInspectorWfProcessNodeComponent implements OnDestroy, OnInit {
     });
     if (obj.parameterSetUuid != null && obj.parameterSetUuid !== '') {
       this.parameterset = this.cacheService.getPsetItemByUuid(obj.parameterSetUuid) ?? undefined;
-      console.log(this.parameterset)
     }
     this.subs.push(this.propsService.NodesOpened.subscribe((node) => {
-      console.log(node, this.moveNodeNextTo)
       if (node.type === 'PSetItems' && this.moveNodeNextTo[(<SyshubPSetItem>node.node).uuid]) {
         const nodelement = this.document.getElementById(node.id);
-        console.log(nodelement)
-        console.log(this.moveNodeNextTo[(<SyshubPSetItem>node.node).uuid])
         const nodetarget = this.moveNodeNextTo[(<SyshubPSetItem>node.node).uuid];
         if (nodelement) {
           nodelement.style.left = `${Math.floor(+nodetarget.style.left.substring(0, nodetarget.style.left.length - 2) + 524)}px`;
@@ -79,9 +74,7 @@ export class NodeInspectorWfProcessNodeComponent implements OnDestroy, OnInit {
 
   selectNode(node: SyshubPSetItem, event: MouseEvent): void {
     this.propsService.inspect('PSetItems', node);
-    console.log(event)
     const target = (<HTMLElement>event.target).parentElement?.parentElement?.parentElement?.parentElement?.parentElement
-    console.log(target)
     if (target) {
       this.moveNodeNextTo[node.uuid] = target;
     }

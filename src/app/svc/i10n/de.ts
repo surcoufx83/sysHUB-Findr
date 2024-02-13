@@ -362,6 +362,9 @@ export const L10nDe: L10nLocale = {
         failedBackToFindr: 'Zurück zur Startseite',
         failedCommon: 'Fehler beim Anzeigen des Workflows: ',
         errorConnector: 'On Error',
+        decision: {
+            subject: 'Entscheidung',
+        },
         process: {
             subject: ['Prozess', 'Loop-Prozess'],
         },

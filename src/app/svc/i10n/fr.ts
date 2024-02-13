@@ -359,6 +359,9 @@ export const L10nFr: L10nLocale = {
         failedBackToFindr: 'Retour à la page d\'accueil',
         failedCommon: 'Erreur lors de l\'affichage du workflow : ',
         errorConnector: 'On Error',
+        decision: {
+            subject: 'Décision',
+        },
         process: {
             subject: ['Processus', 'Processus en boucle'],
         },

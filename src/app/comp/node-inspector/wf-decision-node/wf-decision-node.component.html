@@ -2,8 +2,8 @@
     <div class="d-flex align-items-center justify-content-between">
         <div>
             <div class="fs-8 mb-1">
-                <i class="bi bi-gear me-1"></i>
-                {{ l10nphrase.workflowUi.process.subject[$any(nodeItem.modeldata).isLoop === true ? 1 : 0] }}
+                <i class="bi bi-signpost-split me-1"></i>
+                {{ l10nphrase.workflowUi.decision.subject }}
             </div>
             <h5 class="mb-0" [innerHTML]="nodeItem.title | highlight: searchResult.search.phrase"></h5>
         </div>
@@ -45,16 +45,7 @@
                 <th scope="row" [innerHTML]="(item[0] || '&lt;null&gt;' | highlight: searchResult.search.phrase) + ':'">
                 </th>
                 <td>
-                    @if(item[0] === 'query' && $any(nodeItem.modeldata).command == 'com.oce.epos.procs.ExecuteQuery') {
-                    <markdown ngPreserveWhitespaces>
-                        ```sql
-                        {{item[1]}}
-                        ```
-                    </markdown>
-                    }
-                    @else {
                     <code [innerHTML]="item[1] || '&lt;null&gt;' | highlight: searchResult.search.phrase"></code>
-                    }
                 </td>
                 <td style="width: 20px;" class="py-0">
                     <app-copy-button [valueToCopy]="item[1]"></app-copy-button>
