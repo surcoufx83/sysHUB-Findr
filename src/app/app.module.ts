@@ -58,6 +58,7 @@ import { SearchService } from './svc/search.service';
 import { ToastsService } from './svc/toasts.service';
 import { ToastsComponent } from './svc/toasts/toasts.component';
 import { HighlightPipe } from './utils/highlight.pipe';
+import { APP_BASE_HREF } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -118,6 +119,7 @@ import { HighlightPipe } from './utils/highlight.pipe';
     RouterModule,
   ],
   providers: [
+    { provide: APP_BASE_HREF, useValue: '/' },
     { provide: AppInitService, multi: false },
     { provide: Settings, multi: false, useFactory: (initService: AppInitService) => initService.environment.api.syshub, deps: [AppInitService] },
     { provide: RestService, multi: false, deps: [Settings, HttpClient] },

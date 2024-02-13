@@ -20,6 +20,9 @@ Die Konfiguration für ein Kundensystem erfolgt vorrangig in der `environment.pr
 
 In der Datei müssen entweder Basic- oder OAuth Credentials angegeben und anschließend muss das gesamte Projektverzeichnis kompiliert werden (siehe [Contributing Guide - Abschnitt Build](CONTRIBUTING.md#build)). Durch die direkte Einbindung in den Source code lädt die Seite schneller, mit weniger HTTP-Anfragen und ohne nachträgliches Rendering.
 
+### Konfiguration im sysHUB
+
+
 ### Konfigurationsparameter
 | Parameter                 | Werte (Default)                                                          | Verwendung und Hinweise                                                                                                                                                                                                                                                                                                                                                         |
 | ------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

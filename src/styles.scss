@@ -27,7 +27,7 @@ $theme-colors: (
 @import 'bootstrap/scss/bootstrap.scss';
 @import '@fontsource/montserrat';
 
-@import 'flag-icons/css/flag-icons.min.css';
+@import 'flag-icons/css/flag-icons.css';
 
 body {
     font-family: "Montserrat";
@@ -108,6 +108,17 @@ code {
         &[style*="height"] {
             max-height: unset;
         }
+    }
+}
+
+
+.card.node-inspector {
+    width: 100%;
+}
+
+@include media-breakpoint-up(lg) {
+    .card.node-inspector {
+        min-width: 500px;
     }
 }
 
