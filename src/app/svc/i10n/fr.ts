@@ -359,6 +359,11 @@ export const L10nFr: L10nLocale = {
         failedBackToFindr: 'Retour à la page d\'accueil',
         failedCommon: 'Erreur lors de l\'affichage du workflow : ',
         errorConnector: 'On Error',
+        celement: {
+            instanceName: 'Instance',
+            subject: 'CElement',
+            variable: 'Variable',
+        },
         decision: {
             subject: 'Décision',
         },
@@ -366,8 +371,14 @@ export const L10nFr: L10nLocale = {
             subject: ['Processus', 'Processus en boucle'],
         },
         shared: {
+            agent: 'Agent',
             loop: 'Boucle tableau',
             parametersetRef: 'Ensemble de paramètres',
+        },
+        workflow: {
+            startpoint: 'Point de départ',
+            subject: ['Workflow', 'Workflow en boucle'],
+            threads: 'Threads',
         },
     },
 };

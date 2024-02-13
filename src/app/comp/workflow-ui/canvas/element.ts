@@ -203,6 +203,7 @@ export class ProcessElement extends SvgElement {
             graphNode.command,
             graphNode.parameterSetPath,
             graphNode.parameters,
+            graphNode.loopName,
             (searchResult.search.filter.includeUuids ? graphNode.parameterSetUuid : ''),
             (searchResult.search.filter.includeUuids ? graphNode.uuid : ''),
         ], searchResult.search) : false;
@@ -249,6 +250,7 @@ export class WorkflowElement extends SvgElement {
             graphNode.agent ?? '',
             graphNode.refName,
             graphNode.refShortDesc,
+            graphNode.loopName,
             (searchResult.search.filter.includeUuids ? graphNode.refUuid : ''),
         ], searchResult.search) : false;
     }

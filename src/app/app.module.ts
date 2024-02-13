@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { MarkdownModule } from 'ngx-markdown';
 import { RestService, Settings, SyshubInterceptor } from 'syshub-rest-module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -29,6 +30,10 @@ import { NodeInspectorJobtypesNodeComponent } from './comp/node-inspector/jobtyp
 import { NodeInspectorComponent } from './comp/node-inspector/node-inspector.component';
 import { NodeInspectorPsetNodeComponent } from './comp/node-inspector/pset-node/pset-node.component';
 import { NodeInspectorUserNodeComponent } from './comp/node-inspector/user-node/user-node.component';
+import { NodeInspectorWfCelementNodeComponent } from './comp/node-inspector/wf-celement-node/wf-celement-node.component';
+import { NodeInspectorWfDecisionNodeComponent } from './comp/node-inspector/wf-decision-node/wf-decision-node.component';
+import { NodeInspectorWfProcessNodeComponent } from './comp/node-inspector/wf-process-node/wf-process-node.component';
+import { NodeInspectorWfWorkflowNodeComponent } from './comp/node-inspector/wf-workflow-node/wf-workflow-node.component';
 import { NodeInspectorWorkflowsNodeComponent } from './comp/node-inspector/workflows-node/workflows-node.component';
 import { CertstoreComponent } from './comp/result/certstore/certstore.component';
 import { ConfigComponent } from './comp/result/config/config.component';
@@ -44,6 +49,7 @@ import { UserComponent } from './comp/result/user/user.component';
 import { WorkflowsComponent } from './comp/result/workflows/workflows.component';
 import { SearchComponent } from './comp/search/search.component';
 import { StatsComponent } from './comp/stats/stats.component';
+import { CanvasComponent } from './comp/workflow-ui/canvas/canvas.component';
 import { WorkflowUiComponent } from './comp/workflow-ui/workflow-ui.component';
 import { AppInitService } from './svc/app-init.service';
 import { L10nService } from './svc/i10n.service';
@@ -52,15 +58,12 @@ import { SearchService } from './svc/search.service';
 import { ToastsService } from './svc/toasts.service';
 import { ToastsComponent } from './svc/toasts/toasts.component';
 import { HighlightPipe } from './utils/highlight.pipe';
-import { CanvasComponent } from './comp/workflow-ui/canvas/canvas.component';
-import { NodeInspectorWfProcessNodeComponent } from './comp/node-inspector/wf-process-node/wf-process-node.component';
-import { MarkdownModule } from 'ngx-markdown';
-import { NodeInspectorWfDecisionNodeComponent } from './comp/node-inspector/wf-decision-node/wf-decision-node.component';
 
 @NgModule({
   declarations: [
     AboutComponent,
     AppComponent,
+    CanvasComponent,
     CertstoreComponent,
     ConfigComponent,
     CopyButtonComponent,
@@ -81,6 +84,10 @@ import { NodeInspectorWfDecisionNodeComponent } from './comp/node-inspector/wf-d
     NodeInspectorJobtypesNodeComponent,
     NodeInspectorPsetNodeComponent,
     NodeInspectorUserNodeComponent,
+    NodeInspectorWfCelementNodeComponent,
+    NodeInspectorWfDecisionNodeComponent,
+    NodeInspectorWfProcessNodeComponent,
+    NodeInspectorWfWorkflowNodeComponent,
     NodeInspectorWorkflowsNodeComponent,
     OverviewComponent,
     ParametersetComponent,
@@ -97,9 +104,6 @@ import { NodeInspectorWfDecisionNodeComponent } from './comp/node-inspector/wf-d
     UserComponent,
     WorkflowsComponent,
     WorkflowUiComponent,
-    CanvasComponent,
-    NodeInspectorWfProcessNodeComponent,
-    NodeInspectorWfDecisionNodeComponent,
   ],
   imports: [
     AppRoutingModule,

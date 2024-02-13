@@ -362,6 +362,11 @@ export const L10nDe: L10nLocale = {
         failedBackToFindr: 'Zurück zur Startseite',
         failedCommon: 'Fehler beim Anzeigen des Workflows: ',
         errorConnector: 'On Error',
+        celement: {
+            instanceName: 'Instanz',
+            subject: 'CElement',
+            variable: 'Variable',
+        },
         decision: {
             subject: 'Entscheidung',
         },
@@ -369,8 +374,14 @@ export const L10nDe: L10nLocale = {
             subject: ['Prozess', 'Loop-Prozess'],
         },
         shared: {
+            agent: 'Agent',
             loop: 'Looparray',
             parametersetRef: 'Parameterset',
+        },
+        workflow: {
+            startpoint: 'Startpunkt',
+            subject: ['Workflow', 'Loop-Workflow'],
+            threads: 'Threads',
         },
     }
 };

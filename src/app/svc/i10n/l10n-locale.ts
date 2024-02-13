@@ -301,6 +301,11 @@ export type L10nLocale = {
         failedBackToFindr: string,
         failedCommon: string,
         errorConnector: string,
+        celement: {
+            instanceName: string,
+            subject: string,
+            variable: string,
+        },
         decision: {
             subject: string,
         },
@@ -308,8 +313,14 @@ export type L10nLocale = {
             subject: string[],
         },
         shared: {
+            agent: string,
             loop: string,
             parametersetRef: string,
+        },
+        workflow: {
+            startpoint: string,
+            subject: string[],
+            threads: string,
         },
     },
 }

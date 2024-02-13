@@ -14,9 +14,9 @@
             <ng-content></ng-content>
         </div>
     </div>
-    <p class="mb-0 fst-italic" [innerHTML]="nodeItem.description | highlight: searchResult.search.phrase"></p>
+    <p class="mb-1 fst-italic" [innerHTML]="nodeItem.description | highlight: searchResult.search.phrase"></p>
     @if ($any(nodeItem.modeldata).isLoop === true) {
-    <p class="mb-0">
+    <p class="mb-1">
         <strong>
             <i class="bi bi-arrow-repeat me-1"></i>
             {{ l10nphrase.workflowUi.shared.loop }}:
@@ -25,7 +25,7 @@
     </p>
     }
     @if (parameterset) {
-    <p class="mb-0">
+    <p class="mb-1">
         <strong>
             <i class="bi bi-p-square-fill me-1"></i>
             {{ l10nphrase.workflowUi.shared.parametersetRef }}:
