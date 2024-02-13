@@ -250,8 +250,14 @@ body[data-bs-theme="dark"] {
     .workflow-container {
         background-color: #898989;
 
-        svg.workflow g.element-group rect.proc-box {
-            fill: rgba($color: #898989, $alpha: .1) !important;
+        svg.workflow {
+            g.element-group rect.proc-box {
+                fill: rgba($color: #898989, $alpha: .1) !important;
+            }
+
+            text.proc-description.connector-description.error {
+                fill: darken($primary, $amount: 15) !important;
+            }
         }
     }
 

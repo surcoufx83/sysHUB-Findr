@@ -23,6 +23,7 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('workflowSvgContainer') svgContainer!: ElementRef;
 
   onErrorHandlerNodes: string[] = []; // key of elements after on error connector
+  breakpoints: SvgConnectorBreakpoint[] = [];
   connectorTitles: SvgConnectorText[] = [];
   nodes: SvgElement[] = [];
   nodeUUids: { [key: string]: number } = {};
@@ -224,10 +225,15 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
           if (path.category == 'error' || (path.description)) {
             let coords = this.getConnectorPosition(elementFrom, path.fromPort);
             this.connectorTitles.push({
+              isErrorConnection: path.category == 'error',
               x: path.category == 'error' ? coords.x + 22 : path.fromPort == 'l' ? coords.x - 16 : coords.x + 16,
               y: path.fromPort == 'b' ? coords.y : coords.y - 3,
               text: path.category == 'error' ? this.l10nphrase.workflowUi.errorConnector : path.description!
             });
+          }
+          if (path.breakpoint === true) {
+            let coords = this.getConnectorPosition(elementTo, path.toPort);
+            this.breakpoints.push({ x: coords.x - 9, y: coords.y - 28 })
           }
         }
       });
@@ -279,15 +285,17 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy(): void {
-    this.ngOnInit();
     this.subs.forEach((s) => s.unsubscribe());
   }
 
   ngOnInit(): void {
-    this.nodes = [];
-    this.onErrorHandlerNodes = [];
-    this.nodeUUids = {};
-    this.connectorTitles = [];
+    this.subs.push(this.propsService.NodesClosed.subscribe((node) => {
+      if (node.type != 'SvgNode')
+        return;
+      let i = this.nodesToggled.indexOf((<SvgElement>node.node).modeldata.key);
+      if (i > -1)
+        this.nodesToggled.splice(i, 1);
+    }))
   }
 
   onMouseLeaveSvg(): void {
@@ -420,8 +428,14 @@ export interface SvgPathPoint {
   cs?: Point;
 }
 
-export interface SvgConnectorText {
+export interface SvgConnectorBreakpoint {
   x: number;
   y: number;
+}
+
+export interface SvgConnectorText {
+  isErrorConnection: boolean;
   text: string;
+  x: number;
+  y: number;
 }

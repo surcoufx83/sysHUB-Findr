@@ -109,13 +109,15 @@ export class NodeInspectorComponent implements OnDestroy, OnInit {
     })
   }
 
-  onRemoveNode(i: number, nodeid: string): void {
+  onRemoveNode(i: number, nodeid: string, manual?: boolean): void {
     for (let i = 0; i < this.nodesAdded.length; i++) {
       if (this.nodesAdded[i] === nodeid) {
         this.nodesAdded.splice(i, 1);
         this.nodeCards.forEach((node) => {
           if (node.id === nodeid)
             node.dispose = true;
+          if (manual === true)
+            this.propsService.NodesClosed.next({ type: node.type, node: node.nodeitem });
         });
         return;
       }

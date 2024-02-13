@@ -55,6 +55,7 @@ import { HighlightPipe } from './utils/highlight.pipe';
 import { CanvasComponent } from './comp/workflow-ui/canvas/canvas.component';
 import { NodeInspectorWfProcessNodeComponent } from './comp/node-inspector/wf-process-node/wf-process-node.component';
 import { MarkdownModule } from 'ngx-markdown';
+import { WfDecisionNodeComponent } from './comp/node-inspector/wf-decision-node/wf-decision-node.component';
 
 @NgModule({
   declarations: [
@@ -98,6 +99,7 @@ import { MarkdownModule } from 'ngx-markdown';
     WorkflowUiComponent,
     CanvasComponent,
     NodeInspectorWfProcessNodeComponent,
+    WfDecisionNodeComponent,
   ],
   imports: [
     AppRoutingModule,

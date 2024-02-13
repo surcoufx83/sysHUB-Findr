@@ -67,14 +67,23 @@
             }
             <g class="workflow-paths">
                 @for (connection of graphModel.linkDataArray; track connection; let i = $index) {
-                <path [attr.i]="i" [attr.marker-end]="hoverpath == i ? 'url(#arrowred)' : 'url(#arrow)'"
-                    (mousemove)="hoverpath = i" (mouseleave)="hoverpath = undefined"></path>
+                <path [attr.i]="i" [ngClass]="[connection.category ?? 'common']"
+                    [attr.marker-end]="hoverpath == i ? 'url(#arrowred)' : 'url(#arrow)'" (mousemove)="hoverpath = i"
+                    (mouseleave)="hoverpath = undefined"></path>
                 }
             </g>
             <g class="connector-notes">
                 @for (item of connectorTitles; track $index) {
-                <text class="proc-description connector-description" [attr.x]="item.x" [attr.y]="item.y"
-                    dominant-baseline="bottom" text-anchor="middle">{{ item.text }}</text>
+                <text
+                    [class]="['proc-description','connector-description', item.isErrorConnection ? 'error' : 'default']"
+                    [attr.x]="item.x" [attr.y]="item.y" dominant-baseline="bottom" text-anchor="middle">{{ item.text
+                    }}</text>
+                }
+            </g>
+            <g class="connector-breakpoints">
+                @for (item of breakpoints; track $index) {
+                <image [attr.x]="item.x" [attr.y]="item.y" width="18" height="18" href="/assets/syshub/breakpoint.svg">
+                </image>
                 }
             </g>
             <g>

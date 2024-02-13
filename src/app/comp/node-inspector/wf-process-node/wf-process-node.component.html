@@ -3,7 +3,7 @@
         <div>
             <div class="fs-8 mb-1">
                 <i class="bi bi-gear me-1"></i>
-                {{ l10nphrase.workflowUi.process.subject }}
+                {{ l10nphrase.workflowUi.process.subject[$any(nodeItem.modeldata).isLoop === true ? 1 : 0] }}
             </div>
             <h5 class="mb-0" [innerHTML]="nodeItem.title | highlight: searchResult.search.phrase"></h5>
         </div>
@@ -15,6 +15,15 @@
         </div>
     </div>
     <p class="mb-0 fst-italic" [innerHTML]="nodeItem.description | highlight: searchResult.search.phrase"></p>
+    @if ($any(nodeItem.modeldata).isLoop === true) {
+    <p class="mb-0">
+        <strong>
+            <i class="bi bi-arrow-repeat me-1"></i>
+            {{ l10nphrase.workflowUi.process.loop }}:
+        </strong>
+        <span [innerHTML]="$any(nodeItem.modeldata).loopName | highlight: searchResult.search.phrase"></span>
+    </p>
+    }
 </div>
 <div class="card-body p-0">
     <table class="table table-sm table-hover m-0">

@@ -36,6 +36,7 @@ export class NodeInspectorWfProcessNodeComponent implements OnInit {
 
   ngOnInit(): void {
     const parms = (<GraphModelProcessObject>this.nodeItem.modeldata).parameters.split(';');
+    console.log(<GraphModelProcessObject>this.nodeItem.modeldata)
     parms.forEach((kvpair) => {
       if (kvpair != '') {
         const key = kvpair.substring(0, kvpair.indexOf('='));
