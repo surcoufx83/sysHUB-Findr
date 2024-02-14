@@ -380,5 +380,15 @@ export const L10nFr: L10nLocale = {
             subject: ['Workflow', 'Workflow en boucle'],
             threads: 'Threads',
         },
+        versionsDropdown: {
+            title: ['[0] versions (actuel: [1])', '[0] versions (modifié: [1])'],
+            versionstr: '[0].[1]',
+            isactive: 'actif',
+            lastactive: 'en cours'
+        },
+        referencesDropdown: {
+            title: ['Aucune référence', '[0] référence', '[0] références'],
+            occurencesInWorkflow: '[0]x dans [1]',
+        },
     },
 };

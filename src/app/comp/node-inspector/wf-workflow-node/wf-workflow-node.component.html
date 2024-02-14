@@ -28,10 +28,10 @@
             {{ l10nphrase.workflowUi.workflow.startpoint }}:
         </strong>
         @if ($any(nodeItem.modeldata).startPoint == '') {
-        <span>Start</span>
+        <code>Start</code>
         }
         @else {
-        <span [innerHTML]="$any(nodeItem.modeldata).startPoint | highlight: searchResult.search.phrase"></span>
+        <code [innerHTML]="$any(nodeItem.modeldata).startPoint | highlight: searchResult.search.phrase"></code>
         }
     </p>
     @if ($any(nodeItem.modeldata).isLoop === true) {
@@ -40,7 +40,7 @@
             <i class="bi bi-arrow-repeat me-1"></i>
             {{ l10nphrase.workflowUi.shared.loop }}:
         </strong>
-        <span [innerHTML]="$any(nodeItem.modeldata).loopName | highlight: searchResult.search.phrase"></span>
+        <code [innerHTML]="$any(nodeItem.modeldata).loopName | highlight: searchResult.search.phrase"></code>
     </p>
     }
     @if ($any(nodeItem.modeldata).agent != '') {
@@ -49,7 +49,7 @@
             <i class="bi bi-router me-1"></i>
             {{ l10nphrase.workflowUi.shared.agent }}:
         </strong>
-        <span [innerHTML]="$any(nodeItem.modeldata).agent | highlight: searchResult.search.phrase"></span>
+        <code [innerHTML]="$any(nodeItem.modeldata).agent | highlight: searchResult.search.phrase"></code>
     </p>
     }
     @if ($any(nodeItem.modeldata).threadCount && $any(nodeItem.modeldata).threadCount > 1) {
@@ -58,15 +58,8 @@
             <i class="bi bi-stack me-1"></i>
             {{ l10nphrase.workflowUi.workflow.threads }}:
         </strong>
-        <span
-            [innerHTML]="$any(nodeItem.modeldata).threadCount + ' (' + $any(nodeItem.modeldata).threadName + ')' | highlight: searchResult.search.phrase"></span>
+        <code
+            [innerHTML]="$any(nodeItem.modeldata).threadCount + ' (' + $any(nodeItem.modeldata).threadName + ')' | highlight: searchResult.search.phrase"></code>
     </p>
     }
-</div>
-<div class="card-body p-0">
-    <table class="table table-sm table-hover m-0">
-        <tbody>
-
-        </tbody>
-    </table>
 </div>

@@ -21,7 +21,7 @@
             <i class="bi bi-arrow-repeat me-1"></i>
             {{ l10nphrase.workflowUi.shared.loop }}:
         </strong>
-        <span [innerHTML]="$any(nodeItem.modeldata).loopName | highlight: searchResult.search.phrase"></span>
+        <code [innerHTML]="$any(nodeItem.modeldata).loopName | highlight: searchResult.search.phrase"></code>
     </p>
     }
     @if (parameterset) {
@@ -30,7 +30,7 @@
             <i class="bi bi-p-square-fill me-1"></i>
             {{ l10nphrase.workflowUi.shared.parametersetRef }}:
         </strong>
-        <span [innerHTML]="$any(nodeItem.modeldata).parameterSetPath | highlight: searchResult.search.phrase"></span>
+        <code [innerHTML]="$any(nodeItem.modeldata).parameterSetPath | highlight: searchResult.search.phrase"></code>
         <button type="button" class="btn btn-sm ms-1" (click)="selectNode(parameterset, $event)">
             <i class="bi bi-window-stack fs-7"></i>
         </button>

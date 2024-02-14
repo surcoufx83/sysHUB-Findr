@@ -322,5 +322,15 @@ export type L10nLocale = {
             subject: string[],
             threads: string,
         },
+        versionsDropdown: {
+            title: string[],
+            versionstr: string,
+            isactive: string,
+            lastactive: string,
+        },
+        referencesDropdown: {
+            title: string[],
+            occurencesInWorkflow: string,
+        },
     },
 }
