@@ -76,17 +76,18 @@ export const L10nDe: L10nLocale = {
     },
     navbar: {
         aboutLink: 'Über',
-        searchPlaceholder: '🔍 Suchbegriff, z.B. currentjob',
         clearCacheLink: 'Cache leeren',
         helpLink: 'Hilfe',
         homeLink: 'Start',
         logoutLink: 'Abmelden',
+        promoLink: 'Findr auf Github',
         resultLink: 'Suchergebnis',
         searchBtn: 'Suchen',
         searchBtnBusy: 'Suche läuft...',
         searchOptions: 'Optionen',
+        searchPlaceholder: '🔍 Suchbegriff, z.B. currentjob',
         statsLink: 'Statistiken',
-        promoLink: 'Findr auf Github',
+        themeSwitch: ['hell', 'dunkel', 'automatisch'],
         webclientLink: 'sysHUB web client'
     },
     result: {

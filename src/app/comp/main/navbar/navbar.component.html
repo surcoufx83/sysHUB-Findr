@@ -171,17 +171,17 @@
                     <li class="dropdown-item cursor-pointer" (click)="applyTheme('light')">
                         <i
                             [ngClass]="{ 'bi me-2': true, 'bi-brightness-high-fill text-success': appTheme == 'light', 'bi-brightness-high': appTheme != 'light' }"></i>
-                        hell
+                        {{ l10nphrase.navbar.themeSwitch[0] }}
                     </li>
                     <li class="dropdown-item cursor-pointer" (click)="applyTheme('dark')">
                         <i
                             [ngClass]="{ 'bi me-2': true, 'bi-moon-fill text-success': appTheme == 'dark', 'bi-moon': appTheme != 'dark' }"></i>
-                        dunkel
+                        {{ l10nphrase.navbar.themeSwitch[1] }}
                     </li>
                     <li class="dropdown-item cursor-pointer" (click)="applyTheme(null)">
                         <i
                             [ngClass]="{ 'bi me-2': true, 'bi-circle-half text-success': appTheme == 'auto' || appTheme == null, 'bi-brightness-high':appTheme != 'auto' && appTheme != null }"></i>
-                        automatisch
+                        {{ l10nphrase.navbar.themeSwitch[2] }}
                     </li>
                     <li>
                         <hr class="dropdown-divider">

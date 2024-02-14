@@ -76,18 +76,19 @@ export const L10nFr: L10nLocale = {
     },
     navbar: {
         aboutLink: 'À propos',
-        searchPlaceholder: '🔍 Terme de recherche, par exemple, currentjob',
-        clearCacheLink: 'Effacer le cache',
+        clearCacheLink: 'Vider le cache',
         helpLink: 'Aide',
         homeLink: 'Accueil',
         logoutLink: 'Déconnexion',
-        resultLink: 'Résultats de recherche',
+        promoLink: 'Findr sur Github',
+        resultLink: 'Résultat de recherche',
         searchBtn: 'Rechercher',
         searchBtnBusy: 'Recherche en cours...',
         searchOptions: 'Options',
+        searchPlaceholder: '🔍 Terme de recherche, par exemple, currentjob',
         statsLink: 'Statistiques',
-        promoLink: 'Findr sur Github',
-        webclientLink: 'Client web sysHUB'
+        themeSwitch: ['clair', 'sombre', 'automatique'],
+        webclientLink: 'client web sysHUB'
     },
     result: {
         certStoreItem: {
