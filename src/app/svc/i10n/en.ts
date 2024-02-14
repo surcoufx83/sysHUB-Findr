@@ -19,7 +19,8 @@ export const L10nEn: L10nLocale = {
             searchOngoing: 'Search in progress...',
             resultView: 'Result View',
             resultConfigView: 'Result (Config)'
-        }
+        },
+        configurationFileMissing: 'The Findr configuration could not be loaded. <a class="text-light" target="_blank" href="https://github.com/surcoufx83/sysHUB-Findr?tab=readme-ov-file#konfiguration-work-in-progress-see-3">Please configure according to the instructions.</a>',
     },
     common: {
         clipboard: {

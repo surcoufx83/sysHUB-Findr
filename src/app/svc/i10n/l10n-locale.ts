@@ -23,7 +23,8 @@ export type L10nLocale = {
             searchOngoing: string,
             resultView: string,
             resultConfigView: string
-        }
+        },
+        configurationFileMissing: string,
     },
     common: {
         clipboard: {

@@ -1,6 +1,6 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, Inject, NgModule, Optional } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -59,6 +59,11 @@ import { ToastsService } from './svc/toasts.service';
 import { ToastsComponent } from './svc/toasts/toasts.component';
 import { HighlightPipe } from './utils/highlight.pipe';
 import { APP_BASE_HREF } from '@angular/common';
+
+export function initAppFactory(svc: AppInitService) {
+  console.warn('initAppFactory')
+  return () => svc.load();
+}
 
 @NgModule({
   declarations: [
@@ -121,7 +126,8 @@ import { APP_BASE_HREF } from '@angular/common';
   providers: [
     { provide: APP_BASE_HREF, useValue: '/' },
     { provide: AppInitService, multi: false },
-    { provide: Settings, multi: false, useFactory: (initService: AppInitService) => initService.environment.api.syshub, deps: [AppInitService] },
+    { provide: APP_INITIALIZER, useFactory: initAppFactory, deps: [AppInitService], multi: true },
+    { provide: Settings, multi: false, useFactory: (initService: AppInitService) => initService.environment?.api.syshub, deps: [AppInitService] },
     { provide: RestService, multi: false, deps: [Settings, HttpClient] },
     { provide: HTTP_INTERCEPTORS, multi: true, useClass: SyshubInterceptor, deps: [Settings, RestService] },
     { provide: L10nService, multi: false },
@@ -132,4 +138,22 @@ import { APP_BASE_HREF } from '@angular/common';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  /* private _donePromise: Promise<void>;
+  private _done: boolean = false;
+  constructor(@Inject(APP_INITIALIZER) @Optional() appInits: (() => any)[]) {
+    const asyncInitPromises: Promise<any>[] = [];
+    if (appInits) {
+      for (let i = 0; i < appInits.length; i++) {
+        const initResult = appInits[i]();
+        //if (isPromise(initResult)) {
+        asyncInitPromises.push(initResult);
+        //}
+      }
+    }
+    this._donePromise = Promise.all(asyncInitPromises).then(() => { this._done = true; });
+    if (asyncInitPromises.length === 0) {
+      this._done = true;
+    }
+  } */
+}

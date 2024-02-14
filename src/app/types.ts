@@ -2,6 +2,9 @@ import { Env, SyshubCategory, SyshubCertStoreItem, SyshubIppDevice, SyshubRole, 
 
 export type FindrEnvironment = {
     api: Env,
+    appInitializationFailure?: {
+        configStatusCode: number,
+    },
     app?: {
         baseUrl?: string,
         promotionLink?: string,

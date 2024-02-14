@@ -19,7 +19,8 @@ export const L10nFr: L10nLocale = {
             searchOngoing: 'Recherche en cours...',
             resultView: 'Vue des résultats',
             resultConfigView: 'Résultat (Configuration)'
-        }
+        },
+        configurationFileMissing: 'La configuration Findr n\'a pas pu être chargée. <a class="text-light" target="_blank" href="https://github.com/surcoufx83/sysHUB-Findr?tab=readme-ov-file#konfiguration-work-in-progress-see-3">Veuillez la configurer selon les instructions.</a>',
     },
     common: {
         clipboard: {
