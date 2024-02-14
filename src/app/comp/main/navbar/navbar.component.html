@@ -13,10 +13,6 @@
                         [routerLink]="['/']">{{
                         l10nphrase.navbar.homeLink }}</a>
                 </li>
-                <li class="nav-item">
-                    <a [ngClass]="{'nav-link': true, 'active': url === '/stats'}" [routerLink]="['/stats']">{{
-                        l10nphrase.navbar.statsLink }}</a>
-                </li>
                 <li class="nav-item" *ngIf="url === '/about'">
                     <a [ngClass]="{'nav-link': true, 'active': true}" [routerLink]="['/about']">{{
                         l10nphrase.navbar.aboutLink }}</a>
