@@ -33,5 +33,6 @@ export type Toast = {
   autohide?: boolean,
   cssClasses?: string[] | { [key: string]: string } | string,
   delay?: number,
-  message: string
+  isHtml?: boolean,
+  message: string,
 };
