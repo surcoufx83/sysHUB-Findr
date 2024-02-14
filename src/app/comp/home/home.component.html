@@ -138,8 +138,10 @@
                                     id="home-search-categoryFilter" name="home-search-categoryFilter"
                                     style="max-width: 320px;">
                                     <option [value]="null">{{ l10nphrase.search.filter.categoryFilterNone }}</option>
-                                    <option [value]="category.uuid" *ngFor="let category of categories">{{ category.name
+                                    @for (category of categories; track $index) {
+                                    <option [value]="category.uuid">{{ category.name
                                         }}</option>
+                                    }
                                 </select>
                             </div>
                         </li>
