@@ -265,6 +265,14 @@ export class CacheService {
     return fallback;
   }
 
+  getJobtypeByName(name: string): SyshubJobType | null {
+    for (let i = 0; i < this.jobtypes$.value.length; i++) {
+      if (this.jobtypes$.value[i].name === name)
+        return this.jobtypes$.value[i];
+    }
+    return null;
+  }
+
   getJobtypeByUuid(uuid: string): SyshubJobType | null {
     return this.jobtypeUuid2Index$[uuid] != undefined ? this.jobtypes$.value[this.jobtypeUuid2Index$[uuid]] : null;
   }
@@ -286,6 +294,22 @@ export class CacheService {
     if (item.parent == null)
       return item.name + (includeUuids ? `[${item.uuid}]` : '');
     return `${this.getPsetTree(item.parent, includeUuids)} / ${item.name}` + (includeUuids ? `[${item.uuid}]` : '');
+  }
+
+  getWorkflow(uuid: string): SyshubWorkflow | null {
+    return this.workflowUuid2Index$[uuid] != undefined ? this.workflows$.value[this.workflowUuid2Index$[uuid]] : null;
+  }
+
+  getWorkflowByName(name: string): SyshubWorkflow | null {
+    for (let i = 0; i < this.workflows$.value.length; i++) {
+      if (this.workflows$.value[i].name === name)
+        return this.workflows$.value[i];
+    }
+    return null;
+  }
+
+  getWorkflows(): SyshubWorkflow[] {
+    return this.workflows$.value;
   }
 
   loadSearchResult(token: string): boolean {
@@ -328,14 +352,6 @@ export class CacheService {
     // Limitation: As jobtypes do not contain modifiedtime we reload them after search result contains at least one jobtype
     if (result.jobtypes.length > 0)
       this.reloadJobtypes();
-  }
-
-  getWorkflow(uuid: string): SyshubWorkflow | null {
-    return this.workflowUuid2Index$[uuid] != undefined ? this.workflows$.value[this.workflowUuid2Index$[uuid]] : null;
-  }
-
-  getWorkflows(): SyshubWorkflow[] {
-    return this.workflows$.value;
   }
 
   get l10nphrase(): L10nLocale {
@@ -408,16 +424,18 @@ export class CacheService {
   loadSubscriptions_Config(): void {
     this.Config.subscribe((configitems) => {
       let indexed: { [key: string]: SyshubConfigItem } = {};
+      let paths: { [key: string]: string } = {};
       configitems.filter((cfg) => cfg.uuid != '').forEach((cfg, i) => {
-        this.loadSubscriptions_ConfigItem(cfg, indexed);
+        this.loadSubscriptions_ConfigItem(cfg, indexed, paths);
       });
       configitems = configitems.sort((a, b) => a.type == 'Group/Folder' && b.type != 'Group/Folder' ? 1 : b.type == 'Group/Folder' && a.type != 'Group/Folder' ? -1 : a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1);
       this.configUuid2Ref$ = { ...indexed };
+      this.configPath2Uuid$ = { ...paths };
       this.configUpdated$.next(Date.now());
     });
   }
 
-  loadSubscriptions_ConfigItem(cfg: SyshubConfigItem, indexed: { [key: string]: SyshubConfigItem }, path: string = ''): void {
+  loadSubscriptions_ConfigItem(cfg: SyshubConfigItem, indexed: { [key: string]: SyshubConfigItem }, paths: { [key: string]: string }, path: string = ''): void {
     this.uuids[cfg.uuid] = {
       uuid: cfg.uuid,
       modifiedtime: cfg.modifiedtime,
@@ -425,8 +443,9 @@ export class CacheService {
       type: 'SyshubConfigItem'
     }
     indexed[cfg.uuid] = cfg;
+    paths[this.uuids[cfg.uuid].path!] = cfg.uuid;
     cfg.children.filter((child) => child.uuid != '').forEach((child, i) => {
-      this.loadSubscriptions_ConfigItem(child, indexed, path === '' ? cfg.name : `${path}/${cfg.name}`);
+      this.loadSubscriptions_ConfigItem(child, indexed, paths, path === '' ? cfg.name : `${path}/${cfg.name}`);
     });
     cfg.children = cfg.children.sort((a, b) => a.type == 'Group/Folder' && b.type != 'Group/Folder' ? -1 : b.type == 'Group/Folder' && a.type != 'Group/Folder' ? 1 : a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1);
   }
@@ -443,16 +462,18 @@ export class CacheService {
   loadSubscriptions_PSet(): void {
     this.Parameterset.subscribe((parameterset) => {
       let indexed: { [key: string]: SyshubPSetItem } = {};
+      let paths: { [key: string]: string } = {};
       parameterset.filter((item) => item.uuid != '').forEach((item, i) => {
-        this.loadSubscriptions_PSetItem(item, indexed);
+        this.loadSubscriptions_PSetItem(item, indexed, paths);
       });
       parameterset = parameterset.sort((a, b) => a.type == 'Group/Folder' && b.type != 'Group/Folder' ? 1 : b.type == 'Group/Folder' && a.type != 'Group/Folder' ? -1 : a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1);
       this.parametersetUuid2Ref$ = { ...indexed };
+      this.parametersetPath2Uuid$ = { ...paths };
       this.parametersetUpdated$.next(Date.now());
     });
   }
 
-  loadSubscriptions_PSetItem(item: SyshubPSetItem, indexed: { [key: string]: SyshubPSetItem }, path: string = ''): void {
+  loadSubscriptions_PSetItem(item: SyshubPSetItem, indexed: { [key: string]: SyshubPSetItem }, paths: { [key: string]: string }, path: string = ''): void {
     this.uuids[item.uuid] = {
       uuid: item.uuid,
       modifiedtime: item.modifiedtime,
@@ -460,8 +481,9 @@ export class CacheService {
       type: 'SyshubPSetItem'
     }
     indexed[item.uuid] = item;
+    paths[this.uuids[item.uuid].path!] = item.uuid;
     item.children.filter((child) => child.uuid != '').forEach((child, i) => {
-      this.loadSubscriptions_PSetItem(child, indexed, path === '' ? item.name : `${path}/${item.name}`);
+      this.loadSubscriptions_PSetItem(child, indexed, paths, path === '' ? item.name : `${path}/${item.name}`);
     });
     item.children = item.children.sort((a, b) => a.type == 'Group/Folder' && b.type != 'Group/Folder' ? 1 : b.type == 'Group/Folder' && a.type != 'Group/Folder' ? -1 : a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1);
   }

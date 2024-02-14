@@ -19,7 +19,8 @@ export const L10nFr: L10nLocale = {
             searchOngoing: 'Recherche en cours...',
             resultView: 'Vue des résultats',
             resultConfigView: 'Résultat (Configuration)'
-        }
+        },
+        configurationFileMissing: 'La configuration Findr n\'a pas pu être chargée. <a class="text-light" target="_blank" href="https://github.com/surcoufx83/sysHUB-Findr?tab=readme-ov-file#konfiguration-work-in-progress-see-3">Veuillez la configurer selon les instructions.</a>',
     },
     common: {
         clipboard: {
@@ -76,18 +77,19 @@ export const L10nFr: L10nLocale = {
     },
     navbar: {
         aboutLink: 'À propos',
-        searchPlaceholder: '🔍 Terme de recherche, par exemple, currentjob',
-        clearCacheLink: 'Effacer le cache',
+        clearCacheLink: 'Vider le cache',
         helpLink: 'Aide',
         homeLink: 'Accueil',
         logoutLink: 'Déconnexion',
-        resultLink: 'Résultats de recherche',
+        promoLink: 'Findr sur Github',
+        resultLink: 'Résultat de recherche',
         searchBtn: 'Rechercher',
         searchBtnBusy: 'Recherche en cours...',
         searchOptions: 'Options',
+        searchPlaceholder: '🔍 Terme de recherche, par exemple, currentjob',
         statsLink: 'Statistiques',
-        promoLink: 'Findr sur Github',
-        webclientLink: 'Client web sysHUB'
+        themeSwitch: ['clair', 'sombre', 'automatique'],
+        webclientLink: 'client web sysHUB'
     },
     result: {
         certStoreItem: {
@@ -359,5 +361,36 @@ export const L10nFr: L10nLocale = {
         failedBackToFindr: 'Retour à la page d\'accueil',
         failedCommon: 'Erreur lors de l\'affichage du workflow : ',
         errorConnector: 'On Error',
+        celement: {
+            instanceName: 'Instance',
+            subject: 'CElement',
+            variable: 'Variable',
+        },
+        decision: {
+            subject: 'Décision',
+        },
+        process: {
+            subject: ['Processus', 'Processus en boucle'],
+        },
+        shared: {
+            agent: 'Agent',
+            loop: 'Boucle tableau',
+            parametersetRef: 'Ensemble de paramètres',
+        },
+        workflow: {
+            startpoint: 'Point de départ',
+            subject: ['Workflow', 'Workflow en boucle'],
+            threads: 'Threads',
+        },
+        versionsDropdown: {
+            title: ['[0] versions (actuel: [1])', '[0] versions (modifié: [1])'],
+            versionstr: '[0].[1]',
+            isactive: 'actif',
+            lastactive: 'en cours'
+        },
+        referencesDropdown: {
+            title: ['Aucune référence', '[0] référence', '[0] références'],
+            occurencesInWorkflow: '[0]x dans [1]',
+        },
     },
 };

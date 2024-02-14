@@ -19,7 +19,8 @@ export const L10nDe: L10nLocale = {
             searchOngoing: 'Suche läuft...',
             resultView: 'Ergebnisansicht',
             resultConfigView: 'Ergebnis (Konfig)'
-        }
+        },
+        configurationFileMissing: 'Die Findr-Konfiguration konnte nicht geladen werden. <a class="text-light" target="_blank" href="https://github.com/surcoufx83/sysHUB-Findr?tab=readme-ov-file#konfiguration-work-in-progress-see-3">Bitte gemäß der Anleitung konfigurieren.</a>',
     },
     common: {
         clipboard: {
@@ -76,17 +77,18 @@ export const L10nDe: L10nLocale = {
     },
     navbar: {
         aboutLink: 'Über',
-        searchPlaceholder: '🔍 Suchbegriff, z.B. currentjob',
         clearCacheLink: 'Cache leeren',
         helpLink: 'Hilfe',
         homeLink: 'Start',
         logoutLink: 'Abmelden',
+        promoLink: 'Findr auf Github',
         resultLink: 'Suchergebnis',
         searchBtn: 'Suchen',
         searchBtnBusy: 'Suche läuft...',
         searchOptions: 'Optionen',
+        searchPlaceholder: '🔍 Suchbegriff, z.B. currentjob',
         statsLink: 'Statistiken',
-        promoLink: 'Findr auf Github',
+        themeSwitch: ['hell', 'dunkel', 'automatisch'],
         webclientLink: 'sysHUB web client'
     },
     result: {
@@ -362,5 +364,36 @@ export const L10nDe: L10nLocale = {
         failedBackToFindr: 'Zurück zur Startseite',
         failedCommon: 'Fehler beim Anzeigen des Workflows: ',
         errorConnector: 'On Error',
+        celement: {
+            instanceName: 'Instanz',
+            subject: 'CElement',
+            variable: 'Variable',
+        },
+        decision: {
+            subject: 'Entscheidung',
+        },
+        process: {
+            subject: ['Prozess', 'Loop-Prozess'],
+        },
+        shared: {
+            agent: 'Agent',
+            loop: 'Looparray',
+            parametersetRef: 'Parameterset',
+        },
+        workflow: {
+            startpoint: 'Startpunkt',
+            subject: ['Workflow', 'Loop-Workflow'],
+            threads: 'Threads',
+        },
+        versionsDropdown: {
+            title: ['[0] Versionen (aktuell: [1])', '[0] Versionen (bearbeitet: [1])'],
+            versionstr: '[0].[1]',
+            isactive: 'aktiv',
+            lastactive: 'in Bearbeitung'
+        },
+        referencesDropdown: {
+            title: ['Keine Referenzen', '[0] Referenz', '[0] Referenzen'],
+            occurencesInWorkflow: '[0]x in [1]',
+        },
     }
 };

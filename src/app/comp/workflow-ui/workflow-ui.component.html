@@ -1,7 +1,146 @@
+@if(searchResult) {
+<div class="position-absolute">
+    <app-node-inspector [searchResult]="searchResult"></app-node-inspector>
+</div>
+}
 @if (loaded && workflow && model && references && startpoints && versions && workflowUuid) {
 <article class="container-fluid">
     <section>
-        <h1>{{ l10n(l10nphrase.workflowUi.title, [workflow.name]) }}</h1>
+        <div class="d-flex align-items-center justify-content-between">
+            <h1>{{ l10n(l10nphrase.workflowUi.title, [workflow.name]) }}</h1>
+            <div class="d-flex align-items-center">
+                @if (versions.length > 0) {
+                <div class="dropdown">
+                    <button type="button" class="btn btn-outline-secondary dropdown-toggle ms-2"
+                        data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                        <i class="bi bi-view-list me-md-1"></i>
+                        <span class="d-none d-md-inline">
+                            {{ l10n(l10nphrase.workflowUi.versionsDropdown.title[model.modelData.version != '0.0' ? 0 :
+                            1], [versions.length,
+                            model.modelData.version != '0.0' ? model.modelData.version : model.modelData.baseVersion !=
+                            '0.0' ? model.modelData.baseVersion : '—']) }}
+                        </span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" style="width: 330px;">
+                        @for (versionitem of versions; track $index) {
+                        <li class="dropdown-item text-wrap">
+                            <strong class="mb-1">
+                                @if (model.modelData.version == versionitem.major + '.' + versionitem.minor) {
+                                <i class="bi bi-check2-square me-2"></i>
+                                {{ l10n(l10nphrase.workflowUi.versionsDropdown.versionstr, [versionitem.major,
+                                versionitem.minor]) }}
+                                ({{ l10nphrase.workflowUi.versionsDropdown.isactive }})
+                                }
+                                @else if (model.modelData.version == '0.0' && model.modelData.baseVersion ==
+                                versionitem.major + '.' + versionitem.minor) {
+                                <i class="bi bi-dash-square me-2 text-secondary"></i>
+                                {{ l10n(l10nphrase.workflowUi.versionsDropdown.versionstr, [versionitem.major,
+                                versionitem.minor]) }}
+                                ({{ l10nphrase.workflowUi.versionsDropdown.lastactive }})
+                                }
+                                @else {
+                                <i class="bi bi-square me-2 text-secondary"></i>
+                                {{ l10n(l10nphrase.workflowUi.versionsDropdown.versionstr, [versionitem.major,
+                                versionitem.minor]) }}
+                                }
+                            </strong>
+                            <br />
+                            <span class="fs-7 fst-italic">{{ versionitem.description }}</span>
+                        </li>
+                        }
+                    </ul>
+                </div>
+                }
+                <div class="dropdown">
+                    <button type="button" class="btn btn-outline-secondary dropdown-toggle ms-2"
+                        data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                        <i class="bi bi-link-45deg me-md-1"></i>
+                        <span class="d-none d-md-inline">
+                            {{ l10n(l10nphrase.workflowUi.referencesDropdown.title[references.length == 0 ? 0 :
+                            references.length == 1 ? 1 : 2], [references.length]) }}
+                        </span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" style="width: 430px;">
+                        @for (refgroup of references; track $index) {
+
+                        @for (refitem of refgroup.items; track $index) {
+                        <li class="dropdown-item text-wrap d-flex align-items-baseline">
+
+                            <span class="pe-2">
+                                @switch (refitem.type) {
+
+                                @case ('Config') {
+                                <i class="bi bi-c-square"></i>
+                                }
+
+                                @case ('JobType') {
+                                <i class="bi bi-fonts"></i>
+                                }
+
+                                @case ('Parameterset') {
+                                <i class="bi bi-p-square"></i>
+                                }
+
+                                @case ('Workflow') {
+                                <i class="bi bi-diagram-2-fill"></i>
+                                }
+                                }
+                            </span>
+
+                            <div class="flex-fill">
+                                @switch (refitem.type) {
+
+                                @case ('Config') {
+                                <span class="mb-1">{{ refitem.name }}</span>
+                                <button type="button" class="btn btn-sm ms-1" (click)="selectConfigNode(refitem.name)">
+                                    <i class="bi bi-window-stack fs-7"></i>
+                                </button>
+                                }
+
+                                @case ('JobType') {
+                                <span class="mb-1">{{ refitem.name }}</span>
+                                <button type="button" class="btn btn-sm ms-1" (click)="selectJobtypeNode(refitem.name)">
+                                    <i class="bi bi-window-stack fs-7"></i>
+                                </button>
+                                }
+
+                                @case ('Parameterset') {
+                                <span class="mb-1">{{ refitem.name }}</span>
+                                <button type="button" class="btn btn-sm ms-1" (click)="selectPSetNode(refitem.name)">
+                                    <i class="bi bi-window-stack fs-7"></i>
+                                </button>
+                                }
+
+                                @case ('Workflow') {
+                                <span class="mb-1">
+                                    {{ l10n(l10nphrase.workflowUi.referencesDropdown.occurencesInWorkflow, [
+                                    refitem.appears, refitem.name]) }}
+                                </span>
+                                <button type="button" class="btn btn-sm ms-1"
+                                    (click)="selectWorkflowNode(refitem.name)">
+                                    <i class="bi bi-window-stack fs-7"></i>
+                                </button>
+                                @if (getWorkflowByName(refitem.name) != null) {
+                                <a target="_blank"
+                                    [href]="'#workflow?uuid=' + getWorkflowByName(refitem.name)!.uuid + '&t=' + searchResult!.search.token">
+                                    <button type="button" class="btn btn-sm">
+                                        <i class="bi bi-box-arrow-up-right me-1"></i>
+                                    </button>
+                                </a>
+                                }
+                                }
+
+                                }
+                            </div>
+
+                        </li>
+                        }
+
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
     </section>
     <div style="margin-left: -24px;">
         <app-workflow-ui-canvas [graphModel]="model" [searchResult]="searchResult"

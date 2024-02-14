@@ -23,7 +23,8 @@ export type L10nLocale = {
             searchOngoing: string,
             resultView: string,
             resultConfigView: string
-        }
+        },
+        configurationFileMissing: string,
     },
     common: {
         clipboard: {
@@ -79,6 +80,7 @@ export type L10nLocale = {
         searchOptions: string,
         searchPlaceholder: string,
         statsLink: string,
+        themeSwitch: string[],
         webclientLink: string
     },
     result: {
@@ -301,5 +303,36 @@ export type L10nLocale = {
         failedBackToFindr: string,
         failedCommon: string,
         errorConnector: string,
-    }
+        celement: {
+            instanceName: string,
+            subject: string,
+            variable: string,
+        },
+        decision: {
+            subject: string,
+        },
+        process: {
+            subject: string[],
+        },
+        shared: {
+            agent: string,
+            loop: string,
+            parametersetRef: string,
+        },
+        workflow: {
+            startpoint: string,
+            subject: string[],
+            threads: string,
+        },
+        versionsDropdown: {
+            title: string[],
+            versionstr: string,
+            isactive: string,
+            lastactive: string,
+        },
+        referencesDropdown: {
+            title: string[],
+            occurencesInWorkflow: string,
+        },
+    },
 }

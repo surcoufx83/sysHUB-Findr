@@ -2,7 +2,7 @@
     <div class="container-fluid d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center">
             <a class="navbar-brand d-flex align-items-center" [routerLink]="['/']">
-                <img src="/assets/android-icon-36x36.png" style="width: 36px; height: 36px;">
+                <img src="/findr/assets/android-icon-36x36.png" style="width: 36px; height: 36px;">
                 <span class="ms-2 fs-3 d-none d-lg-inline">
                     {{ l10nphrase.app.title }}
                 </span>
@@ -13,22 +13,24 @@
                         [routerLink]="['/']">{{
                         l10nphrase.navbar.homeLink }}</a>
                 </li>
+                @if (url === '/about') {
                 <li class="nav-item">
-                    <a [ngClass]="{'nav-link': true, 'active': url === '/stats'}" [routerLink]="['/stats']">{{
-                        l10nphrase.navbar.statsLink }}</a>
-                </li>
-                <li class="nav-item" *ngIf="url === '/about'">
                     <a [ngClass]="{'nav-link': true, 'active': true}" [routerLink]="['/about']">{{
                         l10nphrase.navbar.aboutLink }}</a>
                 </li>
-                <li class="nav-item" *ngIf="url === '/help'">
+                }
+                @if (url === '/help') {
+                <li class="nav-item">
                     <a [ngClass]="{'nav-link': true, 'active': true}" [routerLink]="['/help']">{{
                         l10nphrase.navbar.helpLink }}</a>
                 </li>
-                <li class="nav-item" *ngIf="url.startsWith('/result')">
+                }
+                @if (url.startsWith('/result')) {
+                <li class="nav-item">
                     <a [ngClass]="{'nav-link': true, 'active': true}" [routerLink]="url">{{
                         l10nphrase.navbar.resultLink }}</a>
                 </li>
+                }
             </ul>
         </div>
         <div class="d-flex align-items-center">
@@ -169,17 +171,17 @@
                     <li class="dropdown-item cursor-pointer" (click)="applyTheme('light')">
                         <i
                             [ngClass]="{ 'bi me-2': true, 'bi-brightness-high-fill text-success': appTheme == 'light', 'bi-brightness-high': appTheme != 'light' }"></i>
-                        hell
+                        {{ l10nphrase.navbar.themeSwitch[0] }}
                     </li>
                     <li class="dropdown-item cursor-pointer" (click)="applyTheme('dark')">
                         <i
                             [ngClass]="{ 'bi me-2': true, 'bi-moon-fill text-success': appTheme == 'dark', 'bi-moon': appTheme != 'dark' }"></i>
-                        dunkel
+                        {{ l10nphrase.navbar.themeSwitch[1] }}
                     </li>
                     <li class="dropdown-item cursor-pointer" (click)="applyTheme(null)">
                         <i
                             [ngClass]="{ 'bi me-2': true, 'bi-circle-half text-success': appTheme == 'auto' || appTheme == null, 'bi-brightness-high':appTheme != 'auto' && appTheme != null }"></i>
-                        automatisch
+                        {{ l10nphrase.navbar.themeSwitch[2] }}
                     </li>
                     <li>
                         <hr class="dropdown-divider">
@@ -196,18 +198,22 @@
                             {{ l10nphrase.navbar.aboutLink }}
                         </a>
                     </li>
+                    @if (promolink) {
                     <li>
-                        <a class="dropdown-item" target="_blank" [href]="promolink" *ngIf="promolink">
+                        <a class="dropdown-item" target="_blank" [href]="promolink">
                             <i class="bi bi-git me-2"></i>
                             {{ l10nphrase.navbar.promoLink }}
                         </a>
                     </li>
+                    }
+                    @if (webclientlink) {
                     <li>
-                        <a class="dropdown-item" target="_blank" [href]="webclientlink" *ngIf="webclientlink">
+                        <a class="dropdown-item" target="_blank" [href]="webclientlink">
                             <i class="bi bi-browser-edge me-2"></i>
                             {{ l10nphrase.navbar.webclientLink }}
                         </a>
                     </li>
+                    }
                     <li>
                         <hr class="dropdown-divider">
                     </li>

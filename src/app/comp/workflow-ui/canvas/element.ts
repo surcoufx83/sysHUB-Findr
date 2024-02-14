@@ -106,7 +106,9 @@ export class AnnotationElement extends SvgElement {
         this.isAnnotation = true;
         this.annotationBgColor = graphNode.color;
         this.annotationTextColor = graphNode.colorText;
-        this.hasMatch = searchResult ? searchService.match(graphNode.text, searchResult.search) : false;
+        this.hasMatch = searchResult ? searchService.match([
+            graphNode.text,
+        ], searchResult.search) : false;
     }
 
 }
@@ -122,7 +124,18 @@ export class CElement extends SvgElement {
         this.imagewidth = 70;
         this.x -= this.width / 2;
         this.y -= this.height / 2;
-        this.hasMatch = searchResult ? searchService.match(`${this.title}${this.description}`, searchResult.search) : false;
+        this.title = graphNode.refName;
+        this.hasMatch = searchResult ? searchService.match([
+            this.title,
+            this.description,
+            graphNode.agent ?? '',
+            graphNode.instanceName,
+            graphNode.variable,
+            graphNode.refName,
+            graphNode.refShortDesc,
+            (searchResult.search.filter.includeUuids ? graphNode.refUuid : ''),
+            (searchResult.search.filter.includeUuids ? graphNode.startUuid : ''),
+        ], searchResult.search) : false;
     }
 
 }
@@ -139,7 +152,15 @@ export class DecisionElement extends SvgElement {
         this.imagewidth = 56;
         this.x -= this.width / 2;
         this.y -= this.height / 2;
-        this.hasMatch = searchResult ? searchService.match(`${this.title}${this.description}`, searchResult.search) : false;
+        this.hasMatch = searchResult ? searchService.match([
+            this.title,
+            this.description,
+            graphNode.command,
+            graphNode.parameterSetPath,
+            graphNode.parameters,
+            (searchResult.search.filter.includeUuids ? graphNode.parameterSetUuid : ''),
+            (searchResult.search.filter.includeUuids ? graphNode.uuid : ''),
+        ], searchResult.search) : false;
     }
 
 }
@@ -156,7 +177,10 @@ export class EndElement extends SvgElement {
         this.imagewidth = 56;
         this.x -= this.width / 2;
         this.y -= this.height / 2;
-        this.hasMatch = searchResult ? searchService.match(`${this.title}${this.description}`, searchResult.search) : false;
+        this.hasMatch = searchResult ? searchService.match([
+            this.title,
+            this.description,
+        ], searchResult.search) : false;
     }
 
 }
@@ -173,7 +197,16 @@ export class ProcessElement extends SvgElement {
         this.imagewidth = 56;
         this.x -= this.width / 2;
         this.y -= this.height / 2;
-        this.hasMatch = searchResult ? searchService.match(`${this.title}${this.description}`, searchResult.search) : false;
+        this.hasMatch = searchResult ? searchService.match([
+            this.title,
+            this.description,
+            graphNode.command,
+            graphNode.parameterSetPath,
+            graphNode.parameters,
+            graphNode.loopName,
+            (searchResult.search.filter.includeUuids ? graphNode.parameterSetUuid : ''),
+            (searchResult.search.filter.includeUuids ? graphNode.uuid : ''),
+        ], searchResult.search) : false;
     }
 
 }
@@ -190,7 +223,11 @@ export class StartElement extends SvgElement {
         this.imagewidth = 56;
         this.x -= this.width / 2;
         this.y -= this.height / 2;
-        this.hasMatch = searchResult ? searchService.match(`${this.title}${this.description}`, searchResult.search) : false;
+        this.hasMatch = searchResult ? searchService.match([
+            this.title,
+            this.description,
+            graphNode.roles ?? '',
+        ], searchResult.search) : false;
     }
 
 }
@@ -207,7 +244,15 @@ export class WorkflowElement extends SvgElement {
         this.title = `${graphNode.refName}${graphNode.startPoint && graphNode.startPoint != 'Start' ? ':' + graphNode.startPoint : ''}${graphNode.agent ? '@' + graphNode.agent : ''}`;
         this.x -= this.width / 2;
         this.y -= this.height / 2;
-        this.hasMatch = searchResult ? searchService.match(`${this.title}${this.description}`, searchResult.search) : false;
+        this.hasMatch = searchResult ? searchService.match([
+            this.title,
+            this.description,
+            graphNode.agent ?? '',
+            graphNode.refName,
+            graphNode.refShortDesc,
+            graphNode.loopName,
+            (searchResult.search.filter.includeUuids ? graphNode.refUuid : ''),
+        ], searchResult.search) : false;
     }
 
 }

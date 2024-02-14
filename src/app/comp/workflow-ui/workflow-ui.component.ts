@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
+import { PagepropsService } from 'src/app/svc/pageprops.service';
 import { SearchService } from 'src/app/svc/search.service';
 import { ToastsService } from 'src/app/svc/toasts.service';
 import { SearchResult } from 'src/app/types';
@@ -23,23 +24,28 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
   progress: number = 0;
   searchResult?: SearchResult;
 
+  moveNodeNextTo: { [key: string]: HTMLElement } = {};
   subs: Subscription[] = [];
 
   workflow?: SyshubWorkflow;
   model?: SyshubWorkflowModel;
-  references?: SyshubWorkflowReference[];
+  references?: SyshubWorkflowReferenceGroup[];
   startpoints?: string[];
   versions?: SyshubWorkflowVersion[];
   workflowUuid?: string;
 
   constructor(private l10nService: L10nService,
     private cacheService: CacheService,
+    private propsService: PagepropsService,
     private searchService: SearchService,
-    private router: Router,
     private route: ActivatedRoute,
     private toastsService: ToastsService,
     private restapi: RestService,
   ) { }
+
+  getWorkflowByName(name: string): SyshubWorkflow | null {
+    return this.cacheService.getWorkflowByName(name);
+  }
 
   get l10nphrase(): L10nLocale {
     return this.l10nService.locale;
@@ -103,7 +109,18 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
         this.apiError = { ...reply };
       }
       else {
-        this.references = reply;
+        let temprefs: { [key: string]: SyshubWorkflowReferenceGroup } = {};
+        reply.forEach((ref) => {
+          if (!temprefs[ref.type])
+            temprefs[ref.type] = { type: ref.type, items: [] };
+          temprefs[ref.type].items.push(ref);
+        });
+        let temprefs2 = Object.values(temprefs).sort((a, b) => a.type.toLocaleLowerCase() > b.type.toLocaleLowerCase() ? 1 : a.type.toLocaleLowerCase() < b.type.toLocaleLowerCase() ? -1 : 0);
+        temprefs2.forEach((group) => group.items = group.items.sort((a, b) => a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : a.name.toLocaleLowerCase() < b.name.toLocaleLowerCase() ? -1 : 0));
+        this.references = [...temprefs2];
+
+        //         this.references = reply.sort((a, b) => a.type > b.type ? 1 : a.type < b.type ? -1 : a.name > b.name ? 1 : a.name < b.name ? -1 : 0);
+        console.log(this.references)
         this.ngOnInit_ReportProgress();
       }
     }));
@@ -148,7 +165,8 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
         this.apiError = { ...reply };
       }
       else {
-        this.versions = reply;
+        // sort versions descending
+        this.versions = reply.sort((a, b) => a.major > b.major ? -1 : b.major > a.major ? 1 : a.minor > b.minor ? -1 : b.minor > a.minor ? 1 : 0);
         this.ngOnInit_ReportProgress();
       }
     }));
@@ -163,4 +181,37 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
     this.searchService.setProgress(this.progress);
   }
 
+  selectConfigNode(path: string): void {
+    const node = this.cacheService.getConfigItemByPath(path);
+    if (node == null)
+      return;
+    this.propsService.inspect('ConfigItems', node);
+  }
+
+  selectJobtypeNode(name: string): void {
+    const node = this.cacheService.getJobtypeByName(name);
+    if (node == null)
+      return;
+    this.propsService.inspect('JobTypes', node);
+  }
+
+  selectPSetNode(path: string): void {
+    const node = this.cacheService.getPsetItemByPath(path);
+    if (node == null)
+      return;
+    this.propsService.inspect('PSetItems', node);
+  }
+
+  selectWorkflowNode(name: string): void {
+    const node = this.cacheService.getWorkflowByName(name);
+    if (node == null)
+      return;
+    this.propsService.inspect('WorkflowItems', node);
+  }
+
+}
+
+export type SyshubWorkflowReferenceGroup = {
+  type: string,
+  items: SyshubWorkflowReference[],
 }

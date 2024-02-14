@@ -1,0 +1,65 @@
+<div class="card-header d-flex flex-column">
+    <div class="d-flex align-items-center justify-content-between">
+        <div>
+            <div class="fs-8 mb-1">
+                <i class="bi bi-signpost-split me-1"></i>
+                {{ l10nphrase.workflowUi.workflow.subject[$any(nodeItem.modeldata).isLoop === true ? 1 : 0] }}
+            </div>
+            <h5 class="mb-0" [innerHTML]="$any(nodeItem.modeldata).refName | highlight: searchResult.search.phrase">
+            </h5>
+        </div>
+        <div>
+            <a target="_blank"
+                [href]="'#workflow?uuid=' + $any(nodeItem.modeldata).refUuid + '&t=' + searchResult.search.token">
+                <button type="button" class="btn btn-sm">
+                    <i class="bi bi-box-arrow-up-right me-1"></i>
+                </button>
+            </a>
+            <button type="button" class="btn btn-sm px-2" (click)="onChangeColor.emit()">
+                <i class="bi bi-palette-fill"></i>
+            </button>
+            <ng-content></ng-content>
+        </div>
+    </div>
+    <p class="mb-1 fst-italic" [innerHTML]="nodeItem.description | highlight: searchResult.search.phrase"></p>
+    <p class="mb-1">
+        <strong>
+            <i class="bi bi-play-fill me-1"></i>
+            {{ l10nphrase.workflowUi.workflow.startpoint }}:
+        </strong>
+        @if ($any(nodeItem.modeldata).startPoint == '') {
+        <code>Start</code>
+        }
+        @else {
+        <code [innerHTML]="$any(nodeItem.modeldata).startPoint | highlight: searchResult.search.phrase"></code>
+        }
+    </p>
+    @if ($any(nodeItem.modeldata).isLoop === true) {
+    <p class="mb-1">
+        <strong>
+            <i class="bi bi-arrow-repeat me-1"></i>
+            {{ l10nphrase.workflowUi.shared.loop }}:
+        </strong>
+        <code [innerHTML]="$any(nodeItem.modeldata).loopName | highlight: searchResult.search.phrase"></code>
+    </p>
+    }
+    @if ($any(nodeItem.modeldata).agent != '') {
+    <p class="mb-1">
+        <strong>
+            <i class="bi bi-router me-1"></i>
+            {{ l10nphrase.workflowUi.shared.agent }}:
+        </strong>
+        <code [innerHTML]="$any(nodeItem.modeldata).agent | highlight: searchResult.search.phrase"></code>
+    </p>
+    }
+    @if ($any(nodeItem.modeldata).threadCount && $any(nodeItem.modeldata).threadCount > 1) {
+    <p class="mb-1">
+        <strong>
+            <i class="bi bi-stack me-1"></i>
+            {{ l10nphrase.workflowUi.workflow.threads }}:
+        </strong>
+        <code
+            [innerHTML]="$any(nodeItem.modeldata).threadCount + ' (' + $any(nodeItem.modeldata).threadName + ')' | highlight: searchResult.search.phrase"></code>
+    </p>
+    }
+</div>

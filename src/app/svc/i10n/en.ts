@@ -19,7 +19,8 @@ export const L10nEn: L10nLocale = {
             searchOngoing: 'Search in progress...',
             resultView: 'Result View',
             resultConfigView: 'Result (Config)'
-        }
+        },
+        configurationFileMissing: 'The Findr configuration could not be loaded. <a class="text-light" target="_blank" href="https://github.com/surcoufx83/sysHUB-Findr?tab=readme-ov-file#konfiguration-work-in-progress-see-3">Please configure according to the instructions.</a>',
     },
     common: {
         clipboard: {
@@ -76,17 +77,18 @@ export const L10nEn: L10nLocale = {
     },
     navbar: {
         aboutLink: 'About',
-        searchPlaceholder: '🔍 Search term, e.g., currentjob',
         clearCacheLink: 'Clear Cache',
         helpLink: 'Help',
         homeLink: 'Home',
-        logoutLink: 'Log Out',
-        resultLink: 'Search Results',
+        logoutLink: 'Logout',
+        promoLink: 'Findr on Github',
+        resultLink: 'Search Result',
         searchBtn: 'Search',
         searchBtnBusy: 'Searching...',
         searchOptions: 'Options',
+        searchPlaceholder: '🔍 Search term, e.g., currentjob',
         statsLink: 'Statistics',
-        promoLink: 'Findr on Github',
+        themeSwitch: ['light', 'dark', 'automatic'],
         webclientLink: 'sysHUB web client'
     },
     result: {
@@ -359,5 +361,36 @@ export const L10nEn: L10nLocale = {
         failedBackToFindr: 'Back to homepage',
         failedCommon: 'Error displaying the workflow: ',
         errorConnector: 'On Error',
+        celement: {
+            instanceName: 'Instance',
+            subject: 'CElement',
+            variable: 'Variable',
+        },
+        decision: {
+            subject: 'Decision',
+        },
+        process: {
+            subject: ['Process', 'Loop Process'],
+        },
+        shared: {
+            agent: 'Agent',
+            loop: 'Looparray',
+            parametersetRef: 'Parameterset',
+        },
+        workflow: {
+            startpoint: 'Startpoint',
+            subject: ['Workflow', 'Loop Workflow'],
+            threads: 'Threads',
+        },
+        versionsDropdown: {
+            title: ['[0] versions (current: [1])', '[0] versions (edited: [1])'],
+            versionstr: '[0].[1]',
+            isactive: 'active',
+            lastactive: 'in progress'
+        },
+        referencesDropdown: {
+            title: ['No references', '[0] reference', '[0] references'],
+            occurencesInWorkflow: '[0]x in [1]',
+        },
     },
 };

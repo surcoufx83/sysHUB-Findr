@@ -1,4 +1,11 @@
-<ngb-toast *ngFor="let toast of toasts; let i = index" [class]="toast.cssClasses" [autohide]="toast.autohide ?? true"
-    [delay]="toast.delay || 5000" (hidden)="removeAt(i)">
+@for (toast of toasts; track $index) {
+<ngb-toast [class]="toast.cssClasses" [autohide]="toast.autohide ?? true" [delay]="toast.delay || 5000"
+    (hidden)="removeAt($index)">
+    @if (toast.isHtml === true) {
+    <span [innerHtml]="toast.message"></span>
+    }
+    @else {
     {{toast.message}}
+    }
 </ngb-toast>
+}

@@ -8,6 +8,7 @@ import { SearchService } from 'src/app/svc/search.service';
 import { SearchResult } from 'src/app/types';
 import { Subscription } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
+import { PagepropsService } from 'src/app/svc/pageprops.service';
 
 @Component({
   selector: 'app-workflow-ui-canvas',
@@ -22,12 +23,12 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('workflowSvgContainer') svgContainer!: ElementRef;
 
   onErrorHandlerNodes: string[] = []; // key of elements after on error connector
+  breakpoints: SvgConnectorBreakpoint[] = [];
   connectorTitles: SvgConnectorText[] = [];
   nodes: SvgElement[] = [];
   nodeUUids: { [key: string]: number } = {};
-  hovernode?: SvgElement;
+  nodesToggled: string[] = [];
   hoverpath?: number;
-  hovernodePinned: boolean = false;
   ruler: number[] = [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800];
 
   svgGrid = { width: 10, height: 10, strokeColor: 'rgba(0, 0, 0, .1)' };
@@ -40,9 +41,9 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   subs: Subscription[] = [];
 
   constructor(private l10nService: L10nService,
-    private cacheService: CacheService,
     private searchService: SearchService,
-    @Inject(DOCUMENT) private document: Document) {
+    @Inject(DOCUMENT) private document: Document,
+    private propsService: PagepropsService,) {
     this.window = document.defaultView!;
     this.pageSize = { width: this.window.innerWidth, height: this.window.innerHeight - 64 };
   }
@@ -224,10 +225,15 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
           if (path.category == 'error' || (path.description)) {
             let coords = this.getConnectorPosition(elementFrom, path.fromPort);
             this.connectorTitles.push({
+              isErrorConnection: path.category == 'error',
               x: path.category == 'error' ? coords.x + 22 : path.fromPort == 'l' ? coords.x - 16 : coords.x + 16,
               y: path.fromPort == 'b' ? coords.y : coords.y - 3,
               text: path.category == 'error' ? this.l10nphrase.workflowUi.errorConnector : path.description!
             });
+          }
+          if (path.breakpoint === true) {
+            let coords = this.getConnectorPosition(elementTo, path.toPort);
+            this.breakpoints.push({ x: coords.x - 9, y: coords.y - 28 })
           }
         }
       });
@@ -279,44 +285,26 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy(): void {
-    this.ngOnInit();
     this.subs.forEach((s) => s.unsubscribe());
   }
 
   ngOnInit(): void {
-    this.hovernode = undefined;
-    this.nodes = [];
-    this.onErrorHandlerNodes = [];
-    this.nodeUUids = {};
-    this.hovernodePinned = false;
-    this.connectorTitles = [];
-  }
-
-  onMouseLeaveElement(): void {
-    if (this.toggleTooltipTimeout)
-      clearTimeout(this.toggleTooltipTimeout);
-    this.toggleTooltipTimeout = setTimeout(() => {
-      this.showTooltip('');
-    }, 100);
+    this.subs.push(this.propsService.NodesClosed.subscribe((node) => {
+      if (node.type != 'SvgNode')
+        return;
+      let i = this.nodesToggled.indexOf((<SvgElement>node.node).modeldata.key);
+      if (i > -1)
+        this.nodesToggled.splice(i, 1);
+    }))
   }
 
   onMouseLeaveSvg(): void {
     this.svgCursor = { x: 0, y: 0 };
   }
 
-  toggleTooltipTimeout: any;
-  onMouseOverElement(elementuuid: string, event: MouseEvent): void {
-    if (this.toggleTooltipTimeout)
-      clearTimeout(this.toggleTooltipTimeout);
-    this.toggleTooltipTimeout = setTimeout(() => {
-      this.showTooltip(elementuuid, event.offsetX, event.offsetY);
-    }, 100);
-  }
-
   onMouseMoveOverSvg(event: MouseEvent): void {
-    const x = event.clientX + (this.document.documentElement.scrollLeft)
-    const y = event.clientY + (this.document.documentElement.scrollTop) - (this.document.documentElement.clientTop)
-    console.log(event.clientX, this.document.documentElement.scrollLeft, this.document.documentElement.clientLeft, x)
+    const x = event.clientX + (this.document.documentElement.scrollLeft);
+    const y = event.clientY + (this.document.documentElement.scrollTop) - (this.document.documentElement.clientTop);
     this.svgCursor = { x: x, y: y - 132 };
   }
 
@@ -399,26 +387,26 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     this.drawPaths();
   }
 
-  showTooltip(uuid?: string, x?: number, y?: number) {
-    if (this.hovernodePinned)
-      return;
-    if (uuid) {
-      if (this.hovernode == undefined || this.hovernode.uuid != uuid) {
-        let node = this.nodes[this.nodeUUids[uuid]];
-        if (node.modeldata.category != 'start' && node.modeldata.category != 'end') {
-          this.hovernode = node;
-          this.tooltipLeft = (x! <= this.pageSize.width / 2);
-          this.tooltipLocation = {
-            x: (this.tooltipLeft ? x! + 80 : this.pageSize.width - x! + 54),
-            y: y!
-          };
-        }
-        else
-          this.hovernode = undefined;
-      }
+  hoverNode(node: SvgElement): void {
+    if (node.modeldata.category != 'start' && node.modeldata.category != 'end' && node.modeldata.category != 'annotation') {
+      this.propsService.inspect('SvgNode', node);
     }
-    else
-      this.hovernode = undefined;
+  }
+
+  leaveNode(node: SvgElement): void {
+    if (this.nodesToggled.includes(node.modeldata.key))
+      return;
+    if (node.modeldata.category != 'start' && node.modeldata.category != 'end' && node.modeldata.category != 'annotation') {
+      this.propsService.inspect('SvgNode', node, true);
+    }
+  }
+
+  selectNode(node: SvgElement): void {
+    if (node.modeldata.category != 'start' && node.modeldata.category != 'end' && node.modeldata.category != 'annotation') {
+      if (!this.nodesToggled.includes(node.modeldata.key))
+        this.nodesToggled.push(node.modeldata.key);
+      this.propsService.inspect('SvgNode', node);
+    }
   }
 
 
@@ -440,8 +428,14 @@ export interface SvgPathPoint {
   cs?: Point;
 }
 
-export interface SvgConnectorText {
+export interface SvgConnectorBreakpoint {
   x: number;
   y: number;
+}
+
+export interface SvgConnectorText {
+  isErrorConnection: boolean;
   text: string;
+  x: number;
+  y: number;
 }
