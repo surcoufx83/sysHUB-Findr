@@ -1,4 +1,8 @@
-<router-outlet *ngIf="isLoggedIn === false"></router-outlet>
-<app-main *ngIf="isLoggedIn === true"></app-main>
+@if (isLoggedIn === false) {
+<router-outlet></router-outlet>
+}
+@else {
+<app-main></app-main>
+}
 
 <app-toasts></app-toasts>

@@ -1,4 +1,5 @@
-<section class="container" *ngIf="currentLocale === 'de'">
+@if (currentLocale === 'de') {
+<section class="container">
     <h1>Über sysHUB Findr</h1>
     <p>
         sysHUBFindr ist ein Projekt das im Zuge der Arbeit mit der Software NT-ware uniFLOW sysHUB (nachfolgend kurz
@@ -23,8 +24,10 @@
         <li>Verfolgbarkeit von Variablen</li>
     </ol>
 </section>
+}
 
-<section class="container" *ngIf="currentLocale !== 'de'">
+@if (currentLocale !== 'de') {
+<section class="container">
     <h1>About sysHUB Findr</h1>
     <p>
         sysHUB Findr is a project that emerged in the course of working with the software NT-ware uniFLOW sysHUB
@@ -49,3 +52,4 @@
         <li>Traceability of variables</li>
     </ol>
 </section>
+}

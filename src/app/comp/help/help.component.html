@@ -1,4 +1,5 @@
-<article class="container" *ngIf="currentLocale === 'de'">
+@if (currentLocale === 'de') {
+<article class="container">
     <section>
         <h1>Hilfe</h1>
         <p>
@@ -8,7 +9,7 @@
         </p>
     </section>
     <section>
-        <h2>Allgemeine Benutztungshinweise</h2>
+        <h2>Allgemeine Benutzungshinweise</h2>
         <p>
             <img src="/findr/assets/help/sec1-navbar-left.png"
                 alt="Screenshot der Navigationsleiste links oben, mit den Verknüpfungen zur Startseite und den Statistiken"
@@ -62,8 +63,10 @@
         </ul>
     </section>
 </article>
+}
 
-<article class="container" *ngIf="currentLocale !== 'de'">
+@if (currentLocale !== 'de') {
+<article class="container">
     <section>
         <h1>Help</h1>
         <p>
@@ -122,3 +125,4 @@
         </ul>
     </section>
 </article>
+}
