@@ -9,38 +9,40 @@ Um diese Software nutzen zu können und dürfen ist folgendes erforderlich:
 - NT-ware uniFLOW sysHUB ab Version 2022.1.0
 - sysHUB Lizenz REST API
 
-## Erforderliche Berechtigung für Anwender ⚠️ 
+## Erforderliche Berechtigung für Anwender
 Nutzer des Findr müssen im sysHUB mindestens die folgenden Berechtigungen besitzen:
-- Rolle gem. Vorgabe Authorisierungsserver
-- Permission PERM_IADMINSERVICE_GETWORKFLOWITEM: Erforderlich für die Ausführung des Workflows der die Suchanfrage bearbeitet und das sysHUB durchsucht.
-- Permission ...
+- `PERM_IADMINSERVICE_GETSERVERINFOS`: Erforderlich zum Abrufen der sysHUB Server properties
+- `PERM_IADMINSERVICE_GETWORKFLOWITEMS`, `PERM_IADMINSERVICE_GETWORKFLOWITEM`: Erforderlich für die Ausführung des Workflows der die Suchanfrage bearbeitet und das sysHUB durchsucht sowie Details und Design der Workflows.
+- `PERM_IEPOSSERVER_GETINFORMATIONLIST`: Erforderlich zum Abrufen einer Liste von IPP Devices und Server-Infos
+- `PERM_RESTAPI_CERTIFICATE_READ`: Erforderlich zum Abrufen des Certstore
+- `PERM_RESTAPI_USER_READ`: Erforderlich zum Abrufen aller Benutzer
+- `PERM_RESTAPI_USER_READSELF`: Erforderlich um Details (wie den Benutzernamen) des angemeldeten Benutzers zu ermitteln.
+- `PERM_RESTAPI_USER_READSELF`: Erforderlich um Details (wie den Benutzernamen) des angemeldeten Benutzers zu ermitteln.
+- Unbekannte weitere Berechtigungen für den Abruf von Kategorien, Expertenkonfiguration, Parameterset, Benutzerrollen. Diese sind nicht dokumentiert.
 
-## Konfiguration (Work in progress [see #3](https://github.com/surcoufx83/sysHUB-Findr/issues/3))
-Die Konfiguration für ein Kundensystem erfolgt vorrangig in der `environment.prod.ts` (siehe [src\environments](src\environments)). Sofern die Datei nicht existiert, erzeuge eine Kopie der `environment.prod.template.ts` und der `environment.template.ts` und entferne jeweils das `.template` aus dem Dateinamen.
+## Konfiguration
 
-In der Datei müssen entweder Basic- oder OAuth Credentials angegeben und anschließend muss das gesamte Projektverzeichnis kompiliert werden (siehe [Contributing Guide - Abschnitt Build](CONTRIBUTING.md#build)). Durch die direkte Einbindung in den Source code lädt die Seite schneller, mit weniger HTTP-Anfragen und ohne nachträgliches Rendering.
+### Webapp Konfiguration
+Die Konfiguration für ein Kundensystem erfolgt in der Datei `webapps\findr\assets\config\config.json`. Diese Datei ist im Auslieferungszustand nicht vorhanden und muss erzeugt werden. Als Vorlage dient die `config.json.template` im gleichen Verzeichnis.
+
+1. Eine Kopie des Templates anlegen und als `config.json` benennen.
+2. In der `config.json` folgende Werte anpassen:
+   1. Zeile 4: `host` anpassen zum Hostnamen des sysHUB-Systems dessen Rest API aufgerufen wird.
+   2. In Zeile 5: `version` ändern in:
+      - `1` = sysHUB 2021
+      - `2` = sysHUB 2022
+      - `3` = sysHUB 2023
+   3. Ab Zeile 6: `basic` aktivieren und mit Zugangsdaten befüllen, sofern ein sysHUB API Server mit basic Authentifizierung verendet wird.
+   4. Ab Zeile 12: `oauth` aktivieren und mit Zugangsdaten befüllen, sofern ein sysHUB Authorisierungsserver verwendet wird.
+   5. `basic` und `oauth` dürfen nicht zusammen aktiv sein, entweder oder.
+   6. Zeile 22: `promotionLink` kann im Findr ausgeblendet werden, wenn der Link entfernt wird und nur `""` bleibt
 
 ### Konfiguration im sysHUB
 
-
-### Konfigurationsparameter
-| Parameter                 | Werte (Default)                                                          | Verwendung und Hinweise                                                                                                                                                                                                                                                                                                                                                         |
-| ------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| production                | `true` oder `false`                                                      | **Niemals ändern.** Immer `true` in der `environment.prod.ts` und immer `false` in der `environment.ts`.                                                                                                                                                                                                                                                                        |
-| app.baseUrl               | String (`/findr/`)                                                       | Der relative Pfad über den die Webapp vom Webserver ausgeliefert wird. Heißt der Ordner innerhalb von `webapps` `findr`, so muss der Name auch in `app.baseUrl` angegeben sein (mit führenden und abschließendem `/`).                                                                                                                                                          |
-| app.promotionLink         | Url (`""`)                                                               | Beliebige Url. Ist dieser Parameter nicht leer, wird in der Titelzeile des Findr rechts neben dem Suchsymbol ein Link zu dieser Url angezeigt. Im Standard ist es der Link zum Findr Sourcecode.                                                                                                                                                                                |
-| app.minPhraseLength       | Numerisch (`3`)                                                          | Beliebige Zahl. Mindestanzahl an Zeichen die im Suchfeld eingegeben sein müssen, bevor die Suche auch ausgeführt wird.                                                                                                                                                                                                                                                          |
-| i10n.fallback             | String (`en`)                                                            | Beliebiger gültiger Sprachcode zweistellig. Der Findr enthält Übersetzungsdateien [siehe Lokalisierung](#lokalisierung-i10n) für Deutsch (`de`) und Englisch (`en`). Fordert der Browser eine andere Sprache an, wird die Fallback-Sprache geliefert, die durch diesen Parameter bestimmt wird.                                                                                 |
-| storage. ...              | String                                                                   | Alle Einträge innerhalb des `storage`-Objekts definieren Speicherpfade im Browsercache. **Nicht verändern.**                                                                                                                                                                                                                                                                    |
-| syshub.host               | Url (`http://localhost:8088/`)                                           | Basis-Url zur Syshub-Installation. Immer sicherstellen das ein abschließender `/` gesetzt ist. Diese Url ist die Basis für die Anmeldung am sysHUB und auch die Aufrufe gegen die Rest-API.                                                                                                                                                                                     |
-| syshub.basic.enabled      | `true` oder `false` (`false`)                                            | Definiert, ob sich die Webseite per Basic-Authentifizierung am sysHUB Host anmeldet. Wenn `true` müssen die folgenden drei Parameter username, password und provider befüllt sein.                                                                                                                                                                                              |
-| syshub.basic.username     | String (`""`)                                                            | Name des Useraccounts der die Berechtigung zur Anmeldung am sysHUB besitzt. Die erforderliche Rolle wird im sysHUB API Server (gem. nachfolgendem Parameter provider) festgelegt.                                                                                                                                                                                               |
-| syshub.basic.password     | String (`""`)                                                            | Zugehöriges Passwort für den Useraccount.                                                                                                                                                                                                                                                                                                                                       |
-| syshub.basic.provider     | String (`""`)                                                            | Name eines registrierten API Server im sysHUB (Scope `private;public` erforderlich)                                                                                                                                                                                                                                                                                             |
-| syshub.oauth.enabled      | `true` oder `false` (`false`)                                            | Definiert, ob sich die Webseite per OAUTH2-Authentifizierung am sysHUB Host anmeldet. Wenn `true` müssen die folgenden beiden Parameter clientId und clientSecret befüllt sein. Nutzer der Webseite werden vor der ersten Suche aufgefordert sich anzumelden.                                                                                                                   |
-| syshub.oauth.clientId     | String (`findr`)                                                         | Name eines im sysHUB konfigurierten Authorisierungsserver (Scope `private;public` erforderlich, Resource Ids `cosmos-web;cosmos-webapi` erforderlich)                                                                                                                                                                                                                           |
-| syshub.oauth.clientSecret | String (`...`)                                                           | Das zur Client Id zugehörige secret.                                                                                                                                                                                                                                                                                                                                            |
-| syshub.oauth.scope        | String (`'private' \| 'public' \| 'private+public' \| 'public+private'`) | Das scope, so wie im Client konfiguriert. Für den Findr muss im sysHUB `private;public` konfiguriert werden. Daher muss dieser Parameter entweder als `private+public` oder `public+private` gesetzt sein. <br/>⚠️Ist OAuth aktiviert und dieser Parameter nicht korrekt konfiguriert, wird eine Fehlermeldung angezeigt und sämtliche Suchfunktionen im Findr sind deaktiviert. |
+1. Die `Findr_1.0.ppk` importieren.
+2. Je nach Bedarf den API Server oder Authorisierungsserver findr konfigurieren und entsprechend in der `config.json` anpassen. Nicht benötigtes kann deaktiviert werden.
+3. Den Ordner `webapps\findr` in das sysHUB Verzeichnis kopieren. Eine evtl. vorhandene findr-webapp vorher entfernen.
+4. Bei Neuinstallation den sysHUB neustarten.
 
 ### Theme
 <img align="left" src="docs/theme-switch.png" alt="Wechsel des Themas (hell/dunkel) über das Menü">
