@@ -15,17 +15,23 @@ export class AppInitService {
   load() {
     return new Promise<boolean>((resolve) => {
       fetch('/findr/assets/config/config.json').then((response) => {
-        let tempenv = { ...MissingConfigJson };
         if (response.status == HttpStatusCode.Ok) {
           response.json().then((json) => {
-            tempenv = { ...<FindrEnvironment>json };
+            let tempenv = { ...<FindrEnvironment>json };
+            tempenv.appInitializationFailure = {
+              configStatusCode: response.status,
+            };
+            this.environment = { ...tempenv };
+            resolve(true);
           });
+        } else {
+          let tempenv = { ...MissingConfigJson };
+          tempenv.appInitializationFailure = {
+            configStatusCode: response.status,
+          };
+          this.environment = { ...tempenv };
+          resolve(true);
         }
-        tempenv.appInitializationFailure = {
-          configStatusCode: response.status,
-        };
-        this.environment = { ...tempenv };
-        resolve(true);
       }).catch((reason) => {
         let tempenv = { ...MissingConfigJson };
         tempenv.appInitializationFailure = {
