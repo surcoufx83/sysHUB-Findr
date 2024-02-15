@@ -17,22 +17,20 @@ import { RestService, SyshubWorkflow, SyshubWorkflowModel, SyshubWorkflowReferen
 })
 export class WorkflowUiComponent implements OnDestroy, OnInit {
 
-  failedState: 'noUuid' | 'noCache' | 'apiError' | null = null;
   apiError?: Error;
-
+  failedState: 'noUuid' | 'noCache' | 'apiError' | null = null;
+  highlightWorkflowRef: string = '';
   loaded: boolean = false;
-  progress: number = 0;
-  searchResult?: SearchResult;
-
-  moveNodeNextTo: { [key: string]: HTMLElement } = {};
-  subs: Subscription[] = [];
-
-  workflow?: SyshubWorkflow;
   model?: SyshubWorkflowModel;
+  moveNodeNextTo: { [key: string]: HTMLElement } = {};
+  progress: number = 0;
   references?: SyshubWorkflowReferenceGroup[];
   referencesCount: number = 0;
+  searchResult?: SearchResult;
   startpoints?: string[];
+  subs: Subscription[] = [];
   versions?: SyshubWorkflowVersion[];
+  workflow?: SyshubWorkflow;
   workflowUuid?: string;
 
   constructor(private l10nService: L10nService,
@@ -72,6 +70,9 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
       }
       if (map.has('t')) {
         this.cacheService.loadSearchResult(map.get('t')!);
+      }
+      if (map.has('highlight')) {
+        this.highlightWorkflowRef = map.get('highlight')!;
       }
       this.workflowUuid = map.get('uuid') ?? undefined;
       clearTimeout(this.debounce);

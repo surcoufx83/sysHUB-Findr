@@ -263,7 +263,21 @@ body[data-bs-theme="dark"] {
 
         svg.workflow {
             g.element-group rect.proc-box {
-                fill: rgba($color: #898989, $alpha: .1) !important;
+
+                &.has-match {
+                    stroke: #16DB93;
+                    fill: rgba($color: #16DB93, $alpha: .1);
+                }
+
+                &.has-highlight {
+                    stroke: #c1db16;
+                    fill: rgba($color: #c1db16, $alpha: .1);
+                }
+
+                &:not(.has-match):not(.has-highlight) {
+                    fill: rgba($color: #898989, $alpha: .1) !important;
+                }
+
             }
 
             text.proc-description.connector-description.error {

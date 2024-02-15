@@ -20,6 +20,7 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input({ required: true }) workflow!: SyshubWorkflow;
   @Input({ required: true }) graphModel!: SyshubWorkflowModel;
   @Input({ required: true }) searchResult?: SearchResult;
+  @Input({ required: true }) highlightWorkflowRef!: string;
   @ViewChild('workflowSvgContainer') svgContainer!: ElementRef;
 
   onErrorHandlerNodes: string[] = []; // key of elements after on error connector
@@ -350,7 +351,7 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
         this.onErrorHandlerNodes.push(connector.to);
     })
     this.graphModel.nodeDataArray.forEach((node) => {
-      const element = SvgElement.createElement(node, this.onErrorHandlerNodes.includes(node.key), this.searchService, this.searchResult);
+      const element = SvgElement.createElement(node, this.onErrorHandlerNodes.includes(node.key), this.searchService, this.searchResult, this.highlightWorkflowRef);
       this.nodeUUids[element.uuid] = this.nodes.length;
       this.nodes.push(element);
     });
