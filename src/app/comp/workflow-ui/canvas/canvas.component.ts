@@ -368,9 +368,11 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     this.drawPaths();
   }
 
-  hoverNode(node: SvgElement, x: number, y: number): void {
+  hoverNode(node: SvgElement, x: number, y: number, w: number): void {
+    y += 56;
+    const placement = x > ((this.document.defaultView?.innerWidth ?? 1080) / 1.66) ? 'left' : 'right';
     if (node.modeldata.category != 'start' && node.modeldata.category != 'end' && node.modeldata.category != 'annotation') {
-      this.propsService.inspect('SvgNode', node, 'show', { left: x, top: y });
+      this.propsService.inspect('SvgNode', node, 'show', { left: (placement == 'right' ? x + w + 64 : undefined), right: (placement == 'left' ? ((this.document.defaultView?.innerWidth ?? 1080) - (x) + w) : undefined), top: y });
     }
   }
 

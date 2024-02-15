@@ -62,7 +62,7 @@
                 <rect [attr.width]="node.width" [attr.height]="node.height" [attr.x]="node.x" [attr.y]="node.y" rx="5"
                     ry="5"
                     [ngClass]="{'proc-box': true, 'resize-to-parent': true, 'has-match': node.hasMatch, 'has-highlight': node.hasHighlight}"
-                    (click)="selectNode(node)" (mouseover)="hoverNode(node, node.x + node.width + 64, node.y + 56)"
+                    (click)="selectNode(node)" (mouseover)="hoverNode(node, node.x, node.y, node.width)"
                     (mouseout)="leaveNode(node)">
                 </rect>
             </g>
