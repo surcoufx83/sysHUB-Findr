@@ -18,7 +18,7 @@ export class NodeInspectorWfProcessNodeComponent implements OnDestroy, OnInit {
 
   @Input({ required: true }) nodeItem!: SvgElement;
   @Output() onChangeColor = new EventEmitter<never>();
-  @Input({ required: true }) searchResult!: SearchResult;
+  @Input({ required: true }) searchResult?: SearchResult;
 
   parameters: [string, string][] = [];
   parameterset?: SyshubPSetItem;
@@ -62,7 +62,7 @@ export class NodeInspectorWfProcessNodeComponent implements OnDestroy, OnInit {
     }
     this.subs.push(this.propsService.NodesOpened.subscribe((node) => {
       if (node.type === 'PSetItems' && this.moveNodeNextTo[(<SyshubPSetItem>node.node).uuid]) {
-        const nodelement = this.document.getElementById(node.id);
+        const nodelement = this.document.getElementById(node.id!);
         const nodetarget = this.moveNodeNextTo[(<SyshubPSetItem>node.node).uuid];
         if (nodelement) {
           nodelement.style.left = `${Math.floor(+nodetarget.style.left.substring(0, nodetarget.style.left.length - 2) + 524)}px`;

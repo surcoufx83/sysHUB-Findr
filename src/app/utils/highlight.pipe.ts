@@ -9,7 +9,7 @@ export class HighlightPipe implements PipeTransform {
   constructor(private sanitizer: DomSanitizer) { }
 
   transform(value: any, args: any): any {
-    if (!args || !value)
+    if (!args || !value || value === '')
       return value;
 
     if (Array.isArray(value) || typeof value === 'object')

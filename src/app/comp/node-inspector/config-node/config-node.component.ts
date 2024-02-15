@@ -14,7 +14,7 @@ export class NodeInspectorConfigNodeComponent implements OnInit {
 
   @Input({ required: true }) nodeItem!: SyshubConfigItem;
   @Output() onChangeColor = new EventEmitter<never>();
-  @Input({ required: true }) searchResult!: SearchResult;
+  @Input({ required: true }) searchResult?: SearchResult;
 
   configPath: string = '';
 

@@ -13,15 +13,11 @@ export class NodeInspectorWfCelementNodeComponent {
 
   @Input({ required: true }) nodeItem!: SvgElement;
   @Output() onChangeColor = new EventEmitter<never>();
-  @Input({ required: true }) searchResult!: SearchResult;
+  @Input({ required: true }) searchResult?: SearchResult;
 
   constructor(
     private l10nService: L10nService,
-  ) {
-    setTimeout(() => {
-      console.log(this.nodeItem)
-    }, 10);
-  }
+  ) { }
 
   getValueToCopy(text: string) {
     return text.replace(/\s\/\s/gi, '/');

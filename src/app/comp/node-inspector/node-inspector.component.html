@@ -1,7 +1,8 @@
 @for (node of nodeCards; track $index) {
 @if (node.dispose !== true) {
-<div [ngClass]="['card', 'shadow', 'node-inspector', 'ms-2', 'mb-2', colorpalette[node.color], (node.type == 'SvgNode' ? 'position-absolute' : '')]"
-    [ngStyle]="{ 'z-index': node.zindex }" [id]="node.id" cdkDrag (click)="onReopenNode(node.id)">
+<div [ngClass]="['position-absolute', 'card', 'shadow', 'node-inspector', 'ms-2', 'mb-2', colorpalette[node.color]]"
+    [ngStyle]="{ 'z-index': node.zindex, 'display': node.display}" [id]="node.id" cdkDrag
+    (click)="onReopenNode(node.id)" (cdkDragEnded)="node.moved = true">
     @switch (node.type) {
     @case ('ConfigItems') {
     <app-node-inspector-config-node [nodeItem]="$any(node.nodeitem)" [searchResult]="searchResult"
@@ -9,7 +10,7 @@
         <button type="button" class="btn btn-sm px-2" cdkDragHandle>
             <i class="bi bi-arrows-move"></i>
         </button>
-        <button type="button" class="btn btn-sm px-2" (click)="onRemoveNode($index, node.id, true)">
+        <button type="button" class="btn btn-sm px-2" (click)="onRemoveNode($index, node.id)">
             <i class="bi bi-x-lg"></i>
         </button>
     </app-node-inspector-config-node>

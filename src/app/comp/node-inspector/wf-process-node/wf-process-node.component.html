@@ -5,7 +5,7 @@
                 <i class="bi bi-gear me-1"></i>
                 {{ l10nphrase.workflowUi.process.subject[$any(nodeItem.modeldata).isLoop === true ? 1 : 0] }}
             </div>
-            <h5 class="mb-0" [innerHTML]="nodeItem.title | highlight: searchResult.search.phrase"></h5>
+            <h5 class="mb-0" [innerHTML]="nodeItem.title | highlight: searchResult?.search?.phrase"></h5>
         </div>
         <div>
             <button type="button" class="btn btn-sm px-2" (click)="onChangeColor.emit()">
@@ -14,14 +14,14 @@
             <ng-content></ng-content>
         </div>
     </div>
-    <p class="mb-1 fst-italic" [innerHTML]="nodeItem.description | highlight: searchResult.search.phrase"></p>
+    <p class="mb-1 fst-italic" [innerHTML]="nodeItem.description | highlight: searchResult?.search?.phrase"></p>
     @if ($any(nodeItem.modeldata).isLoop === true) {
     <p class="mb-1">
         <strong>
             <i class="bi bi-arrow-repeat me-1"></i>
             {{ l10nphrase.workflowUi.shared.loop }}:
         </strong>
-        <code [innerHTML]="$any(nodeItem.modeldata).loopName | highlight: searchResult.search.phrase"></code>
+        <code [innerHTML]="$any(nodeItem.modeldata).loopName | highlight: searchResult?.search?.phrase"></code>
     </p>
     }
     @if (parameterset) {
@@ -30,7 +30,7 @@
             <i class="bi bi-p-square-fill me-1"></i>
             {{ l10nphrase.workflowUi.shared.parametersetRef }}:
         </strong>
-        <code [innerHTML]="$any(nodeItem.modeldata).parameterSetPath | highlight: searchResult.search.phrase"></code>
+        <code [innerHTML]="$any(nodeItem.modeldata).parameterSetPath | highlight: searchResult?.search?.phrase"></code>
         <button type="button" class="btn btn-sm ms-1" (click)="selectNode(parameterset, $event)">
             <i class="bi bi-window-stack fs-7"></i>
         </button>
@@ -42,7 +42,8 @@
         <tbody>
             @for (item of parameters; track $index) {
             <tr>
-                <th scope="row" [innerHTML]="(item[0] || '&lt;null&gt;' | highlight: searchResult.search.phrase) + ':'">
+                <th scope="row"
+                    [innerHTML]="(item[0] || '&lt;null&gt;' | highlight: searchResult?.search?.phrase) + ':'">
                 </th>
                 <td>
                     @if(item[0] === 'query' && $any(nodeItem.modeldata).command == 'com.oce.epos.procs.ExecuteQuery') {
@@ -53,7 +54,7 @@
                     </markdown>
                     }
                     @else {
-                    <code [innerHTML]="item[1] || '&lt;null&gt;' | highlight: searchResult.search.phrase"></code>
+                    <code [innerHTML]="item[1] || '&lt;null&gt;' | highlight: searchResult?.search?.phrase"></code>
                     }
                 </td>
                 <td style="width: 20px;" class="py-0">

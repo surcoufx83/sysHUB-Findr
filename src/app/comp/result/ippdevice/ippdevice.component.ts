@@ -15,6 +15,7 @@ export class IppdeviceComponent implements OnInit {
 
   devices: SyshubIppDevice[] = [];
   devicesMatched: string[] = [];
+  nodesToggled: string[] = [];
   @Input({ required: true }) searchResult!: SearchResult;
 
   constructor(private l10nService: L10nService,
@@ -39,8 +40,23 @@ export class IppdeviceComponent implements OnInit {
     });
   }
 
+  hoverNode(node: SyshubIppDevice, event: MouseEvent): void {
+    this.propsService.inspect('IppDevices', node, 'show', {
+      top: event.pageY - 74,
+      left: event.pageX + 86,
+    });
+  }
+
+  leaveNode(node: SyshubIppDevice): void {
+    if (!this.nodesToggled.includes(node.name))
+      this.propsService.inspect('IppDevices', node, 'remove');
+  }
+
   selectNode(node: SyshubIppDevice): void {
-    this.propsService.inspect('IppDevices', node);
+    if (!this.nodesToggled.includes(node.name))
+      this.nodesToggled.push(node.name);
+    else
+      this.nodesToggled.splice(this.nodesToggled.indexOf(node.name, 1));
   }
 
 }

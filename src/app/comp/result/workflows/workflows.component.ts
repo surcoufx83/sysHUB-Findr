@@ -14,6 +14,7 @@ import { SyshubWorkflow } from 'syshub-rest-module';
 })
 export class WorkflowsComponent implements OnDestroy, OnInit {
 
+  nodesToggled: string[] = [];
   @Input({ required: true }) searchResult!: SearchResult;
   workflows: SyshubWorkflow[] = [];
   workflowsMatched: string[] = [];
@@ -48,7 +49,22 @@ export class WorkflowsComponent implements OnDestroy, OnInit {
     this.searchResult.result?.workflows.forEach((item) => this.workflowsMatched.push(item.uuid));
   }
 
+  hoverNode(node: SyshubWorkflow, event: MouseEvent): void {
+    this.propsService.inspect('WorkflowItems', node, 'show', {
+      top: event.pageY - 74,
+      left: event.pageX + 86,
+    });
+  }
+
+  leaveNode(node: SyshubWorkflow): void {
+    if (!this.nodesToggled.includes(node.uuid))
+      this.propsService.inspect('WorkflowItems', node, 'remove');
+  }
+
   selectNode(node: SyshubWorkflow): void {
-    this.propsService.inspect('WorkflowItems', node);
+    if (!this.nodesToggled.includes(node.uuid))
+      this.nodesToggled.push(node.uuid);
+    else
+      this.nodesToggled.splice(this.nodesToggled.indexOf(node.uuid, 1));
   }
 }

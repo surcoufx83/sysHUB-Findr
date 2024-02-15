@@ -2,11 +2,11 @@
 Dokumentation zum sysHUB Findr. Weitere Informationen über aktuelle Änderungen sind im [Changelog](CHANGELOG.md) zu finden. Informationen zur Mitarbeit in dem Projekt gibt es im Abschnitt [Contributing](CONTRIBUTING.md).
 
 ## ⚠️ Work in progress
-Diese Software befindet sich noch in der Entwicklung. Sie basiert auf dem [COSMOSFindr aus Version 2.9.1](https://cdegitlab.westeurope.cloudapp.azure.com/sfuchs/COSMOSFindr) der aber durch viele Änderungen in sysHUB und der REST API hinfällig wurde. Der sysHUBFindr ist der generalüberholte Findr mit modernen Webkomponenten und einem neuen Outfit auf Grundlage des Material Design von Google.
+Diese Software befindet sich noch in der Entwicklung. Sie basiert auf dem [COSMOSFindr aus Version 2.9.1](https://cdegitlab.westeurope.cloudapp.azure.com/sfuchs/COSMOSFindr) der aber durch viele Änderungen in sysHUB und der REST API hinfällig wurde. Der sysHUBFindr ist der generalüberholte Findr mit modernen Webkomponenten und einem neuen Outfit auf Grundlage des Angular Frameworks.
 
 ## Voraussetzungen
 Um diese Software nutzen zu können und dürfen ist folgendes erforderlich:
-- NT-ware uniFLOW sysHUB ab Version 2022.1.0
+- NT-ware uniFLOW sysHUB Version 2023.1.0 (der Findr ist sofern möglich abwärtskompatibel bis 2022, aber mit eingeschränkter Funktionalität)
 - sysHUB Lizenz REST API
 
 ## Erforderliche Berechtigung für Anwender
@@ -29,7 +29,6 @@ Die Konfiguration für ein Kundensystem erfolgt in der Datei `webapps\findr\asse
 2. In der `config.json` folgende Werte anpassen:
    1. Zeile 4: `host` anpassen zum Hostnamen des sysHUB-Systems dessen Rest API aufgerufen wird.
    2. In Zeile 5: `version` ändern in:
-      - `1` = sysHUB 2021
       - `2` = sysHUB 2022
       - `3` = sysHUB 2023
    3. Ab Zeile 6: `basic` aktivieren und mit Zugangsdaten befüllen, sofern ein sysHUB API Server mit basic Authentifizierung verendet wird.
@@ -55,14 +54,14 @@ Der Findr enthält einen automatischen Design-Wechsel zwischen hellem und dunkle
 <br clear="all"/>
 
 ### Sucheinstellungen auf der Startseite
-Über die Startseite können Sucheinstellungen vorgenommen werden, die über die Suche in der Navigationsleiste aus Platzgründen nicht verfügbar sind. Diese zusätzlichen Einstellungen sind im Findr als "erweiterte Filter" bezeichnet. In diese sind folgende Optionen enthalten:
-- Suchen nur in Elementen die einer Kategorie zugeordnet sind
+![Startseite in der Desktop-Ansicht](docs/home-desktop.png)
+
+Über die Startseite können Sucheinstellungen vorgenommen werden, die über die Navigationsleiste aus Platzgründen nicht verfügbar sind. Diese zusätzlichen Einstellungen sind im Findr als "erweiterte Filter" bezeichnet und enthalten enthalten:
 - `[B]`-Kommentare ignorieren (Standard-Kommentare in Prozessen und Beschreibungstexten)
 - UUID's durchsuchen
 - Inklusive Workflowinhalte
 
 In den Findr Standardeinstellungen sind diese wie folgt gesetzt:
-- Kategorie-Filter: deaktiviert
 - `[B]`-Kommentare ignorieren: aktiviert
 - UUID's durchsuchen: deaktiviert
 - Inklusive Workflowinhalte: aktiviert
@@ -71,12 +70,17 @@ Werden diese Einstellungen durch den Anwender auf der Startseite geändert und d
 
 ## Vorschau auf die Funktionalitäten
 
-### Anmeldeseite ⚠️ 
+### Anmeldeseite 
+![Startseite in der Desktop-Ansicht](docs/login-desktop.png)
+
+Die Anmeldeseite wird angezeigt, wenn ein Anwender den Findr mit aktiviertem OAuth aufruft und sich nicht zuvor angemeldet hat. Der Login erfordert gültige sysHUB Zugangsdaten. Nach erfolgter Anmeldung wird der Anwender auf die Startseite weitergeleitet.
 
 ### Startseite
-Die Startseite dient der Konfiguration einer Suchanfrage. Die Suchanfrage wird für das nächste mal im Browsercache gespeichert. Das Suchfeld in der obersten Navigationsleiste bietet jederzeit den schnellsten Weg eine weitere Suche zu starten (Einstellungen der vorherigen Suche werden übernommen).
+Die Startseite dient der Konfiguration einer Suchanfrage. Die Suchanfrage wird für das nächste mal im Browsercache gespeichert. 
 
 ![Startseite in der Desktop-Ansicht](docs/home-desktop.png)
+
+Das Suchfeld in der oberen Navigationsleiste bietet den schnellsten Weg eine weitere Suche zu starten und verwendet immer die letzten Sucheinstellungen der Startseite.
 
 ### Suche läuft
 Nachdem die Suche gestartet wird, wird der Anwender auf eine Seite zum Status der Suche weitergeleitet. Diese wird zusammen mit einem sich bewegenden Balken angezeigt, bis das Ergebnis der Suche vom sysHUB zurückgemeldet und aufbereitet wurde.
@@ -99,30 +103,42 @@ In der Zusammenfassung der Suchergebnisse sind für jedes Thema mit Treffer die 
 ### Ergebnisansicht Konfiguration und Parametersets 
 Die Expertenkonfiguration und die Parametersets werden in einer Baumstruktur dargestellt. Zweige die einen Treffer enthalten sind automatisch aufgeklappt. Über die `+`- und `-`-Symbole in der Baumstruktur können beliebige andere Ordner aufgeklappt werden. Elemente die keine Unterelemente enthalten, haben ein Symbol das dem gewählten Datentyp entspricht.
 
-Nach dem Klick auf den Namen oder Wert eines Eintrags, öffnet sich ein kleines Eigenschaftenfenster auf der rechten Seite. Je nach Bildschirmauflösung können mehrere Fenster dargestellt werden. Diese Fenster können farblich eingefärbt, frei auf der Seite verschoben und vertikal verkleinert und vergrößert werden. Mit dem `X`-Icon wird das Fenster geschlossen.
+Beim Zeigen mit der Maus auf den Namen oder Wert eines Eintrags, öffnet sich ein kleines Eigenschaftenfenster. Mit einem Mausklick auf den Namen oder Wert des Eintrags, wird es angepinnt und kann beliebig verschoben werden. Mit dem `X`-Icon wird das Fenster geschlossen.
 
-**In der 📱 mobilen Ansicht gibt es kein Eigenschaftenfenster!**
+![Eigenschaftenfenster eines Elements](docs/result-config-pinned-desktop.png)
 
-Die Eigenschaftenfenster enthalten jeweils neben einem Wert immer auch ein kleines `Copy`-Icon. Wird darauf geklickt, so wird der Textinhalt der Eigenschaft (z.B. die Uuid) in die Zwischenablage übernommen.
+**Einschränkung in der 📱 mobilen Ansicht**
 
-![Eigenschaftenfenster eines Elements](docs/result-config-desktop.png)
+Da es auf mobilen Geräten keinen Mauszeiger gibt, klappt auch das Zeigen auf einen Konfigurationseintrag nicht. Das Eigenschaftenfenster kann per Klick geöffnet werden.
 
-### Weitere Ergebnisansichten ⚠️ 
-Die Ergebnisansicht der Auftragstypen, Workflows, etc stellen mögliche Elemente und Treffer in einer sortierten Liste dar. Nach dem Klick auf einen Listeneintrag wird auch wieder ein zusätzliches Eigenschaftenfenster dargestellt. 
+### Weitere Ergebnisansichten
+Die Ergebnisansicht der Auftragstypen, Workflows, etc stellen mögliche Elemente und Treffer in einer sortierten Liste dar. Wie auch in der Baumstruktur ist das Eigenschaftenfenster verfügbar.
 
-Je nach Thema weitere Funktionen in der Titelleiste des Zusatzfensters. Für Jobtypen gibt es eine Funktion um Einträge die nur ein `%` enthalten oder leer sind, auszublenden. Da Jobtypen sehr viele Eigenschaften für die Klassifizierung enthalten, bei denen die meisten Werte nur dem Prozentzeichen entsprechen, erhöht sich mit aktivem Filter die Übersichtlichkeit. Die Filtereinstellung wird im Browser gespeichert und bleibt auch nach dem Schließen des Browsers erhalten.
+Je nach Thema enthält die Titelleiste des Zusatzfensters weitere Funktionen. Für Jobtypen gibt es eine Funktion um Einträge die nur ein `%` enthalten oder leer sind, auszublenden. Da Jobtypen sehr viele Eigenschaften für die Klassifizierung enthalten, bei denen die meisten Werte nur dem Prozentzeichen entsprechen, erhöht sich mit aktivem Filter die Übersichtlichkeit. Die Filtereinstellung wird im Browser gespeichert und bleibt auch nach dem Schließen des Browsers erhalten. Bei Workflows ist ein Link vorhanden, der den Workflow im Designer anzeigt.
 
 Wie auch im sysHUB Client sind die Eigenschaften thematisch gruppiert (Klassifizierung, Jobattribute, Verarbeitung, Workflows). Diese Gruppen können zu- und auch wieder aufgeklappt werden um mehr Platz zu sparen. Standardmäßig sind alle Gruppen immer aufgeklappt.
-
 
 <p>
     <img src="docs/result-jobtypes-desktop-nofilter.png" width="50%">
     <img src="docs/result-jobtypes-desktop-filter.png" width="46%">
 </p>
 
+### Workflow Viewer
+
+![Workflowdesigner mit Treffern in der Desktop-Ansicht](docs/workflow-desktop.png)
+
+Ein Klick auf den Link Workflow öffnen oder das entsprechende Icon in einem der Eigenschaftsfenster öffnet den Workflow Viewer in einem neuen Browser-Tab. Treffer sind auch hier grün hervorgehoben. Je nach sysHUB-Version stehen rechts über dem Workflow noch Dropdowns zur Verfügung, die Workflow Versionen und Workflow Referenzen auflisten. Mauszeiger über eines der Workflow-Elemente (nicht bei Start, Ende, Notiz) öffnet auch hier das Eigenschaften-Fenster und per Klick kann es auch wieder angepinnt werden.
+
+Wird ein Workflow als Referenz geöffnet, werden zusätzlich die Startpunkte die den referenzierten Workflow aufrufen, gelb hervorgehoben (siehe folgender Screenshot).
+
+![Workflowdesigner mit Treffern in der Desktop-Ansicht](docs/workflow-ref-desktop.png)
+
+
 ## Ergebnisliste exportieren und importieren ⚠️ 
 
-## Fehlerdiagnose Findr ⚠️
+Funktion noch nicht verfügbar
+
+## Fehlerdiagnose Findr
 
 ### Findr deaktiviert
 Wird in einem roten Banner die Meldung "Findr deaktiviert!" angezeigt, bedeutet das schlicht, dass in der [Konfiguration](#konfigurationsparameter) für OAuth entweder kein `syshub.oauth.scope` oder ein unzureichender Wert angegeben wurde.
@@ -138,3 +154,7 @@ Ohne den Zugriff auf die internen Endpunkte ("private"), ist kein Abruf des Konf
 2. Bei Basic Auth:
 
    *Stand 8.2.24: sysHUB prüft das Scope bei Basic auth nicht. Es gibt also aktuell nichts zu tun.*
+
+### Andere Fehler, Eingeschränkte Funktion
+1. Browser Debug Konsole öffnen und auf Fehler prüfen
+2. Ein [Issue auf Githab](https://github.com/surcoufx83/sysHUB-Findr/issues) mit Angabe einer aussagekräftigen Meldung und Screenshots erstellen

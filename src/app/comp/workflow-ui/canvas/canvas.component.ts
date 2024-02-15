@@ -20,6 +20,7 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input({ required: true }) workflow!: SyshubWorkflow;
   @Input({ required: true }) graphModel!: SyshubWorkflowModel;
   @Input({ required: true }) searchResult?: SearchResult;
+  @Input({ required: true }) highlightWorkflowRef!: string;
   @ViewChild('workflowSvgContainer') svgContainer!: ElementRef;
 
   onErrorHandlerNodes: string[] = []; // key of elements after on error connector
@@ -30,23 +31,13 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   nodesToggled: string[] = [];
   hoverpath?: number;
   ruler: number[] = [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800];
-
-  svgGrid = { width: 10, height: 10, strokeColor: 'rgba(0, 0, 0, .1)' };
   svgCursor: Point = { x: 0, y: 0 };
-  tooltipLocation: Point = { x: 0, y: 0 };
-  tooltipLeft: boolean = false;
-  pageSize = { width: 0, height: 0 };
-  window: Window;
-
   subs: Subscription[] = [];
 
   constructor(private l10nService: L10nService,
     private searchService: SearchService,
     @Inject(DOCUMENT) private document: Document,
-    private propsService: PagepropsService,) {
-    this.window = document.defaultView!;
-    this.pageSize = { width: this.window.innerWidth, height: this.window.innerHeight - 64 };
-  }
+    private propsService: PagepropsService,) { }
 
   private calculateCubicPath(path: SvgPathPoint[], pointFrom: Point, portFrom: string, pointTo: Point, elementTo: Element): void {
     let intersections: Point[] = [];
@@ -308,16 +299,6 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     this.svgCursor = { x: x, y: y - 132 };
   }
 
-  resizeTimeout: any;
-  @HostListener('window:resize', [])
-  onWindowResized(): void {
-    if (this.resizeTimeout)
-      clearTimeout(this.resizeTimeout);
-    this.resizeTimeout = setTimeout(() => {
-      this.pageSize = { width: this.window.innerWidth, height: this.window.innerHeight - 64 };
-    }, 150);
-  }
-
   private renderPath(path: SvgPathPoint[]): string {
     let elements: string[] = [];
     path.forEach((element) => {
@@ -350,7 +331,7 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
         this.onErrorHandlerNodes.push(connector.to);
     })
     this.graphModel.nodeDataArray.forEach((node) => {
-      const element = SvgElement.createElement(node, this.onErrorHandlerNodes.includes(node.key), this.searchService, this.searchResult);
+      const element = SvgElement.createElement(node, this.onErrorHandlerNodes.includes(node.key), this.searchService, this.searchResult, this.highlightWorkflowRef);
       this.nodeUUids[element.uuid] = this.nodes.length;
       this.nodes.push(element);
     });
@@ -387,9 +368,11 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     this.drawPaths();
   }
 
-  hoverNode(node: SvgElement): void {
+  hoverNode(node: SvgElement, x: number, y: number, w: number): void {
+    y += 56;
+    const placement = x > ((this.document.defaultView?.innerWidth ?? 1080) / 1.66) ? 'left' : 'right';
     if (node.modeldata.category != 'start' && node.modeldata.category != 'end' && node.modeldata.category != 'annotation') {
-      this.propsService.inspect('SvgNode', node);
+      this.propsService.inspect('SvgNode', node, 'show', { left: (placement == 'right' ? x + w + 64 : undefined), right: (placement == 'left' ? ((this.document.defaultView?.innerWidth ?? 1080) - (x) + w) : undefined), top: y });
     }
   }
 
@@ -397,7 +380,7 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.nodesToggled.includes(node.modeldata.key))
       return;
     if (node.modeldata.category != 'start' && node.modeldata.category != 'end' && node.modeldata.category != 'annotation') {
-      this.propsService.inspect('SvgNode', node, true);
+      this.propsService.inspect('SvgNode', node, 'remove');
     }
   }
 
@@ -405,10 +388,10 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     if (node.modeldata.category != 'start' && node.modeldata.category != 'end' && node.modeldata.category != 'annotation') {
       if (!this.nodesToggled.includes(node.modeldata.key))
         this.nodesToggled.push(node.modeldata.key);
-      this.propsService.inspect('SvgNode', node);
+      else
+        this.nodesToggled.splice(this.nodesToggled.indexOf(node.modeldata.key, 1));
     }
   }
-
 
 }
 

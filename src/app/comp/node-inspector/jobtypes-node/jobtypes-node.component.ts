@@ -15,7 +15,7 @@ export class NodeInspectorJobtypesNodeComponent implements OnDestroy, OnInit {
 
   @Input({ required: true }) nodeItem!: SyshubJobType;
   @Output() onChangeColor = new EventEmitter<never>();
-  @Input({ required: true }) searchResult!: SearchResult;
+  @Input({ required: true }) searchResult?: SearchResult;
 
   classifiedWorkflow: SyshubWorkflow | null = null;
   processingWorkflow: SyshubWorkflow | null = null;

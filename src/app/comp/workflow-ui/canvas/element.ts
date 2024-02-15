@@ -1,4 +1,3 @@
-import { CacheService } from "src/app/svc/cache.service";
 import { SearchService } from "src/app/svc/search.service";
 import { SearchResult } from "src/app/types";
 import { GraphModelAnnotationObject, GraphModelCElementObject, GraphModelDecisionObject, GraphModelEndObject, GraphModelProcessObject, GraphModelStartObject, GraphModelWorkflowObject } from "syshub-rest-module";
@@ -13,6 +12,7 @@ export class SvgElement implements SvgNode {
     annotationTextColor: string = '';
     annotationText: SvgTSpan[] = [];
     description: string = '';
+    hasHighlight: boolean = false;
     hasMatch: boolean = false;
     image: string = '';
     imageheight: number = 0;
@@ -42,7 +42,7 @@ export class SvgElement implements SvgNode {
         }
     }
 
-    public static createElement(graphNode: GraphModelAnnotationObject | GraphModelCElementObject | GraphModelDecisionObject | GraphModelEndObject | GraphModelProcessObject | GraphModelStartObject | GraphModelWorkflowObject, onErrorConnected: boolean, searchService: SearchService, searchResult?: SearchResult): SvgElement {
+    public static createElement(graphNode: GraphModelAnnotationObject | GraphModelCElementObject | GraphModelDecisionObject | GraphModelEndObject | GraphModelProcessObject | GraphModelStartObject | GraphModelWorkflowObject, onErrorConnected: boolean, searchService: SearchService, searchResult?: SearchResult, highlightWorkflowRef?: string): SvgElement {
         switch (graphNode.category) {
             case 'annotation':
                 return new AnnotationElement(graphNode, searchService, searchResult);
@@ -57,7 +57,7 @@ export class SvgElement implements SvgNode {
             case 'start':
                 return new StartElement(graphNode, searchService, searchResult);
             case 'workflow':
-                return new WorkflowElement(graphNode, onErrorConnected, searchService, searchResult);
+                return new WorkflowElement(graphNode, onErrorConnected, searchService, searchResult, highlightWorkflowRef);
         }
     }
 
@@ -94,18 +94,28 @@ export class AnnotationElement extends SvgElement {
                 });
             }
         });
-        let size = graphNode.size.split(' ');
-        if (size.length != 2)
-            console.error('WorkflowElement: Size can not be set, not exact two numbers: ' + graphNode.size, graphNode);
-        else {
-            this.width = +size[0];
-            this.height = +size[1];
+        if (graphNode.size != undefined) {
+            let size = graphNode.size.split(' ');
+            if (size.length != 2)
+                console.error('WorkflowElement: Size can not be set, not exact two numbers: ' + graphNode.size, graphNode);
+            else {
+                this.width = +size[0];
+                this.height = +size[1];
+            }
+            this.x -= this.width / 2;
+            this.y -= this.height / 2;
         }
-        this.x -= this.width / 2;
-        this.y -= this.height / 2;
         this.isAnnotation = true;
-        this.annotationBgColor = graphNode.color;
-        this.annotationTextColor = graphNode.colorText;
+        if (graphNode.color != undefined && graphNode.colorText == undefined) {
+            // sysHUB 2022 compatibility
+            const match = graphNode.color.match(/RGB \{(.+)\}/)
+            this.annotationBgColor = match ? `rgb(${match[1]})` : graphNode.color;
+            this.annotationTextColor = 'rgb(0,0,0)';
+        }
+        else {
+            this.annotationBgColor = graphNode.color;
+            this.annotationTextColor = graphNode.colorText;
+        }
         this.hasMatch = searchResult ? searchService.match([
             graphNode.text,
         ], searchResult.search) : false;
@@ -234,7 +244,7 @@ export class StartElement extends SvgElement {
 
 export class WorkflowElement extends SvgElement {
 
-    constructor(graphNode: GraphModelWorkflowObject, onErrorConnected: boolean, searchService: SearchService, searchResult?: SearchResult) {
+    constructor(graphNode: GraphModelWorkflowObject, onErrorConnected: boolean, searchService: SearchService, searchResult?: SearchResult, highlightWorkflowRef?: string) {
         super(graphNode);
         this.height = this.height === 0 ? (70 + (this.description.indexOf('+') == 0 ? 20 : 0)) : this.height;
         this.width = this.width === 0 ? 56 : this.width;
@@ -253,6 +263,7 @@ export class WorkflowElement extends SvgElement {
             graphNode.loopName,
             (searchResult.search.filter.includeUuids ? graphNode.refUuid : ''),
         ], searchResult.search) : false;
+        this.hasHighlight = highlightWorkflowRef != undefined && highlightWorkflowRef != '' && graphNode.refName == highlightWorkflowRef;
     }
 
 }

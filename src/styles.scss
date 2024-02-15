@@ -101,24 +101,19 @@ code {
     }
 
     &.node-inspector {
-        max-height: clamp(100px, 280px, 40vh);
         overflow: auto;
         resize: both;
+        width: fit-content;
+        min-width: 350px;
+        max-width: 860px;
 
         &[style*="height"] {
             max-height: unset;
         }
-    }
-}
 
-
-.card.node-inspector {
-    width: 100%;
-}
-
-@include media-breakpoint-up(lg) {
-    .card.node-inspector {
-        min-width: 500px;
+        &[style*="width"] {
+            max-width: unset;
+        }
     }
 }
 
@@ -132,6 +127,21 @@ code {
 
 .fs-8 {
     font-size: 80%;
+}
+
+.interaction-reminder:hover::after {
+    content: '\f6d2';
+    display: inline-block;
+    font-family: bootstrap-icons !important;
+    font-size: 6pt;
+    font-style: normal;
+    font-weight: normal !important;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    transform: translate(.2rem, -.3rem);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 mark,
@@ -208,22 +218,6 @@ ul.treeview {
             -moz-box-sizing: content-box;
             box-sizing: content-box;
             display: inline-block;
-
-            &.interaction-reminder:hover::after {
-                content: '\f6d2';
-                display: inline-block;
-                font-family: bootstrap-icons !important;
-                font-size: 6pt;
-                font-style: normal;
-                font-weight: normal !important;
-                font-variant: normal;
-                text-transform: none;
-                line-height: 1;
-                transform: translate(.2rem, -.3rem);
-                -webkit-font-smoothing: antialiased;
-                -moz-osx-font-smoothing: grayscale;
-            }
-
         }
 
         &.has-match {
@@ -263,7 +257,21 @@ body[data-bs-theme="dark"] {
 
         svg.workflow {
             g.element-group rect.proc-box {
-                fill: rgba($color: #898989, $alpha: .1) !important;
+
+                &.has-match {
+                    stroke: #16DB93;
+                    fill: rgba($color: #16DB93, $alpha: .1);
+                }
+
+                &.has-highlight {
+                    stroke: #c1db16;
+                    fill: rgba($color: #c1db16, $alpha: .1);
+                }
+
+                &:not(.has-match):not(.has-highlight) {
+                    fill: rgba($color: #898989, $alpha: .1) !important;
+                }
+
             }
 
             text.proc-description.connector-description.error {

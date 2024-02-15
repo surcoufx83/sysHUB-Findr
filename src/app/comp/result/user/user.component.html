@@ -4,9 +4,10 @@
     <tbody>
         @for (item of user; track $index) {
         <tr>
-            <td [ngClass]="{ 'cursor-pointer': true, 'text-success': userMatched.includes(item.uuid)}"
-                (click)="selectNode(item)">
-                <strong [innerHTML]="item.name | highlight: searchResult.search.phrase"></strong>
+            <td [ngClass]="{ 'cursor-pointer': true, 'text-success': userMatched.includes(item.uuid)}">
+                <strong [innerHTML]="item.name | highlight: searchResult.search.phrase"
+                    (mouseover)="hoverNode(item, $event)" (mouseout)="leaveNode(item)"
+                    (click)="selectNode(item)"></strong>
             </td>
         </tr>
         }

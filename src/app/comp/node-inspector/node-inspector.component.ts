@@ -2,7 +2,7 @@ import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
-import { PagepropsService } from 'src/app/svc/pageprops.service';
+import { NodeInspectorRequest, PagepropsService } from 'src/app/svc/pageprops.service';
 import { SearchResult } from 'src/app/types';
 import { SyshubCertStoreItem, SyshubConfigItem, SyshubIppDevice, SyshubJobType, SyshubPSetItem, SyshubUserAccount, SyshubWorkflow } from 'syshub-rest-module';
 import { SvgElement } from '../workflow-ui/canvas/element';
@@ -15,7 +15,7 @@ import { DOCUMENT } from '@angular/common';
 })
 export class NodeInspectorComponent implements OnDestroy, OnInit {
 
-  @Input({ required: true }) searchResult!: SearchResult;
+  @Input({ required: true }) searchResult?: SearchResult;
 
   private nodeTypes = ['ConfigItems', 'JobTypes', 'PSetItems', 'WorkflowItems', 'CertStoreItems', 'IppDevices', 'ServerConfig', 'ServerInformation', 'Users', 'ImpExpView', 'SvgNode'];
   private subs: Subscription[] = [];
@@ -56,17 +56,24 @@ export class NodeInspectorComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    this.subs.push(this.propsService.NodeInspectorItem.subscribe((item) => {
-      this.onInspectNewNodeItem(item.type, item.node, item.remove);
+    this.subs.push(this.propsService.NodeInspectorItem.subscribe((request) => {
+      this.onInspectNewNodeItem(request);
     }))
   }
 
-  onInspectNewNodeItem(type: string, node: SvgElement | SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubIppDevice | SyshubWorkflow | SyshubCertStoreItem, remove?: boolean): void {
-    if (!this.nodeTypes.includes(type))
+  onInspectNewNodeItem(request: NodeInspectorRequest): void {
+    if (!this.nodeTypes.includes(request.type))
       return;
-    const nodeid = type === 'IppDevices' ? `node-${type}${encodeURIComponent((<SyshubIppDevice>node).name)}` : type === 'CertStoreItems' ? `node-${type}${encodeURIComponent((<SyshubCertStoreItem>node).alias)}` : `node-${type}${(<SvgElement | SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubWorkflow>node).uuid}`;
+    const nodeid =
+      request.type === 'IppDevices' ?
+        `node-${request.type}${encodeURIComponent((<SyshubIppDevice>request.node).name)}` :
+        request.type === 'CertStoreItems' ?
+          `node-${request.type}${encodeURIComponent((<SyshubCertStoreItem>request.node).alias)}` :
+          `node-${request.type}${(<SvgElement | SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubWorkflow>request.node).uuid}`;
 
-    if (remove === true) {
+    request.id = nodeid;
+
+    if (request.action == 'remove') {
       for (let i = 0; i < this.nodesAdded.length; i++) {
         if (this.nodesAdded[i] === nodeid) {
           this.onRemoveNode(i, nodeid);
@@ -82,16 +89,49 @@ export class NodeInspectorComponent implements OnDestroy, OnInit {
     }
     this.nodesAdded.push(nodeid);
 
+    let initialPosition = 0;
+    this.nodeCards.forEach((card) => {
+      if (!card.moved && !card.dispose)
+        initialPosition++;
+    });
+
     this.nodeCards.push({
       id: nodeid,
       color: 0,
-      nodeitem: node,
-      type: type,
+      display: 'none',
+      dispose: false,
+      location: initialPosition,
+      moved: (request.placeAt != undefined),
+      nodeitem: request.node,
+      request: { ...request },
+      type: request.type,
       zindex: ++this.zindex
     });
 
     setTimeout(() => {
-      if (type == 'SvgNode') {
+      let element = this.document.getElementById(nodeid);
+      if (!element)
+        return;
+      if (request.placeAt != undefined) {
+        if (request.placeAt!.top)
+          element.style.top = `${request.placeAt!.top}px`;
+        if (request.placeAt!.left)
+          element.style.left = `${request.placeAt!.left}px`;
+        if (request.placeAt!.right)
+          element.style.right = `${request.placeAt!.right}px`;
+      } else {
+        element.style.left = `${initialPosition * 15}px`;
+        element.style.top = `${initialPosition * 50}px`;
+      }
+      element.style.display = 'flex';
+    }, 10);
+
+    setTimeout(() => {
+      this.propsService.NodesOpened.next(request);
+    }, 2);
+
+    /* setTimeout(() => {
+      if (content.type == 'SvgNode') {
         let element = this.document.getElementById(nodeid);
         if (!element)
           return;
@@ -99,7 +139,7 @@ export class NodeInspectorComponent implements OnDestroy, OnInit {
         element.style.top = `${(<SvgElement>node).y + 48}px`;
       }
       this.propsService.NodesOpened.next({ id: nodeid, type: type, node: node });
-    }, 1);
+    }, 1); */
 
   }
 
@@ -116,9 +156,12 @@ export class NodeInspectorComponent implements OnDestroy, OnInit {
         this.nodesAdded.splice(i, 1);
         this.nodeCards.forEach((node) => {
           if (node.id === nodeid)
-            node.dispose = true;
-          if (manual === true)
-            this.propsService.NodesClosed.next({ id: nodeid, type: node.type, node: node.nodeitem });
+            setTimeout(() => {
+              node.dispose = true;
+              if (manual === true) {
+                this.propsService.NodesClosed.next(node.request);
+              }
+            }, 1);
         });
         return;
       }
@@ -128,10 +171,14 @@ export class NodeInspectorComponent implements OnDestroy, OnInit {
 }
 
 export type NodeInspectorItem = {
-  id: string;
-  color: number;
-  dispose?: boolean;
-  nodeitem: SvgElement | SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubIppDevice | SyshubWorkflow | SyshubCertStoreItem;
-  type: string;
-  zindex: number;
+  id: string,
+  color: number,
+  display: string,
+  dispose: boolean,
+  location: number,
+  moved: boolean,
+  nodeitem: SvgElement | SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubIppDevice | SyshubWorkflow | SyshubCertStoreItem,
+  request: NodeInspectorRequest,
+  type: string,
+  zindex: number,
 }

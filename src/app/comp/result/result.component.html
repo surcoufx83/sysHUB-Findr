@@ -176,7 +176,7 @@
                     </h4>
                 </div>
                 <div class="card-body row">
-                    <div class="col-12 col-lg-8">
+                    <div class="col-12">
                         @switch (selectedChapter) {
                         @case ('ConfigItems') {
                         <app-result-config [configByTree]="configByTree" [configUpdate]="configUpdate"
@@ -216,11 +216,6 @@
                             [workflows]="workflows"></app-result-overview>
                         }
                         }
-                    </div>
-                    <div class="col-12 col-lg-4 d-none d-lg-block">
-                        <div class="sticky-top pe-3" style="top: 2rem; z-index: 99;">
-                            <app-node-inspector [searchResult]="searchResult"></app-node-inspector>
-                        </div>
                     </div>
                 </div>
             </div>

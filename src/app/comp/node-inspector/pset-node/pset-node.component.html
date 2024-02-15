@@ -4,9 +4,17 @@
             <i class="bi bi-p-square-fill me-1"></i>
             {{ l10nphrase.result.parameterset.nodeInspector.subject }}
         </div>
-        <h5 class="mb-0" [innerHTML]="nodeItem.name | highlight: searchResult.search.phrase"></h5>
+        <h5 class="mb-0" [innerHTML]="nodeItem.name | highlight: searchResult?.search?.phrase"></h5>
     </div>
     <div>
+        @if (nodeItem.type == 'Workflow-UUID' && nodeItem.value != '') {
+        <a target="_blank" class="me-2"
+            [href]="'#workflow?uuid=' + nodeItem.value + '&t=' + searchResult?.search?.token">
+            <button type="button" class="btn btn-sm px-2" [title]="l10nphrase.result.showWorkflow">
+                <i class="bi bi-box-arrow-up-right"></i>
+            </button>
+        </a>
+        }
         <button type="button" class="btn btn-sm px-2" (click)="onChangeColor.emit()">
             <i class="bi bi-palette-fill"></i>
         </button>
@@ -22,8 +30,8 @@
             </tr>
             <tr nodeinspector-common-table-node [title]="l10nphrase.result.parameterset.nodeInspector.uuid"
                 [valueToCopy]="nodeItem.uuid">
-                @if (searchResult.search.filter.includeUuids) {
-                <code [innerHTML]="nodeItem.uuid | highlight: searchResult.search.phrase"></code>
+                @if (searchResult?.search?.filter?.includeUuids) {
+                <code [innerHTML]="nodeItem.uuid | highlight: searchResult?.search?.phrase"></code>
                 }
                 @else {
                 <code>{{nodeItem.uuid}}</code>
@@ -35,12 +43,12 @@
             </tr>
             <tr nodeinspector-common-table-node [title]="l10nphrase.result.parameterset.nodeInspector.value"
                 [valueToCopy]="nodeItem.value || undefined">
-                <code [innerHTML]="nodeItem.value || '&lt;null&gt;' | highlight: searchResult.search.phrase"></code>
+                <code [innerHTML]="nodeItem.value || '&lt;null&gt;' | highlight: searchResult?.search?.phrase"></code>
             </tr>
             <tr nodeinspector-common-table-node [title]="l10nphrase.result.parameterset.nodeInspector.description"
                 [valueToCopy]="nodeItem.description || undefined">
-                @if (!searchResult.search.filter.excludeBComments || !nodeItem.description?.startsWith('[B]')) {
-                <code [innerHTML]="nodeItem.description | highlight: searchResult.search.phrase"></code>
+                @if (!searchResult?.search?.filter?.excludeBComments || !nodeItem.description?.startsWith('[B]')) {
+                <code [innerHTML]="nodeItem.description | highlight: searchResult?.search?.phrase"></code>
                 }
                 @else {
                 <code>{{nodeItem.description}}</code>

@@ -13,7 +13,7 @@ export class NodeInspectorWorkflowsNodeComponent {
 
   @Input({ required: true }) nodeItem!: SyshubWorkflow;
   @Output() onChangeColor = new EventEmitter<never>();
-  @Input({ required: true }) searchResult!: SearchResult;
+  @Input({ required: true }) searchResult?: SearchResult;
 
   constructor(
     private l10nService: L10nService,

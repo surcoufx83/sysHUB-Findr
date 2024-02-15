@@ -326,6 +326,7 @@ export type L10nLocale = {
         },
         versionsDropdown: {
             title: string[],
+            titleActiveVersion: string[],
             versionstr: string,
             isactive: string,
             lastactive: string,

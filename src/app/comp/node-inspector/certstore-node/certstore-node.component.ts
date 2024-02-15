@@ -13,7 +13,7 @@ export class NodeInspectorCertstoreNodeComponent {
 
   @Input({ required: true }) nodeItem!: SyshubCertStoreItem;
   @Output() onChangeColor = new EventEmitter<never>();
-  @Input({ required: true }) searchResult!: SearchResult;
+  @Input({ required: true }) searchResult?: SearchResult;
 
   showQueueSettingsGroup = true;
 
