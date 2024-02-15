@@ -15,10 +15,11 @@
                         data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                         <i class="bi bi-view-list me-md-1"></i>
                         <span class="d-none d-md-inline">
-                            {{ l10n(l10nphrase.workflowUi.versionsDropdown.title[model.modelData.version != '0.0' ? 0 :
-                            1], [versions.length,
-                            model.modelData.version != '0.0' ? model.modelData.version : model.modelData.baseVersion !=
-                            '0.0' ? model.modelData.baseVersion : '—']) }}
+                            {{ l10n(l10nphrase.workflowUi.versionsDropdown.title[versions.length == 1 ? 0 :
+                            1], [versions.length]) }}
+                            ({{ l10n(l10nphrase.workflowUi.versionsDropdown.titleActiveVersion[model.modelData.version
+                            != '0.0' ? 0 : 1], [model.modelData.version != '0.0' ? model.modelData.version :
+                            model.modelData.baseVersion != '0.0' ? model.modelData.baseVersion : '—']) }})
                         </span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" style="width: 330px;">
@@ -33,7 +34,7 @@
                                 }
                                 @else if (model.modelData.version == '0.0' && model.modelData.baseVersion ==
                                 versionitem.major + '.' + versionitem.minor) {
-                                <i class="bi bi-dash-square me-2 text-secondary"></i>
+                                <i class="bi bi-pencil-square me-2 text-secondary"></i>
                                 {{ l10n(l10nphrase.workflowUi.versionsDropdown.versionstr, [versionitem.major,
                                 versionitem.minor]) }}
                                 ({{ l10nphrase.workflowUi.versionsDropdown.lastactive }})
@@ -53,85 +54,94 @@
                 }
                 <div class="dropdown">
                     <button type="button" class="btn btn-outline-secondary dropdown-toggle ms-2"
-                        data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                        [attr.data-bs-toggle]="referencesCount > 0 ? 'dropdown' : undefined"
+                        data-bs-auto-close="outside" aria-expanded="false">
                         <i class="bi bi-link-45deg me-md-1"></i>
                         <span class="d-none d-md-inline">
-                            {{ l10n(l10nphrase.workflowUi.referencesDropdown.title[references.length == 0 ? 0 :
-                            references.length == 1 ? 1 : 2], [references.length]) }}
+                            {{ l10n(l10nphrase.workflowUi.referencesDropdown.title[referencesCount == 0 ? 0 :
+                            referencesCount == 1 ? 1 : 2], [referencesCount]) }}
                         </span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" style="width: 430px;">
                         @for (refgroup of references; track $index) {
 
-                        @for (refitem of refgroup.items; track $index) {
-                        <li class="dropdown-item text-wrap d-flex align-items-baseline">
+                        <li class="dropdown-item">
 
-                            <span class="pe-2">
-                                @switch (refitem.type) {
+                            <h5 class="mb-0">
+                                <span class="pe-2">
+                                    @switch (refgroup.type) {
 
-                                @case ('Config') {
-                                <i class="bi bi-c-square"></i>
-                                }
+                                    @case ('Config') {
+                                    <i class="bi bi-c-square"></i>
+                                    {{ l10nphrase.result.config.nodeInspector.subject }}
+                                    }
 
-                                @case ('JobType') {
-                                <i class="bi bi-fonts"></i>
-                                }
+                                    @case ('JobType') {
+                                    <i class="bi bi-fonts"></i>
+                                    {{ l10nphrase.result.jobtype.nodeInspector.subject }}
+                                    }
 
-                                @case ('Parameterset') {
-                                <i class="bi bi-p-square"></i>
-                                }
+                                    @case ('Parameterset') {
+                                    <i class="bi bi-p-square"></i>
+                                    {{ l10nphrase.result.parameterset.nodeInspector.subject }}
+                                    }
 
-                                @case ('Workflow') {
-                                <i class="bi bi-diagram-2-fill"></i>
-                                }
-                                }
-                            </span>
-
-                            <div class="flex-fill">
-                                @switch (refitem.type) {
-
-                                @case ('Config') {
-                                <span class="mb-1">{{ refitem.name }}</span>
-                                <button type="button" class="btn btn-sm ms-1" (click)="selectConfigNode(refitem.name)">
-                                    <i class="bi bi-window-stack fs-7"></i>
-                                </button>
-                                }
-
-                                @case ('JobType') {
-                                <span class="mb-1">{{ refitem.name }}</span>
-                                <button type="button" class="btn btn-sm ms-1" (click)="selectJobtypeNode(refitem.name)">
-                                    <i class="bi bi-window-stack fs-7"></i>
-                                </button>
-                                }
-
-                                @case ('Parameterset') {
-                                <span class="mb-1">{{ refitem.name }}</span>
-                                <button type="button" class="btn btn-sm ms-1" (click)="selectPSetNode(refitem.name)">
-                                    <i class="bi bi-window-stack fs-7"></i>
-                                </button>
-                                }
-
-                                @case ('Workflow') {
-                                <span class="mb-1">
-                                    {{ l10n(l10nphrase.workflowUi.referencesDropdown.occurencesInWorkflow, [
-                                    refitem.appears, refitem.name]) }}
+                                    @case ('Workflow') {
+                                    <i class="bi bi-diagram-2-fill"></i>
+                                    {{ l10nphrase.result.workflow.nodeInspector.subject }}
+                                    }
+                                    }
                                 </span>
-                                <button type="button" class="btn btn-sm ms-1"
-                                    (click)="selectWorkflowNode(refitem.name)">
-                                    <i class="bi bi-window-stack fs-7"></i>
-                                </button>
-                                @if (getWorkflowByName(refitem.name) != null) {
-                                <a target="_blank"
-                                    [href]="'#workflow?uuid=' + getWorkflowByName(refitem.name)!.uuid + '&t=' + searchResult!.search.token">
-                                    <button type="button" class="btn btn-sm">
-                                        <i class="bi bi-box-arrow-up-right me-1"></i>
-                                    </button>
-                                </a>
-                                }
-                                }
 
-                                }
-                            </div>
+                            </h5>
+
+                        </li>
+
+                        @for (refitem of refgroup.items; track $index) {
+                        <li class="dropdown-item text-wrap">
+
+                            @switch (refitem.type) {
+
+                            @case ('Config') {
+                            <code class="mb-1">{{ refitem.name }}</code>
+                            <button type="button" class="btn btn-sm ms-1" (click)="selectConfigNode(refitem.name)">
+                                <i class="bi bi-window-stack fs-7"></i>
+                            </button>
+                            }
+
+                            @case ('JobType') {
+                            <code class="mb-1">{{ refitem.name }}</code>
+                            <button type="button" class="btn btn-sm ms-1" (click)="selectJobtypeNode(refitem.name)">
+                                <i class="bi bi-window-stack fs-7"></i>
+                            </button>
+                            }
+
+                            @case ('Parameterset') {
+                            <code class="mb-1">{{ refitem.name }}</code>
+                            <button type="button" class="btn btn-sm ms-1" (click)="selectPSetNode(refitem.name)">
+                                <i class="bi bi-window-stack fs-7"></i>
+                            </button>
+                            }
+
+                            @case ('Workflow') {
+                            <code class="mb-1">
+                                {{ l10n(l10nphrase.workflowUi.referencesDropdown.occurencesInWorkflow, [
+                                refitem.appears, refitem.name]) }}
+                            </code>
+                            <button type="button" class="btn btn-sm ms-1" (click)="selectWorkflowNode(refitem.name)">
+                                <i class="bi bi-window-stack fs-7"></i>
+                            </button>
+                            @if (getWorkflowByName(refitem.name) != null) {
+                            <a target="_blank"
+                                [href]="'#workflow?uuid=' + getWorkflowByName(refitem.name)!.uuid + '&t=' + searchResult!.search.token">
+                                <button type="button" class="btn btn-sm">
+                                    <i class="bi bi-box-arrow-up-right me-1"></i>
+                                </button>
+                            </a>
+                            }
+                            }
+
+                            }
 
                         </li>
                         }

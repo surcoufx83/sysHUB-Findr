@@ -30,6 +30,7 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
   workflow?: SyshubWorkflow;
   model?: SyshubWorkflowModel;
   references?: SyshubWorkflowReferenceGroup[];
+  referencesCount: number = 0;
   startpoints?: string[];
   versions?: SyshubWorkflowVersion[];
   workflowUuid?: string;
@@ -116,11 +117,11 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
           temprefs[ref.type].items.push(ref);
         });
         let temprefs2 = Object.values(temprefs).sort((a, b) => a.type.toLocaleLowerCase() > b.type.toLocaleLowerCase() ? 1 : a.type.toLocaleLowerCase() < b.type.toLocaleLowerCase() ? -1 : 0);
-        temprefs2.forEach((group) => group.items = group.items.sort((a, b) => a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : a.name.toLocaleLowerCase() < b.name.toLocaleLowerCase() ? -1 : 0));
+        temprefs2.forEach((group) => {
+          group.items = group.items.sort((a, b) => a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : a.name.toLocaleLowerCase() < b.name.toLocaleLowerCase() ? -1 : 0);
+          this.referencesCount += group.items.length;
+        });
         this.references = [...temprefs2];
-
-        //         this.references = reply.sort((a, b) => a.type > b.type ? 1 : a.type < b.type ? -1 : a.name > b.name ? 1 : a.name < b.name ? -1 : 0);
-        console.log(this.references)
         this.ngOnInit_ReportProgress();
       }
     }));

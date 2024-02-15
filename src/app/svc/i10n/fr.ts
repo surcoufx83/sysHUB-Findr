@@ -383,7 +383,8 @@ export const L10nFr: L10nLocale = {
             threads: 'Threads',
         },
         versionsDropdown: {
-            title: ['[0] versions (actuel: [1])', '[0] versions (modifié: [1])'],
+            title: ['[0] Version', '[0] Versions'],
+            titleActiveVersion: ['actuelle : [0]', 'en cours : [0]'],
             versionstr: '[0].[1]',
             isactive: 'actif',
             lastactive: 'en cours'

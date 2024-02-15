@@ -1,4 +1,5 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { APP_BASE_HREF } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, Inject, NgModule, Optional } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -58,10 +59,8 @@ import { SearchService } from './svc/search.service';
 import { ToastsService } from './svc/toasts.service';
 import { ToastsComponent } from './svc/toasts/toasts.component';
 import { HighlightPipe } from './utils/highlight.pipe';
-import { APP_BASE_HREF } from '@angular/common';
 
 export function initAppFactory(svc: AppInitService) {
-  console.warn('initAppFactory')
   return () => svc.load();
 }
 
@@ -138,22 +137,4 @@ export function initAppFactory(svc: AppInitService) {
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-  /* private _donePromise: Promise<void>;
-  private _done: boolean = false;
-  constructor(@Inject(APP_INITIALIZER) @Optional() appInits: (() => any)[]) {
-    const asyncInitPromises: Promise<any>[] = [];
-    if (appInits) {
-      for (let i = 0; i < appInits.length; i++) {
-        const initResult = appInits[i]();
-        //if (isPromise(initResult)) {
-        asyncInitPromises.push(initResult);
-        //}
-      }
-    }
-    this._donePromise = Promise.all(asyncInitPromises).then(() => { this._done = true; });
-    if (asyncInitPromises.length === 0) {
-      this._done = true;
-    }
-  } */
-}
+export class AppModule { }
