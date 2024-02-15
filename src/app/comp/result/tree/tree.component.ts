@@ -18,6 +18,7 @@ export class TreeComponent implements OnInit {
   @Input({ required: true }) treeUuids: { [key: string]: [path: string, defaultOpen: boolean, open: boolean] } = {};
   @Input({ required: true }) searchResult!: SearchResult;
   matchedNodeUuids: string[] = [];
+  nodesToggled: string[] = [];
 
   constructor(private l10nService: L10nService,
     private cacheService: CacheService,
@@ -50,15 +51,30 @@ export class TreeComponent implements OnInit {
       this.searchResult.result?.parameterset.forEach((item) => this.matchedNodeUuids.push(item.uuid));
   }
 
-  selectNode(node: SyshubConfigItem | SyshubPSetItem): void {
-    this.propsService.inspect(this.treetype, node);
-  }
-
   toggleNode(node: SyshubConfigItem | SyshubPSetItem): void {
     if (this.treeUuids[node.uuid] == undefined || this.treeUuids[node.uuid][2] == undefined) {
       return;
     }
     this.treeUuids[node.uuid][2] = !this.treeUuids[node.uuid][2];
+  }
+
+  hoverNode(node: SyshubConfigItem | SyshubPSetItem, event: MouseEvent): void {
+    this.propsService.inspect(this.treetype, node, 'show', {
+      top: event.pageY - 74,
+      left: event.pageX + 86,
+    });
+  }
+
+  leaveNode(node: SyshubConfigItem | SyshubPSetItem): void {
+    if (!this.nodesToggled.includes(node.uuid))
+      this.propsService.inspect(this.treetype, node, 'remove');
+  }
+
+  selectNode(node: SyshubConfigItem | SyshubPSetItem): void {
+    if (!this.nodesToggled.includes(node.uuid))
+      this.nodesToggled.push(node.uuid);
+    else
+      this.nodesToggled.splice(this.nodesToggled.indexOf(node.uuid, 1));
   }
 
 }

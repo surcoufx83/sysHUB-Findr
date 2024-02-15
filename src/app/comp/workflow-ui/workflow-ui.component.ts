@@ -8,7 +8,7 @@ import { PagepropsService } from 'src/app/svc/pageprops.service';
 import { SearchService } from 'src/app/svc/search.service';
 import { ToastsService } from 'src/app/svc/toasts.service';
 import { SearchResult } from 'src/app/types';
-import { RestService, SyshubWorkflow, SyshubWorkflowModel, SyshubWorkflowReference, SyshubWorkflowVersion } from 'syshub-rest-module';
+import { RestService, SyshubConfigItem, SyshubJobType, SyshubPSetItem, SyshubWorkflow, SyshubWorkflowModel, SyshubWorkflowReference, SyshubWorkflowVersion } from 'syshub-rest-module';
 
 @Component({
   selector: 'app-workflow-ui',
@@ -22,7 +22,8 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
   highlightWorkflowRef: string = '';
   loaded: boolean = false;
   model?: SyshubWorkflowModel;
-  moveNodeNextTo: { [key: string]: HTMLElement } = {};
+  nodesCache: { [key: string]: SyshubConfigItem | SyshubJobType | SyshubWorkflow | SyshubPSetItem | null } = {};
+  nodesToggled: string[] = [];
   progress: number = 0;
   references?: SyshubWorkflowReferenceGroup[];
   referencesCount: number = 0;
@@ -183,32 +184,55 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
     this.searchService.setProgress(this.progress);
   }
 
-  selectConfigNode(path: string): void {
-    const node = this.cacheService.getConfigItemByPath(path);
-    if (node == null)
-      return;
-    this.propsService.inspect('ConfigItems', node);
+  hoverNode(type: 'ConfigItems' | 'JobTypes' | 'PSetItems' | 'WorkflowItems', path: string, event: MouseEvent): void {
+    let node: SyshubConfigItem | SyshubJobType | SyshubWorkflow | SyshubPSetItem | null = null;
+    if (this.nodesCache[`${type}-${path}`] === undefined) {
+      switch (type) {
+        case 'ConfigItems':
+          node = this.cacheService.getConfigItemByPath(path);
+          break;
+        case 'JobTypes':
+          node = this.cacheService.getJobtypeByName(path);
+          break;
+        case 'PSetItems':
+          node = this.cacheService.getPsetItemByPath(path);
+          break;
+        case 'WorkflowItems':
+          node = this.cacheService.getWorkflowByName(path);
+          break;
+      }
+      this.nodesCache[`${type}-${path}`] = node;
+    }
+    else
+      node = this.nodesCache[`${type}-${path}`];
+
+    if (node != null) {
+      this.propsService.inspect(type, node, 'show', {
+        top: event.pageY - 122,
+        right: 470,
+      });
+    }
   }
 
-  selectJobtypeNode(name: string): void {
-    const node = this.cacheService.getJobtypeByName(name);
-    if (node == null)
+  leaveNode(type: 'ConfigItems' | 'JobTypes' | 'PSetItems' | 'WorkflowItems', path: string): void {
+    if (this.nodesCache[`${type}-${path}`] === undefined)
       return;
-    this.propsService.inspect('JobTypes', node);
+    let node = this.nodesCache[`${type}-${path}`];
+    if (node == null || this.nodesToggled.includes(node.uuid))
+      return;
+    this.propsService.inspect(type, node, 'remove');
   }
 
-  selectPSetNode(path: string): void {
-    const node = this.cacheService.getPsetItemByPath(path);
+  selectNode(type: 'ConfigItems' | 'JobTypes' | 'PSetItems' | 'WorkflowItems', path: string): void {
+    if (this.nodesCache[`${type}-${path}`] === undefined)
+      return;
+    let node = this.nodesCache[`${type}-${path}`];
     if (node == null)
       return;
-    this.propsService.inspect('PSetItems', node);
-  }
-
-  selectWorkflowNode(name: string): void {
-    const node = this.cacheService.getWorkflowByName(name);
-    if (node == null)
-      return;
-    this.propsService.inspect('WorkflowItems', node);
+    if (!this.nodesToggled.includes(node.uuid))
+      this.nodesToggled.push(node.uuid);
+    else
+      this.nodesToggled.splice(this.nodesToggled.indexOf(node.uuid, 1));
   }
 
 }

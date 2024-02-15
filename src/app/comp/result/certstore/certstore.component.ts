@@ -16,6 +16,7 @@ export class CertstoreComponent implements OnInit {
 
   certstore: SearchResultCertStoreContent = { keystore: [], truststore: [] };
   itemsMatched: { keystore: string[], truststore: string[] } = { keystore: [], truststore: [] };
+  nodesToggled: string[] = [];
   @Input({ required: true }) searchResult!: SearchResult;
 
   constructor(private l10nService: L10nService,
@@ -45,8 +46,23 @@ export class CertstoreComponent implements OnInit {
     });
   }
 
+  hoverNode(node: SyshubCertStoreItem, event: MouseEvent): void {
+    this.propsService.inspect('CertStoreItems', node, 'show', {
+      top: event.pageY - 74,
+      left: event.pageX + 86,
+    });
+  }
+
+  leaveNode(node: SyshubCertStoreItem): void {
+    if (!this.nodesToggled.includes(node.certX509SubjectDN))
+      this.propsService.inspect('CertStoreItems', node, 'remove');
+  }
+
   selectNode(node: SyshubCertStoreItem): void {
-    this.propsService.inspect('CertStoreItems', node);
+    if (!this.nodesToggled.includes(node.certX509SubjectDN))
+      this.nodesToggled.push(node.certX509SubjectDN);
+    else
+      this.nodesToggled.splice(this.nodesToggled.indexOf(node.certX509SubjectDN, 1));
   }
 
 }

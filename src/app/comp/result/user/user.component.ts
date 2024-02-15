@@ -14,9 +14,10 @@ import { SyshubUserAccount } from 'syshub-rest-module';
 })
 export class UserComponent implements OnInit {
 
+  nodesToggled: string[] = [];
+  @Input({ required: true }) searchResult!: SearchResult;
   user: SyshubUserAccount[] = [];
   userMatched: string[] = [];
-  @Input({ required: true }) searchResult!: SearchResult;
 
   constructor(private l10nService: L10nService,
     private cacheService: CacheService,
@@ -45,7 +46,22 @@ export class UserComponent implements OnInit {
     });
   }
 
+  hoverNode(node: SyshubUserAccount, event: MouseEvent): void {
+    this.propsService.inspect('Users', node, 'show', {
+      top: event.pageY - 74,
+      left: event.pageX + 86,
+    });
+  }
+
+  leaveNode(node: SyshubUserAccount): void {
+    if (!this.nodesToggled.includes(node.uuid))
+      this.propsService.inspect('Users', node, 'remove');
+  }
+
   selectNode(node: SyshubUserAccount): void {
-    this.propsService.inspect('Users', node);
+    if (!this.nodesToggled.includes(node.uuid))
+      this.nodesToggled.push(node.uuid);
+    else
+      this.nodesToggled.splice(this.nodesToggled.indexOf(node.uuid, 1));
   }
 }

@@ -1,8 +1,3 @@
-@if(searchResult) {
-<div class="position-absolute">
-    <app-node-inspector [searchResult]="searchResult"></app-node-inspector>
-</div>
-}
 @if (loaded && workflow && model && references && startpoints && versions && workflowUuid) {
 <article class="container-fluid">
     <section>
@@ -98,39 +93,45 @@
                         </li>
 
                         @for (refitem of refgroup.items; track $index) {
-                        <li class="dropdown-item text-wrap">
 
-                            @switch (refitem.type) {
+                        @switch (refitem.type) {
 
-                            @case ('Config') {
+                        @case ('Config') {
+                        <li class="dropdown-item text-wrap cursor-pointer"
+                            (mouseover)="hoverNode('ConfigItems', refitem.name, $event)"
+                            (mouseout)="leaveNode('ConfigItems', refitem.name)"
+                            (click)="selectNode('ConfigItems', refitem.name)">
                             <code class="mb-1">{{ refitem.name }}</code>
-                            <button type="button" class="btn btn-sm ms-1" (click)="selectConfigNode(refitem.name)">
-                                <i class="bi bi-window-stack fs-7"></i>
-                            </button>
-                            }
+                        </li>
+                        }
 
-                            @case ('JobType') {
+                        @case ('JobType') {
+                        <li class="dropdown-item text-wrap cursor-pointer"
+                            (mouseover)="hoverNode('JobTypes', refitem.name, $event)"
+                            (mouseout)="leaveNode('JobTypes', refitem.name)"
+                            (click)="selectNode('JobTypes', refitem.name)">
                             <code class="mb-1">{{ refitem.name }}</code>
-                            <button type="button" class="btn btn-sm ms-1" (click)="selectJobtypeNode(refitem.name)">
-                                <i class="bi bi-window-stack fs-7"></i>
-                            </button>
-                            }
+                        </li>
+                        }
 
-                            @case ('Parameterset') {
+                        @case ('Parameterset') {
+                        <li class="dropdown-item text-wrap cursor-pointer"
+                            (mouseover)="hoverNode('PSetItems', refitem.name, $event)"
+                            (mouseout)="leaveNode('PSetItems', refitem.name)"
+                            (click)="selectNode('PSetItems', refitem.name)">
                             <code class="mb-1">{{ refitem.name }}</code>
-                            <button type="button" class="btn btn-sm ms-1" (click)="selectPSetNode(refitem.name)">
-                                <i class="bi bi-window-stack fs-7"></i>
-                            </button>
-                            }
+                        </li>
+                        }
 
-                            @case ('Workflow') {
+                        @case ('Workflow') {
+                        <li class="dropdown-item text-wrap cursor-pointer"
+                            (mouseover)="hoverNode('WorkflowItems', refitem.name, $event)"
+                            (mouseout)="leaveNode('WorkflowItems', refitem.name)"
+                            (click)="selectNode('WorkflowItems', refitem.name)">
                             <code class="mb-1">
                                 {{ l10n(l10nphrase.workflowUi.referencesDropdown.occurencesInWorkflow, [
                                 refitem.appears, refitem.name]) }}
                             </code>
-                            <button type="button" class="btn btn-sm ms-1" (click)="selectWorkflowNode(refitem.name)">
-                                <i class="bi bi-window-stack fs-7"></i>
-                            </button>
                             @if (getWorkflowByName(refitem.name) != null) {
                             <a target="_blank"
                                 [href]="'#workflow?uuid=' + getWorkflowByName(refitem.name)!.uuid + '&t=' + searchResult!.search.token + '&highlight=' + workflow.name">
@@ -139,11 +140,11 @@
                                 </button>
                             </a>
                             }
-                            }
-
-                            }
-
                         </li>
+                        }
+
+                        }
+
                         }
 
                         }

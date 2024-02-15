@@ -16,6 +16,7 @@ export class JobtypesComponent implements OnDestroy, OnInit {
 
   jobtypes: SyshubJobType[] = [];
   jobtypesMatched: string[] = [];
+  nodesToggled: string[] = [];
   @Input({ required: true }) searchResult!: SearchResult;
 
   subs: Subscription[] = [];
@@ -50,7 +51,22 @@ export class JobtypesComponent implements OnDestroy, OnInit {
     }));
   }
 
+  hoverNode(node: SyshubJobType, event: MouseEvent): void {
+    this.propsService.inspect('JobTypes', node, 'show', {
+      top: event.pageY - 256,
+      left: event.pageX + 86,
+    });
+  }
+
+  leaveNode(node: SyshubJobType): void {
+    if (!this.nodesToggled.includes(node.uuid))
+      this.propsService.inspect('JobTypes', node, 'remove');
+  }
+
   selectNode(node: SyshubJobType): void {
-    this.propsService.inspect('JobTypes', node);
+    if (!this.nodesToggled.includes(node.uuid))
+      this.nodesToggled.push(node.uuid);
+    else
+      this.nodesToggled.splice(this.nodesToggled.indexOf(node.uuid, 1));
   }
 }

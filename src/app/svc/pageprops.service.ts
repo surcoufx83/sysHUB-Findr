@@ -16,10 +16,10 @@ export class PagepropsService {
 
   private deviceType$: 'mobile' | 'tablet' | 'desktop' = 'desktop';
 
-  private nodeInspectorItem$ = new Subject<{ type: string, node: SvgElement | SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubIppDevice | SyshubWorkflow | SyshubCertStoreItem, remove?: boolean }>();
+  private nodeInspectorItem$ = new Subject<NodeInspectorRequest>();
   public NodeInspectorItem = this.nodeInspectorItem$.asObservable();
-  public NodesOpened = new Subject<{ id: string, type: string, node: SvgElement | SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubIppDevice | SyshubWorkflow | SyshubCertStoreItem }>();
-  public NodesClosed = new Subject<{ id: string, type: string, node: SvgElement | SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubIppDevice | SyshubWorkflow | SyshubCertStoreItem }>();
+  public NodesOpened = new Subject<NodeInspectorRequest>();
+  public NodesClosed = new Subject<NodeInspectorRequest>();
 
   private pages: PageTitleItem[] = [
     { pattern: new RegExp(/^\/$/), text: 'sysHUB Findr' },
@@ -91,8 +91,17 @@ export class PagepropsService {
     return this.deviceType$;
   }
 
-  public inspect(type: string, node: SvgElement | SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubIppDevice | SyshubWorkflow | SyshubCertStoreItem, remove?: boolean): void {
-    this.nodeInspectorItem$.next({ type: type, node: node, remove: remove });
+  public inspect(
+    type: 'ConfigItems' | 'JobTypes' | 'PSetItems' | 'WorkflowItems' | 'CertStoreItems' | 'IppDevices' | 'ServerConfig' | 'ServerInformation' | 'Users' | 'ImpExpView' | 'SvgNode',
+    node: SvgElement | SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubIppDevice | SyshubWorkflow | SyshubCertStoreItem,
+    action?: 'show' | 'remove',
+    placeAt?: { top?: number, left?: number, right?: number, }): void {
+    this.nodeInspectorItem$.next({
+      type: type,
+      node: node,
+      action: action ?? 'show',
+      placeAt: placeAt,
+    });
   }
 
   l10n(phrase: string, params: any[] = []) {
@@ -110,9 +119,17 @@ export class PagepropsService {
 
 }
 
-export interface PageTitleItem {
+export type PageTitleItem = {
   pattern: RegExp;
   text?: string;
   i10n?: string;
   i10nargs?: string[];
+}
+
+export type NodeInspectorRequest = {
+  action: 'show' | 'remove',
+  id?: string,
+  node: SvgElement | SyshubConfigItem | SyshubPSetItem | SyshubJobType | SyshubUserAccount | SyshubIppDevice | SyshubWorkflow | SyshubCertStoreItem,
+  placeAt?: { top?: number, left?: number, right?: number, },
+  type: 'ConfigItems' | 'JobTypes' | 'PSetItems' | 'WorkflowItems' | 'CertStoreItems' | 'IppDevices' | 'ServerConfig' | 'ServerInformation' | 'Users' | 'ImpExpView' | 'SvgNode',
 }

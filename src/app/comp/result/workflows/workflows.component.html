@@ -4,9 +4,10 @@
     <tbody>
         @for (item of workflows; track $index) {
         <tr>
-            <td [ngClass]="{ 'cursor-pointer': true, 'text-success': workflowsMatched.includes(item.uuid)}"
-                (click)="selectNode(item)">
-                <strong [innerHTML]="item.name | highlight: searchResult.search.phrase"></strong>
+            <td [ngClass]="{ 'cursor-pointer': true, 'text-success': workflowsMatched.includes(item.uuid)}">
+                <strong [innerHTML]="item.name | highlight: searchResult.search.phrase"
+                    (mouseover)="hoverNode(item, $event)" (mouseout)="leaveNode(item)"
+                    (click)="selectNode(item)"></strong>
             </td>
             <td class="text-end">
                 <a target="_blank" [href]="'#workflow?uuid=' + item.uuid + '&t=' + searchResult.search.token">

@@ -62,7 +62,7 @@ export class NodeInspectorWfDecisionNodeComponent implements OnDestroy, OnInit {
     }
     this.subs.push(this.propsService.NodesOpened.subscribe((node) => {
       if (node.type === 'PSetItems' && this.moveNodeNextTo[(<SyshubPSetItem>node.node).uuid]) {
-        const nodelement = this.document.getElementById(node.id);
+        const nodelement = this.document.getElementById(node.id!);
         const nodetarget = this.moveNodeNextTo[(<SyshubPSetItem>node.node).uuid];
         if (nodelement) {
           nodelement.style.left = `${Math.floor(+nodetarget.style.left.substring(0, nodetarget.style.left.length - 2) + 524)}px`;
