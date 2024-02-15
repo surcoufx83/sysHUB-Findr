@@ -6,7 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
 ### Added
+
 - Basic functionality
-- Angular 17 Framework and Angular Material
-- REST API via native endpoints and not execute workflow endpoints
+- Angular 17 Framework and Bootstrap
+- REST API via native endpoints in addition to existing workflow execution
