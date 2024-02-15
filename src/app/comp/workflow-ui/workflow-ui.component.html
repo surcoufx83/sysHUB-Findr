@@ -1,10 +1,11 @@
-@if (loaded && workflow && model && references && startpoints && versions && workflowUuid) {
+@if (loaded && workflow && model && startpoints && workflowUuid && (sysHUB2022CompatibilityMode || (references &&
+versions))) {
 <article class="container-fluid">
     <section>
         <div class="d-flex align-items-center justify-content-between">
             <h1>{{ l10n(l10nphrase.workflowUi.title, [workflow.name]) }}</h1>
             <div class="d-flex align-items-center">
-                @if (versions.length > 0) {
+                @if (versions && versions.length > 0) {
                 <div class="dropdown">
                     <button type="button" class="btn btn-outline-secondary dropdown-toggle ms-2"
                         data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
@@ -47,6 +48,7 @@
                     </ul>
                 </div>
                 }
+                @if (references) {
                 <div class="dropdown">
                     <button type="button" class="btn btn-outline-secondary dropdown-toggle ms-2"
                         [attr.data-bs-toggle]="referencesCount > 0 ? 'dropdown' : undefined"
@@ -129,9 +131,9 @@
                             (mouseout)="leaveNode('WorkflowItems', refitem.name)"
                             (click)="selectNode('WorkflowItems', refitem.name)">
                             <code class="mb-1">
-                                {{ l10n(l10nphrase.workflowUi.referencesDropdown.occurencesInWorkflow, [
-                                refitem.appears, refitem.name]) }}
-                            </code>
+                                    {{ l10n(l10nphrase.workflowUi.referencesDropdown.occurencesInWorkflow, [
+                                    refitem.appears, refitem.name]) }}
+                                </code>
                             @if (getWorkflowByName(refitem.name) != null) {
                             <a target="_blank"
                                 [href]="'#workflow?uuid=' + getWorkflowByName(refitem.name)!.uuid + '&t=' + searchResult!.search.token + '&highlight=' + workflow.name">
@@ -150,6 +152,7 @@
                         }
                     </ul>
                 </div>
+                }
             </div>
         </div>
     </section>

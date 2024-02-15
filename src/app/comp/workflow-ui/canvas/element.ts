@@ -106,8 +106,16 @@ export class AnnotationElement extends SvgElement {
             this.y -= this.height / 2;
         }
         this.isAnnotation = true;
-        this.annotationBgColor = graphNode.color;
-        this.annotationTextColor = graphNode.colorText;
+        if (graphNode.color != undefined && graphNode.colorText == undefined) {
+            // sysHUB 2022 compatibility
+            const match = graphNode.color.match(/RGB \{(.+)\}/)
+            this.annotationBgColor = match ? `rgb(${match[1]})` : graphNode.color;
+            this.annotationTextColor = 'rgb(0,0,0)';
+        }
+        else {
+            this.annotationBgColor = graphNode.color;
+            this.annotationTextColor = graphNode.colorText;
+        }
         this.hasMatch = searchResult ? searchService.match([
             graphNode.text,
         ], searchResult.search) : false;
