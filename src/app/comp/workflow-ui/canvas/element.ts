@@ -94,15 +94,17 @@ export class AnnotationElement extends SvgElement {
                 });
             }
         });
-        let size = graphNode.size.split(' ');
-        if (size.length != 2)
-            console.error('WorkflowElement: Size can not be set, not exact two numbers: ' + graphNode.size, graphNode);
-        else {
-            this.width = +size[0];
-            this.height = +size[1];
+        if (graphNode.size != undefined) {
+            let size = graphNode.size.split(' ');
+            if (size.length != 2)
+                console.error('WorkflowElement: Size can not be set, not exact two numbers: ' + graphNode.size, graphNode);
+            else {
+                this.width = +size[0];
+                this.height = +size[1];
+            }
+            this.x -= this.width / 2;
+            this.y -= this.height / 2;
         }
-        this.x -= this.width / 2;
-        this.y -= this.height / 2;
         this.isAnnotation = true;
         this.annotationBgColor = graphNode.color;
         this.annotationTextColor = graphNode.colorText;
