@@ -17,11 +17,7 @@ export class NodeInspectorWfCelementNodeComponent {
 
   constructor(
     private l10nService: L10nService,
-  ) {
-    setTimeout(() => {
-      console.log(this.nodeItem)
-    }, 10);
-  }
+  ) { }
 
   getValueToCopy(text: string) {
     return text.replace(/\s\/\s/gi, '/');
