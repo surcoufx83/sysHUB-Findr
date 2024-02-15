@@ -4,7 +4,7 @@
             <i class="bi bi-people-fill me-1"></i>
             {{ l10nphrase.result.useraccount.nodeInspector.subject }}
         </div>
-        <h5 class="mb-0" [innerHTML]="nodeItem.name | highlight: searchResult.search.phrase"></h5>
+        <h5 class="mb-0" [innerHTML]="nodeItem.name | highlight: searchResult?.search?.phrase"></h5>
     </div>
     <div>
         <button type="button" [ngClass]="{'btn btn-sm px-2 me-2': true, 'btn-outline-danger': hideUnassignedRoles}"
@@ -23,8 +23,8 @@
         <tbody>
             <tr nodeinspector-common-table-node [title]="l10nphrase.result.useraccount.nodeInspector.uuid"
                 [valueToCopy]="nodeItem.uuid">
-                @if (searchResult.search.filter.includeUuids) {
-                <code [innerHTML]="nodeItem.uuid | highlight: searchResult.search.phrase"></code>
+                @if (searchResult?.search?.filter?.includeUuids) {
+                <code [innerHTML]="nodeItem.uuid | highlight: searchResult?.search?.phrase"></code>
                 }
                 @else {
                 <code>{{nodeItem.uuid}}</code>
@@ -32,7 +32,7 @@
             </tr>
             <tr nodeinspector-common-table-node [title]="l10nphrase.result.useraccount.nodeInspector.email"
                 [valueToCopy]="nodeItem.email || undefined">
-                <code [innerHTML]="nodeItem.email | highlight: searchResult.search.phrase"></code>
+                <code [innerHTML]="nodeItem.email | highlight: searchResult?.search?.phrase"></code>
             </tr>
             <tr nodeinspector-common-table-node [title]="l10nphrase.result.useraccount.nodeInspector.enabled"
                 [valueToCopy]="undefined">
@@ -45,7 +45,7 @@
             <tr nodeinspector-common-table-node [title]="l10nphrase.result.useraccount.nodeInspector.type"
                 [valueToCopy]="nodeItem.type || undefined">
                 <code
-                    [innerHTML]="(l10nphrase.result.useraccount.nodeInspector.types[nodeItem.type] + ' (' + nodeItem.type + ')') | highlight: searchResult.search.phrase"></code>
+                    [innerHTML]="(l10nphrase.result.useraccount.nodeInspector.types[nodeItem.type] + ' (' + nodeItem.type + ')') | highlight: searchResult?.search?.phrase"></code>
             </tr>
             <tr nodeinspector-common-table-node [title]="l10nphrase.result.useraccount.nodeInspector.modified"
                 [valueToCopy]="nodeItem.modifiedtime">

@@ -4,7 +4,7 @@
             <i class="bi bi-printer-fill me-1"></i>
             {{ l10nphrase.result.ippDevice.nodeInspector.subject }}
         </div>
-        <h5 class="mb-0" [innerHTML]="nodeItem.name | highlight: searchResult.search.phrase"></h5>
+        <h5 class="mb-0" [innerHTML]="nodeItem.name | highlight: searchResult?.search?.phrase"></h5>
     </div>
     <div>
         <button type="button" class="btn btn-sm px-2" (click)="onChangeColor.emit()">
@@ -18,15 +18,15 @@
         <tbody>
             <tr nodeinspector-common-table-node [title]="l10nphrase.result.ippDevice.nodeInspector.desc"
                 [valueToCopy]="nodeItem.desc || undefined">
-                <code [innerHTML]="nodeItem.desc | highlight: searchResult.search.phrase"></code>
+                <code [innerHTML]="nodeItem.desc | highlight: searchResult?.search?.phrase"></code>
             </tr>
             <tr nodeinspector-common-table-node [title]="l10nphrase.result.ippDevice.nodeInspector.location"
                 [valueToCopy]="nodeItem.location || undefined">
-                <code [innerHTML]="nodeItem.location | highlight: searchResult.search.phrase"></code>
+                <code [innerHTML]="nodeItem.location | highlight: searchResult?.search?.phrase"></code>
             </tr>
             <tr nodeinspector-common-table-node [title]="l10nphrase.result.ippDevice.nodeInspector.uri"
                 [valueToCopy]="nodeItem.uri || undefined">
-                <code [innerHTML]="nodeItem.uri | highlight: searchResult.search.phrase"></code>
+                <code [innerHTML]="nodeItem.uri | highlight: searchResult?.search?.phrase"></code>
             </tr>
             <tr nodeinspector-common-table-node [title]="l10nphrase.result.ippDevice.nodeInspector.state"
                 [valueToCopy]="undefined">
@@ -42,7 +42,7 @@
             </tr>
             <tr nodeinspector-common-table-node [title]="l10nphrase.result.ippDevice.nodeInspector.form"
                 [valueToCopy]="nodeItem.form || undefined">
-                <code [innerHTML]="nodeItem.form | highlight: searchResult.search.phrase"></code>
+                <code [innerHTML]="nodeItem.form | highlight: searchResult?.search?.phrase"></code>
             </tr>
             <tr>
                 <th scope="row" colspan="3" class="cursor-pointer"
@@ -56,12 +56,12 @@
             <tr [ngClass]="[ showQueueSettingsGroup ? 'd-table-row' : 'd-none' ]" nodeinspector-common-table-node
                 [title]="l10nphrase.result.ippDevice.nodeInspector.maxInputQueueSize"
                 [valueToCopy]="nodeItem.maxInputQueueSize || undefined">
-                <code [innerHTML]="nodeItem.maxInputQueueSize | highlight: searchResult.search.phrase"></code>
+                <code [innerHTML]="nodeItem.maxInputQueueSize | highlight: searchResult?.search?.phrase"></code>
             </tr>
             <tr [ngClass]="[ showQueueSettingsGroup ? 'd-table-row' : 'd-none' ]" nodeinspector-common-table-node
                 [title]="l10nphrase.result.ippDevice.nodeInspector.outputThreshold"
                 [valueToCopy]="nodeItem.outputThreshold || undefined">
-                <code [innerHTML]="nodeItem.outputThreshold | highlight: searchResult.search.phrase"></code>
+                <code [innerHTML]="nodeItem.outputThreshold | highlight: searchResult?.search?.phrase"></code>
             </tr>
         </tbody>
     </table>

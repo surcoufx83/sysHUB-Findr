@@ -18,7 +18,7 @@ export class NodeInspectorWfDecisionNodeComponent implements OnDestroy, OnInit {
 
   @Input({ required: true }) nodeItem!: SvgElement;
   @Output() onChangeColor = new EventEmitter<never>();
-  @Input({ required: true }) searchResult!: SearchResult;
+  @Input({ required: true }) searchResult?: SearchResult;
 
   parameters: [string, string][] = [];
   parameterset?: SyshubPSetItem;

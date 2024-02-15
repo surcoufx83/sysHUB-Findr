@@ -4,11 +4,9 @@
 @else {
 <app-navbar></app-navbar>
 <app-progressbar></app-progressbar>
-@if(searchResult) {
 <div class="position-absolute w-100">
     <app-node-inspector [searchResult]="searchResult"></app-node-inspector>
 </div>
-}
 <div class="container-fluid pt-3 pb-5">
     <router-outlet></router-outlet>
 </div>

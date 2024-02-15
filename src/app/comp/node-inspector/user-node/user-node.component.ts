@@ -15,7 +15,7 @@ export class NodeInspectorUserNodeComponent implements OnDestroy, OnInit {
 
   @Input({ required: true }) nodeItem!: SyshubUserAccount;
   @Output() onChangeColor = new EventEmitter<never>();
-  @Input({ required: true }) searchResult!: SearchResult;
+  @Input({ required: true }) searchResult?: SearchResult;
 
   hideUnassignedRoles = false;
   showRolesGroup = true;
@@ -43,6 +43,8 @@ export class NodeInspectorUserNodeComponent implements OnDestroy, OnInit {
     this.subs.push(this.cacheService.userconfig.subscribe((cfg) => {
       this.hideUnassignedRoles = cfg.hideUnassignedRoles || false;
     }));
+    if (!this.searchResult)
+      return;
     if (this.searchResult.result?.system?.roles == undefined || this.searchResult.result?.system?.roles == null || this.searchResult.result?.system?.roles == false)
       return;
     let tempuserroles: SyshubRole[] = [];

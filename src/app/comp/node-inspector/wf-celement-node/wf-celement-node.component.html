@@ -5,7 +5,7 @@
                 <i class="bi bi-signpost-split me-1"></i>
                 {{ l10nphrase.workflowUi.celement.subject }}
             </div>
-            <h5 class="mb-0" [innerHTML]="nodeItem.title | highlight: searchResult.search.phrase">
+            <h5 class="mb-0" [innerHTML]="nodeItem.title | highlight: searchResult?.search?.phrase">
             </h5>
         </div>
         <div>
@@ -16,14 +16,14 @@
         </div>
     </div>
     <p class="mb-1 fst-italic"
-        [innerHTML]="$any(nodeItem.modeldata).refShortDesc | highlight: searchResult.search.phrase"></p>
+        [innerHTML]="$any(nodeItem.modeldata).refShortDesc | highlight: searchResult?.search?.phrase"></p>
     @if ($any(nodeItem.modeldata).agent != '') {
     <p class="mb-1">
         <strong>
             <i class="bi bi-journal-album me-1"></i>
             {{ l10nphrase.workflowUi.celement.instanceName }}:
         </strong>
-        <code [innerHTML]="$any(nodeItem.modeldata).instanceName | highlight: searchResult.search.phrase"></code>
+        <code [innerHTML]="$any(nodeItem.modeldata).instanceName | highlight: searchResult?.search?.phrase"></code>
     </p>
     }
     @if ($any(nodeItem.modeldata).agent != null && $any(nodeItem.modeldata).agent != '') {
@@ -32,7 +32,7 @@
             <i class="bi bi-router me-1"></i>
             {{ l10nphrase.workflowUi.shared.agent }}:
         </strong>
-        <code [innerHTML]="$any(nodeItem.modeldata).agent | highlight: searchResult.search.phrase"></code>
+        <code [innerHTML]="$any(nodeItem.modeldata).agent | highlight: searchResult?.search?.phrase"></code>
     </p>
     }
 </div>
@@ -41,7 +41,7 @@
         <tbody>
             <tr nodeinspector-common-table-node [title]="l10nphrase.workflowUi.celement.variable"
                 [valueToCopy]="$any(nodeItem.modeldata).variable || undefined">
-                <code [innerHTML]="$any(nodeItem.modeldata).variable | highlight: searchResult.search.phrase"></code>
+                <code [innerHTML]="$any(nodeItem.modeldata).variable | highlight: searchResult?.search?.phrase"></code>
             </tr>
         </tbody>
     </table>

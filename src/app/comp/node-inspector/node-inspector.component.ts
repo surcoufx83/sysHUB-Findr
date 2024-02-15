@@ -15,7 +15,7 @@ import { DOCUMENT } from '@angular/common';
 })
 export class NodeInspectorComponent implements OnDestroy, OnInit {
 
-  @Input({ required: true }) searchResult!: SearchResult;
+  @Input({ required: true }) searchResult?: SearchResult;
 
   private nodeTypes = ['ConfigItems', 'JobTypes', 'PSetItems', 'WorkflowItems', 'CertStoreItems', 'IppDevices', 'ServerConfig', 'ServerInformation', 'Users', 'ImpExpView', 'SvgNode'];
   private subs: Subscription[] = [];

@@ -14,7 +14,7 @@ export class NodeInspectorPsetNodeComponent implements OnInit {
 
   @Input({ required: true }) nodeItem!: SyshubPSetItem;
   @Output() onChangeColor = new EventEmitter<never>();
-  @Input({ required: true }) searchResult!: SearchResult;
+  @Input({ required: true }) searchResult?: SearchResult;
 
   psetPath: string = '';
 

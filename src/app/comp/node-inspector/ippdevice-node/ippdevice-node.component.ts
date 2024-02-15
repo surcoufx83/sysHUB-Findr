@@ -13,7 +13,7 @@ export class NodeInspectorIppdeviceNodeComponent {
 
   @Input({ required: true }) nodeItem!: SyshubIppDevice;
   @Output() onChangeColor = new EventEmitter<never>();
-  @Input({ required: true }) searchResult!: SearchResult;
+  @Input({ required: true }) searchResult?: SearchResult;
 
   showQueueSettingsGroup = true;
 

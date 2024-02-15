@@ -4,10 +4,11 @@
             <i class="bi bi-diagram-2-fill me-1"></i>
             {{ l10nphrase.result.workflow.nodeInspector.subject }}
         </div>
-        <h5 class="mb-0" [innerHTML]="nodeItem.name | highlight: searchResult.search.phrase"></h5>
+        <h5 class="mb-0" [innerHTML]="nodeItem.name | highlight: searchResult?.search?.phrase"></h5>
     </div>
     <div>
-        <a target="_blank" class="me-2" [href]="'#workflow?uuid=' + nodeItem.uuid + '&t=' + searchResult.search.token">
+        <a target="_blank" class="me-2"
+            [href]="'#workflow?uuid=' + nodeItem.uuid + '&t=' + searchResult?.search?.token">
             <button type="button" class="btn btn-sm px-2" [title]="l10nphrase.result.showWorkflow">
                 <i class="bi bi-box-arrow-up-right"></i>
             </button>
@@ -23,8 +24,8 @@
         <tbody>
             <tr nodeinspector-common-table-node [title]="l10nphrase.result.workflow.nodeInspector.uuid"
                 [valueToCopy]="nodeItem.uuid">
-                @if (searchResult.search.filter.includeUuids) {
-                <code [innerHTML]="nodeItem.uuid | highlight: searchResult.search.phrase"></code>
+                @if (searchResult?.search?.filter?.includeUuids) {
+                <code [innerHTML]="nodeItem.uuid | highlight: searchResult?.search?.phrase"></code>
                 }
                 @else {
                 <code>{{nodeItem.uuid}}</code>
@@ -32,8 +33,8 @@
             </tr>
             <tr nodeinspector-common-table-node [title]="l10nphrase.result.workflow.nodeInspector.description"
                 [valueToCopy]="nodeItem.description || undefined">
-                @if (!searchResult.search.filter.excludeBComments || !nodeItem.description?.startsWith('[B]')) {
-                <code [innerHTML]="nodeItem.description | highlight: searchResult.search.phrase"></code>
+                @if (!searchResult?.search?.filter?.excludeBComments || !nodeItem.description?.startsWith('[B]')) {
+                <code [innerHTML]="nodeItem.description | highlight: searchResult?.search?.phrase"></code>
                 }
                 @else {
                 <code>{{nodeItem.description}}</code>
