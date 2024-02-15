@@ -7,7 +7,7 @@
         <h5 class="mb-0" [innerHTML]="nodeItem.name | highlight: searchResult.search.phrase"></h5>
     </div>
     <div>
-        <a target="_blank" class="me-2" [href]="'#workflow?uuid=' + nodeItem.uuid">
+        <a target="_blank" class="me-2" [href]="'#workflow?uuid=' + nodeItem.uuid + '&t=' + searchResult.search.token">
             <button type="button" class="btn btn-sm px-2" [title]="l10nphrase.result.showWorkflow">
                 <i class="bi bi-box-arrow-up-right"></i>
             </button>
