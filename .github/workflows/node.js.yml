@@ -28,5 +28,5 @@ jobs:
     - name: Install PNPM
       run: npm i -g pnpm
     - run: pnpm i
-    - run: pnpm run build --if-present
-    - run: pnpm test
+    - run: pnpm run build
+    - run: pnpm run ci-test

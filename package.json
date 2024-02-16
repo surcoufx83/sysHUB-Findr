@@ -5,6 +5,8 @@
     "ng": "ng",
     "start": "ng serve --open --ssl",
     "build": "copy /Y src\\flag-fix\\flag-icons.css node_modules\\flag-icons\\css & ng build",
+    "test": "ng test",
+    "ci-test": "ng test --no-watch --no-progress --browsers=ChromeHeadless",
     "watch": "ng build --watch --configuration development"
   },
   "private": true,
@@ -40,6 +42,15 @@
     "@angular/cli": "~17.0.10",
     "@angular/compiler-cli": "^17.2.1",
     "@angular/localize": "^17.2.1",
+    "@types/jasmine": "^5.1.4",
+    "@types/jasminewd2": "^2.0.13",
+    "jasmine-core": "^5.1.2",
+    "jasmine-spec-reporter": "^7.0.0",
+    "karma": "^6.4.2",
+    "karma-chrome-launcher": "^3.2.0",
+    "karma-coverage": "^2.2.1",
+    "karma-jasmine": "^5.1.0",
+    "karma-jasmine-html-reporter": "^2.1.0",
     "typescript": "~5.2.2"
   }
 }
