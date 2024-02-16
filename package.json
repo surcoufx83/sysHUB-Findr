@@ -6,7 +6,7 @@
     "start": "ng serve --open --ssl",
     "build": "copy /Y src\\flag-fix\\flag-icons.css node_modules\\flag-icons\\css & ng build",
     "test": "ng test",
-    "cibuild": "cp src/flag-fix/flag-icons.css node_modules/flag-icons/css & ng build",
+    "ci-build": "cp src/flag-fix/flag-icons.css node_modules/flag-icons/css & ng build",
     "ci-test": "ng test --no-watch --no-progress --browsers=ChromeHeadless",
     "watch": "ng build --watch --configuration development"
   },
