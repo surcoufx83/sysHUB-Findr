@@ -126,7 +126,8 @@ export class CacheService {
    * Holds information about previous searches (key = search token, value[0] = phrase, value[1] = search configuration).
    * This is persisted to sessionStorage and used to remove oldest entries if sessionstorage quota is exceeded.
    */
-  private searchhistory: { [key: string]: [string, SearchResult] } = {};
+  private searchhistory$ = new BehaviorSubject<{ [key: string]: [string, SearchResult] }>({});
+  public SearchHistory = this.searchhistory$.asObservable();
 
   /**
    * Contains the current loaded search result to be shown on the website.
@@ -199,12 +200,12 @@ export class CacheService {
   }
 
   private addToSearchHistory(token: string, phrase: string, searchResult: SearchResult): CacheService {
-    this.searchhistory[token] = [phrase, searchResult];
-    if (Object.keys(this.searchhistory).length > 5) {
-      const firstkey = Object.keys(this.searchhistory).sort((a, b) => a > b ? 1 : -1)[0];
-      delete this.searchhistory[firstkey];
+    this.searchhistory$.value[token] = [phrase, searchResult];
+    if (Object.keys(this.searchhistory$.value).length > 5) {
+      const firstkey = Object.keys(this.searchhistory$.value).sort((a, b) => a > b ? 1 : -1)[0];
+      delete this.searchhistory$.value[firstkey];
     }
-    localStorage.setItem('findr-history', JSON.stringify(this.searchhistory));
+    localStorage.setItem('findr-history', JSON.stringify(this.searchhistory$.value));
     return this;
   }
 
@@ -318,8 +319,8 @@ export class CacheService {
   }
 
   loadSearchResult(token: string): boolean {
-    if (this.searchhistory[token]) {
-      this._searchresult.next(this.searchhistory[token][1]);
+    if (this.searchhistory$.value[token]) {
+      this._searchresult.next(this.searchhistory$.value[token][1]);
       this.loadSearchResult_reloadOutdatedItems(this._searchresult.value!.result!);
       return true;
     }
@@ -388,7 +389,7 @@ export class CacheService {
   private loadSearchesCache(): void {
     let olddata = localStorage.getItem('findr-history');
     if (olddata != null) {
-      this.searchhistory = (<{ [key: string]: [string, SearchResult] }>JSON.parse(olddata));
+      this.searchhistory$.next(<{ [key: string]: [string, SearchResult] }>JSON.parse(olddata));
     }
   }
 

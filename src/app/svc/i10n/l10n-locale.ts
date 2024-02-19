@@ -81,6 +81,7 @@ export type L10nLocale = {
         resultLink: string,
         searchBtn: string,
         searchBtnBusy: string,
+        searchHistoryTitle: string,
         searchOptions: string,
         searchPlaceholder: string,
         statsLink: string,

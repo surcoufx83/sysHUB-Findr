@@ -147,6 +147,30 @@
                     <span class="d-none d-lg-inline">{{ searchBusy ? l10nphrase.navbar.searchBtnBusy :
                         l10nphrase.navbar.searchBtn }}</span>
                 </button>
+                @if (((searchHistory | async | keyvalue )?.length ?? 0) > 1) {
+                <div class="dropdown ms-2">
+                    <button type="button" class="btn btn-outline-secondary dropdown-toggle hide-toggler"
+                        data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                        <i ngClass="bi bi-clock-history"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li class="dropdown-item">
+                            <strong>
+                                {{ l10nphrase.navbar.searchHistoryTitle }}
+                            </strong>
+                        </li>
+                        @for (item of (searchHistory | async | keyvalue); track $index) {
+                        <a class="dropdown-item cursor-pointer d-flex align-items-center justify-content-between"
+                            [routerLink]="[ '/result' ]" [queryParams]="{ q: item.value[0], t: item.key}">
+                            <span class="text-nowrap">{{item.value[0]}}</span>
+                            <span class="fs-7 text-nowrap text-secondary">
+                                {{ date(item.key, getFormat(item.key)) }}
+                            </span>
+                        </a>
+                        }
+                    </ul>
+                </div>
+                }
             </form>
 
             <div class="dropdown">

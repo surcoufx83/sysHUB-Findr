@@ -89,6 +89,7 @@ export const MockL10n: L10nLocale = {
         resultLink: 'mock-resultLink',
         searchBtn: 'mock-searchBtn',
         searchBtnBusy: 'mock-searchBtnBusy',
+        searchHistoryTitle: 'mock-searchHistoryTitle',
         searchOptions: 'mock-searchOptions',
         searchPlaceholder: 'mock-searchPlaceholder',
         statsLink: 'mock-statsLink',

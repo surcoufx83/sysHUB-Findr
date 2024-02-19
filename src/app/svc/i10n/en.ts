@@ -89,6 +89,7 @@ export const L10nEn: L10nLocale = {
         resultLink: 'Search result',
         searchBtn: 'Search',
         searchBtnBusy: 'Searching...',
+        searchHistoryTitle: 'Search history',
         searchOptions: 'Options',
         searchPlaceholder: '🔍 Search term, e.g. currentjob',
         statsLink: 'Statistics',
