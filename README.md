@@ -137,6 +137,11 @@ Wird ein Workflow als Referenz geöffnet, werden zusätzlich die Startpunkte die
 
 ![Workflowdesigner mit Treffern in der Desktop-Ansicht](docs/workflow-ref-desktop.png)
 
+## Suchhistorie
+<img align="left" src="docs/history-dropdown.png" alt="Wechsel zu einem vorherigen Suchergebnis">
+Die letzten fünf Suchanfragen und Ergebnisse werden im Browser zwischengespeichert und es kann schnell zwischen den Ergebnissen gewechselt werden. Nach der zweiten ausgeführten Suche wird neben dem Suchen-Button in der Navigationsleiste ein Dropdown angezeigt, welches die letzten Anfragen beinhaltet. Per Klick auf einen Eintrag wechselt die Ergebnisansicht zu diesem Suchergebnis.
+
+<br clear="all"/>
 
 ## Ergebnisliste exportieren und importieren ⚠️ 
 
