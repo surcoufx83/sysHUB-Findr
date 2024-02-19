@@ -2,6 +2,7 @@
 Dokumentation zum sysHUB Findr. Weitere Informationen über aktuelle Änderungen sind im [Changelog](CHANGELOG.md) zu finden. Informationen zur Mitarbeit in dem Projekt gibt es im Abschnitt [Contributing](CONTRIBUTING.md).
 
 [![Node.js CI](https://github.com/surcoufx83/sysHUB-Findr/actions/workflows/node.js.yml/badge.svg?branch=main)](https://github.com/surcoufx83/sysHUB-Findr/actions/workflows/node.js.yml)
+[![codecov](https://codecov.io/gh/surcoufx83/sysHUB-Findr/graph/badge.svg?token=57U05YP672)](https://codecov.io/gh/surcoufx83/sysHUB-Findr)
 
 
 ## ⚠️ Work in progress
