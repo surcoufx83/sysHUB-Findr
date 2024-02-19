@@ -35,12 +35,13 @@ jobs:
 
     - name: Build application
       run: pnpm run ci-build
-      
+
     - name: Run tests
       run: pnpm run ci-test
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v4.0.1
-      env:
+      with:
+        directory: ./coverage/findr/
         token: ${{ secrets.CODECOV_TOKEN }}
         slug: surcoufx83/sysHUB-Findr
