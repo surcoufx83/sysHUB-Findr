@@ -163,7 +163,6 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
       }
       else {
         this.model = reply;
-        console.log(this.model)
         this.ngOnInit_ReportProgress();
       }
     }));
