@@ -117,6 +117,11 @@ export class CacheService {
    */
   private parametersetPath2Uuid$: { [key: string]: string } = {};
 
+  private refreshingEntities: { [key: string]: boolean } = {};
+
+  private refreshingEntitiesSubject$ = new BehaviorSubject<string[]>([]);
+  public RefreshingEntities = this.refreshingEntitiesSubject$.asObservable();
+
   /**
    * Holds information about previous searches (key = search token, value[0] = phrase, value[1] = search configuration).
    * This is persisted to sessionStorage and used to remove oldest entries if sessionstorage quota is exceeded.
@@ -522,30 +527,30 @@ export class CacheService {
   }
 
   reloadCategories(): void {
+    if (this.refreshingEntities[this.l10nphrase.result.categories.title] === true)
+      return;
+    this.setRefreshState(this.l10nphrase.result.categories.title, true);
     this.restapi.getCategories().subscribe((reply) => {
       if (reply instanceof Error) {
-        if (reply instanceof UnauthorizedError)
-          return;
-        this.toastService.addDangerToast({
-          message: this.l10n((reply instanceof NetworkError) ? this.l10nphrase.api.failed.serverUnavailable : this.l10nphrase.api.errorCommon, [reply.message])
-        });
+        this.handleReloadError(this.l10nphrase.result.categories.title, reply);
         return;
       }
       this.categories$.next(reply.sort((a, b) => a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1));
+      this.setRefreshState(this.l10nphrase.result.categories.title, false);
     });
   }
 
   reloadConfig(): void {
+    if (this.refreshingEntities[this.l10nphrase.result.config.title] === true)
+      return;
+    this.setRefreshState(this.l10nphrase.result.config.title, true);
     this.restapi.getConfigChildren('').subscribe((reply) => {
       if (reply instanceof Error) {
-        if (reply instanceof UnauthorizedError)
-          return;
-        this.toastService.addDangerToast({
-          message: this.l10n((reply instanceof NetworkError) ? this.l10nphrase.api.failed.serverUnavailable : this.l10nphrase.api.errorCommon, [reply.message])
-        });
+        this.handleReloadError(this.l10nphrase.result.config.title, reply);
         return;
       }
       this.config$.next(this.reloadConfig_SortChilds(reply));
+      this.setRefreshState(this.l10nphrase.result.config.title, false);
     });
   }
 
@@ -557,30 +562,30 @@ export class CacheService {
   }
 
   reloadJobtypes(): void {
+    if (this.refreshingEntities[this.l10nphrase.result.jobtype.title] === true)
+      return;
+    this.setRefreshState(this.l10nphrase.result.jobtype.title, true);
     this.restapi.getJobTypes().subscribe((reply) => {
       if (reply instanceof Error) {
-        if (reply instanceof UnauthorizedError)
-          return;
-        this.toastService.addDangerToast({
-          message: this.l10n((reply instanceof NetworkError) ? this.l10nphrase.api.failed.serverUnavailable : this.l10nphrase.api.errorCommon, [reply.message])
-        });
+        this.handleReloadError(this.l10nphrase.result.jobtype.title, reply);
         return;
       }
       this.jobtypes$.next([...reply].sort((a, b) => a.name > b.name ? 1 : -1));
+      this.setRefreshState(this.l10nphrase.result.jobtype.title, false);
     });
   }
 
   reloadParameterset(): void {
+    if (this.refreshingEntities[this.l10nphrase.result.parameterset.title] === true)
+      return;
+    this.setRefreshState(this.l10nphrase.result.parameterset.title, true);
     this.restapi.getPsetChildren('').subscribe((reply) => {
       if (reply instanceof Error) {
-        if (reply instanceof UnauthorizedError)
-          return;
-        this.toastService.addDangerToast({
-          message: this.l10n((reply instanceof NetworkError) ? this.l10nphrase.api.failed.serverUnavailable : this.l10nphrase.api.errorCommon, [reply.message])
-        });
+        this.handleReloadError(this.l10nphrase.result.parameterset.title, reply);
         return;
       }
       this.parameterset$.next(this.reloadParameterset_SortChilds(reply));
+      this.setRefreshState(this.l10nphrase.result.parameterset.title, false);
     });
   }
 
@@ -592,17 +597,30 @@ export class CacheService {
   }
 
   reloadWorkflows(): void {
+    if (this.refreshingEntities[this.l10nphrase.result.workflow.title] === true)
+      return;
+    this.setRefreshState(this.l10nphrase.result.workflow.title, true);
     this.restapi.getWorkflows({}).subscribe((reply) => {
       if (reply instanceof Error) {
-        if (reply instanceof UnauthorizedError)
-          return;
-        this.toastService.addDangerToast({
-          message: this.l10n((reply instanceof NetworkError) ? this.l10nphrase.api.failed.serverUnavailable : this.l10nphrase.api.errorCommon, [reply.message])
-        });
+        this.handleReloadError(this.l10nphrase.result.workflow.title, reply);
         return;
       }
       this.workflows$.next([...reply].sort((a, b) => a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : b.name.toLocaleLowerCase() > a.name.toLocaleLowerCase() ? -1 : 0));
+      this.setRefreshState(this.l10nphrase.result.workflow.title, false);
     });
+  }
+
+  private handleReloadError(entity: string, reply: Error): void {
+    if (!(reply instanceof UnauthorizedError))
+      this.toastService.addDangerToast({
+        message: this.l10n((reply instanceof NetworkError) ? this.l10nphrase.api.failed.serverUnavailable : this.l10nphrase.api.errorCommon, [reply.message])
+      });
+    this.setRefreshState(entity, false);
+  }
+
+  private setRefreshState(entity: string, isbusy: boolean) {
+    this.refreshingEntities[entity] = isbusy;
+    this.refreshingEntitiesSubject$.next(Object.keys(this.refreshingEntities).filter((a) => this.refreshingEntities[a] === true))
   }
 
   setResult(token: string, result: SearchResultUuids): void {

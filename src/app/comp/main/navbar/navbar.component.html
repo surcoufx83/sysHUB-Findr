@@ -31,6 +31,15 @@
                         l10nphrase.navbar.resultLink }}</a>
                 </li>
                 }
+                <li [ngClass]="{ 'nav-item': true, 'd-none': ((busyReloadingEntities | async)?.length ?? 0) == 0}"
+                    [title]="l10n(l10nphrase.navbar.cacheReload.tooltip, [(busyReloadingEntities | async)?.join(', ')])">
+                    <span class="nav-link">
+                        <div class="spinner-border spinner-border-sm" role="status">
+                            <span class="visually-hidden">{{ l10nphrase.navbar.cacheReload.label }}</span>
+                        </div>
+                        {{ l10nphrase.navbar.cacheReload.label }}
+                    </span>
+                </li>
             </ul>
         </div>
         <div class="d-flex align-items-center">

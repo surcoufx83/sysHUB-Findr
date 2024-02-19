@@ -167,7 +167,7 @@ versions))) {
     <section>
         <div class="d-flex align-items-center justify-content-start">
             <div class="spinner-border" role="status" style="width: 1.8rem; height: 1.8rem;">
-                <span class="visually-hidden">Loading...</span>
+                <span class="visually-hidden">{{ l10nphrase.workflowUi.loading[0] }}</span>
             </div>
             <h1 class="ms-3">
                 {{ l10n(l10nphrase.workflowUi.loading[ workflow != undefined ? 1 : 0 ], [workflow?.name]) }}

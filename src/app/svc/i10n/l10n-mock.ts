@@ -76,7 +76,11 @@ export const MockL10n: L10nLocale = {
         logoutOngoingMsg: 'mock-logoutOngoingMsg',
     },
     navbar: {
-        aboutLink: 'mock-aboutLink',
+        aboutLink: 'mock-about',
+        cacheReload: {
+            label: 'mock-cacheReload',
+            tooltip: 'mock-tooltip'
+        },
         clearCacheLink: 'mock-clearCacheLink',
         helpLink: 'mock-helpLink',
         homeLink: 'mock-homeLink',
@@ -88,10 +92,13 @@ export const MockL10n: L10nLocale = {
         searchOptions: 'mock-searchOptions',
         searchPlaceholder: 'mock-searchPlaceholder',
         statsLink: 'mock-statsLink',
-        themeSwitch: ['mock-themeSwitch0', 'mock-themeSwitch1', 'mock-themeSwitch2'],
-        webclientLink: 'mock-webclientLink',
+        themeSwitch: ['mock-light', 'mock-dark', 'mock-automatic'],
+        webclientLink: 'mock-webclientLink'
     },
     result: {
+        categories: {
+            title: 'mock-title',
+        },
         certStoreItem: {
             title: 'mock-title',
             subtitle: 'mock-subtitle',

@@ -77,21 +77,28 @@ export const L10nFr: L10nLocale = {
     },
     navbar: {
         aboutLink: 'À propos',
+        cacheReload: {
+            label: 'Mise à jour du cache',
+            tooltip: 'Les enregistrements modifiés seront chargés depuis le serveur : [0]'
+        },
         clearCacheLink: 'Vider le cache',
         helpLink: 'Aide',
         homeLink: 'Accueil',
         logoutLink: 'Déconnexion',
         promoLink: 'Findr sur Github',
-        resultLink: 'Résultat de recherche',
+        resultLink: 'Résultat de la recherche',
         searchBtn: 'Rechercher',
         searchBtnBusy: 'Recherche en cours...',
-        searchOptions: 'Options',
-        searchPlaceholder: '🔍 Terme de recherche, par exemple, currentjob',
+        searchOptions: 'Options de recherche',
+        searchPlaceholder: '🔍 Terme de recherche, par exemple currentjob',
         statsLink: 'Statistiques',
         themeSwitch: ['clair', 'sombre', 'automatique'],
         webclientLink: 'client web sysHUB'
     },
     result: {
+        categories: {
+            title: 'Catégories',
+        },
         certStoreItem: {
             title: 'Magasin de certificats',
             subtitle: `

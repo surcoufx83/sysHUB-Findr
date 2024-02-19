@@ -69,6 +69,10 @@ export type L10nLocale = {
     },
     navbar: {
         aboutLink: string,
+        cacheReload: {
+            label: string,
+            tooltip: string,
+        },
         clearCacheLink: string,
         helpLink: string,
         homeLink: string,
@@ -84,6 +88,9 @@ export type L10nLocale = {
         webclientLink: string
     },
     result: {
+        categories: {
+            title: string,
+        },
         certStoreItem: {
             title: string,
             subtitle: string,

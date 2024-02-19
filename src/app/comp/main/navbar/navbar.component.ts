@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NavigationEnd, Router } from '@angular/router';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { Observable } from 'rxjs';
 import { AppInitService } from 'src/app/svc/app-init.service';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
@@ -21,19 +22,20 @@ export class NavbarComponent implements OnInit {
   @Input() title: string = '';
 
   appTheme: 'light' | 'dark' | 'auto' | null = null;
-  deviceType: 'mobile' | 'tablet' | 'desktop' = 'desktop';
+  busyReloadingEntities?: Observable<string[]>;
   currentLocale: string;
+  deviceType: 'mobile' | 'tablet' | 'desktop' = 'desktop';
   locales: string[];
   localesLocalized: { [key: string]: string } = {};
   minPhraseLength: number = 3;
-  promolink: string;
-  webclientlink: string;
   phraseInput: string = '';
+  promolink: string;
   searchBusy: boolean = false;
   searchConfig?: SearchConfig;
   searchFocus: boolean = false;
   searchProgress: number = 100;
   url = '/';
+  webclientlink: string;
 
   searchForm = new FormGroup({
     phrase: new FormControl<string>('', { validators: [Validators.required, Validators.minLength(this.minPhraseLength)] }),
@@ -108,6 +110,7 @@ export class NavbarComponent implements OnInit {
       this.phraseInput = config.phrase;
     });
     this.searchService.searchProgress.subscribe((a) => this.searchProgress = a);
+    this.busyReloadingEntities = this.cacheService.RefreshingEntities;
   }
 
   onClearCache(): void {

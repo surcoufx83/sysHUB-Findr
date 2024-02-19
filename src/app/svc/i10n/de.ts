@@ -77,6 +77,10 @@ export const L10nDe: L10nLocale = {
     },
     navbar: {
         aboutLink: 'Über',
+        cacheReload: {
+            label: 'Cache wird aktualisiert',
+            tooltip: 'Geänderte Datensätze werden vom Server geladen: [0]'
+        },
         clearCacheLink: 'Cache leeren',
         helpLink: 'Hilfe',
         homeLink: 'Start',
@@ -92,6 +96,9 @@ export const L10nDe: L10nLocale = {
         webclientLink: 'sysHUB web client'
     },
     result: {
+        categories: {
+            title: 'Kategorien',
+        },
         certStoreItem: {
             title: 'Zertifikatsspeicher',
             subtitle: `
