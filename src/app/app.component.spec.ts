@@ -9,7 +9,7 @@ import { MockL10n } from './svc/i10n/l10n-mock';
 import { HttpStatusCode } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 import { PagepropsService } from './svc/pageprops.service';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { ToastsService } from './svc/toasts.service';
 import { MockMainComponent, MockToastsComponent } from 'src/testing/mock';
 
@@ -78,6 +78,7 @@ describe('AppComponent', () => {
     }));
 
     afterEach(() => {
+        mockAppInitService.environment = mockEnvironment;
         mockLoggedIn.next(true);
         mockPageTitle.next('foo');
         mockRouterEvents.next({});
@@ -106,10 +107,35 @@ describe('AppComponent', () => {
         expect(compiled.querySelector('app-toasts')).withContext('Toasts component').toBeTruthy();
     });
 
+    it('should forward logged out user to /login', () => {
+        mockLoggedIn.next(false);
+        fixture.detectChanges();
+        mockRouter.navigate = jasmine.createSpy('navigate');
+        mockRouterEvents.next(new NavigationEnd(1, '/', '/'));
+        expect(mockRouter.navigate).withContext('Navigate to /login').toHaveBeenCalledWith(['/login']);
+        mockRouter.navigate = jasmine.createSpy('navigate');
+        mockRouterEvents.next(new NavigationEnd(1, '/foo', '/foo'));
+        expect(mockRouter.navigate).withContext('Navigate to /login').toHaveBeenCalledWith(['/login']);
+    });
+
+    it('should forward logged in user to /', () => {
+        mockLoggedIn.next(true);
+        fixture.detectChanges();
+        mockRouter.navigate = jasmine.createSpy('navigate');
+        mockRouterEvents.next(new NavigationEnd(1, '/', '/'));
+        expect(mockRouter.navigate).withContext('Do not navigate').not.toHaveBeenCalled();
+        mockRouter.navigate = jasmine.createSpy('navigate');
+        mockRouterEvents.next(new NavigationEnd(1, '/foo', '/foo'));
+        expect(mockRouter.navigate).withContext('Do not navigate').not.toHaveBeenCalled();
+        mockRouter.navigate = jasmine.createSpy('navigate');
+        mockRouterEvents.next(new NavigationEnd(1, '/login', '/login'));
+        expect(mockRouter.navigate).withContext('Navigate to /').toHaveBeenCalledWith(['/']);
+    });
+
     it('should navigate to login page after loading', () => {
         mockLoggedIn.next(false);
         fixture.detectChanges();
-        expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
+        expect(mockRouter.navigate).withContext('Navigate to /login after logout').toHaveBeenCalledWith(['/login']);
     });
 
     it('should navigate to start page after logging in', () => {
@@ -117,7 +143,7 @@ describe('AppComponent', () => {
         fixture.detectChanges();
         mockLoggedIn.next(true);
         fixture.detectChanges();
-        expect(mockRouter.navigate).toHaveBeenCalledWith(['/']);
+        expect(mockRouter.navigate).withContext('Navigate to / after login').toHaveBeenCalledWith(['/']);
     });
 
     it('should show toast if environment could not be loaded', fakeAsync(() => {
@@ -125,8 +151,14 @@ describe('AppComponent', () => {
         component.ngOnInit();
         tick(20);
         fixture.detectChanges();
-        expect(mockToastsService.addDangerToast).toHaveBeenCalledWith({ message: 'mock-configurationFileMissing', autohide: false, isHtml: true });
+        expect(mockToastsService.addDangerToast).withContext('Create none closing danger toast').toHaveBeenCalledWith({ message: 'mock-configurationFileMissing', autohide: false, isHtml: true });
         flush();
     }));
+
+    it('implements l10n method correct', () => {
+        let value = component.l10n('test');
+        expect(mockL10nService.ln).withContext('Call ln method of L10nService').toHaveBeenCalledWith('test', []);
+        expect(value).withContext('Return correct value').toEqual('foo');
+    });
 
 });
