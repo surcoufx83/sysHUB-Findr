@@ -133,7 +133,11 @@ export type L10nLocale = {
         },
         header: {
             title: string,
-            subtitle: string
+            subtitle: string,
+            filterUnmatched: {
+                showAll: string,
+                showFiltered: string,
+            },
         },
         ippDevice: {
             title: string,

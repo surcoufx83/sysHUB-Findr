@@ -142,6 +142,10 @@ export const MockL10n: L10nLocale = {
         header: {
             title: 'mock-title',
             subtitle: 'mock-subtitle',
+            filterUnmatched: {
+                showAll: 'mock-showAll',
+                showFiltered: 'mock-showFiltered',
+            },
         },
         ippDevice: {
             title: 'mock-title',

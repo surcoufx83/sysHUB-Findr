@@ -155,6 +155,10 @@ export const L10nFr: L10nLocale = {
                 cliquez sur les boutons des sections respectives ci-dessous. 
                 Bouton gris = aucune correspondance dans cette section.
             `,
+            filterUnmatched: {
+                showAll: 'Tous',
+                showFiltered: 'Apparié uniquement',
+            },
         },
         ippDevice: {
             title: 'Imprimantes IPP',

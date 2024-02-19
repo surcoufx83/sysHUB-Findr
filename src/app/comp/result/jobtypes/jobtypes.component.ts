@@ -18,6 +18,7 @@ export class JobtypesComponent implements OnDestroy, OnInit {
   jobtypesMatched: string[] = [];
   nodesToggled: string[] = [];
   @Input({ required: true }) searchResult!: SearchResult;
+  @Input({ required: true }) showUnmatchedItems!: boolean;
 
   subs: Subscription[] = [];
 

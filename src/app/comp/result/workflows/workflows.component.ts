@@ -16,6 +16,7 @@ export class WorkflowsComponent implements OnDestroy, OnInit {
 
   nodesToggled: string[] = [];
   @Input({ required: true }) searchResult!: SearchResult;
+  @Input({ required: true }) showUnmatchedItems!: boolean;
   workflows: SyshubWorkflow[] = [];
   workflowsMatched: string[] = [];
   workflowsUpdated: number | null = null;

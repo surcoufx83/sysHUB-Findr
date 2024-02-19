@@ -154,7 +154,11 @@ export const L10nDe: L10nLocale = {
                 Die übersicht zeigt eine kurze Zusammenfassung der Treffer. Mehr Details
                 findest du nach dem Klicken auf die Buttons der jeweiligen Kategorien. 
                 Grauer Button = kein Treffer in diesem Bereich.
-            `
+            `,
+            filterUnmatched: {
+                showAll: 'Alle',
+                showFiltered: 'Nur Treffer',
+            },
         },
         ippDevice: {
             title: 'IPP Drucker',

@@ -155,6 +155,10 @@ export const L10nEn: L10nLocale = {
                 click on the buttons of the respective sections below. 
                 Gray button = no results in this section.
             `,
+            filterUnmatched: {
+                showAll: 'All',
+                showFiltered: 'Matched only',
+            },
         },
         ippDevice: {
             title: 'sysHUB IPP Printers',

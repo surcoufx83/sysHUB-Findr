@@ -17,6 +17,7 @@ export class IppdeviceComponent implements OnInit {
   devicesMatched: string[] = [];
   nodesToggled: string[] = [];
   @Input({ required: true }) searchResult!: SearchResult;
+  @Input({ required: true }) showUnmatchedItems!: boolean;
 
   constructor(private l10nService: L10nService,
     private searchService: SearchService,

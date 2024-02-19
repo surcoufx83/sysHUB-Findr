@@ -15,7 +15,7 @@
                     <div class="d-flex flex-column flex-md-row justify-content-between">
                         <div>
                             <a [routerLink]="['/result']"
-                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token}">
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, unmatched: !showUnmatched ? 'hide' : 'show'}">
                                 <button type="button"
                                     [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == '', 'btn-outline-success': selectedChapter != '' }">
                                     <i class="bi bi-view-list me-2"></i>
@@ -23,7 +23,7 @@
                                 </button>
                             </a>
                             <a [routerLink]="['/result']"
-                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'ConfigItems'}">
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'ConfigItems', unmatched: !showUnmatched ? 'hide' : 'show'}">
                                 <button type="button"
                                     [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'ConfigItems', 'btn-outline-success': selectedChapter != 'ConfigItems' && searchResult.result!.config.length > 0, 'btn-outline-secondary': selectedChapter != 'ConfigItems' && searchResult.result!.config.length == 0 }">
                                     <i class="bi bi-c-square-fill me-2"></i>
@@ -32,7 +32,7 @@
                                 </button>
                             </a>
                             <a [routerLink]="['/result']"
-                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'JobTypes'}">
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'JobTypes', unmatched: !showUnmatched ? 'hide' : 'show'}">
                                 <button type="button"
                                     [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'JobTypes', 'btn-outline-success': selectedChapter != 'JobTypes' && searchResult.result!.jobtypes.length > 0, 'btn-outline-secondary': selectedChapter != 'JobTypes' && searchResult.result!.jobtypes.length == 0 }">
                                     <i class="bi bi-fonts me-2"></i>
@@ -42,7 +42,7 @@
                                 </button>
                             </a>
                             <a [routerLink]="['/result']"
-                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'PSetItems'}">
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'PSetItems', unmatched: !showUnmatched ? 'hide' : 'show'}">
                                 <button type="button"
                                     [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'PSetItems', 'btn-outline-success': selectedChapter != 'PSetItems' && searchResult.result!.parameterset.length > 0, 'btn-outline-secondary': selectedChapter != 'PSetItems' && searchResult.result!.parameterset.length == 0 }">
                                     <i class="bi bi-p-square-fill me-2"></i>
@@ -52,7 +52,7 @@
                                 </button>
                             </a>
                             <a [routerLink]="['/result']"
-                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'WorkflowItems'}">
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'WorkflowItems', unmatched: !showUnmatched ? 'hide' : 'show'}">
                                 <button type="button"
                                     [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'WorkflowItems', 'btn-outline-success': selectedChapter != 'WorkflowItems' && searchResult.result!.workflows.length > 0, 'btn-outline-secondary': selectedChapter != 'WorkflowItems' && searchResult.result!.workflows.length == 0 }">
                                     <i class="bi bi-diagram-2-fill me-2"></i>
@@ -64,7 +64,7 @@
                             @if (searchResult.result?.system != undefined) {
                             @if (searchResult.result?.system?.certstore) {
                             <a [routerLink]="['/result']"
-                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'CertStoreItems'}">
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'CertStoreItems', unmatched: !showUnmatched ? 'hide' : 'show'}">
                                 <button type="button"
                                     [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'CertStoreItems', 'btn-outline-success': selectedChapter != 'CertStoreItems' && getMatches(searchResult.result?.system?.certstore) > 0, 'btn-outline-secondary': selectedChapter != 'CertStoreItems' && getMatches(searchResult.result?.system?.certstore) == 0 }">
                                     <i class="bi bi-award-fill me-2"></i>
@@ -76,7 +76,7 @@
                             }
                             @if (searchResult.result?.system?.ippDevices) {
                             <a [routerLink]="['/result']"
-                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'IppDevices'}">
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'IppDevices', unmatched: !showUnmatched ? 'hide' : 'show'}">
                                 <button type="button"
                                     [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'IppDevices', 'btn-outline-success': selectedChapter != 'IppDevices' && getMatches(searchResult.result?.system?.ippDevices) > 0, 'btn-outline-secondary': selectedChapter != 'IppDevices' && getMatches(searchResult.result?.system?.ippDevices) == 0 }">
                                     <i class="bi bi-printer-fill me-2"></i>
@@ -88,7 +88,7 @@
                             }
                             @if (searchResult.result?.system?.serverConfig) {
                             <a [routerLink]="['/result']"
-                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'ServerConfig'}">
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'ServerConfig', unmatched: !showUnmatched ? 'hide' : 'show'}">
                                 <button type="button"
                                     [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'ServerConfig', 'btn-outline-success': selectedChapter != 'ServerConfig' && getMatches(searchResult.result?.system?.serverConfig) > 0, 'btn-outline-secondary': selectedChapter != 'ServerConfig' && getMatches(searchResult.result?.system?.serverConfig) == 0 }">
                                     <i class="bi bi-sliders2-vertical me-2"></i>
@@ -101,7 +101,7 @@
                             }
                             @if (searchResult.result?.system?.serverInfo) {
                             <a [routerLink]="['/result']"
-                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'ServerInformation'}">
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'ServerInformation', unmatched: !showUnmatched ? 'hide' : 'show'}">
                                 <button type="button"
                                     [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'ServerInformation', 'btn-outline-success': selectedChapter != 'ServerInformation' && getMatches(searchResult.result?.system?.serverInfo) > 0, 'btn-outline-secondary': selectedChapter != 'ServerInformation' && getMatches(searchResult.result?.system?.serverInfo) == 0 }">
                                     <i class="bi bi-server me-2"></i>
@@ -113,7 +113,7 @@
                             }
                             @if (searchResult.result?.system?.users) {
                             <a [routerLink]="['/result']"
-                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'Users'}">
+                                [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'Users', unmatched: !showUnmatched ? 'hide' : 'show'}">
                                 <button type="button"
                                     [ngClass]="{ 'btn btn-sm me-2 mb-2': true, 'btn-success': selectedChapter == 'Users', 'btn-outline-success': selectedChapter != 'Users' && getMatches(searchResult.result?.system?.users) > 0, 'btn-outline-secondary': selectedChapter != 'Users' && getMatches(searchResult.result?.system?.users) == 0 }">
                                     <i class="bi bi-people-fill me-2"></i>
@@ -139,7 +139,7 @@
 
             <!-- result container based on selected chapter -->
             <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="mb-0">
                         @switch (selectedChapter) {
                         @case ('ConfigItems') {
@@ -174,6 +174,20 @@
                         }
                         }
                     </h4>
+                    <div>
+                        @if (selectedChapter == 'JobTypes' || selectedChapter == 'WorkflowItems' || selectedChapter ==
+                        'CertStoreItems' || selectedChapter == 'IppDevices' || selectedChapter == 'Users') {
+                        <a [routerLink]="['/result']"
+                            [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: this.selectedChapter, unmatched: showUnmatched ? 'hide' : 'show'}">
+                            <button type="button"
+                                [ngClass]="{ btn: true, 'btn-sm': true, 'btn-warning': !showUnmatched, 'btn-outline-secondary': showUnmatched }">
+                                <i [ngClass]="['bi', 'me-1', showUnmatched ? 'bi-funnel' : 'bi-funnel-fill']"></i>
+                                {{ showUnmatched ? l10nphrase.result.header.filterUnmatched.showAll :
+                                l10nphrase.result.header.filterUnmatched.showFiltered }}
+                            </button>
+                        </a>
+                        }
+                    </div>
                 </div>
                 <div class="card-body row">
                     <div class="col-12">
@@ -183,20 +197,24 @@
                             [searchResult]="searchResult"></app-result-config>
                         }
                         @case ('JobTypes') {
-                        <app-result-jobtypes [searchResult]="searchResult"></app-result-jobtypes>
+                        <app-result-jobtypes [searchResult]="searchResult"
+                            [showUnmatchedItems]="showUnmatched"></app-result-jobtypes>
                         }
                         @case ('PSetItems') {
                         <app-result-parameterset [psetByTree]="psetByTree"
                             [searchResult]="searchResult"></app-result-parameterset>
                         }
                         @case ('WorkflowItems') {
-                        <app-result-workflows [searchResult]="searchResult"></app-result-workflows>
+                        <app-result-workflows [searchResult]="searchResult"
+                            [showUnmatchedItems]="showUnmatched"></app-result-workflows>
                         }
                         @case ('CertStoreItems') {
-                        <app-result-certstore [searchResult]="searchResult"></app-result-certstore>
+                        <app-result-certstore [searchResult]="searchResult"
+                            [showUnmatchedItems]="showUnmatched"></app-result-certstore>
                         }
                         @case ('IppDevices') {
-                        <app-result-ippdevice [searchResult]="searchResult"></app-result-ippdevice>
+                        <app-result-ippdevice [searchResult]="searchResult"
+                            [showUnmatchedItems]="showUnmatched"></app-result-ippdevice>
                         }
                         @case ('ServerConfig') {
                         <app-result-serverprops [searchResult]="searchResult"></app-result-serverprops>
@@ -205,7 +223,8 @@
                         <app-result-serverinfo [searchResult]="searchResult"></app-result-serverinfo>
                         }
                         @case ('Users') {
-                        <app-result-user [searchResult]="searchResult"></app-result-user>
+                        <app-result-user [searchResult]="searchResult"
+                            [showUnmatchedItems]="showUnmatched"></app-result-user>
                         }
                         @default {
                         <app-result-overview [searchResult]="searchResult" [totalMatchCount]="totalMatchCount"

@@ -3,7 +3,7 @@
 <table class="table table-sm table-hover">
     <tbody>
         @for (item of devices; track $index) {
-        <tr>
+        <tr [ngClass]="showUnmatchedItems || devicesMatched.includes(item.name) ? '' : 'd-none'">
             <td [ngClass]="{ 'cursor-pointer': true, 'text-success': devicesMatched.includes(item.name)}">
                 <strong [innerHTML]="item.name | highlight: searchResult.search.phrase"
                     (mouseover)="hoverNode(item, $event)" (mouseout)="leaveNode(item)"

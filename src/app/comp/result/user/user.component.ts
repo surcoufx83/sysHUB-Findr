@@ -16,6 +16,7 @@ export class UserComponent implements OnInit {
 
   nodesToggled: string[] = [];
   @Input({ required: true }) searchResult!: SearchResult;
+  @Input({ required: true }) showUnmatchedItems!: boolean;
   user: SyshubUserAccount[] = [];
   userMatched: string[] = [];
 

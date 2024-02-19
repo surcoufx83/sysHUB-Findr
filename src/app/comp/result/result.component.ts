@@ -24,6 +24,7 @@ export class ResultComponent implements OnDestroy, OnInit {
   configByTree: { [key: string]: SyshubConfigItem[] } = {};
   configTreeKeys: string[] = [];
   configUpdate: number | null = null;
+  showUnmatched: boolean = true;
   ippDevices: SyshubIppDevice[] = [];
   jobtypes: SyshubJobType[] = [];
   psetByTree: { [key: string]: SyshubPSetItem[] } = {};
@@ -79,6 +80,7 @@ export class ResultComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
+    this.showUnmatched = this.cacheService.showUnmatchedItems;
     this.subs.push(this.cacheService.searchresult.subscribe((result) => {
       this.ngOnInit_updateItems(result);
     }));
@@ -91,6 +93,10 @@ export class ResultComponent implements OnDestroy, OnInit {
       let view = map.get('view') ?? '';
       if (view == '' || view == 'ConfigItems' || view == 'JobTypes' || view == 'PSetItems' || view == 'WorkflowItems' || view == 'CertStoreItems' || view == 'IppDevices' || view == 'ServerConfig' || view == 'ServerInformation' || view == 'Users')
         this.selectedChapter = view;
+      if (map.has('unmatched')) {
+        this.showUnmatched = (map.get('unmatched') ?? 'show') == 'show';
+        this.cacheService.toggleShowUnmatchedItems(this.showUnmatched);
+      }
     }));
   }
 

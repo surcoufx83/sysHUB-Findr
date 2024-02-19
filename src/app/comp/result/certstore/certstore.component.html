@@ -3,7 +3,7 @@
 <table class="table table-sm table-hover" style="table-layout: fixed;">
     <tbody>
         @for (item of certstore.keystore; track $index) {
-        <tr>
+        <tr [ngClass]="showUnmatchedItems || itemsMatched.keystore.includes(item.certX509SubjectDN) ? '' : 'd-none'">
             <td
                 [ngClass]="{ 'cursor-pointer': true, 'text-success': itemsMatched.keystore.includes(item.certX509SubjectDN)}">
                 <div class="text-truncate">
@@ -17,7 +17,7 @@
         </tr>
         }
         @for (item of certstore.truststore; track $index) {
-        <tr>
+        <tr [ngClass]="showUnmatchedItems || itemsMatched.truststore.includes(item.certX509SubjectDN) ? '' : 'd-none'">
             <td
                 [ngClass]="{ 'cursor-pointer': true, 'text-success': itemsMatched.truststore.includes(item.certX509SubjectDN)}">
                 <div class="text-truncate">

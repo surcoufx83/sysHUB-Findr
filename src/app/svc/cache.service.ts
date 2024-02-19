@@ -638,10 +638,22 @@ export class CacheService {
     }
   }
 
+  get showUnmatchedItems(): boolean {
+    return this._userconfig.value.showUnmatchedItems ?? true;
+  }
+
   toggleJobtypePropertyFilter(newvalue: boolean): void {
     if (newvalue !== this._userconfig.value.hideJobtypePercentItems) {
       let obj: UserConfig = { ...this._userconfig.value };
       obj.hideJobtypePercentItems = newvalue;
+      this._userconfig.next(obj);
+    }
+  }
+
+  toggleShowUnmatchedItems(newvalue: boolean): void {
+    if (newvalue !== this._userconfig.value.showUnmatchedItems) {
+      let obj: UserConfig = { ...this._userconfig.value };
+      obj.showUnmatchedItems = newvalue;
       this._userconfig.next(obj);
     }
   }
