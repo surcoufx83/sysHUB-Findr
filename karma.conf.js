@@ -26,12 +26,16 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/sys-hub-findr'),
+      dir: require('path').join(__dirname, './coverage/findr'),
       subdir: '.',
       reporters: [
         { type: 'html' },
-        { type: 'text-summary' }
+        { type: 'text-summary' },
+        { type: 'lcov' }
       ]
+    },
+    preprocessor: {
+      'src/**/*.js': ['coverage']
     },
     reporters: ['progress', 'kjhtml', 'coverage'],
     port: 9876,
