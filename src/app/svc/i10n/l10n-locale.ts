@@ -69,6 +69,10 @@ export type L10nLocale = {
     },
     navbar: {
         aboutLink: string,
+        cacheReload: {
+            label: string,
+            tooltip: string,
+        },
         clearCacheLink: string,
         helpLink: string,
         homeLink: string,
@@ -77,6 +81,7 @@ export type L10nLocale = {
         resultLink: string,
         searchBtn: string,
         searchBtnBusy: string,
+        searchHistoryTitle: string,
         searchOptions: string,
         searchPlaceholder: string,
         statsLink: string,
@@ -84,6 +89,9 @@ export type L10nLocale = {
         webclientLink: string
     },
     result: {
+        categories: {
+            title: string,
+        },
         certStoreItem: {
             title: string,
             subtitle: string,
@@ -126,7 +134,11 @@ export type L10nLocale = {
         },
         header: {
             title: string,
-            subtitle: string
+            subtitle: string,
+            filterUnmatched: {
+                showAll: string,
+                showFiltered: string,
+            },
         },
         ippDevice: {
             title: string,
@@ -296,6 +308,7 @@ export type L10nLocale = {
     workflowUi: {
         title: string,
         subtitle: string,
+        loading: string[],
         failed: {
             noCache: string,
             noUuid: string,

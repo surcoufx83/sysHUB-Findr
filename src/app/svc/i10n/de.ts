@@ -77,6 +77,10 @@ export const L10nDe: L10nLocale = {
     },
     navbar: {
         aboutLink: 'Über',
+        cacheReload: {
+            label: 'Cache wird aktualisiert',
+            tooltip: 'Geänderte Datensätze werden vom Server geladen: [0]'
+        },
         clearCacheLink: 'Cache leeren',
         helpLink: 'Hilfe',
         homeLink: 'Start',
@@ -85,6 +89,7 @@ export const L10nDe: L10nLocale = {
         resultLink: 'Suchergebnis',
         searchBtn: 'Suchen',
         searchBtnBusy: 'Suche läuft...',
+        searchHistoryTitle: 'Suchhistorie',
         searchOptions: 'Optionen',
         searchPlaceholder: '🔍 Suchbegriff, z.B. currentjob',
         statsLink: 'Statistiken',
@@ -92,6 +97,9 @@ export const L10nDe: L10nLocale = {
         webclientLink: 'sysHUB web client'
     },
     result: {
+        categories: {
+            title: 'Kategorien',
+        },
         certStoreItem: {
             title: 'Zertifikatsspeicher',
             subtitle: `
@@ -147,7 +155,11 @@ export const L10nDe: L10nLocale = {
                 Die übersicht zeigt eine kurze Zusammenfassung der Treffer. Mehr Details
                 findest du nach dem Klicken auf die Buttons der jeweiligen Kategorien. 
                 Grauer Button = kein Treffer in diesem Bereich.
-            `
+            `,
+            filterUnmatched: {
+                showAll: 'Alle',
+                showFiltered: 'Nur Treffer',
+            },
         },
         ippDevice: {
             title: 'IPP Drucker',
@@ -357,6 +369,7 @@ export const L10nDe: L10nLocale = {
     workflowUi: {
         title: 'Workflow »[0]«',
         subtitle: '',
+        loading: ['Workflow wird geladen...', 'Workflow »[0]« wird geladen...'],
         failed: {
             noCache: 'Unter der angegebenen Workflow-Id konnte kein Workflow gefunden werden.',
             noUuid: 'Die aufgerufene Url ist fehlerhaft.',

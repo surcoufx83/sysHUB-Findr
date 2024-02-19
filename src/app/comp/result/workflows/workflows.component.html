@@ -3,7 +3,7 @@
 <table class="table table-sm table-hover">
     <tbody>
         @for (item of workflows; track $index) {
-        <tr>
+        <tr [ngClass]="showUnmatchedItems || workflowsMatched.includes(item.uuid) ? '' : 'd-none'">
             <td [ngClass]="{ 'cursor-pointer': true, 'text-success': workflowsMatched.includes(item.uuid)}">
                 <strong [innerHTML]="item.name | highlight: searchResult.search.phrase"
                     (mouseover)="hoverNode(item, $event)" (mouseout)="leaveNode(item)"

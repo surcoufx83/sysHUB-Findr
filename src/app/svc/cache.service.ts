@@ -117,11 +117,17 @@ export class CacheService {
    */
   private parametersetPath2Uuid$: { [key: string]: string } = {};
 
+  private refreshingEntities: { [key: string]: boolean } = {};
+
+  private refreshingEntitiesSubject$ = new BehaviorSubject<string[]>([]);
+  public RefreshingEntities = this.refreshingEntitiesSubject$.asObservable();
+
   /**
    * Holds information about previous searches (key = search token, value[0] = phrase, value[1] = search configuration).
    * This is persisted to sessionStorage and used to remove oldest entries if sessionstorage quota is exceeded.
    */
-  private searchhistory: { [key: string]: [string, SearchResult] } = {};
+  private searchhistory$ = new BehaviorSubject<{ [key: string]: [string, SearchResult] }>({});
+  public SearchHistory = this.searchhistory$.asObservable();
 
   /**
    * Contains the current loaded search result to be shown on the website.
@@ -194,12 +200,12 @@ export class CacheService {
   }
 
   private addToSearchHistory(token: string, phrase: string, searchResult: SearchResult): CacheService {
-    this.searchhistory[token] = [phrase, searchResult];
-    if (Object.keys(this.searchhistory).length > 5) {
-      const firstkey = Object.keys(this.searchhistory).sort((a, b) => a > b ? 1 : -1)[0];
-      delete this.searchhistory[firstkey];
+    this.searchhistory$.value[token] = [phrase, searchResult];
+    if (Object.keys(this.searchhistory$.value).length > 5) {
+      const firstkey = Object.keys(this.searchhistory$.value).sort((a, b) => a > b ? 1 : -1)[0];
+      delete this.searchhistory$.value[firstkey];
     }
-    localStorage.setItem('findr-history', JSON.stringify(this.searchhistory));
+    localStorage.setItem('findr-history', JSON.stringify(this.searchhistory$.value));
     return this;
   }
 
@@ -313,8 +319,8 @@ export class CacheService {
   }
 
   loadSearchResult(token: string): boolean {
-    if (this.searchhistory[token]) {
-      this._searchresult.next(this.searchhistory[token][1]);
+    if (this.searchhistory$.value[token]) {
+      this._searchresult.next(this.searchhistory$.value[token][1]);
       this.loadSearchResult_reloadOutdatedItems(this._searchresult.value!.result!);
       return true;
     }
@@ -383,7 +389,7 @@ export class CacheService {
   private loadSearchesCache(): void {
     let olddata = localStorage.getItem('findr-history');
     if (olddata != null) {
-      this.searchhistory = (<{ [key: string]: [string, SearchResult] }>JSON.parse(olddata));
+      this.searchhistory$.next(<{ [key: string]: [string, SearchResult] }>JSON.parse(olddata));
     }
   }
 
@@ -522,30 +528,30 @@ export class CacheService {
   }
 
   reloadCategories(): void {
+    if (this.refreshingEntities[this.l10nphrase.result.categories.title] === true)
+      return;
+    this.setRefreshState(this.l10nphrase.result.categories.title, true);
     this.restapi.getCategories().subscribe((reply) => {
       if (reply instanceof Error) {
-        if (reply instanceof UnauthorizedError)
-          return;
-        this.toastService.addDangerToast({
-          message: this.l10n((reply instanceof NetworkError) ? this.l10nphrase.api.failed.serverUnavailable : this.l10nphrase.api.errorCommon, [reply.message])
-        });
+        this.handleReloadError(this.l10nphrase.result.categories.title, reply);
         return;
       }
       this.categories$.next(reply.sort((a, b) => a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1));
+      this.setRefreshState(this.l10nphrase.result.categories.title, false);
     });
   }
 
   reloadConfig(): void {
+    if (this.refreshingEntities[this.l10nphrase.result.config.title] === true)
+      return;
+    this.setRefreshState(this.l10nphrase.result.config.title, true);
     this.restapi.getConfigChildren('').subscribe((reply) => {
       if (reply instanceof Error) {
-        if (reply instanceof UnauthorizedError)
-          return;
-        this.toastService.addDangerToast({
-          message: this.l10n((reply instanceof NetworkError) ? this.l10nphrase.api.failed.serverUnavailable : this.l10nphrase.api.errorCommon, [reply.message])
-        });
+        this.handleReloadError(this.l10nphrase.result.config.title, reply);
         return;
       }
       this.config$.next(this.reloadConfig_SortChilds(reply));
+      this.setRefreshState(this.l10nphrase.result.config.title, false);
     });
   }
 
@@ -557,30 +563,30 @@ export class CacheService {
   }
 
   reloadJobtypes(): void {
+    if (this.refreshingEntities[this.l10nphrase.result.jobtype.title] === true)
+      return;
+    this.setRefreshState(this.l10nphrase.result.jobtype.title, true);
     this.restapi.getJobTypes().subscribe((reply) => {
       if (reply instanceof Error) {
-        if (reply instanceof UnauthorizedError)
-          return;
-        this.toastService.addDangerToast({
-          message: this.l10n((reply instanceof NetworkError) ? this.l10nphrase.api.failed.serverUnavailable : this.l10nphrase.api.errorCommon, [reply.message])
-        });
+        this.handleReloadError(this.l10nphrase.result.jobtype.title, reply);
         return;
       }
       this.jobtypes$.next([...reply].sort((a, b) => a.name > b.name ? 1 : -1));
+      this.setRefreshState(this.l10nphrase.result.jobtype.title, false);
     });
   }
 
   reloadParameterset(): void {
+    if (this.refreshingEntities[this.l10nphrase.result.parameterset.title] === true)
+      return;
+    this.setRefreshState(this.l10nphrase.result.parameterset.title, true);
     this.restapi.getPsetChildren('').subscribe((reply) => {
       if (reply instanceof Error) {
-        if (reply instanceof UnauthorizedError)
-          return;
-        this.toastService.addDangerToast({
-          message: this.l10n((reply instanceof NetworkError) ? this.l10nphrase.api.failed.serverUnavailable : this.l10nphrase.api.errorCommon, [reply.message])
-        });
+        this.handleReloadError(this.l10nphrase.result.parameterset.title, reply);
         return;
       }
       this.parameterset$.next(this.reloadParameterset_SortChilds(reply));
+      this.setRefreshState(this.l10nphrase.result.parameterset.title, false);
     });
   }
 
@@ -592,17 +598,30 @@ export class CacheService {
   }
 
   reloadWorkflows(): void {
+    if (this.refreshingEntities[this.l10nphrase.result.workflow.title] === true)
+      return;
+    this.setRefreshState(this.l10nphrase.result.workflow.title, true);
     this.restapi.getWorkflows({}).subscribe((reply) => {
       if (reply instanceof Error) {
-        if (reply instanceof UnauthorizedError)
-          return;
-        this.toastService.addDangerToast({
-          message: this.l10n((reply instanceof NetworkError) ? this.l10nphrase.api.failed.serverUnavailable : this.l10nphrase.api.errorCommon, [reply.message])
-        });
+        this.handleReloadError(this.l10nphrase.result.workflow.title, reply);
         return;
       }
       this.workflows$.next([...reply].sort((a, b) => a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : b.name.toLocaleLowerCase() > a.name.toLocaleLowerCase() ? -1 : 0));
+      this.setRefreshState(this.l10nphrase.result.workflow.title, false);
     });
+  }
+
+  private handleReloadError(entity: string, reply: Error): void {
+    if (!(reply instanceof UnauthorizedError))
+      this.toastService.addDangerToast({
+        message: this.l10n((reply instanceof NetworkError) ? this.l10nphrase.api.failed.serverUnavailable : this.l10nphrase.api.errorCommon, [reply.message])
+      });
+    this.setRefreshState(entity, false);
+  }
+
+  private setRefreshState(entity: string, isbusy: boolean) {
+    this.refreshingEntities[entity] = isbusy;
+    this.refreshingEntitiesSubject$.next(Object.keys(this.refreshingEntities).filter((a) => this.refreshingEntities[a] === true))
   }
 
   setResult(token: string, result: SearchResultUuids): void {
@@ -620,10 +639,22 @@ export class CacheService {
     }
   }
 
+  get showUnmatchedItems(): boolean {
+    return this._userconfig.value.showUnmatchedItems ?? true;
+  }
+
   toggleJobtypePropertyFilter(newvalue: boolean): void {
     if (newvalue !== this._userconfig.value.hideJobtypePercentItems) {
       let obj: UserConfig = { ...this._userconfig.value };
       obj.hideJobtypePercentItems = newvalue;
+      this._userconfig.next(obj);
+    }
+  }
+
+  toggleShowUnmatchedItems(newvalue: boolean): void {
+    if (newvalue !== this._userconfig.value.showUnmatchedItems) {
+      let obj: UserConfig = { ...this._userconfig.value };
+      obj.showUnmatchedItems = newvalue;
       this._userconfig.next(obj);
     }
   }

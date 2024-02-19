@@ -77,21 +77,29 @@ export const L10nEn: L10nLocale = {
     },
     navbar: {
         aboutLink: 'About',
-        clearCacheLink: 'Clear Cache',
+        cacheReload: {
+            label: 'Cache is updating',
+            tooltip: 'Changed records will be loaded from the server: [0]'
+        },
+        clearCacheLink: 'Clear cache',
         helpLink: 'Help',
         homeLink: 'Home',
         logoutLink: 'Logout',
         promoLink: 'Findr on Github',
-        resultLink: 'Search Result',
+        resultLink: 'Search result',
         searchBtn: 'Search',
         searchBtnBusy: 'Searching...',
+        searchHistoryTitle: 'Search history',
         searchOptions: 'Options',
-        searchPlaceholder: '🔍 Search term, e.g., currentjob',
+        searchPlaceholder: '🔍 Search term, e.g. currentjob',
         statsLink: 'Statistics',
         themeSwitch: ['light', 'dark', 'automatic'],
         webclientLink: 'sysHUB web client'
     },
     result: {
+        categories: {
+            title: 'Categories',
+        },
         certStoreItem: {
             title: 'Certificate Store',
             subtitle: `
@@ -148,6 +156,10 @@ export const L10nEn: L10nLocale = {
                 click on the buttons of the respective sections below. 
                 Gray button = no results in this section.
             `,
+            filterUnmatched: {
+                showAll: 'All',
+                showFiltered: 'Matched only',
+            },
         },
         ippDevice: {
             title: 'sysHUB IPP Printers',
@@ -354,6 +366,7 @@ export const L10nEn: L10nLocale = {
     workflowUi: {
         title: 'Workflow »[0]«',
         subtitle: '',
+        loading: ['Loading workflow...', 'Loading workflow »[0]«...'],
         failed: {
             noCache: 'No workflow could be found under the specified workflow ID.',
             noUuid: 'The called URL is faulty.',

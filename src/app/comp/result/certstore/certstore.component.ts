@@ -18,6 +18,7 @@ export class CertstoreComponent implements OnInit {
   itemsMatched: { keystore: string[], truststore: string[] } = { keystore: [], truststore: [] };
   nodesToggled: string[] = [];
   @Input({ required: true }) searchResult!: SearchResult;
+  @Input({ required: true }) showUnmatchedItems!: boolean;
 
   constructor(private l10nService: L10nService,
     private searchService: SearchService,

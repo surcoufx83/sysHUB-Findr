@@ -1,6 +1,10 @@
 # sysHUB Findr
 Dokumentation zum sysHUB Findr. Weitere Informationen über aktuelle Änderungen sind im [Changelog](CHANGELOG.md) zu finden. Informationen zur Mitarbeit in dem Projekt gibt es im Abschnitt [Contributing](CONTRIBUTING.md).
 
+[![Node.js CI](https://github.com/surcoufx83/sysHUB-Findr/actions/workflows/node.js.yml/badge.svg?branch=main)](https://github.com/surcoufx83/sysHUB-Findr/actions/workflows/node.js.yml)
+[![codecov](https://codecov.io/gh/surcoufx83/sysHUB-Findr/graph/badge.svg?token=57U05YP672)](https://codecov.io/gh/surcoufx83/sysHUB-Findr)
+
+
 ## ⚠️ Work in progress
 Diese Software befindet sich noch in der Entwicklung. Sie basiert auf dem [COSMOSFindr aus Version 2.9.1](https://cdegitlab.westeurope.cloudapp.azure.com/sfuchs/COSMOSFindr) der aber durch viele Änderungen in sysHUB und der REST API hinfällig wurde. Der sysHUBFindr ist der generalüberholte Findr mit modernen Webkomponenten und einem neuen Outfit auf Grundlage des Angular Frameworks.
 
@@ -133,6 +137,11 @@ Wird ein Workflow als Referenz geöffnet, werden zusätzlich die Startpunkte die
 
 ![Workflowdesigner mit Treffern in der Desktop-Ansicht](docs/workflow-ref-desktop.png)
 
+## Suchhistorie
+<img align="left" src="docs/history-dropdown.png" alt="Wechsel zu einem vorherigen Suchergebnis">
+Die letzten fünf Suchanfragen und Ergebnisse werden im Browser zwischengespeichert und es kann schnell zwischen den Ergebnissen gewechselt werden. Nach der zweiten ausgeführten Suche wird neben dem Suchen-Button in der Navigationsleiste ein Dropdown angezeigt, welches die letzten Anfragen beinhaltet. Per Klick auf einen Eintrag wechselt die Ergebnisansicht zu diesem Suchergebnis.
+
+<br clear="all"/>
 
 ## Ergebnisliste exportieren und importieren ⚠️ 
 

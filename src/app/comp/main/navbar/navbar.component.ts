@@ -1,7 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NavigationEnd, Router } from '@angular/router';
+import { fromUnixTime, isToday } from 'date-fns';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { Observable, Subscription } from 'rxjs';
 import { AppInitService } from 'src/app/svc/app-init.service';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
@@ -9,31 +11,34 @@ import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
 import { PagepropsService } from 'src/app/svc/pageprops.service';
 import { SearchService, defaultSearchConfig } from 'src/app/svc/search.service';
 import { ToastsService } from 'src/app/svc/toasts.service';
-import { SearchConfig } from 'src/app/types';
+import { SearchConfig, SearchResult } from 'src/app/types';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnDestroy, OnInit {
 
   @Input() title: string = '';
 
   appTheme: 'light' | 'dark' | 'auto' | null = null;
-  deviceType: 'mobile' | 'tablet' | 'desktop' = 'desktop';
+  busyReloadingEntities?: Observable<string[]>;
   currentLocale: string;
+  deviceType: 'mobile' | 'tablet' | 'desktop' = 'desktop';
   locales: string[];
   localesLocalized: { [key: string]: string } = {};
   minPhraseLength: number = 3;
-  promolink: string;
-  webclientlink: string;
   phraseInput: string = '';
+  promolink: string;
   searchBusy: boolean = false;
   searchConfig?: SearchConfig;
   searchFocus: boolean = false;
+  searchHistory?: Observable<{ [key: string]: [string, SearchResult] }>;
   searchProgress: number = 100;
+  subs: Subscription[] = [];
   url = '/';
+  webclientlink: string;
 
   searchForm = new FormGroup({
     phrase: new FormControl<string>('', { validators: [Validators.required, Validators.minLength(this.minPhraseLength)] }),
@@ -55,20 +60,51 @@ export class NavbarComponent implements OnInit {
     private searchService: SearchService,
     private toastsService: ToastsService,
     private pagepropsService: PagepropsService,
-    router: Router
+    private router: Router
   ) {
     this.deviceType = pagepropsService.DeviceType;
     this.locales = appInitService.environment.i10n?.locales ?? ['en', 'de', 'fr'];
     this.minPhraseLength = appInitService.environment.app?.minPhraseLength ?? 3;
     this.promolink = appInitService.environment.app?.promotionLink ?? '';
     this.webclientlink = appInitService.environment.app?.webclientLink ?? '';
-    router.events.subscribe((event) => {
+    this.locales.forEach((locale) => {
+      this.localesLocalized[locale] = this.l10nphrase.common.locales[locale] ?? locale;
+    });
+    this.currentLocale = this.l10nService.lang.length > 2 ? this.l10nService.lang.substring(0, 2) : this.l10nService.lang;
+  }
+
+  applyTheme(theme: 'light' | 'dark' | null): void {
+    this.pagepropsService.applyTheme(theme);
+  }
+
+  public date(timestamp: string, form: string): string {
+    return this.l10nService.date(fromUnixTime(+timestamp * 1000), form);
+  }
+
+  getFormat(timestamp: string): string {
+    return isToday(fromUnixTime(+timestamp * 1000)) ? 'p' : 'Pp';
+  }
+
+  get l10nphrase(): L10nLocale {
+    return this.l10nService.locale;
+  }
+
+  l10n(phrase: string, params: any[] = []) {
+    return this.l10nService.ln(phrase, params);
+  }
+
+  ngOnDestroy(): void {
+    this.subs.forEach((sub) => sub.unsubscribe());
+  }
+
+  ngOnInit(): void {
+    this.subs.push(this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.url = event.url;
       }
-    });
-    this.searchService.searchBusy.subscribe((busy) => this.searchBusy = busy);
-    this.searchService.searchConfig.subscribe((cfg) => {
+    }));
+    this.subs.push(this.searchService.searchBusy.subscribe((busy) => this.searchBusy = busy));
+    this.subs.push(this.searchService.searchConfig.subscribe((cfg) => {
       this.searchConfig = { ...cfg };
       this.searchForm.controls.phrase.patchValue(cfg.phrase);
       this.searchForm.controls.searchConfig.patchValue(cfg.topics.config);
@@ -81,33 +117,11 @@ export class NavbarComponent implements OnInit {
       this.searchForm.controls.searchIppDevices.patchValue(cfg.topics.system.ippDevices);
       this.searchForm.controls.searchUsers.patchValue(cfg.topics.system.users);
       this.searchForm.markAsPristine();
-    });
-    this.locales.forEach((locale) => {
-      this.localesLocalized[locale] = this.l10nphrase.common.locales[locale] ?? locale;
-    });
-    this.currentLocale = this.l10nService.lang.length > 2 ? this.l10nService.lang.substring(0, 2) : this.l10nService.lang;
-    this.pagepropsService.AppTheme.subscribe((theme) => this.appTheme = theme);
-  }
-
-  applyTheme(theme: 'light' | 'dark' | null): void {
-    this.pagepropsService.applyTheme(theme);
-  }
-
-  get l10nphrase(): L10nLocale {
-    return this.l10nService.locale;
-  }
-
-  l10n(phrase: string, params: any[] = []) {
-    return this.l10nService.ln(phrase, params);
-  }
-
-  ngOnInit(): void {
-    this.searchService.searchBusy.subscribe((a) => this.searchBusy = a);
-    this.searchService.searchConfig.subscribe((config) => {
-      this.searchConfig = config;
-      this.phraseInput = config.phrase;
-    });
-    this.searchService.searchProgress.subscribe((a) => this.searchProgress = a);
+    }));
+    this.subs.push(this.searchService.searchProgress.subscribe((a) => this.searchProgress = a));
+    this.subs.push(this.pagepropsService.AppTheme.subscribe((theme) => this.appTheme = theme));
+    this.busyReloadingEntities = this.cacheService.RefreshingEntities;
+    this.searchHistory = this.cacheService.SearchHistory;
   }
 
   onClearCache(): void {

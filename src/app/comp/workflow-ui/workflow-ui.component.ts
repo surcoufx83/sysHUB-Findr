@@ -149,7 +149,6 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
           this.ngOnInit_ReportProgress();
         }
       }));
-
     }
 
     this.subs.push(this.restapi.getWorkflowModel(tempworkflow.uuid).subscribe((reply) => {
@@ -163,7 +162,6 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
       }
       else {
         this.model = reply;
-        console.log(this.model)
         this.ngOnInit_ReportProgress();
       }
     }));
@@ -178,25 +176,31 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
         this.apiError = { ...reply };
       }
       else {
-        this.startpoints = reply;
+        this.startpoints = <any>reply === null ? [] : reply;
         this.ngOnInit_ReportProgress();
       }
     }));
   }
 
+  progressDebounce: any;
   private ngOnInit_ReportProgress(): void {
-    if (this.sysHUB2022CompatibilityMode) {
-      this.progress = Math.floor(((this.workflow != undefined ? 1 : 0) +
-        (this.startpoints != undefined ? 1 : 0) +
-        (this.model != undefined ? 1 : 0)) * 33.34);
-    } else {
-      this.progress = Math.floor(((this.workflow != undefined ? 1 : 0) +
-        (this.versions != undefined ? 1 : 0) +
-        (this.references != undefined ? 1 : 0) +
-        (this.startpoints != undefined ? 1 : 0) +
-        (this.model != undefined ? 1 : 0)) * 20);
-    }
-    this.searchService.setProgress(this.progress);
+    clearTimeout(this.progressDebounce);
+    this.progressDebounce = setTimeout(() => {
+      if (this.sysHUB2022CompatibilityMode) {
+        this.progress = Math.floor(((this.workflow != undefined ? 1 : 0) +
+          (this.startpoints != undefined ? 1 : 0) +
+          (this.model != undefined ? 1 : 0)) * 33.34);
+      } else {
+        this.progress = Math.floor(((this.workflow != undefined ? 1 : 0) +
+          (this.versions != undefined ? 1 : 0) +
+          (this.references != undefined ? 1 : 0) +
+          (this.startpoints != undefined ? 1 : 0) +
+          (this.model != undefined ? 1 : 0)) * 20);
+      }
+      this.searchService.setProgress(this.progress);
+      if (this.progress < 100)
+        this.ngOnInit_ReportProgress();
+    }, 100);
   }
 
   hoverNode(type: 'ConfigItems' | 'JobTypes' | 'PSetItems' | 'WorkflowItems', path: string, event: MouseEvent): void {
