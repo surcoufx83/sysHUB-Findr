@@ -1,14 +1,58 @@
-import { TestBed, async } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async, fakeAsync, flush, tick } from '@angular/core/testing';
 import { AppComponent } from './app.component';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppInitService } from './svc/app-init.service';
-import { MockAppInitService, MockL10nService } from 'src/testing/mock';
-import { Settings } from 'syshub-rest-module';
-import { APP_BASE_HREF } from '@angular/common';
+import { RestService } from 'syshub-rest-module';
 import { L10nService } from './svc/i10n.service';
+import { MockL10n } from './svc/i10n/l10n-mock';
+import { HttpStatusCode } from '@angular/common/http';
+import { BehaviorSubject } from 'rxjs';
+import { PagepropsService } from './svc/pageprops.service';
+import { Router } from '@angular/router';
+import { ToastsService } from './svc/toasts.service';
+import { MockMainComponent, MockToastsComponent } from 'src/testing/mock';
 
 describe('AppComponent', () => {
+    let fixture: ComponentFixture<AppComponent>;
+    let component: AppComponent;
+
+    let mockLoggedIn = new BehaviorSubject<boolean>(true);
+    let mockPageTitle = new BehaviorSubject<string>('foo');
+    let mockRouterEvents = new BehaviorSubject<any>({});
+
+    let mockEnvironment = {
+        appInitializationFailure: {
+            configStatusCode: HttpStatusCode.Ok,
+        },
+    }
+
+    let mockAppInitService = {
+        environment: mockEnvironment,
+    };
+
+    let mockL10nService = {
+        ln: jasmine.createSpy('ln').and.returnValue('foo'),
+        locale: MockL10n,
+    };
+
+    let mockPagepropsService = {
+        pagetitle: mockPageTitle.asObservable(),
+    };
+
+    let mockRestService = {
+        isLoggedIn: mockLoggedIn.asObservable(),
+    };
+
+    let mockRouter = {
+        events: mockRouterEvents.asObservable(),
+        navigate: jasmine.createSpy('navigate'),
+    };
+
+    let mockToastsService = {
+        addDangerToast: jasmine.createSpy('addDangerToast'),
+    };
+
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports: [
@@ -16,22 +60,73 @@ describe('AppComponent', () => {
                 RouterTestingModule,
             ],
             declarations: [
-                AppComponent
+                AppComponent,
+                MockMainComponent,
+                MockToastsComponent,
             ],
             providers: [
-                { provide: APP_BASE_HREF, useValue: '/' },
-                { provide: AppInitService, useClass: MockAppInitService },
-                { provide: Settings, multi: false, useFactory: (initService: AppInitService) => initService.environment?.api.syshub, deps: [AppInitService] },
-                { provide: L10nService, useClass: MockL10nService }
+                { provide: AppInitService, useValue: mockAppInitService },
+                { provide: L10nService, useValue: mockL10nService },
+                { provide: PagepropsService, useValue: mockPagepropsService },
+                { provide: RestService, useValue: mockRestService },
+                { provide: Router, useValue: mockRouter },
+                { provide: ToastsService, useValue: mockToastsService },
             ]
         }).compileComponents();
+        fixture = TestBed.createComponent(AppComponent);
+        component = fixture.debugElement.componentInstance;
     }));
 
-    it('should create the app', () => {
-        const fixture = TestBed.createComponent(AppComponent);
-        const app = fixture.debugElement.componentInstance;
-        expect(app).toBeTruthy();
+    afterEach(() => {
+        mockLoggedIn.next(true);
+        mockPageTitle.next('foo');
+        mockRouterEvents.next({});
+        mockRouter.navigate = jasmine.createSpy('navigate');
+        mockToastsService.addDangerToast = jasmine.createSpy('addDangerToast');
     });
 
-    // Hier können weitere Tests hinzugefügt werden
+    it('should create the app', () => {
+        expect(component).toBeTruthy();
+    });
+
+    it('should contain correct components if logged in', () => {
+        fixture.detectChanges();
+        let compiled = fixture.nativeElement as HTMLElement;
+        expect(compiled.querySelector('router-outlet')).withContext('Router outlet').toBeFalsy();
+        expect(compiled.querySelector('app-main')).withContext('Main component').toBeTruthy();
+        expect(compiled.querySelector('app-toasts')).withContext('Toasts component').toBeTruthy();
+    });
+
+    it('should contain correct components if logged out', () => {
+        mockLoggedIn.next(false);
+        fixture.detectChanges();
+        let compiled = fixture.nativeElement as HTMLElement;
+        expect(compiled.querySelector('router-outlet')).withContext('Router outlet').toBeTruthy();
+        expect(compiled.querySelector('app-main')).withContext('Main component').toBeFalsy();
+        expect(compiled.querySelector('app-toasts')).withContext('Toasts component').toBeTruthy();
+    });
+
+    it('should navigate to login page after loading', () => {
+        mockLoggedIn.next(false);
+        fixture.detectChanges();
+        expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
+    });
+
+    it('should navigate to start page after logging in', () => {
+        mockLoggedIn.next(false);
+        fixture.detectChanges();
+        mockLoggedIn.next(true);
+        fixture.detectChanges();
+        expect(mockRouter.navigate).toHaveBeenCalledWith(['/']);
+    });
+
+    it('should show toast if environment could not be loaded', fakeAsync(() => {
+        mockAppInitService.environment = { appInitializationFailure: { configStatusCode: HttpStatusCode.NotFound } };
+        component.ngOnInit();
+        tick(20);
+        fixture.detectChanges();
+        expect(mockToastsService.addDangerToast).toHaveBeenCalledWith({ message: 'mock-configurationFileMissing', autohide: false, isHtml: true });
+        flush();
+    }));
+
 });
