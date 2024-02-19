@@ -1,7 +1,7 @@
 {
     "api": {
         "syshub": {
-            "host": "https://localhost:8443/",
+            "host": "/",
             "version": 3,
             "basic": {
                 "enabled": false,
@@ -22,7 +22,7 @@
         "promotionLink": "https://github.com/surcoufx83/sysHUB-Findr",
         "minPhraseLength": 3,
         "useCache": true,
-        "webclientLink": "https://localhost:8443/webclient"
+        "webclientLink": "/webclient"
     },
     "i10n": {
         "fallback": "de"
