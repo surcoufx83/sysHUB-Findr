@@ -296,6 +296,7 @@ export type L10nLocale = {
     workflowUi: {
         title: string,
         subtitle: string,
+        loading: string[],
         failed: {
             noCache: string,
             noUuid: string,

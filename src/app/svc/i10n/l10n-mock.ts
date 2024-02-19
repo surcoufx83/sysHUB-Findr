@@ -314,6 +314,7 @@ export const MockL10n: L10nLocale = {
     workflowUi: {
         title: 'mock-title',
         subtitle: 'mock-subtitle',
+        loading: ['mock-loading0', 'mock-loading1'],
         failed: {
             noCache: 'mock-noCache',
             noUuid: 'mock-noUuid',

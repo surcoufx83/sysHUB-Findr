@@ -354,6 +354,7 @@ export const L10nEn: L10nLocale = {
     workflowUi: {
         title: 'Workflow »[0]«',
         subtitle: '',
+        loading: ['Loading workflow...', 'Loading workflow »[0]«...'],
         failed: {
             noCache: 'No workflow could be found under the specified workflow ID.',
             noUuid: 'The called URL is faulty.',
