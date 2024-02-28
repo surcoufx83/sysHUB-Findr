@@ -45,7 +45,7 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
     private toastsService: ToastsService,
     private restapi: RestService,
   ) {
-    this.sysHUB2022CompatibilityMode = initService.environment.api.syshub.version == 2;
+    this.sysHUB2022CompatibilityMode = initService.environment.api.version == 2;
   }
 
   getWorkflowByName(name: string): SyshubWorkflow | null {

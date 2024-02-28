@@ -2,7 +2,7 @@ import { HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { Response, RestService, SyshubCertStoreItem, SyshubIppDevice, SyshubRole, SyshubServerInformation, SyshubUserAccount } from 'syshub-rest-module';
+import { OAuthRestSettings, Response, RestService, SyshubCertStoreItem, SyshubIppDevice, SyshubRole, SyshubServerInformation, SyshubUserAccount } from 'syshub-rest-module';
 import { SearchConfig, SearchResultUuids } from '../types';
 import { AppInitService } from './app-init.service';
 import { CacheService } from './cache.service';
@@ -38,7 +38,7 @@ export class SearchService {
       this._searchConfig.next({ ...cfg });
     }
     this.searchConfig.subscribe((config) => localStorage.setItem(appInitService.environment.storage?.searchconfigKey ?? 'findr-searchconfig', JSON.stringify(config)));
-    this.missingScope = (appInitService.environment.api.syshub.basic?.enabled || false) === true ? false : (appInitService.environment.api.syshub.oauth?.scope !== 'private+public' && appInitService.environment.api.syshub.oauth?.scope !== 'public+private');
+    this.missingScope = Object.keys(appInitService.environment.api).includes('basic') === true ? false : ((<OAuthRestSettings>appInitService.environment.api).oauth.scope !== 'private+public' && (<OAuthRestSettings>appInitService.environment.api).oauth.scope !== 'public+private');
   }
 
   public getProgress(): number {

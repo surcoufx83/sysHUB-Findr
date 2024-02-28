@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { AppInitService } from 'src/app/svc/app-init.service';
 import { CacheService } from 'src/app/svc/cache.service';
 import { SearchResult } from 'src/app/types';
+import { OAuthRestSettings } from 'syshub-rest-module';
 
 @Component({
   selector: 'app-main',
@@ -19,7 +20,7 @@ export class MainComponent implements OnDestroy, OnInit {
     appInitService: AppInitService,
     private cacheService: CacheService,
   ) {
-    this.missingScope = (appInitService.environment.api.syshub.basic?.enabled || false) === true ? false : (appInitService.environment.api.syshub.oauth?.scope !== 'private+public' && appInitService.environment.api.syshub.oauth?.scope !== 'public+private');
+    this.missingScope = Object.keys(appInitService.environment.api).includes('basic') === true ? false : ((<OAuthRestSettings>appInitService.environment.api).oauth.scope !== 'private+public' && (<OAuthRestSettings>appInitService.environment.api).oauth.scope !== 'public+private');
   }
 
   ngOnDestroy(): void {

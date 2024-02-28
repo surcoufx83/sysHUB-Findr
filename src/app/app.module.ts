@@ -126,7 +126,7 @@ export function initAppFactory(svc: AppInitService) {
     { provide: APP_BASE_HREF, useValue: '/' },
     { provide: AppInitService, multi: false },
     { provide: APP_INITIALIZER, useFactory: initAppFactory, deps: [AppInitService], multi: true },
-    { provide: Settings, multi: false, useFactory: (initService: AppInitService) => initService.environment?.api.syshub, deps: [AppInitService] },
+    { provide: Settings, multi: false, useFactory: (initService: AppInitService) => new Settings(initService.environment?.api), deps: [AppInitService] },
     { provide: RestService, multi: false, deps: [Settings, HttpClient] },
     { provide: HTTP_INTERCEPTORS, multi: true, useClass: SyshubInterceptor, deps: [Settings, RestService] },
     { provide: L10nService, multi: false },

@@ -33,7 +33,7 @@
     "ngx-markdown": "^17.1.1",
     "prismjs": "1.28.0",
     "rxjs": "^7.8.1",
-    "syshub-rest-module": "^3.3.2",
+    "syshub-rest-module": "^4.0.0",
     "titleize": "^4.0.0",
     "tslib": "^2.6.2",
     "zone.js": "~0.14.4"

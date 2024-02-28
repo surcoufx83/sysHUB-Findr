@@ -1,12 +1,13 @@
-import { Env, SyshubCategory, SyshubCertStoreItem, SyshubIppDevice, SyshubRole, SyshubServerInformation, SyshubUserAccount } from "syshub-rest-module";
+import { BasicRestSettings, OAuthRestSettings, SyshubCategory, SyshubCertStoreItem, SyshubIppDevice, SyshubRole, SyshubServerInformation, SyshubUserAccount } from "syshub-rest-module";
 
 export type FindrEnvironment = {
-    api: Env,
+    api: BasicRestSettings | OAuthRestSettings,
     appInitializationFailure?: {
         configStatusCode: number,
     },
     app?: {
         baseUrl?: string,
+        disabledFunctions: ('config' | 'jobtypes' | 'parameterset' | 'workflows' | 'certstore' | 'serverConfig' | 'serverInfo' | 'ippDevices' | 'users' | 'roles')[];
         promotionLink?: string,
         minPhraseLength?: number,
         useCache?: boolean,

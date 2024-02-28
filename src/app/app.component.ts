@@ -1,7 +1,7 @@
 import { HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { RestService } from 'syshub-rest-module';
+import { RestService, Settings } from 'syshub-rest-module';
 import { AppInitService } from './svc/app-init.service';
 import { L10nService } from './svc/i10n.service';
 import { L10nLocale } from './svc/i10n/l10n-locale';

@@ -47,18 +47,12 @@ export class AppInitService {
 
 const MissingConfigJson: FindrEnvironment = {
   api: {
-    variant: undefined,
-    syshub: {
-      host: 'http://localhost:8088/',
-      basic: {
-        enabled: false,
-      },
-      oauth: {
-        enabled: true,
-        clientId: '<<missing client>>',
-        clientSecret: '<<missing client>>',
-        scope: 'private+public'
-      },
-    }
-  }
+    host: 'http://localhost:8088/',
+    oauth: {
+      enabled: true,
+      clientId: '<<missing client>>',
+      clientSecret: '<<missing client>>',
+      scope: 'private+public'
+    },
+  },
 };
