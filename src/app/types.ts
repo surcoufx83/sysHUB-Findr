@@ -7,7 +7,7 @@ export type FindrEnvironment = {
     },
     app?: {
         baseUrl?: string,
-        disabledFunctions: ('config' | 'jobtypes' | 'parameterset' | 'workflows' | 'certstore' | 'serverConfig' | 'serverInfo' | 'ippDevices' | 'users' | 'roles')[];
+        disabledFunctions?: ('config' | 'jobtypes' | 'parameterset' | 'workflows' | 'certstore' | 'serverConfig' | 'serverInfo' | 'ippDevices' | 'users')[];
         promotionLink?: string,
         minPhraseLength?: number,
         useCache?: boolean,

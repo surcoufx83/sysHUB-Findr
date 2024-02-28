@@ -56,6 +56,7 @@
                         <span class="d-none d-lg-inline">{{ l10nphrase.navbar.searchOptions }}</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
+                        @if (!disabledFunctions.includes('config')) {
                         <li class="dropdown-item">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" formControlName="searchConfig"
@@ -65,6 +66,8 @@
                                 </label>
                             </div>
                         </li>
+                        }
+                        @if (!disabledFunctions.includes('jobtypes')) {
                         <li class="dropdown-item">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" formControlName="searchJobtypes"
@@ -74,6 +77,8 @@
                                 </label>
                             </div>
                         </li>
+                        }
+                        @if (!disabledFunctions.includes('parameterset')) {
                         <li class="dropdown-item">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" formControlName="searchPSet"
@@ -83,6 +88,8 @@
                                 </label>
                             </div>
                         </li>
+                        }
+                        @if (!disabledFunctions.includes('workflows')) {
                         <li class="dropdown-item">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" formControlName="searchWorkflows"
@@ -92,9 +99,11 @@
                                 </label>
                             </div>
                         </li>
+                        }
                         <li>
                             <hr class="dropdown-divider">
                         </li>
+                        @if (!disabledFunctions.includes('certstore')) {
                         <li class="dropdown-item">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" formControlName="searchCertstore"
@@ -104,6 +113,8 @@
                                 </label>
                             </div>
                         </li>
+                        }
+                        @if (!disabledFunctions.includes('serverConfig')) {
                         <li class="dropdown-item">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" formControlName="searchServerConfig"
@@ -113,6 +124,8 @@
                                 </label>
                             </div>
                         </li>
+                        }
+                        @if (!disabledFunctions.includes('serverInfo')) {
                         <li class="dropdown-item">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" formControlName="searchServerInfo"
@@ -122,6 +135,8 @@
                                 </label>
                             </div>
                         </li>
+                        }
+                        @if (!disabledFunctions.includes('ippDevices')) {
                         <li class="dropdown-item">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" formControlName="searchIppDevices"
@@ -131,6 +146,8 @@
                                 </label>
                             </div>
                         </li>
+                        }
+                        @if (!disabledFunctions.includes('users')) {
                         <li class="dropdown-item">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" formControlName="searchUsers"
@@ -140,6 +157,7 @@
                                 </label>
                             </div>
                         </li>
+                        }
                     </ul>
                 </div>
                 <button class="btn btn-success text-nowrap" [disabled]="searchBusy" type="submit">

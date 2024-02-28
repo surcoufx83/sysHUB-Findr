@@ -133,6 +133,7 @@ export class SearchService {
       return false;
     if (search.phrase == '' || search.phrase.trim().length < (this.appInitService.environment.app?.minPhraseLength ?? 3) || this._searchBusy.value == true)
       return false;
+    search = this.searchDisableMethods(search);
     this._searchBusy.next(true);
     this._searchProgress.next(0);
     search.token = this.cache.prepareSearch(search);
@@ -140,6 +141,31 @@ export class SearchService {
     this.router.navigate(['/search']);
     this.searchStep1(search);
     return true;
+  }
+
+  private searchDisableMethods(search: SearchConfig): SearchConfig {
+    if (!this.appInitService.environment.app?.disabledFunctions)
+      return search;
+    let tempcfg: SearchConfig = { ...search };
+    if (this.appInitService.environment.app.disabledFunctions.includes('config'))
+      tempcfg.topics.config = false;
+    if (this.appInitService.environment.app.disabledFunctions.includes('jobtypes'))
+      tempcfg.topics.jobtypes = false;
+    if (this.appInitService.environment.app.disabledFunctions.includes('parameterset'))
+      tempcfg.topics.parameterset = false;
+    if (this.appInitService.environment.app.disabledFunctions.includes('workflows'))
+      tempcfg.topics.workflows = false;
+    if (this.appInitService.environment.app.disabledFunctions.includes('certstore'))
+      tempcfg.topics.system.certstore = false;
+    if (this.appInitService.environment.app.disabledFunctions.includes('serverConfig'))
+      tempcfg.topics.system.serverConfig = false;
+    if (this.appInitService.environment.app.disabledFunctions.includes('serverInfo'))
+      tempcfg.topics.system.serverInfo = false;
+    if (this.appInitService.environment.app.disabledFunctions.includes('ippDevices'))
+      tempcfg.topics.system.ippDevices = false;
+    if (this.appInitService.environment.app.disabledFunctions.includes('users'))
+      tempcfg.topics.system.users = false;
+    return tempcfg;
   }
 
   private searchStep1(search: SearchConfig): void {

@@ -2,6 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { AppInitService } from 'src/app/svc/app-init.service';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
@@ -24,6 +25,7 @@ export class ResultComponent implements OnDestroy, OnInit {
   configByTree: { [key: string]: SyshubConfigItem[] } = {};
   configTreeKeys: string[] = [];
   configUpdate: number | null = null;
+  disabledFunctions: ('config' | 'jobtypes' | 'parameterset' | 'workflows' | 'certstore' | 'serverConfig' | 'serverInfo' | 'ippDevices' | 'users')[] = [];
   showUnmatched: boolean = true;
   ippDevices: SyshubIppDevice[] = [];
   jobtypes: SyshubJobType[] = [];
@@ -37,12 +39,16 @@ export class ResultComponent implements OnDestroy, OnInit {
 
   subs: Subscription[] = [];
 
-  constructor(private l10nService: L10nService,
+  constructor(
+    appInitService: AppInitService,
+    private l10nService: L10nService,
     private cacheService: CacheService,
     private searchService: SearchService,
     private router: Router,
     private route: ActivatedRoute,
-    @Inject(DOCUMENT) private document: Document) { }
+    @Inject(DOCUMENT) private document: Document) {
+    this.disabledFunctions = appInitService.environment.app?.disabledFunctions ?? [];
+  }
 
   get l10nphrase(): L10nLocale {
     return this.l10nService.locale;
@@ -91,8 +97,21 @@ export class ResultComponent implements OnDestroy, OnInit {
       } else
         this.router.navigate(['/']);
       let view = map.get('view') ?? '';
-      if (view == '' || view == 'ConfigItems' || view == 'JobTypes' || view == 'PSetItems' || view == 'WorkflowItems' || view == 'CertStoreItems' || view == 'IppDevices' || view == 'ServerConfig' || view == 'ServerInformation' || view == 'Users')
+      if (
+        view == '' ||
+        (view == 'ConfigItems' && !this.disabledFunctions.includes('config')) ||
+        (view == 'JobTypes' && !this.disabledFunctions.includes('jobtypes')) ||
+        (view == 'PSetItems' && !this.disabledFunctions.includes('parameterset')) ||
+        (view == 'WorkflowItems' && !this.disabledFunctions.includes('workflows')) ||
+        (view == 'CertStoreItems' && !this.disabledFunctions.includes('certstore')) ||
+        (view == 'IppDevices' && !this.disabledFunctions.includes('ippDevices')) ||
+        (view == 'ServerConfig' && !this.disabledFunctions.includes('serverConfig')) ||
+        (view == 'ServerInformation' && !this.disabledFunctions.includes('serverInfo')) ||
+        (view == 'Users' && !this.disabledFunctions.includes('users'))
+      )
         this.selectedChapter = view;
+      else
+        this.selectedChapter = '';
       if (map.has('unmatched')) {
         this.showUnmatched = (map.get('unmatched') ?? 'show') == 'show';
         this.cacheService.toggleShowUnmatchedItems(this.showUnmatched);

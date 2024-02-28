@@ -69,8 +69,8 @@ dependencies:
     specifier: ^7.8.1
     version: 7.8.1
   syshub-rest-module:
-    specifier: ^3.3.2
-    version: 3.3.2(@angular/common@17.2.1)(@angular/core@17.2.1)
+    specifier: ^4.0.0
+    version: link:../syshub-rest-module/dist/syshub-rest-module
   titleize:
     specifier: ^4.0.0
     version: 4.0.0
@@ -7714,17 +7714,6 @@ packages:
     resolution: {integrity: sha512-b19dMThMV4HVFynSAM1++gBHAbk2Tc/osgLIBZMKsyqh34jb2e8Os7T6ZW/Bt3pJFdBTd2JwAnAAEQV7rSNvcQ==}
     engines: {node: '>=0.10'}
     dev: true
-
-  /syshub-rest-module@3.3.2(@angular/common@17.2.1)(@angular/core@17.2.1):
-    resolution: {integrity: sha512-BQ2IW2cpMFhE9NG5Qgraygqw1sLcvbnpZ1yemOgTTL6wRscGfUQKpcfoUuwuIDHDqQlalFtMITjRVZXY8xKIBg==}
-    peerDependencies:
-      '@angular/common': ^17.2.1
-      '@angular/core': ^17.2.1
-    dependencies:
-      '@angular/common': 17.2.1(@angular/core@17.2.1)(rxjs@7.8.1)
-      '@angular/core': 17.2.1(rxjs@7.8.1)(zone.js@0.14.4)
-      tslib: 2.6.2
-    dev: false
 
   /tapable@2.2.1:
     resolution: {integrity: sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==}

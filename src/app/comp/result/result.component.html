@@ -22,6 +22,7 @@
                                     {{ l10nphrase.result.toolbar.overview }}
                                 </button>
                             </a>
+                            @if (!disabledFunctions.includes('config')) {
                             <a [routerLink]="['/result']"
                                 [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'ConfigItems', unmatched: !showUnmatched ? 'hide' : 'show'}">
                                 <button type="button"
@@ -31,6 +32,8 @@
                                     <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
                                 </button>
                             </a>
+                            }
+                            @if (!disabledFunctions.includes('jobtypes')) {
                             <a [routerLink]="['/result']"
                                 [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'JobTypes', unmatched: !showUnmatched ? 'hide' : 'show'}">
                                 <button type="button"
@@ -41,6 +44,8 @@
                                     <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
                                 </button>
                             </a>
+                            }
+                            @if (!disabledFunctions.includes('parameterset')) {
                             <a [routerLink]="['/result']"
                                 [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'PSetItems', unmatched: !showUnmatched ? 'hide' : 'show'}">
                                 <button type="button"
@@ -51,6 +56,8 @@
                                     <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
                                 </button>
                             </a>
+                            }
+                            @if (!disabledFunctions.includes('workflows')) {
                             <a [routerLink]="['/result']"
                                 [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'WorkflowItems', unmatched: !showUnmatched ? 'hide' : 'show'}">
                                 <button type="button"
@@ -61,8 +68,9 @@
                                     <span class="d-none d-lg-inline">{{ l10nphrase.result.toolbar.matches }}</span>
                                 </button>
                             </a>
+                            }
                             @if (searchResult.result?.system != undefined) {
-                            @if (searchResult.result?.system?.certstore) {
+                            @if (!disabledFunctions.includes('certstore') && searchResult.result?.system?.certstore) {
                             <a [routerLink]="['/result']"
                                 [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'CertStoreItems', unmatched: !showUnmatched ? 'hide' : 'show'}">
                                 <button type="button"
@@ -74,7 +82,7 @@
                                 </button>
                             </a>
                             }
-                            @if (searchResult.result?.system?.ippDevices) {
+                            @if (!disabledFunctions.includes('ippDevices') && searchResult.result?.system?.ippDevices) {
                             <a [routerLink]="['/result']"
                                 [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'IppDevices', unmatched: !showUnmatched ? 'hide' : 'show'}">
                                 <button type="button"
@@ -86,7 +94,8 @@
                                 </button>
                             </a>
                             }
-                            @if (searchResult.result?.system?.serverConfig) {
+                            @if (!disabledFunctions.includes('serverConfig') &&
+                            searchResult.result?.system?.serverConfig) {
                             <a [routerLink]="['/result']"
                                 [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'ServerConfig', unmatched: !showUnmatched ? 'hide' : 'show'}">
                                 <button type="button"
@@ -99,7 +108,7 @@
                                 </button>
                             </a>
                             }
-                            @if (searchResult.result?.system?.serverInfo) {
+                            @if (!disabledFunctions.includes('serverInfo') && searchResult.result?.system?.serverInfo) {
                             <a [routerLink]="['/result']"
                                 [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'ServerInformation', unmatched: !showUnmatched ? 'hide' : 'show'}">
                                 <button type="button"
@@ -111,7 +120,7 @@
                                 </button>
                             </a>
                             }
-                            @if (searchResult.result?.system?.users) {
+                            @if (!disabledFunctions.includes('users') && searchResult.result?.system?.users) {
                             <a [routerLink]="['/result']"
                                 [queryParams]="{ q: searchResult.search.phrase, t: searchResult.search.token, view: 'Users', unmatched: !showUnmatched ? 'hide' : 'show'}">
                                 <button type="button"
