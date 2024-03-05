@@ -24,7 +24,6 @@ export type L10nLocale = {
             resultView: string,
             resultConfigView: string
         },
-        configurationFileMissing: string,
     },
     common: {
         clipboard: {
@@ -50,6 +49,8 @@ export type L10nLocale = {
         disabledFindr: {
             title: string,
             description: string,
+            missingConfigFile: string,
+            missingScope: string,
             documentationLink: string,
         }
     },

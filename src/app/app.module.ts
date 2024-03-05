@@ -59,6 +59,7 @@ import { SearchService } from './svc/search.service';
 import { ToastsService } from './svc/toasts.service';
 import { ToastsComponent } from './svc/toasts/toasts.component';
 import { HighlightPipe } from './utils/highlight.pipe';
+import { ConfigMissingBarComponent } from './comp/main/config-missing-bar/config-missing-bar.component';
 
 export function initAppFactory(svc: AppInitService) {
   return () => svc.load();
@@ -109,6 +110,7 @@ export function initAppFactory(svc: AppInitService) {
     UserComponent,
     WorkflowsComponent,
     WorkflowUiComponent,
+    ConfigMissingBarComponent,
   ],
   imports: [
     AppRoutingModule,

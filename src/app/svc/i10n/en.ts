@@ -20,7 +20,6 @@ export const L10nEn: L10nLocale = {
             resultView: 'Result View',
             resultConfigView: 'Result (Config)'
         },
-        configurationFileMissing: 'The Findr configuration could not be loaded. <a class="text-light" target="_blank" href="https://github.com/surcoufx83/sysHUB-Findr?tab=readme-ov-file#konfiguration-work-in-progress-see-3">Please configure according to the instructions.</a>',
     },
     common: {
         clipboard: {
@@ -48,10 +47,12 @@ export const L10nEn: L10nLocale = {
         welcomeSubtitleUser: 'Hello [0], what would you like to find today?',
         welcomeTitle: 'sysHUBFindr',
         disabledFindr: {
-            title: 'Findr disabled!',
             description: 'Findr requires a specific configuration for searching and displaying results.',
-            documentationLink: 'See Readme on Github, Configuration Parameters section, Parameter syshub.oauth.scope'
-        }
+            documentationLink: 'See Readme on Github',
+            missingConfigFile: 'The configuration file was not found.',
+            missingScope: 'Parameter syshub.oauth.scope is not configured correctly',
+            title: 'Findr disabled!',
+        },
     },
     login: {
         title: 'Login',

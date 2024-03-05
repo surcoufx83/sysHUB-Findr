@@ -1,3 +1,4 @@
+import { HttpStatusCode } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AppInitService } from 'src/app/svc/app-init.service';
@@ -12,6 +13,7 @@ import { OAuthRestSettings } from 'syshub-rest-module';
 })
 export class MainComponent implements OnDestroy, OnInit {
 
+  missingConfig: boolean;
   missingScope: boolean;
   searchResult?: SearchResult;
   subs: Subscription[] = [];
@@ -20,6 +22,7 @@ export class MainComponent implements OnDestroy, OnInit {
     appInitService: AppInitService,
     private cacheService: CacheService,
   ) {
+    this.missingConfig = appInitService.environment.appInitializationFailure?.configStatusCode !== HttpStatusCode.Ok;
     this.missingScope = Object.keys(appInitService.environment.api).includes('basic') === true ? false : ((<OAuthRestSettings>appInitService.environment.api).oauth.scope !== 'private+public' && (<OAuthRestSettings>appInitService.environment.api).oauth.scope !== 'public+private');
   }
 
