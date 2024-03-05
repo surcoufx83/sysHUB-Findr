@@ -34,6 +34,16 @@ export class SearchService {
     let oldconfig = localStorage.getItem(appInitService.environment.storage?.searchconfigKey ?? 'findr-searchconfig');
     if (oldconfig != null) {
       let cfg: SearchConfig = <SearchConfig>JSON.parse(oldconfig);
+      if (Object.keys(cfg.topics).includes('system') == false) {
+        cfg.topics.system = {
+          certstore: false,
+          serverConfig: false,
+          serverInfo: false,
+          ippDevices: false,
+          users: false,
+          userRoles: false,
+        };
+      }
       cfg.phrase = '';
       this._searchConfig.next({ ...cfg });
     }
