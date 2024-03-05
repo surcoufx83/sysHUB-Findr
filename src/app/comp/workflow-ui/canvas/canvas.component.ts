@@ -30,7 +30,7 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   nodeUUids: { [key: string]: number } = {};
   nodesToggled: string[] = [];
   hoverpath?: number;
-  ruler: number[] = [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800];
+  ruler: number[] = [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200];
   svgCursor: Point = { x: 0, y: 0 };
   subs: Subscription[] = [];
 
