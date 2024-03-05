@@ -26,6 +26,7 @@ export class NavbarComponent implements OnDestroy, OnInit {
   busyReloadingEntities?: Observable<string[]>;
   currentLocale: string;
   deviceType: 'mobile' | 'tablet' | 'desktop' = 'desktop';
+  disabledFunctions: ('config' | 'jobtypes' | 'parameterset' | 'workflows' | 'certstore' | 'serverConfig' | 'serverInfo' | 'ippDevices' | 'users')[] = [];
   locales: string[];
   localesLocalized: { [key: string]: string } = {};
   minPhraseLength: number = 3;
@@ -63,6 +64,7 @@ export class NavbarComponent implements OnDestroy, OnInit {
     private router: Router
   ) {
     this.deviceType = pagepropsService.DeviceType;
+    this.disabledFunctions = appInitService.environment.app?.disabledFunctions ?? [];
     this.locales = appInitService.environment.i10n?.locales ?? ['en', 'de', 'fr'];
     this.minPhraseLength = appInitService.environment.app?.minPhraseLength ?? 3;
     this.promolink = appInitService.environment.app?.promotionLink ?? '';

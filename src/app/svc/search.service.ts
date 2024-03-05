@@ -2,7 +2,7 @@ import { HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { Response, RestService, SyshubCertStoreItem, SyshubIppDevice, SyshubRole, SyshubServerInformation, SyshubUserAccount } from 'syshub-rest-module';
+import { OAuthRestSettings, Response, RestService, SyshubCertStoreItem, SyshubIppDevice, SyshubRole, SyshubServerInformation, SyshubUserAccount } from 'syshub-rest-module';
 import { SearchConfig, SearchResultUuids } from '../types';
 import { AppInitService } from './app-init.service';
 import { CacheService } from './cache.service';
@@ -34,11 +34,21 @@ export class SearchService {
     let oldconfig = localStorage.getItem(appInitService.environment.storage?.searchconfigKey ?? 'findr-searchconfig');
     if (oldconfig != null) {
       let cfg: SearchConfig = <SearchConfig>JSON.parse(oldconfig);
+      if (Object.keys(cfg.topics).includes('system') == false) {
+        cfg.topics.system = {
+          certstore: false,
+          serverConfig: false,
+          serverInfo: false,
+          ippDevices: false,
+          users: false,
+          userRoles: false,
+        };
+      }
       cfg.phrase = '';
       this._searchConfig.next({ ...cfg });
     }
     this.searchConfig.subscribe((config) => localStorage.setItem(appInitService.environment.storage?.searchconfigKey ?? 'findr-searchconfig', JSON.stringify(config)));
-    this.missingScope = (appInitService.environment.api.syshub.basic?.enabled || false) === true ? false : (appInitService.environment.api.syshub.oauth?.scope !== 'private+public' && appInitService.environment.api.syshub.oauth?.scope !== 'public+private');
+    this.missingScope = Object.keys(appInitService.environment.api).includes('basic') === true ? false : ((<OAuthRestSettings>appInitService.environment.api).oauth.scope !== 'private+public' && (<OAuthRestSettings>appInitService.environment.api).oauth.scope !== 'public+private');
   }
 
   public getProgress(): number {
@@ -133,6 +143,7 @@ export class SearchService {
       return false;
     if (search.phrase == '' || search.phrase.trim().length < (this.appInitService.environment.app?.minPhraseLength ?? 3) || this._searchBusy.value == true)
       return false;
+    search = this.searchDisableMethods(search);
     this._searchBusy.next(true);
     this._searchProgress.next(0);
     search.token = this.cache.prepareSearch(search);
@@ -140,6 +151,31 @@ export class SearchService {
     this.router.navigate(['/search']);
     this.searchStep1(search);
     return true;
+  }
+
+  private searchDisableMethods(search: SearchConfig): SearchConfig {
+    if (!this.appInitService.environment.app?.disabledFunctions)
+      return search;
+    let tempcfg: SearchConfig = { ...search };
+    if (this.appInitService.environment.app.disabledFunctions.includes('config'))
+      tempcfg.topics.config = false;
+    if (this.appInitService.environment.app.disabledFunctions.includes('jobtypes'))
+      tempcfg.topics.jobtypes = false;
+    if (this.appInitService.environment.app.disabledFunctions.includes('parameterset'))
+      tempcfg.topics.parameterset = false;
+    if (this.appInitService.environment.app.disabledFunctions.includes('workflows'))
+      tempcfg.topics.workflows = false;
+    if (this.appInitService.environment.app.disabledFunctions.includes('certstore'))
+      tempcfg.topics.system.certstore = false;
+    if (this.appInitService.environment.app.disabledFunctions.includes('serverConfig'))
+      tempcfg.topics.system.serverConfig = false;
+    if (this.appInitService.environment.app.disabledFunctions.includes('serverInfo'))
+      tempcfg.topics.system.serverInfo = false;
+    if (this.appInitService.environment.app.disabledFunctions.includes('ippDevices'))
+      tempcfg.topics.system.ippDevices = false;
+    if (this.appInitService.environment.app.disabledFunctions.includes('users'))
+      tempcfg.topics.system.users = false;
+    return tempcfg;
   }
 
   private searchStep1(search: SearchConfig): void {
@@ -335,7 +371,7 @@ export class SearchService {
   }
 
   private searchstep2_MatchContent(search: SearchConfig, content: string): number {
-    const regex = new RegExp(search.phrase.toLocaleLowerCase(), 'gi');
+    const regex = new RegExp(search.phrase.toLocaleLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
     const matches = content.match(regex);
     return matches?.length || 0;
   }

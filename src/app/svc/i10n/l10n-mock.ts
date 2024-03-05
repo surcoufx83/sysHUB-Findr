@@ -20,7 +20,6 @@ export const MockL10n: L10nLocale = {
             resultView: 'mock-resultView',
             resultConfigView: 'mock-resultConfigView',
         },
-        configurationFileMissing: 'mock-configurationFileMissing',
     },
     common: {
         clipboard: {
@@ -48,10 +47,12 @@ export const MockL10n: L10nLocale = {
         welcomeSubtitleUser: 'mock-welcomeSubtitleUser',
         welcomeTitle: 'mock-welcomeTitle',
         disabledFindr: {
-            title: 'mock-title',
-            description: 'mock-description',
+            description: 'mock-disabledFindr-description',
             documentationLink: 'mock-documentationLink',
-        }
+            missingConfigFile: 'mock-missingConfigFile',
+            missingScope: 'mock-missingScope',
+            title: 'mock-disabledFindr-title',
+        },
     },
     login: {
         title: 'mock-title',
@@ -290,6 +291,7 @@ export const MockL10n: L10nLocale = {
             categoryFilter: 'mock-categoryFilter',
             categoryFilterNone: 'mock-categoryFilterNone',
             excludeBComments: 'mock-excludeBComments',
+            excludeBCommentsWorkflowHint: 'mock-excludeBCommentsWorkflowHint',
             includeUuids: 'mock-includeUuids',
             searchWorkflowContent: 'mock-searchWorkflowContent',
         },

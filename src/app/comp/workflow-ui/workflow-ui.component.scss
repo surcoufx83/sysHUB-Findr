@@ -1,0 +1,12 @@
+ul.custom-dropdown {
+    max-height: 460px;
+    overflow-y: auto;
+
+    &.dropdown-330 {
+        max-width: 330px;
+    }
+
+    &.dropdown-430 {
+        max-width: 430px;
+    }
+}

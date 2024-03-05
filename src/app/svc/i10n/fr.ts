@@ -20,7 +20,6 @@ export const L10nFr: L10nLocale = {
             resultView: 'Vue des résultats',
             resultConfigView: 'Résultat (Configuration)'
         },
-        configurationFileMissing: 'La configuration Findr n\'a pas pu être chargée. <a class="text-light" target="_blank" href="https://github.com/surcoufx83/sysHUB-Findr?tab=readme-ov-file#konfiguration-work-in-progress-see-3">Veuillez la configurer selon les instructions.</a>',
     },
     common: {
         clipboard: {
@@ -48,10 +47,12 @@ export const L10nFr: L10nLocale = {
         welcomeSubtitleUser: 'Bonjour [0], que souhaitez-vous trouver aujourd\'hui ?',
         welcomeTitle: 'sysHUBFindr',
         disabledFindr: {
+            description: 'Findr nécessite une configuration spécifique pour la recherche et l\'affichage des résultats.',
+            documentationLink: 'Voir Readme sur Github',
+            missingConfigFile: 'Le fichier de configuration n\'a pas été trouvé.',
+            missingScope: 'Le paramètre syshub.oauth.scope n\'est pas configuré correctement',
             title: 'Findr désactivé !',
-            description: 'Le Findr nécessite une configuration spécifique pour effectuer des recherches et afficher les résultats.',
-            documentationLink: 'Consultez le Readme sur Github, section Paramètres de configuration, Paramètre syshub.oauth.scope'
-        }
+        },
     },
     login: {
         title: 'Connexion',
@@ -324,11 +325,12 @@ export const L10nFr: L10nLocale = {
             phraseEmpty: 'Veuillez entrer un terme de recherche d\'au moins [0] caractères.'
         },
         filter: {
-            categoryFilter: 'Filtrer par Catégorie',
-            categoryFilterNone: 'Non Appliqué',
-            excludeBComments: 'Ignorer les Commentaires [B]',
-            includeUuids: 'Rechercher les UUIDs',
-            searchWorkflowContent: 'Inclure le Contenu du Workflow',
+            categoryFilter: 'Filtrer par catégorie',
+            categoryFilterNone: 'Aucun appliqué',
+            excludeBComments: 'Ignorer les commentaires [B]',
+            excludeBCommentsWorkflowHint: 'sauf pour le contenu du workflow',
+            includeUuids: 'Rechercher les UUID',
+            searchWorkflowContent: 'Inclure le contenu du workflow',
         },
         options: {
             enableCache: 'Utiliser le Cache du Navigateur',

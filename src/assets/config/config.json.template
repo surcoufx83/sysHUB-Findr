@@ -3,22 +3,20 @@
         "syshub": {
             "host": "/",
             "version": 3,
-            "basic": {
-                "enabled": false,
-                "username": "<basic user name>",
-                "password": "<basic password>",
-                "provider": "<basic api server name>"
-            },
             "oauth": {
                 "enabled": true,
                 "clientId": "<oauth provider>",
                 "clientSecret": "<oauth secret>",
                 "scope": "public+private"
+            },
+            "options": {
+                "autoLogoutOn401": true
             }
         }
     },
     "app": {
         "baseUrl": "/findr/",
+        "disabledFunctions": [],
         "promotionLink": "https://github.com/surcoufx83/sysHUB-Findr",
         "minPhraseLength": 3,
         "useCache": true,

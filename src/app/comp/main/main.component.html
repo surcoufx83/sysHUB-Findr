@@ -1,4 +1,7 @@
-@if (missingScope) {
+@if (missingConfig) {
+<app-config-missing-bar></app-config-missing-bar>
+}
+@else if (missingScope) {
 <app-scope-warning-bar></app-scope-warning-bar>
 }
 @else {

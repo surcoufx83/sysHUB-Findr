@@ -59,6 +59,7 @@ import { SearchService } from './svc/search.service';
 import { ToastsService } from './svc/toasts.service';
 import { ToastsComponent } from './svc/toasts/toasts.component';
 import { HighlightPipe } from './utils/highlight.pipe';
+import { ConfigMissingBarComponent } from './comp/main/config-missing-bar/config-missing-bar.component';
 
 export function initAppFactory(svc: AppInitService) {
   return () => svc.load();
@@ -109,6 +110,7 @@ export function initAppFactory(svc: AppInitService) {
     UserComponent,
     WorkflowsComponent,
     WorkflowUiComponent,
+    ConfigMissingBarComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -126,7 +128,7 @@ export function initAppFactory(svc: AppInitService) {
     { provide: APP_BASE_HREF, useValue: '/' },
     { provide: AppInitService, multi: false },
     { provide: APP_INITIALIZER, useFactory: initAppFactory, deps: [AppInitService], multi: true },
-    { provide: Settings, multi: false, useFactory: (initService: AppInitService) => initService.environment?.api.syshub, deps: [AppInitService] },
+    { provide: Settings, multi: false, useFactory: (initService: AppInitService) => new Settings(initService.environment?.api), deps: [AppInitService] },
     { provide: RestService, multi: false, deps: [Settings, HttpClient] },
     { provide: HTTP_INTERCEPTORS, multi: true, useClass: SyshubInterceptor, deps: [Settings, RestService] },
     { provide: L10nService, multi: false },

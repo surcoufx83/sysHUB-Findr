@@ -1,5 +1,4 @@
-@if (loaded && workflow && model && startpoints && workflowUuid && (sysHUB2022CompatibilityMode || (references &&
-versions))) {
+@if (loaded && workflow && model && startpoints && workflowUuid) {
 <article class="container-fluid">
     <section>
         <div class="d-flex align-items-center justify-content-between">
@@ -18,7 +17,7 @@ versions))) {
                             model.modelData.baseVersion != '0.0' ? model.modelData.baseVersion : '—']) }})
                         </span>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-end" style="width: 330px;">
+                    <ul class="dropdown-menu dropdown-menu-end custom-dropdown dropdown-330">
                         @for (versionitem of versions; track $index) {
                         <li class="dropdown-item text-wrap">
                             <strong class="mb-1">
@@ -59,7 +58,7 @@ versions))) {
                             referencesCount == 1 ? 1 : 2], [referencesCount]) }}
                         </span>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-end" style="width: 430px;">
+                    <ul class="dropdown-menu dropdown-menu-end custom-dropdown dropdown-430">
                         @for (refgroup of references; track $index) {
 
                         <li class="dropdown-item">

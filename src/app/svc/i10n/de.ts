@@ -20,7 +20,6 @@ export const L10nDe: L10nLocale = {
             resultView: 'Ergebnisansicht',
             resultConfigView: 'Ergebnis (Konfig)'
         },
-        configurationFileMissing: 'Die Findr-Konfiguration konnte nicht geladen werden. <a class="text-light" target="_blank" href="https://github.com/surcoufx83/sysHUB-Findr?tab=readme-ov-file#konfiguration-work-in-progress-see-3">Bitte gemäß der Anleitung konfigurieren.</a>',
     },
     common: {
         clipboard: {
@@ -48,9 +47,11 @@ export const L10nDe: L10nLocale = {
         welcomeSubtitleUser: 'Hallo [0], was möchtest du heute finden?',
         welcomeTitle: 'sysHUBFindr',
         disabledFindr: {
-            title: 'Findr deaktiviert!',
             description: 'Der Findr benötigt zur Suche und zur Ergebnisdarstellung eine bestimmte Konfiguration.',
-            documentationLink: 'Siehe Readme auf Github, Abschnitt Konfigurationsparameter, Parameter syshub.oauth.scope'
+            documentationLink: 'Siehe Readme auf Github',
+            missingConfigFile: 'Die Konfigurationsdatei wurde nicht gefunden.',
+            missingScope: 'Parameter syshub.oauth.scope ist nicht korrekt konfiguriert',
+            title: 'Findr deaktiviert!',
         }
     },
     login: {
@@ -329,6 +330,7 @@ export const L10nDe: L10nLocale = {
             categoryFilter: 'Filtern nach Kategorie',
             categoryFilterNone: 'Nicht angewendet',
             excludeBComments: '[B]-Kommentare ignorieren',
+            excludeBCommentsWorkflowHint: 'außer bei Workflowinhalten',
             includeUuids: 'UUID\'s durchsuchen',
             searchWorkflowContent: 'Inklusive Workflowinhalte',
         },

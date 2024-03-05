@@ -18,6 +18,7 @@ import { RestService, SyshubCategory } from 'syshub-rest-module';
 export class HomeComponent implements OnDestroy, OnInit {
 
   currentLocale: string;
+  disabledFunctions: ('config' | 'jobtypes' | 'parameterset' | 'workflows' | 'certstore' | 'serverConfig' | 'serverInfo' | 'ippDevices' | 'users')[] = [];
   enableCache: boolean = true;
   loggedin: boolean = false;
   minPhraseLength: number = 3;
@@ -56,6 +57,7 @@ export class HomeComponent implements OnDestroy, OnInit {
     private toastsService: ToastsService,
   ) {
     this.currentLocale = l10nService.lang.length > 2 ? l10nService.lang.substring(0, 2) : l10nService.lang;
+    this.disabledFunctions = appInitService.environment.app?.disabledFunctions ?? [];
     this.enableCache = appInitService.environment.app?.useCache ?? true;
     this.minPhraseLength = appInitService.environment.app?.minPhraseLength ?? 3;
   }
