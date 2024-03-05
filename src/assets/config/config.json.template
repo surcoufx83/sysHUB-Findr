@@ -8,6 +8,9 @@
                 "clientId": "<oauth provider>",
                 "clientSecret": "<oauth secret>",
                 "scope": "public+private"
+            },
+            "options": {
+                "autoLogoutOn401": true
             }
         }
     },
