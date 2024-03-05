@@ -17,7 +17,7 @@
                             model.modelData.baseVersion != '0.0' ? model.modelData.baseVersion : '—']) }})
                         </span>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-end" style="width: 330px;">
+                    <ul class="dropdown-menu dropdown-menu-end custom-dropdown dropdown-330">
                         @for (versionitem of versions; track $index) {
                         <li class="dropdown-item text-wrap">
                             <strong class="mb-1">
@@ -58,7 +58,7 @@
                             referencesCount == 1 ? 1 : 2], [referencesCount]) }}
                         </span>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-end" style="width: 430px;">
+                    <ul class="dropdown-menu dropdown-menu-end custom-dropdown dropdown-430">
                         @for (refgroup of references; track $index) {
 
                         <li class="dropdown-item">
