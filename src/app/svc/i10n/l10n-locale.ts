@@ -279,6 +279,7 @@ export type L10nLocale = {
             categoryFilter: string,
             categoryFilterNone: string,
             excludeBComments: string,
+            excludeBCommentsWorkflowHint: string,
             includeUuids: string,
             searchWorkflowContent: string
         },

@@ -330,6 +330,7 @@ export const L10nDe: L10nLocale = {
             categoryFilter: 'Filtern nach Kategorie',
             categoryFilterNone: 'Nicht angewendet',
             excludeBComments: '[B]-Kommentare ignorieren',
+            excludeBCommentsWorkflowHint: 'außer bei Workflowinhalten',
             includeUuids: 'UUID\'s durchsuchen',
             searchWorkflowContent: 'Inklusive Workflowinhalte',
         },

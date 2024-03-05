@@ -325,11 +325,12 @@ export const L10nFr: L10nLocale = {
             phraseEmpty: 'Veuillez entrer un terme de recherche d\'au moins [0] caractères.'
         },
         filter: {
-            categoryFilter: 'Filtrer par Catégorie',
-            categoryFilterNone: 'Non Appliqué',
-            excludeBComments: 'Ignorer les Commentaires [B]',
-            includeUuids: 'Rechercher les UUIDs',
-            searchWorkflowContent: 'Inclure le Contenu du Workflow',
+            categoryFilter: 'Filtrer par catégorie',
+            categoryFilterNone: 'Aucun appliqué',
+            excludeBComments: 'Ignorer les commentaires [B]',
+            excludeBCommentsWorkflowHint: 'sauf pour le contenu du workflow',
+            includeUuids: 'Rechercher les UUID',
+            searchWorkflowContent: 'Inclure le contenu du workflow',
         },
         options: {
             enableCache: 'Utiliser le Cache du Navigateur',

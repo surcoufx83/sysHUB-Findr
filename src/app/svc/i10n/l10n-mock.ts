@@ -291,6 +291,7 @@ export const MockL10n: L10nLocale = {
             categoryFilter: 'mock-categoryFilter',
             categoryFilterNone: 'mock-categoryFilterNone',
             excludeBComments: 'mock-excludeBComments',
+            excludeBCommentsWorkflowHint: 'mock-excludeBCommentsWorkflowHint',
             includeUuids: 'mock-includeUuids',
             searchWorkflowContent: 'mock-searchWorkflowContent',
         },
