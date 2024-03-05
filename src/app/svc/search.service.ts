@@ -371,7 +371,7 @@ export class SearchService {
   }
 
   private searchstep2_MatchContent(search: SearchConfig, content: string): number {
-    const regex = new RegExp(search.phrase.toLocaleLowerCase(), 'gi');
+    const regex = new RegExp(search.phrase.toLocaleLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
     const matches = content.match(regex);
     return matches?.length || 0;
   }

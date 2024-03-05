@@ -16,7 +16,7 @@ export class HighlightPipe implements PipeTransform {
       value = JSON.stringify(value);
 
     // Match in a case insensitive maneer
-    const re = new RegExp(args, 'gi');
+    const re = new RegExp(args.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
     const match = `${value}`.match(re);
 
     // If there's no match, just return the original value.
