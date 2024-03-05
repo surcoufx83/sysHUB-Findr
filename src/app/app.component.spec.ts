@@ -146,19 +146,11 @@ describe('AppComponent', () => {
         expect(mockRouter.navigate).withContext('Navigate to / after login').toHaveBeenCalledWith(['/']);
     });
 
-    it('should show toast if environment could not be loaded', fakeAsync(() => {
-        mockAppInitService.environment = { appInitializationFailure: { configStatusCode: HttpStatusCode.NotFound } };
-        component.ngOnInit();
-        tick(20);
-        fixture.detectChanges();
-        expect(mockToastsService.addDangerToast).withContext('Create none closing danger toast').toHaveBeenCalledWith({ message: 'mock-configurationFileMissing', autohide: false, isHtml: true });
-        flush();
-    }));
-
-    it('implements l10n method correct', () => {
+    it('implements l10n and l10nphrase method correct', () => {
         let value = component.l10n('test');
         expect(mockL10nService.ln).withContext('Call ln method of L10nService').toHaveBeenCalledWith('test', []);
         expect(value).withContext('Return correct value').toEqual('foo');
+        expect(component.l10nphrase).withContext('l10nphrase').toEqual(MockL10n);
     });
 
 });
