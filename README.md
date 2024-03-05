@@ -35,15 +35,24 @@ Die Konfiguration für ein Kundensystem erfolgt in der Datei `webapps\findr\asse
    2. In Zeile 5: `version` ändern in:
       - `2` = sysHUB 2022
       - `3` = sysHUB 2023
-   3. Ab Zeile 6: `basic` aktivieren und mit Zugangsdaten befüllen, sofern ein sysHUB API Server mit basic Authentifizierung verendet wird.
-   4. Ab Zeile 12: `oauth` aktivieren und mit Zugangsdaten befüllen, sofern ein sysHUB Authorisierungsserver verwendet wird.
-   5. `basic` und `oauth` dürfen nicht zusammen aktiv sein, entweder oder.
-   6. Zeile 22: `promotionLink` kann im Findr ausgeblendet werden, wenn der Link entfernt wird und nur `""` bleibt
+   3. Ab Zeile 6: `oauth` mit Zugangsdaten befüllen.
+   4. Falls statt OAuth Basic auth verwendet werden soll, muss die Konfig angepasst werden gem. [der Vorgaben des Konnektors](https://github.com/surcoufx83/syshub-rest-module/tree/main/projects/syshub-rest-module#configuration).
+   5. Zeile 19: `"disabledFunctions": [],`: Sollen nicht alle Suchfunktionen bereitstehen (z.B. nicht suchen in der server.properties), können die Themenbereiche kommasepariert eingetragen werden. Folgende Werte sind möglich:
+      - `"config"`
+      - `"jobtypes"`
+      - `"parameterset"`
+      - `"workflows"`
+      - `"certstore"`
+      - `"serverConfig"`
+      - `"serverInfo"`
+      - `"ippDevices"`
+      - `"users"`
+   6. Zeile 20: `promotionLink` kann im Findr ausgeblendet werden, wenn der Link entfernt wird und nur `""` bleibt
 
 ### Konfiguration im sysHUB
 
 1. Die `Findr_1.0.ppk` importieren.
-2. Je nach Bedarf den API Server oder Authorisierungsserver findr konfigurieren und entsprechend in der `config.json` anpassen. Nicht benötigtes kann deaktiviert werden.
+2. Je nach Bedarf den API Server oder Authorisierungsserver findr konfigurieren und entsprechend in der `config.json` anpassen. Nicht benötigtes kann deaktiviert werden. Passwörter dürfen geändert werden, müssen aber entsprechend auch in der Konfigurationsdatei angepasst werden.
 3. Den Ordner `webapps\findr` in das sysHUB Verzeichnis kopieren. Eine evtl. vorhandene findr-webapp vorher entfernen.
 4. Bei Neuinstallation den sysHUB neustarten.
 
