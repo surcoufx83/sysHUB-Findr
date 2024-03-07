@@ -245,7 +245,7 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
           let coords = this.getConnectorPosition(<HTMLImageElement>elementFrom, path.fromPort);
           this.connectorTitles.push({
             isErrorConnection: path.category == 'error',
-            x: path.category == 'error' ? coords.x + 22 : path.fromPort == 'l' ? coords.x - 16 : coords.x + 16,
+            x: path.category == 'error' ? coords.x + 38 : path.fromPort == 'l' ? coords.x - 12 : path.fromPort == 'b' ? coords.x + 24 : coords.x + 16,
             y: path.fromPort == 'b' ? coords.y : coords.y - 3,
             text: path.category == 'error' ? this.l10nphrase.workflowUi.errorConnector : path.description!
           });
