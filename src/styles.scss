@@ -253,9 +253,27 @@ body[data-bs-theme="dark"] {
     }
 
     .workflow-container {
-        background-color: #898989;
+        background-image: linear-gradient(#404040 1px, transparent 1px), linear-gradient(to right, #404040 1px, transparent 1px);
+        background-size: 20px 20px;
+        background-color: #212529;
 
-        svg.workflow {
+        >.element {
+
+            &.hoverable:hover {
+                border-color: #aa0000 !important;
+            }
+
+            &.annotation>.content {
+                background: rgba($color: #000000, $alpha: .6);
+                color: #dee2e6 !important;
+                margin: -4px;
+                padding: 4px;
+                width: calc(100% + 8px) !important;
+                height: calc(100% + 8px) !important;
+            }
+        }
+
+        /* svg.workflow {
             g.element-group rect.proc-box {
 
                 &.has-match {
@@ -277,7 +295,7 @@ body[data-bs-theme="dark"] {
             text.proc-description.connector-description.error {
                 fill: darken($primary, $amount: 15) !important;
             }
-        }
+        } */
     }
 
 }

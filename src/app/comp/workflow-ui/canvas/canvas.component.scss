@@ -1,12 +1,39 @@
 $primary: #E12327;
 
 .workflow-container {
+    background-image: linear-gradient(#aaaaaa 1px, transparent 1px), linear-gradient(to right, #aaaaaa 1px, transparent 1px);
+    background-size: 20px 20px;
     background-color: #efefef;
-    height: 3300px;
-    width: 3300px;
+    min-width: 100%;
+    min-height: 100vh;
+    box-sizing: border-box;
+
+    >.element {
+        padding: 4px;
+        border: 3px solid transparent;
+
+        &.hoverable:hover {
+            border: 3px solid red;
+        }
+
+        &.annotation {
+            border: 1px solid #000;
+
+            &.hoverable:hover {
+                margin: -1.5px;
+            }
+
+            >.content {
+                width: 100%;
+                height: 100%;
+                white-space: pre-wrap;
+            }
+        }
+    }
+
 }
 
-svg.workflow {
+/* svg.workflow {
 
     rect.annotation-box,
     text,
@@ -89,4 +116,4 @@ svg.workflow {
         font-size: 6pt;
         fill: rgba(0, 0, 0, .5);
     }
-}
+} */

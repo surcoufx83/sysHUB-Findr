@@ -23,6 +23,8 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input({ required: true }) highlightWorkflowRef!: string;
   @ViewChild('workflowSvgContainer') svgContainer!: ElementRef;
 
+  containerHeight: number = 100;
+  containerWidth: number = 100;
   onErrorHandlerNodes: string[] = []; // key of elements after on error connector
   breakpoints: SvgConnectorBreakpoint[] = [];
   connectorTitles: SvgConnectorText[] = [];
@@ -319,7 +321,7 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   render(): void {
-    if (this.svgContainer == undefined) {
+    /* if (this.svgContainer == undefined) {
       console.warn('WorkflowGui.render(): SVG Container #workflowSvgContainer not found in DOM. Waiting 50ms.');
       setTimeout(() => {
         this.render();
@@ -335,7 +337,25 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
       this.nodeUUids[element.uuid] = this.nodes.length;
       this.nodes.push(element);
     });
-    this.resizeBoundingBoxes();
+    this.resizeBoundingBoxes(); */
+
+    this.graphModel.linkDataArray.forEach((connector) => {
+      if (connector.category != undefined && connector.category == 'error')
+        this.onErrorHandlerNodes.push(connector.to);
+    })
+    console.log(this.graphModel.nodeDataArray)
+    this.graphModel.nodeDataArray.forEach((node) => {
+      const element = SvgElement.createElement(node, this.onErrorHandlerNodes.includes(node.key), this.searchService, this.searchResult, this.highlightWorkflowRef);
+      this.nodeUUids[element.uuid] = this.nodes.length;
+      this.nodes.push(element);
+      let right = element.x + element.width + 24;
+      let bottom = element.y + element.height + 24;
+      if (right > this.containerWidth)
+        this.containerWidth = right;
+      if (bottom > this.containerHeight)
+        this.containerHeight = bottom;
+    });
+    console.log(this.nodes)
   }
 
   private resizeTries: number = 0;
