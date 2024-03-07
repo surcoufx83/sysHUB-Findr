@@ -22,7 +22,6 @@ export type L10nLocale = {
             home: string,
             searchOngoing: string,
             resultView: string,
-            resultConfigView: string
         },
     },
     common: {

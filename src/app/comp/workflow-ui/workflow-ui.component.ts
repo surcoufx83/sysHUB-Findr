@@ -163,6 +163,7 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
       else {
         this.model = reply;
         this.ngOnInit_ReportProgress();
+        this.propsService.setPageTitle(this.l10n(this.l10nphrase.workflowUi.title, [this.workflow?.name]))
       }
     }));
 

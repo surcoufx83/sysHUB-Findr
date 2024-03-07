@@ -13,12 +13,11 @@ export const MockL10n: L10nLocale = {
         errorCommon: 'mock-errorCommon',
     },
     app: {
-        title: 'mock-title',
+        title: 'mock-Findr',
         titles: {
-            home: 'mock-home',
-            searchOngoing: 'mock-searchOngoing',
-            resultView: 'mock-resultView',
-            resultConfigView: 'mock-resultConfigView',
+            home: 'mock-sysHUB Findr',
+            searchOngoing: 'mock-Search ongoing...',
+            resultView: 'mock-Search "[0]"',
         },
     },
     common: {

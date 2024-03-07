@@ -17,8 +17,7 @@ export const L10nDe: L10nLocale = {
         titles: {
             home: 'sysHUB Findr',
             searchOngoing: 'Suche läuft...',
-            resultView: 'Ergebnisansicht',
-            resultConfigView: 'Ergebnis (Konfig)'
+            resultView: 'Suche "[0]"',
         },
     },
     common: {
