@@ -4,15 +4,17 @@
     @for (node of nodes; track $index) {
     @if(node.isAnnotation) {
     <div class="d-inline-block position-absolute rounded element hoverable annotation" [id]="'node-block-' + node.uuid"
-        [attr.data-uuid]="node.uuid"
+        [attr.data-uuid]="node.uuid" [attr.data-has-match]="node.hasMatch" [attr.data-highlight]="node.hasHighlight"
         [ngStyle]="{ width: node.width + 'px', height: node.height + 'px', left: node.x + 'px', top: node.y + 142 + 'px', background: node.annotationBgColor, color: node.annotationTextColor, 'z-index': node.z}">
         <div class="content">{{ node.annotationText }}</div>
     </div>
     }
     @else {
     <div class="d-inline-block position-absolute rounded element hoverable" [id]="'node-block-' + node.uuid"
-        [attr.data-uuid]="node.uuid"
-        [ngStyle]="{ width: node.width + 'px', 'min-height': node.height + 'px', left: node.x + 'px', top: node.y + 142 + 'px', 'z-index': node.z}">
+        [attr.data-uuid]="node.uuid" [attr.data-has-match]="node.hasMatch" [attr.data-highlight]="node.hasHighlight"
+        [ngStyle]="{ width: node.width + 'px', 'min-height': node.height + 'px', left: node.x + 'px', top: node.y + 142 + 'px', 'z-index': node.z}"
+        (click)="selectNode(node)" (mouseover)="hoverNode(node, node.x, node.y, node.width)"
+        (mouseout)="leaveNode(node)">
         @if (node.image != '') {
         <div class="d-flex flex-column">
             <img [src]="'assets/syshub/' + node.image + '.png'" class="mx-auto"
