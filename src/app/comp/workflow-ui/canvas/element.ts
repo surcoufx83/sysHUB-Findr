@@ -18,6 +18,7 @@ export class SvgElement implements SvgNode {
     imageheight: number = 0;
     imagewidth: number = 0;
     isAnnotation: boolean = false;
+    isDeprecated: boolean = false;
     modeldata!: GraphModelAnnotationObject | GraphModelCElementObject | GraphModelDecisionObject | GraphModelEndObject | GraphModelProcessObject | GraphModelStartObject | GraphModelWorkflowObject;
     title: string = '';
     uuid: string = '';
@@ -68,34 +69,7 @@ export class AnnotationElement extends SvgElement {
 
     constructor(graphNode: GraphModelAnnotationObject, searchService: SearchService, searchResult?: SearchResult) {
         super(graphNode);
-        let blankline = 0, blankblock = 0, cr = false;
         this.annotationText = graphNode.text ?? '';
-        /* graphNode.text?.split(/\r?\n/).forEach((line, i) => {
-            cr = true;
-            if (line.trim() == '')
-                blankline++;
-            else {
-                line.split(/\t| {4}/).forEach((part, j) => {
-                    if (part.trim() == '') {
-                        if (j == 0)
-                            blankline++;
-                        else
-                            blankblock++;
-                    }
-                    else {
-                        this.annotationText.push({
-                            text: part,
-                            x: cr ? 3 : undefined,
-                            dx: j == 0 ? undefined : 16 + (blankblock * 16),
-                            dy: i == 0 ? 0 : (j == 0 ? 15 : 0) + (blankline * 15)
-                        });
-                        blankblock = 0;
-                        blankline = 0;
-                        cr = false;
-                    }
-                });
-            }
-        }); */
         if (graphNode.size != undefined) {
             let size = graphNode.size.split(' ');
             if (size.length != 2)
@@ -164,6 +138,7 @@ export class DecisionElement extends SvgElement {
         this.imagewidth = 56;
         this.x -= this.width / 2;
         this.y -= this.height / 2;
+        this.isDeprecated = graphNode._maturity === 'DEPRECATED';
         this.hasMatch = searchResult ? searchService.match([
             this.title,
             this.description,
@@ -209,6 +184,7 @@ export class ProcessElement extends SvgElement {
         this.imagewidth = 56;
         this.x -= this.width / 2;
         this.y -= this.height / 2;
+        this.isDeprecated = graphNode._maturity === 'DEPRECATED';
         this.hasMatch = searchResult ? searchService.match([
             this.title,
             this.description,

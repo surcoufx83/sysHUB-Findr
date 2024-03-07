@@ -53,6 +53,10 @@ code {
     &.card-danger .card-header {
         --bs-bg-opacity: 1;
         background-color: rgba(var(--bs-danger-rgb), var(--bs-bg-opacity)) !important;
+
+        .text-danger-emphasis {
+            color: rgb(222, 226, 230) !important;
+        }
     }
 
     &.card-danger-subtle .card-header {
@@ -63,11 +67,16 @@ code {
     &.card-warning .card-header {
         --bs-bg-opacity: 1;
         background-color: rgba(var(--bs-warning-rgb), var(--bs-bg-opacity)) !important;
+        color: #000;
+
+        .text-danger-emphasis {
+            color: #000 !important;
+        }
     }
 
-    &.card-warning .card-header {
+    &.card-warning-subtle .card-header {
         --bs-bg-opacity: 1;
-        background-color: rgba(var(--bs-warning-rgb), var(--bs-bg-opacity)) !important;
+        background-color: var(--bs-warning-bg-subtle) !important;
     }
 
     &.card-success .card-header {
@@ -75,19 +84,24 @@ code {
         background-color: rgba(var(--bs-success-rgb), var(--bs-bg-opacity)) !important;
     }
 
-    &.card-success .card-header {
+    &.card-success-subtle .card-header {
         --bs-bg-opacity: 1;
-        background-color: rgba(var(--bs-success-rgb), var(--bs-bg-opacity)) !important;
+        background-color: var(--bs-success-bg-subtle) !important;
     }
 
     &.card-info .card-header {
         --bs-bg-opacity: 1;
         background-color: rgba(var(--bs-info-rgb), var(--bs-bg-opacity)) !important;
+        color: #000;
+
+        .text-danger-emphasis {
+            color: #000 !important;
+        }
     }
 
-    &.card-info .card-header {
+    &.card-info-subtle .card-header {
         --bs-bg-opacity: 1;
-        background-color: rgba(var(--bs-info-rgb), var(--bs-bg-opacity)) !important;
+        background-color: var(--bs-info-bg-subtle) !important;
     }
 
     &.card-secondary .card-header {
@@ -95,9 +109,9 @@ code {
         background-color: rgba(var(--bs-secondary-rgb), var(--bs-bg-opacity)) !important;
     }
 
-    &.card-secondary .card-header {
+    &.card-secondary-subtle .card-header {
         --bs-bg-opacity: 1;
-        background-color: rgba(var(--bs-secondary-rgb), var(--bs-bg-opacity)) !important;
+        background-color: var(--bs-secondary-bg-subtle) !important;
     }
 
     &.node-inspector {
@@ -270,6 +284,27 @@ body[data-bs-theme="dark"] {
                 padding: 4px;
                 width: calc(100% + 8px) !important;
                 height: calc(100% + 8px) !important;
+            }
+
+            img[data-is-deprecated="true"]::after {
+                content: '\f334';
+                font-family: bootstrap-icons;
+                font-weight: normal;
+                font-style: normal;
+                margin: 0px 0px 0px 10px;
+                text-decoration: none;
+            }
+
+        }
+
+        svg.nodes-container {
+            marker#arrow {
+                stroke: #dee2e6 !important;
+                fill: #dee2e6 !important;
+            }
+
+            path.connector-path:not(:hover) {
+                stroke: #dee2e6 !important;
             }
         }
 

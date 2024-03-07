@@ -345,7 +345,8 @@ export const MockL10n: L10nLocale = {
             subject: 'mock-subject',
         },
         process: {
-            subject: ['mock-subject0', 'mock-subject1'],
+            subject: ['mock-process', 'mock-loopProcess'],
+            deprecated: 'mock-deprecated',
         },
         shared: {
             agent: 'mock-agent',
