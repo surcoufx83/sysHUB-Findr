@@ -5,7 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0-beta.4]
+## 1.0.0-beta.5 (Unreleased)
+
+### Changed
+
+- The workflow presentation has changed to native Html as far as possible. Arrows remain svg elements.
+
+## 1.0.0-beta.4 2024-03-05
 
 ### Added
 
@@ -21,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 'Include workflow contents'-filter not applied (#29)
 - Description of 'Exlude [B]-comments' not clear (#29)
 
-## [1.0.0-beta.3]
+## 1.0.0-beta.3 2024-02-19
 
 ### Added
 
