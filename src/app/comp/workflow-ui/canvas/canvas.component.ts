@@ -32,8 +32,7 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   nodeUUids: { [key: string]: number } = {};
   nodesToggled: string[] = [];
   hoverpath?: number;
-  ruler: number[] = [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200];
-  svgCursor: Point = { x: 0, y: 0 };
+  private resizeTries: number = 0;
   subs: Subscription[] = [];
 
   constructor(private l10nService: L10nService,
@@ -327,16 +326,6 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     }))
   }
 
-  onMouseLeaveSvg(): void {
-    this.svgCursor = { x: 0, y: 0 };
-  }
-
-  onMouseMoveOverSvg(event: MouseEvent): void {
-    const x = event.clientX + (this.document.documentElement.scrollLeft);
-    const y = event.clientY + (this.document.documentElement.scrollTop) - (this.document.documentElement.clientTop);
-    this.svgCursor = { x: x, y: y - 132 };
-  }
-
   private renderPath(path: SvgPathPoint[]): string {
     let elements: string[] = [];
     path.forEach((element) => {
@@ -364,17 +353,6 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
       }, 50);
       return;
     }
-    /*
-    this.graphModel.linkDataArray.forEach((connector) => {
-      if (connector.category != undefined && connector.category == 'error')
-        this.onErrorHandlerNodes.push(connector.to);
-    })
-    this.graphModel.nodeDataArray.forEach((node) => {
-      const element = SvgElement.createElement(node, this.onErrorHandlerNodes.includes(node.key), this.searchService, this.searchResult, this.highlightWorkflowRef);
-      this.nodeUUids[element.uuid] = this.nodes.length;
-      this.nodes.push(element);
-    });
-    this.resizeBoundingBoxes(); */
 
     this.graphModel.linkDataArray.forEach((connector) => {
       if (connector.category != undefined && connector.category == 'error')
@@ -395,36 +373,6 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.drawPaths();
 
-  }
-
-  private resizeTries: number = 0;
-  private resizeBoundingBoxes(): void {
-    /* if (this.svgContainer == undefined) {
-      if (this.resizeTries < 10) {
-        setTimeout(() => { this.resizeBoundingBoxes() }, 100);
-        this.resizeTries++;
-      }
-      return;
-    }
-    const svg: HTMLElement = this.svgContainer.nativeElement;
-    const groups = svg.querySelectorAll('g.element-group');
-    if (groups.length != this.nodes.length) {
-      if (this.resizeTries < 10) {
-        setTimeout(() => { this.resizeBoundingBoxes() }, 100);
-        this.resizeTries++;
-      }
-      return;
-    }
-    groups.forEach((group) => {
-      const svggroup = <SVGGraphicsElement>group;
-      group.querySelectorAll('rect.resize-to-parent').forEach((element) => {
-        element.setAttribute('x', `${svggroup.getBBox().x - 4}`);
-        element.setAttribute('y', `${svggroup.getBBox().y - 4}`);
-        element.setAttribute('width', `${svggroup.getBBox().width + 8}`);
-        element.setAttribute('height', `${svggroup.getBBox().height + 8}`);
-      });
-    });
-    this.drawPaths(); */
   }
 
   hoverNode(node: SvgElement, x: number, y: number, w: number): void {
