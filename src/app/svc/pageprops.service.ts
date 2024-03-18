@@ -21,6 +21,7 @@ export class PagepropsService {
   public NodeInspectorItem = this.nodeInspectorItem$.asObservable();
   public NodesOpened = new Subject<NodeInspectorRequest>();
   public NodesClosed = new Subject<NodeInspectorRequest>();
+  public TraceNode = new Subject<SvgElement | undefined>();
 
   private _pagetitle: BehaviorSubject<string> = new BehaviorSubject<string>(this.i10nService.locale.app.titles.home);
   public pagetitle = this._pagetitle.asObservable();

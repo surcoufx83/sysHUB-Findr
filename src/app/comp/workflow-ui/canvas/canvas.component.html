@@ -12,6 +12,7 @@
     @else {
     <div class="d-inline-block position-absolute rounded element hoverable" [id]="'node-block-' + node.uuid"
         [attr.data-uuid]="node.uuid" [attr.data-has-match]="node.hasMatch" [attr.data-highlight]="node.hasHighlight"
+        [attr.data-trace-self]="node.tracing.traceSelf" [attr.data-trace-successor]="node.tracing.traceSuccessor"
         [ngStyle]="{ width: node.width + 'px', 'min-height': node.height + 'px', left: node.x + 'px', top: node.y + 142 + 'px', 'z-index': node.z}"
         (click)="selectNode(node)" (mouseover)="hoverNode(node, node.x, node.y, node.width)"
         (mouseout)="leaveNode(node)">
@@ -54,10 +55,15 @@
                 orient="auto-start-reverse" stroke="#E12327" fill="#E12327" stroke-width="1">
                 <path d="M 0 0 L 10 5 L 0 10 z" />
             </marker>
+            <marker id="arrowtrace" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="4" markerHeight="4"
+                orient="auto-start-reverse" stroke="#f36518" fill="#f36518" stroke-width="1">
+                <path d="M 0 0 L 10 5 L 0 10 z" />
+            </marker>
         </defs>
         @for (connection of graphModel.linkDataArray; track connection; let i = $index) {
         <path [id]="'path-' + i" [attr.i]="i" [ngClass]="[connection.category ?? 'common', 'connector-path']"
-            [attr.marker-end]="hoverpath == i ? 'url(#arrowred)' : 'url(#arrow)'" (mousemove)="hoverpath = i"
+            [attr.marker-end]="traceConnections.includes(i) ? 'url(#arrowtrace)' : hoverpath == i ? 'url(#arrowred)' : 'url(#arrow)'"
+            [attr.data-trace-path]="traceConnections.includes(i)" (mousemove)="hoverpath = i"
             (mouseleave)="hoverpath = undefined"></path>
         }
         @for (item of breakpoints; track $index) {
@@ -65,7 +71,7 @@
         </image>
         }
         @for (item of connectorTitles; track $index) {
-        <text [class]="['proc-description','connector-description', item.isErrorConnection ? 'error' : 'default']"
+        <text [class]="['proc-description', 'connector-description', item.isErrorConnection ? 'error' : 'default']"
             [attr.x]="item.x" [attr.y]="item.y" dominant-baseline="bottom" text-anchor="middle">{{ item.text
             }}</text>
         }

@@ -22,8 +22,13 @@ $primary: #E12327;
             background: rgba($color: #c1db16, $alpha: .1);
         }
 
+        &[data-trace-self="true"] {
+            border-color: $primary !important;
+            background: rgba($color: $primary, $alpha: .2) !important;
+        }
+
         &.hoverable:hover {
-            border: 3px solid red;
+            border: 3px solid $primary;
         }
 
         &.annotation {
@@ -62,6 +67,10 @@ svg.nodes-container {
 
         &:hover {
             stroke: $primary;
+        }
+
+        &[data-trace-path="true"] {
+            stroke: $primary !important;
         }
     }
 }

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 1.0.0-beta.5 (Unreleased)
 
+### Added
+
+- In the workflow presentation an additional hint is shown if a process or decission is marked as deprecated (#40)
+- The title of the browser tabs changes depending on the current view to make it easier working with multiple tabs / workflows (#38)
+- The workflow presentation allows to trace the path to an element. Therefore a new button has been implemented in decisions, processes, cElements and workflow calls. The selected node and all traces leading to it are highlighted in red (#42)
+
 ### Changed
 
 - The workflow presentation has changed to native Html as far as possible. Arrows remain svg elements.

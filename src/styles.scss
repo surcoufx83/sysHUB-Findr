@@ -303,34 +303,24 @@ body[data-bs-theme="dark"] {
                 fill: #dee2e6 !important;
             }
 
-            path.connector-path:not(:hover) {
-                stroke: #dee2e6 !important;
+            path.connector-path {
+                &[data-trace-path="false"] {
+                    &:not(:hover) {
+                        stroke: #dee2e6 !important;
+                    }
+                }
+
+                &[data-trace-path="true"] {
+                    stroke: $primary !important;
+                }
             }
+
+            text.connector-description {
+                fill: #dee2e6 !important;
+            }
+
         }
 
-        /* svg.workflow {
-            g.element-group rect.proc-box {
-
-                &.has-match {
-                    stroke: #16DB93;
-                    fill: rgba($color: #16DB93, $alpha: .1);
-                }
-
-                &.has-highlight {
-                    stroke: #c1db16;
-                    fill: rgba($color: #c1db16, $alpha: .1);
-                }
-
-                &:not(.has-match):not(.has-highlight) {
-                    fill: rgba($color: #898989, $alpha: .1) !important;
-                }
-
-            }
-
-            text.proc-description.connector-description.error {
-                fill: darken($primary, $amount: 15) !important;
-            }
-        } */
     }
 
 }

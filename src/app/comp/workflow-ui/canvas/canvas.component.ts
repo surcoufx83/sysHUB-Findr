@@ -35,6 +35,10 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   private resizeTries: number = 0;
   subs: Subscription[] = [];
 
+  traceConnections: number[] = [];
+  traceNodeUuid: string = '';
+  connectedNodes: { [key: string]: { incoming: number[], outgoing: number[] } } = {};
+
   constructor(private l10nService: L10nService,
     private searchService: SearchService,
     @Inject(DOCUMENT) private document: Document,
@@ -217,7 +221,6 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     const group = svg.querySelector('svg.nodes-container');
     if (group != null) {
-      console.warn(group.querySelectorAll('path'))
       this.graphModel.linkDataArray.forEach((path, i) => {
         let pathelement: SVGPathElement | null = group.querySelector(`path#path-${i}`);
 
@@ -323,7 +326,42 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
       let i = this.nodesToggled.indexOf((<SvgElement>node.node).modeldata.key);
       if (i > -1)
         this.nodesToggled.splice(i, 1);
+    }));
+    this.subs.push(this.propsService.TraceNode.subscribe((node) => {
+      this.trace(node);
     }))
+  }
+
+  trace(nodeToTrace: SvgElement | undefined): void {
+    if (this.traceNodeUuid != '') {
+      this.traceConnections = [];
+      this.nodes.forEach((node) => {
+        node.tracing = { traceSelf: false, traceSuccessor: false };
+      });
+    }
+    if (nodeToTrace == undefined)
+      return;
+    this.traceNodeUuid = nodeToTrace.uuid;
+    if (this.connectedNodes[nodeToTrace.uuid]) {
+      console.log(nodeToTrace);
+      console.log(this.connectedNodes[nodeToTrace.uuid]);
+      this.nodes[this.nodeUUids[nodeToTrace.uuid]].tracing.traceSelf = true;
+      this.nodes[this.nodeUUids[nodeToTrace.uuid]].tracing.traceSuccessor = false;
+      this.connectedNodes[nodeToTrace.uuid].incoming.forEach((i) => this.tracePath(i));
+    }
+  }
+
+  tracePath(i: number) {
+    if (!this.graphModel.linkDataArray[i] || this.traceConnections.includes(i))
+      return;
+    this.traceConnections.push(i);
+    if (this.connectedNodes[this.graphModel.linkDataArray[i].from]) {
+      console.log(i);
+      console.log(this.connectedNodes[this.graphModel.linkDataArray[i].from]);
+      this.nodes[this.nodeUUids[this.graphModel.linkDataArray[i].from]].tracing.traceSelf = false;
+      this.nodes[this.nodeUUids[this.graphModel.linkDataArray[i].from]].tracing.traceSuccessor = true;
+      this.connectedNodes[this.graphModel.linkDataArray[i].from].incoming.forEach((i) => this.tracePath(i));
+    }
   }
 
   private renderPath(path: SvgPathPoint[]): string {
@@ -354,9 +392,15 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
-    this.graphModel.linkDataArray.forEach((connector) => {
+    this.graphModel.linkDataArray.forEach((connector, i) => {
       if (connector.category != undefined && connector.category == 'error')
         this.onErrorHandlerNodes.push(connector.to);
+      if (this.connectedNodes[connector.from] == undefined)
+        this.connectedNodes[connector.from] = { incoming: [], outgoing: [] };
+      if (this.connectedNodes[connector.to] == undefined)
+        this.connectedNodes[connector.to] = { incoming: [], outgoing: [] };
+      this.connectedNodes[connector.from].outgoing.push(i);
+      this.connectedNodes[connector.to].incoming.push(i);
     });
 
     this.graphModel.nodeDataArray.forEach((node) => {
@@ -372,6 +416,10 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     this.drawPaths();
+
+    console.log(this.nodes)
+    console.log(this.graphModel.linkDataArray)
+    console.log(this.connectedNodes)
 
   }
 

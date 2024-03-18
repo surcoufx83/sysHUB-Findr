@@ -21,6 +21,7 @@ export class SvgElement implements SvgNode {
     isDeprecated: boolean = false;
     modeldata!: GraphModelAnnotationObject | GraphModelCElementObject | GraphModelDecisionObject | GraphModelEndObject | GraphModelProcessObject | GraphModelStartObject | GraphModelWorkflowObject;
     title: string = '';
+    tracing = { traceSelf: false, traceSuccessor: false, };
     uuid: string = '';
     z?: number = 0;
 
@@ -225,7 +226,6 @@ export class WorkflowElement extends SvgElement {
     constructor(graphNode: GraphModelWorkflowObject, onErrorConnected: boolean, searchService: SearchService, searchResult?: SearchResult, highlightWorkflowRef?: string) {
         super(graphNode);
         this.title = `${graphNode.refName}${graphNode.startPoint && graphNode.startPoint != 'Start' ? ':' + graphNode.startPoint : ''}${graphNode.agent ? '@' + graphNode.agent : ''}`;
-        console.log(graphNode)
         this.height = this.height === 0 ? (70 + (this.description.indexOf('+') == 0 ? 20 : 0)) : this.height;
         this.width = this.width === 0 ? 56 + Math.max(this.title.length, (this.description.indexOf('+') == 0 ? this.description.length : 0)) * 5.5 : this.width;
         this.image = `callworkflow${graphNode.isLoop ? '-loop' : graphNode.agent && !onErrorConnected ? '-agent' : ''}${onErrorConnected ? '-error' : ''}`;
@@ -263,6 +263,10 @@ export interface SvgNode {
     isAnnotation: boolean;
     modeldata: GraphModelAnnotationObject | GraphModelCElementObject | GraphModelDecisionObject | GraphModelEndObject | GraphModelProcessObject | GraphModelStartObject | GraphModelWorkflowObject;
     title: string;
+    tracing: {
+        traceSelf: boolean;
+        traceSuccessor: boolean;
+    };
     uuid: string;
 }
 
