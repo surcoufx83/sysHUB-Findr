@@ -1,102 +1,80 @@
-<div class="workflow-container">
-    <div class="overflow-visible " (mousemove)="onMouseMoveOverSvg($event)" (mouseleave)="onMouseLeaveSvg()">
-        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink"
-            xmlns:svgjs="http://svgjs.dev/svgjs" width="3300" height="3300" #workflowSvgContainer
-            class="absolute workflow">
-            <defs>
-                <pattern x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse" id="background-pattern">
-                    <rect width="10" height="10" fill="transparent" stroke="rgba(0, 0, 0, .1)"></rect>
-                </pattern>
-                <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4"
-                    orient="auto-start-reverse" stroke="#444" fill="#444" stroke-width="1">
-                    <path d="M 0 0 L 10 5 L 0 10 z" />
-                </marker>
-                <marker id="arrowred" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="3" markerHeight="3"
-                    orient="auto-start-reverse" stroke="red" fill="red" stroke-width="1">
-                    <path d="M 0 0 L 10 5 L 0 10 z" />
-                </marker>
-            </defs>
-            <rect width="100%" height="100%" fill="url(&quot;#background-pattern&quot;)"></rect>
-            @for (point of ruler; track $index) {
-            <g>
-                <text class="ruler" [attr.x]="point" y="8" dominant-baseline="bottom" text-anchor="middle"> {{ point }}
-                </text>
-                <text class="ruler" x="8" [attr.y]="point" dominant-baseline="bottom" text-anchor="middle"
-                    [attr.transform]="'rotate(-90 8,' + point + ')'"> {{ point }} </text>
-            </g>
-            }
-            @for (node of nodes; track $index) {
-            <g class="element-group" [id]="node.uuid" [ngStyle]="{'z-index': node.z}">
-                @if (node.image != '') {
-                <image [attr.width]="node.imagewidth" [attr.height]="node.imageheight"
-                    [attr.x]="node.x + (node.width / 2) - (node.imagewidth / 2)" [attr.y]="node.y + 2"
-                    [attr.xlink:href]="'assets/syshub/' + node.image + '.png'" />
-                }
-                @if(node.isAnnotation) {
-                <rect [attr.width]="node.width" [attr.height]="node.height" [attr.x]="node.x" [attr.y]="node.y" rx="1"
-                    ry="1" class="annotation-box resize-to-parent" [attr.fill]="node.annotationBgColor"></rect>
-                }
-                @if (!node.isAnnotation && node.title != '') {
-                <text class="proc-title" [attr.x]="node.x + (node.width / 2)" [attr.y]="node.y + node.imageheight + 16"
-                    text-anchor="middle">{{ node.title }}</text>
-                }
-                @if (!node.isAnnotation && node.description && node.description.indexOf('+') === 0) {
-                <text class="proc-description" [attr.x]="node.x + (node.width / 2)"
-                    [attr.y]="node.y + node.imageheight + 32" text-anchor="middle">{{
-                    node.description.substring(1).trim() }}</text>
-                }
-                @if(hasOwnProperty(node.modeldata, 'loopName')) {
-                <text class="proc-loop-name" [attr.x]="node.x - (node.width / 2) + 18" [attr.y]="node.y + 12"
-                    text-anchor="end" dominant-baseline="hanging">{{ $any(node.modeldata).loopName.trim() }}</text>
-                }
-                @if (node.isAnnotation && node.annotationText.length > 0) {
-                <text class="proc-title" [attr.width]="node.width > 0 ? node.width - 6 : undefined"
-                    [attr.height]="node.height > 0 ? node.height - 6 : undefined" [attr.x]="node.x + 3"
-                    [attr.y]="node.y + 16">
-                    @for(item of node.annotationText; track $index) {
-                    <tspan [attr.x]="item.x != undefined ? node.x + 3 + item.x : undefined" [attr.dx]="item.dx"
-                        [attr.dy]="item.dy" [attr.fill]="node.annotationTextColor">{{ item.text }}</tspan>
-                    }
-                </text>
-                }
-                <rect [attr.width]="node.width" [attr.height]="node.height" [attr.x]="node.x" [attr.y]="node.y" rx="5"
-                    ry="5"
-                    [ngClass]="{'proc-box': true, 'resize-to-parent': true, 'has-match': node.hasMatch, 'has-highlight': node.hasHighlight}"
-                    (click)="selectNode(node)" (mouseover)="hoverNode(node, node.x, node.y, node.width)"
-                    (mouseout)="leaveNode(node)">
-                </rect>
-            </g>
-            }
-            <g class="workflow-paths">
-                @for (connection of graphModel.linkDataArray; track connection; let i = $index) {
-                <path [attr.i]="i" [ngClass]="[connection.category ?? 'common']"
-                    [attr.marker-end]="hoverpath == i ? 'url(#arrowred)' : 'url(#arrow)'" (mousemove)="hoverpath = i"
-                    (mouseleave)="hoverpath = undefined"></path>
-                }
-            </g>
-            <g class="connector-notes">
-                @for (item of connectorTitles; track $index) {
-                <text
-                    [class]="['proc-description','connector-description', item.isErrorConnection ? 'error' : 'default']"
-                    [attr.x]="item.x" [attr.y]="item.y" dominant-baseline="bottom" text-anchor="middle">{{ item.text
-                    }}</text>
-                }
-            </g>
-            <g class="connector-breakpoints">
-                @for (item of breakpoints; track $index) {
-                <image [attr.x]="item.x" [attr.y]="item.y" width="18" height="18"
-                    href="/findr/assets/syshub/breakpoint.svg">
-                </image>
-                }
-            </g>
-            <g>
-                <rect width="3" height="8" [attr.x]="svgCursor.x - 1" y="0"
-                    [ngClass]="{'cursor': true, 'invisible': svgCursor.x < 1 || svgCursor.y < 1}"></rect>
-                <rect width="8" height="3" [attr.y]="svgCursor.y - 1" x="0"
-                    [ngClass]="{'cursor': true, 'invisible': svgCursor.x < 1 || svgCursor.y < 1}"></rect>
-                <text x="2" y="8" [ngClass]="{'ruler': true, 'invisible': svgCursor.x < 1 || svgCursor.y < 1}">{{
-                    svgCursor.x }}, {{ svgCursor.y }}</text>
-            </g>
-        </svg>
+<div #workflowContainer class="workflow-container"
+    [ngStyle]="{ width: containerWidth + 'px', height: containerHeight + 'px' }">
+
+    @for (node of nodes; track $index) {
+    @if(node.isAnnotation) {
+    <div class="d-inline-block position-absolute rounded element hoverable annotation" [id]="'node-block-' + node.uuid"
+        [attr.data-uuid]="node.uuid" [attr.data-has-match]="node.hasMatch" [attr.data-highlight]="node.hasHighlight"
+        [ngStyle]="{ width: node.width + 'px', height: node.height + 'px', left: node.x + 'px', top: node.y + 142 + 'px', background: node.annotationBgColor, color: node.annotationTextColor, 'z-index': node.z}">
+        <div class="content">{{ node.annotationText }}</div>
     </div>
+    }
+    @else {
+    <div class="d-inline-block position-absolute rounded element hoverable" [id]="'node-block-' + node.uuid"
+        [attr.data-uuid]="node.uuid" [attr.data-has-match]="node.hasMatch" [attr.data-highlight]="node.hasHighlight"
+        [attr.data-trace-self]="node.tracing.traceSelf" [attr.data-trace-successor]="node.tracing.traceSuccessor"
+        [ngStyle]="{ width: node.width + 'px', 'min-height': node.height + 'px', left: node.x + 'px', top: node.y + 142 + 'px', 'z-index': node.z}"
+        (click)="selectNode(node)" (mouseover)="hoverNode(node, node.x, node.y, node.width)"
+        (mouseout)="leaveNode(node)">
+        @if (node.image != '') {
+        <div class="d-flex flex-column">
+            <div class="node-image-container mx-auto position-relative mb-1"
+                [ngStyle]="{ width: node.imagewidth + 'px', height: node.imageheight + 'px'}"
+                [attr.data-is-deprecated]="node.isDeprecated">
+                <img class="node-image" [src]="'assets/syshub/' + node.image + '.png'"
+                    [ngStyle]="{ width: node.imagewidth + 'px', height: node.imageheight + 'px'}">
+            </div>
+            <p class="mx-auto fs-7 text-center mb-0 bg-opacity-75 bg-body px-1 rounded">{{ node.title }}</p>
+            @if (!node.isAnnotation && node.description && node.description.indexOf('+') === 0) {
+            <p class="mx-auto fs-7 text-center mb-0 fst-italic bg-opacity-75 bg-body px-1 rounded">{{
+                node.description.substring(1).trim() }}
+            </p>
+            }
+            @if(hasOwnProperty(node.modeldata, 'loopName')) {
+            <p class="position-absolute top-0 start-0 bg-opacity-75 bg-body px-1 rounded">{{
+                $any(node.modeldata).loopName.trim() }}
+            </p>
+            }
+        </div>
+        }
+    </div>
+    }
+    }
+
+    <svg version="1.1" class="nodes-container position-absolute"
+        [ngStyle]="{ top: '0', left: '0', width: containerWidth + 'px', height: containerHeight + 'px' }"
+        [attr.width]="containerWidth" [attr.height]="containerHeight"
+        [attr.viewBox]="'0 0 ' + containerWidth + ' ' + containerHeight" xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs">
+        <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="4" markerHeight="4"
+                orient="auto-start-reverse" stroke="#444" fill="#444" stroke-width="1">
+                <path d="M 0 0 L 10 5 L 0 10 z" />
+            </marker>
+            <marker id="arrowred" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="4" markerHeight="4"
+                orient="auto-start-reverse" stroke="#E12327" fill="#E12327" stroke-width="1">
+                <path d="M 0 0 L 10 5 L 0 10 z" />
+            </marker>
+            <marker id="arrowtrace" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="4" markerHeight="4"
+                orient="auto-start-reverse" stroke="#f36518" fill="#f36518" stroke-width="1">
+                <path d="M 0 0 L 10 5 L 0 10 z" />
+            </marker>
+        </defs>
+        @for (connection of graphModel.linkDataArray; track connection; let i = $index) {
+        <path [id]="'path-' + i" [attr.i]="i" [ngClass]="[connection.category ?? 'common', 'connector-path']"
+            [attr.marker-end]="traceConnections.includes(i) ? 'url(#arrowtrace)' : hoverpath == i ? 'url(#arrowred)' : 'url(#arrow)'"
+            [attr.data-trace-path]="traceConnections.includes(i)" (mousemove)="hoverpath = i"
+            (mouseleave)="hoverpath = undefined"></path>
+        }
+        @for (item of breakpoints; track $index) {
+        <image [attr.x]="item.x" [attr.y]="item.y" width="18" height="18" href="/findr/assets/syshub/breakpoint.svg">
+        </image>
+        }
+        @for (item of connectorTitles; track $index) {
+        <text [class]="['proc-description', 'connector-description', item.isErrorConnection ? 'error' : 'default']"
+            [attr.x]="item.x" [attr.y]="item.y" dominant-baseline="bottom" text-anchor="middle">{{ item.text
+            }}</text>
+        }
+    </svg>
+
 </div>

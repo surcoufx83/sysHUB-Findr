@@ -21,8 +21,10 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input({ required: true }) graphModel!: SyshubWorkflowModel;
   @Input({ required: true }) searchResult?: SearchResult;
   @Input({ required: true }) highlightWorkflowRef!: string;
-  @ViewChild('workflowSvgContainer') svgContainer!: ElementRef;
+  @ViewChild('workflowContainer') workflowContainer!: ElementRef;
 
+  containerHeight: number = 100;
+  containerWidth: number = 100;
   onErrorHandlerNodes: string[] = []; // key of elements after on error connector
   breakpoints: SvgConnectorBreakpoint[] = [];
   connectorTitles: SvgConnectorText[] = [];
@@ -30,16 +32,19 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   nodeUUids: { [key: string]: number } = {};
   nodesToggled: string[] = [];
   hoverpath?: number;
-  ruler: number[] = [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200];
-  svgCursor: Point = { x: 0, y: 0 };
+  private resizeTries: number = 0;
   subs: Subscription[] = [];
+
+  traceConnections: number[] = [];
+  traceNodeUuid: string = '';
+  connectedNodes: { [key: string]: { incoming: number[], outgoing: number[] } } = {};
 
   constructor(private l10nService: L10nService,
     private searchService: SearchService,
     @Inject(DOCUMENT) private document: Document,
     private propsService: PagepropsService,) { }
 
-  private calculateCubicPath(path: SvgPathPoint[], pointFrom: Point, portFrom: string, pointTo: Point, elementTo: Element): void {
+  private calculateCubicPath(path: SvgPathPoint[], pointFrom: Point, portFrom: string, pointTo: Point, elementTo: HTMLImageElement): void {
     let intersections: Point[] = [];
     switch (portFrom) {
       case 'b':
@@ -63,7 +68,7 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  private calculateCubicPathFromBottom(pointFrom: Point, pointTo: Point, elementTo: Element): Point[] {
+  private calculateCubicPathFromBottom(pointFrom: Point, pointTo: Point, elementTo: HTMLImageElement): Point[] {
     let distx = pointTo.x - pointFrom.x, disty = pointTo.y - pointFrom.y;
     let intersections: Point[] = [];
     if (disty >= 12) {
@@ -90,7 +95,7 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     return intersections;
   }
 
-  private calculateCubicPathFromLeft(pointFrom: Point, pointTo: Point, elementTo: Element): Point[] {
+  private calculateCubicPathFromLeft(pointFrom: Point, pointTo: Point, elementTo: HTMLImageElement): Point[] {
     let distx = pointFrom.x - pointTo.x, disty = pointTo.y - pointFrom.y;
     let targetleft = this.getConnectorPosition(elementTo, 'l').x, targetright = this.getConnectorPosition(elementTo, 'r').x;
     let intersections: Point[] = [];
@@ -122,7 +127,7 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     return intersections;
   }
 
-  private calculateCubicPathFromRight(pointFrom: Point, pointTo: Point, elementTo: Element): Point[] {
+  private calculateCubicPathFromRight(pointFrom: Point, pointTo: Point, elementTo: HTMLImageElement): Point[] {
     let distx = pointTo.x - pointFrom.x, disty = pointTo.y - pointFrom.y;
     let targetleft = this.getConnectorPosition(elementTo, 'l').x, targetright = this.getConnectorPosition(elementTo, 'r').x;
     let intersections: Point[] = [];
@@ -175,7 +180,7 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  private calculatePath(elementFrom: Element, portFrom: string, elementTo: Element, portTo: string): string {
+  private calculatePath(elementFrom: HTMLImageElement, portFrom: string, elementTo: HTMLImageElement, portTo: string): string {
     let coordsA = this.getConnectorPosition(elementFrom, portFrom);
     let coordsB = this.getConnectorPosition(elementTo, portTo);
     let distx = coordsB.x - coordsA.x, disty = coordsB.y - coordsA.y;
@@ -198,47 +203,81 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private drawPaths(): void {
-    const svg: HTMLElement = this.svgContainer.nativeElement;
-    const group = svg.querySelector('g.workflow-paths');
+    if (this.workflowContainer == undefined) {
+      if (this.resizeTries < 10) {
+        setTimeout(() => { this.drawPaths() }, 100);
+        this.resizeTries++;
+      }
+      return;
+    }
+    const svg: HTMLElement = this.workflowContainer.nativeElement;
+    const groups = svg.querySelectorAll('div.element');
+    if (groups.length != this.nodes.length) {
+      if (this.resizeTries < 10) {
+        setTimeout(() => { this.drawPaths() }, 100);
+        this.resizeTries++;
+      }
+      return;
+    }
+    const group = svg.querySelector('svg.nodes-container');
     if (group != null) {
-      group.querySelectorAll('path').forEach((pathelement) => {
-        const i = +pathelement.getAttribute('i')!;
-        const path = this.graphModel.linkDataArray[i];
-        const elementFrom = svg.querySelector(`g.element-group[id="${path.from}"] > image`);
-        const elementTo = svg.querySelector(`g.element-group[id="${path.to}"] > image`);
-        if (!elementFrom)
+      this.graphModel.linkDataArray.forEach((path, i) => {
+        let pathelement: SVGPathElement | null = group.querySelector(`path#path-${i}`);
+
+        if (pathelement == null) {
+          console.warn('WorkflowGui.drawPaths(): path element not found in DOM', path);
+          return;
+        }
+
+        const elementFrom = svg.querySelector(`div.element[data-uuid="${path.from}"] img.node-image`);
+        const elementTo = svg.querySelector(`div.element[data-uuid="${path.to}"] img.node-image`);
+
+        if (!elementFrom) {
           console.warn('WorkflowGui.drawPaths(): elementFrom not found in svg DOM', path);
-        else if (!elementTo)
+          return;
+        }
+        else if (!elementTo) {
           console.warn('WorkflowGui.drawPaths(): elementTo not found in svg DOM', path);
-        else {
-          let pathexpr = this.calculatePath(elementFrom, path.fromPort, elementTo, path.toPort);
-          pathelement.setAttribute('d', pathexpr);
-          if (path.category == 'error' || (path.description)) {
-            let coords = this.getConnectorPosition(elementFrom, path.fromPort);
-            this.connectorTitles.push({
-              isErrorConnection: path.category == 'error',
-              x: path.category == 'error' ? coords.x + 22 : path.fromPort == 'l' ? coords.x - 16 : coords.x + 16,
-              y: path.fromPort == 'b' ? coords.y : coords.y - 3,
-              text: path.category == 'error' ? this.l10nphrase.workflowUi.errorConnector : path.description!
-            });
-          }
-          if (path.breakpoint === true) {
-            let coords = this.getConnectorPosition(elementTo, path.toPort);
-            this.breakpoints.push({ x: coords.x - 9, y: coords.y - 28 })
-          }
+          return;
+        }
+
+        let pathexpr = this.calculatePath(<HTMLImageElement>elementFrom, path.fromPort, <HTMLImageElement>elementTo, path.toPort);
+
+        pathelement.setAttribute('d', pathexpr);
+        if (path.category == 'error' || (path.description)) {
+          let coords = this.getConnectorPosition(<HTMLImageElement>elementFrom, path.fromPort);
+          this.connectorTitles.push({
+            isErrorConnection: path.category == 'error',
+            x: path.category == 'error' ? coords.x + 38 : path.fromPort == 'l' ? coords.x - 12 : path.fromPort == 'b' ? coords.x + 24 : coords.x + 16,
+            y: path.fromPort == 'b' ? coords.y : coords.y - 3,
+            text: path.category == 'error' ? this.l10nphrase.workflowUi.errorConnector : path.description!
+          });
+        }
+        if (path.breakpoint === true) {
+          let coords = this.getConnectorPosition(<HTMLImageElement>elementTo, path.toPort);
+          this.breakpoints.push({ x: coords.x - 9, y: coords.y - 28 })
         }
       });
     }
   }
 
-  private getConnectorPosition(element: Element, port: string): Point {
-    const bbox = (<SVGGraphicsElement>element).getBBox();
-    let t = bbox.y - 3,
-      l = bbox.x,
-      r = bbox.x + bbox.width,
-      b = bbox.y + bbox.height,
-      vc = Math.round(bbox.y + (bbox.height / 2)),
-      hc = Math.round(bbox.x + (bbox.width / 2));
+  private getConnectorPosition(element: HTMLImageElement, port: string): Point {
+
+    const parentStyle = window.getComputedStyle(element.parentElement!.parentElement!.parentElement!);
+    const parentCenter = parseInt(parentStyle.left, 10) + parseInt(parentStyle.width, 10) / 2;
+    const parentTop = parseInt(parentStyle.top, 10) + 7; // include border spacing
+
+    const elementStyle = window.getComputedStyle(element);
+    const imgWidth = parseInt(elementStyle.width, 10);
+    const imgHeight = parseInt(elementStyle.height, 10);
+
+    const l = parentCenter - imgWidth / 2,
+      t = parentTop,
+      r = parentCenter + imgWidth / 2,
+      b = t + imgHeight,
+      vc = t + (imgHeight / 2),
+      hc = l + (imgWidth / 2);
+
     switch (port) {
       case 't':
         return { x: hc, y: t };
@@ -251,6 +290,7 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     console.warn('WorkflowGui.drawPathsGetConnectorPosition(): invalid port requested', port);
     return { x: 0, y: 0 };
+
   }
 
   hasOwnProperty(obj: any, propname: string): boolean {
@@ -286,17 +326,42 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
       let i = this.nodesToggled.indexOf((<SvgElement>node.node).modeldata.key);
       if (i > -1)
         this.nodesToggled.splice(i, 1);
+    }));
+    this.subs.push(this.propsService.TraceNode.subscribe((node) => {
+      this.trace(node);
     }))
   }
 
-  onMouseLeaveSvg(): void {
-    this.svgCursor = { x: 0, y: 0 };
+  trace(nodeToTrace: SvgElement | undefined): void {
+    if (this.traceNodeUuid != '') {
+      this.traceConnections = [];
+      this.nodes.forEach((node) => {
+        node.tracing = { traceSelf: false, traceSuccessor: false };
+      });
+    }
+    if (nodeToTrace == undefined)
+      return;
+    this.traceNodeUuid = nodeToTrace.uuid;
+    if (this.connectedNodes[nodeToTrace.uuid]) {
+      console.log(nodeToTrace);
+      console.log(this.connectedNodes[nodeToTrace.uuid]);
+      this.nodes[this.nodeUUids[nodeToTrace.uuid]].tracing.traceSelf = true;
+      this.nodes[this.nodeUUids[nodeToTrace.uuid]].tracing.traceSuccessor = false;
+      this.connectedNodes[nodeToTrace.uuid].incoming.forEach((i) => this.tracePath(i));
+    }
   }
 
-  onMouseMoveOverSvg(event: MouseEvent): void {
-    const x = event.clientX + (this.document.documentElement.scrollLeft);
-    const y = event.clientY + (this.document.documentElement.scrollTop) - (this.document.documentElement.clientTop);
-    this.svgCursor = { x: x, y: y - 132 };
+  tracePath(i: number) {
+    if (!this.graphModel.linkDataArray[i] || this.traceConnections.includes(i))
+      return;
+    this.traceConnections.push(i);
+    if (this.connectedNodes[this.graphModel.linkDataArray[i].from]) {
+      console.log(i);
+      console.log(this.connectedNodes[this.graphModel.linkDataArray[i].from]);
+      this.nodes[this.nodeUUids[this.graphModel.linkDataArray[i].from]].tracing.traceSelf = false;
+      this.nodes[this.nodeUUids[this.graphModel.linkDataArray[i].from]].tracing.traceSuccessor = true;
+      this.connectedNodes[this.graphModel.linkDataArray[i].from].incoming.forEach((i) => this.tracePath(i));
+    }
   }
 
   private renderPath(path: SvgPathPoint[]): string {
@@ -319,53 +384,43 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   render(): void {
-    if (this.svgContainer == undefined) {
+    if (this.workflowContainer == undefined) {
       console.warn('WorkflowGui.render(): SVG Container #workflowSvgContainer not found in DOM. Waiting 50ms.');
       setTimeout(() => {
         this.render();
       }, 50);
       return;
     }
-    this.graphModel.linkDataArray.forEach((connector) => {
+
+    this.graphModel.linkDataArray.forEach((connector, i) => {
       if (connector.category != undefined && connector.category == 'error')
         this.onErrorHandlerNodes.push(connector.to);
-    })
+      if (this.connectedNodes[connector.from] == undefined)
+        this.connectedNodes[connector.from] = { incoming: [], outgoing: [] };
+      if (this.connectedNodes[connector.to] == undefined)
+        this.connectedNodes[connector.to] = { incoming: [], outgoing: [] };
+      this.connectedNodes[connector.from].outgoing.push(i);
+      this.connectedNodes[connector.to].incoming.push(i);
+    });
+
     this.graphModel.nodeDataArray.forEach((node) => {
       const element = SvgElement.createElement(node, this.onErrorHandlerNodes.includes(node.key), this.searchService, this.searchResult, this.highlightWorkflowRef);
       this.nodeUUids[element.uuid] = this.nodes.length;
       this.nodes.push(element);
+      let right = element.x + element.width + 24;
+      let bottom = element.y + element.height + 24;
+      if (right > this.containerWidth)
+        this.containerWidth = right;
+      if (bottom > this.containerHeight)
+        this.containerHeight = bottom;
     });
-    this.resizeBoundingBoxes();
-  }
 
-  private resizeTries: number = 0;
-  private resizeBoundingBoxes(): void {
-    if (this.svgContainer == undefined) {
-      if (this.resizeTries < 10) {
-        setTimeout(() => { this.resizeBoundingBoxes() }, 100);
-        this.resizeTries++;
-      }
-      return;
-    }
-    const svg: HTMLElement = this.svgContainer.nativeElement;
-    const groups = svg.querySelectorAll('g.element-group');
-    if (groups.length != this.nodes.length) {
-      if (this.resizeTries < 10) {
-        setTimeout(() => { this.resizeBoundingBoxes() }, 100);
-        this.resizeTries++;
-      }
-      return;
-    }
-    groups.forEach((group) => {
-      const svggroup = <SVGGraphicsElement>group;
-      group.querySelectorAll('rect.resize-to-parent').forEach((element) => {
-        element.setAttribute('x', `${svggroup.getBBox().x - 4}`);
-        element.setAttribute('y', `${svggroup.getBBox().y - 4}`);
-        element.setAttribute('width', `${svggroup.getBBox().width + 8}`);
-        element.setAttribute('height', `${svggroup.getBBox().height + 8}`);
-      });
-    });
     this.drawPaths();
+
+    console.log(this.nodes)
+    console.log(this.graphModel.linkDataArray)
+    console.log(this.connectedNodes)
+
   }
 
   hoverNode(node: SvgElement, x: number, y: number, w: number): void {

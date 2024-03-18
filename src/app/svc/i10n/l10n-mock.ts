@@ -13,12 +13,11 @@ export const MockL10n: L10nLocale = {
         errorCommon: 'mock-errorCommon',
     },
     app: {
-        title: 'mock-title',
+        title: 'mock-Findr',
         titles: {
-            home: 'mock-home',
-            searchOngoing: 'mock-searchOngoing',
-            resultView: 'mock-resultView',
-            resultConfigView: 'mock-resultConfigView',
+            home: 'mock-sysHUB Findr',
+            searchOngoing: 'mock-Search ongoing...',
+            resultView: 'mock-Search "[0]"',
         },
     },
     common: {
@@ -345,7 +344,8 @@ export const MockL10n: L10nLocale = {
             subject: 'mock-subject',
         },
         process: {
-            subject: ['mock-subject0', 'mock-subject1'],
+            subject: ['mock-process', 'mock-loopProcess'],
+            deprecated: 'mock-deprecated',
         },
         shared: {
             agent: 'mock-agent',

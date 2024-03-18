@@ -1,8 +1,8 @@
 @if (loaded && workflow && model && startpoints && workflowUuid) {
 <article class="container-fluid">
-    <section>
+    <section class="mb-3">
         <div class="d-flex align-items-center justify-content-between">
-            <h1>{{ l10n(l10nphrase.workflowUi.title, [workflow.name]) }}</h1>
+            <h1 class="mb-0">{{ l10n(l10nphrase.workflowUi.title, [workflow.name]) }}</h1>
             <div class="d-flex align-items-center">
                 @if (versions && versions.length > 0) {
                 <div class="dropdown">
@@ -155,7 +155,7 @@
             </div>
         </div>
     </section>
-    <div style="margin-left: -24px;">
+    <div style="margin-left: -24px; margin-right: -24px; margin-bottom: -48px;">
         <app-workflow-ui-canvas [graphModel]="model" [searchResult]="searchResult" [workflow]="workflow"
             [highlightWorkflowRef]="highlightWorkflowRef"></app-workflow-ui-canvas>
     </div>

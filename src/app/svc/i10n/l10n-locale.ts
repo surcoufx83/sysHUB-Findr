@@ -22,7 +22,6 @@ export type L10nLocale = {
             home: string,
             searchOngoing: string,
             resultView: string,
-            resultConfigView: string
         },
     },
     common: {
@@ -328,6 +327,7 @@ export type L10nLocale = {
         },
         process: {
             subject: string[],
+            deprecated: string,
         },
         shared: {
             agent: string,

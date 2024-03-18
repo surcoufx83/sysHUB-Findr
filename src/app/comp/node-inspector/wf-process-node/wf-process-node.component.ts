@@ -22,6 +22,7 @@ export class NodeInspectorWfProcessNodeComponent implements OnDestroy, OnInit {
 
   parameters: [string, string][] = [];
   parameterset?: SyshubPSetItem;
+  isTracingMe: boolean = false;
   moveNodeNextTo: { [key: string]: HTMLElement } = {};
   subs: Subscription[] = [];
 
@@ -70,6 +71,9 @@ export class NodeInspectorWfProcessNodeComponent implements OnDestroy, OnInit {
         }
       }
     }));
+    this.subs.push(this.propsService.TraceNode.subscribe((node) => {
+      this.isTracingMe = node?.uuid === this.nodeItem.uuid;
+    }));
   }
 
   selectNode(node: SyshubPSetItem, event: MouseEvent): void {
@@ -78,6 +82,10 @@ export class NodeInspectorWfProcessNodeComponent implements OnDestroy, OnInit {
     if (target) {
       this.moveNodeNextTo[node.uuid] = target;
     }
+  }
+
+  traceMe(): void {
+    this.propsService.TraceNode.next(this.isTracingMe ? undefined : this.nodeItem);
   }
 
 }

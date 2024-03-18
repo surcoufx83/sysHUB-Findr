@@ -16,9 +16,8 @@ export const L10nEn: L10nLocale = {
         title: 'Findr',
         titles: {
             home: 'sysHUB Findr',
-            searchOngoing: 'Search in progress...',
-            resultView: 'Result View',
-            resultConfigView: 'Result (Config)'
+            searchOngoing: 'Search ongoing...',
+            resultView: 'Search "[0]"',
         },
     },
     common: {
@@ -386,6 +385,7 @@ export const L10nEn: L10nLocale = {
         },
         process: {
             subject: ['Process', 'Loop Process'],
+            deprecated: 'This process is marked as deprecated and should no longer be used.',
         },
         shared: {
             agent: 'Agent',

@@ -10,7 +10,7 @@ export class SvgElement implements SvgNode {
     y: number = 0;
     annotationBgColor: string = '';
     annotationTextColor: string = '';
-    annotationText: SvgTSpan[] = [];
+    annotationText: string = '';
     description: string = '';
     hasHighlight: boolean = false;
     hasMatch: boolean = false;
@@ -18,8 +18,10 @@ export class SvgElement implements SvgNode {
     imageheight: number = 0;
     imagewidth: number = 0;
     isAnnotation: boolean = false;
+    isDeprecated: boolean = false;
     modeldata!: GraphModelAnnotationObject | GraphModelCElementObject | GraphModelDecisionObject | GraphModelEndObject | GraphModelProcessObject | GraphModelStartObject | GraphModelWorkflowObject;
     title: string = '';
+    tracing = { traceSelf: false, traceSuccessor: false, };
     uuid: string = '';
     z?: number = 0;
 
@@ -37,9 +39,10 @@ export class SvgElement implements SvgNode {
         }
         this.uuid = graphNode.key;
         this.modeldata = graphNode;
-        if (Object.getOwnPropertyNames(graphNode).includes('zOrder')) {
-            this.z = (<GraphModelCElementObject | GraphModelDecisionObject | GraphModelProcessObject | GraphModelWorkflowObject>graphNode).zOrder;
-        }
+        if (Object.getOwnPropertyNames(graphNode).includes('zOrder'))
+            this.z = (<GraphModelCElementObject | GraphModelDecisionObject | GraphModelProcessObject | GraphModelWorkflowObject>graphNode).zOrder + 1;
+        else if (graphNode.category != 'annotation')
+            this.z = 1;
     }
 
     public static createElement(graphNode: GraphModelAnnotationObject | GraphModelCElementObject | GraphModelDecisionObject | GraphModelEndObject | GraphModelProcessObject | GraphModelStartObject | GraphModelWorkflowObject, onErrorConnected: boolean, searchService: SearchService, searchResult?: SearchResult, highlightWorkflowRef?: string): SvgElement {
@@ -67,33 +70,7 @@ export class AnnotationElement extends SvgElement {
 
     constructor(graphNode: GraphModelAnnotationObject, searchService: SearchService, searchResult?: SearchResult) {
         super(graphNode);
-        let blankline = 0, blankblock = 0, cr = false;
-        graphNode.text?.split(/\r?\n/).forEach((line, i) => {
-            cr = true;
-            if (line.trim() == '')
-                blankline++;
-            else {
-                line.split(/\t| {4}/).forEach((part, j) => {
-                    if (part.trim() == '') {
-                        if (j == 0)
-                            blankline++;
-                        else
-                            blankblock++;
-                    }
-                    else {
-                        this.annotationText.push({
-                            text: part,
-                            x: cr ? 3 : undefined,
-                            dx: j == 0 ? undefined : 16 + (blankblock * 16),
-                            dy: i == 0 ? 0 : (j == 0 ? 15 : 0) + (blankline * 15)
-                        });
-                        blankblock = 0;
-                        blankline = 0;
-                        cr = false;
-                    }
-                });
-            }
-        });
+        this.annotationText = graphNode.text ?? '';
         if (graphNode.size != undefined) {
             let size = graphNode.size.split(' ');
             if (size.length != 2)
@@ -127,14 +104,14 @@ export class CElement extends SvgElement {
 
     constructor(graphNode: GraphModelCElementObject, onErrorConnected: boolean, searchService: SearchService, searchResult?: SearchResult) {
         super(graphNode);
+        this.title = graphNode.refName;
         this.height = this.height === 0 ? (70 + (this.description.indexOf('+') == 0 ? 14 : 0)) : this.height;
-        this.width = this.width === 0 ? 70 : this.width;
+        this.width = this.width === 0 ? 70 + Math.max(this.title.length, (this.description.indexOf('+') == 0 ? this.description.length : 0)) * 5.5 : this.width;
         this.image = `celement${onErrorConnected ? '-error' : (graphNode.agent ?? '') != '' ? '-agent' : ''}`;
         this.imageheight = 70;
         this.imagewidth = 70;
         this.x -= this.width / 2;
         this.y -= this.height / 2;
-        this.title = graphNode.refName;
         this.hasMatch = searchResult ? searchService.match([
             this.title,
             this.description,
@@ -156,12 +133,13 @@ export class DecisionElement extends SvgElement {
         super(graphNode);
         this.description = graphNode.description ?? '';
         this.height = this.height === 0 ? (70 + (this.description.indexOf('+') == 0 ? 14 : 0)) : this.height;
-        this.width = this.width === 0 ? 56 : this.width;
+        this.width = this.width === 0 ? 56 + Math.max(this.title.length, (this.description.indexOf('+') == 0 ? this.description.length : 0)) * 5.5 : this.width;
         this.image = `decision-${graphNode.isGlobal ? 'global' : 'local'}${onErrorConnected ? '-error' : ''}`;
         this.imageheight = 56;
         this.imagewidth = 56;
         this.x -= this.width / 2;
         this.y -= this.height / 2;
+        this.isDeprecated = graphNode._maturity === 'DEPRECATED';
         this.hasMatch = searchResult ? searchService.match([
             this.title,
             this.description,
@@ -179,9 +157,9 @@ export class EndElement extends SvgElement {
 
     constructor(graphNode: GraphModelEndObject, searchService: SearchService, searchResult?: SearchResult) {
         super(graphNode);
-        this.height = this.height === 0 ? 48 : this.height;
-        this.width = this.width === 0 ? 56 : this.width;
         this.title = graphNode.label === '' ? 'End' : graphNode.label;
+        this.height = this.height === 0 ? 48 : this.height;
+        this.width = this.width === 0 ? 56 + Math.max(this.title.length, (this.description.indexOf('+') == 0 ? this.description.length : 0)) * 5.5 : this.width;
         this.image = 'end';
         this.imageheight = 24;
         this.imagewidth = 56;
@@ -201,12 +179,13 @@ export class ProcessElement extends SvgElement {
         super(graphNode);
         this.description = graphNode.description ?? '';
         this.height = this.height === 0 ? (50 + (this.description.indexOf('+') == 0 ? 20 : 0)) : this.height;
-        this.width = this.width === 0 ? 56 : this.width;
+        this.width = this.width === 0 ? 56 + Math.max(this.title.length, (this.description.indexOf('+') == 0 ? this.description.length : 0)) * 5.5 : this.width;
         this.image = `process-${graphNode.isGlobal ? 'global' : 'local'}${graphNode.isLoop ? '-loop' : ''}${onErrorConnected ? '-error' : ''}`;
         this.imageheight = 38;
         this.imagewidth = 56;
         this.x -= this.width / 2;
         this.y -= this.height / 2;
+        this.isDeprecated = graphNode._maturity === 'DEPRECATED';
         this.hasMatch = searchResult ? searchService.match([
             this.title,
             this.description,
@@ -225,9 +204,9 @@ export class StartElement extends SvgElement {
 
     constructor(graphNode: GraphModelStartObject, searchService: SearchService, searchResult?: SearchResult) {
         super(graphNode);
-        this.height = this.height === 0 ? 48 : this.height;
-        this.width = this.width === 0 ? 56 : this.width;
         this.title = graphNode.label === '' ? 'Start' : graphNode.label;
+        this.height = this.height === 0 ? 48 : this.height;
+        this.width = this.width === 0 ? 56 + Math.max(this.title.length, (this.description.indexOf('+') == 0 ? this.description.length : 0)) * 5.5 : this.width;
         this.image = 'start';
         this.imageheight = 24;
         this.imagewidth = 56;
@@ -246,12 +225,14 @@ export class WorkflowElement extends SvgElement {
 
     constructor(graphNode: GraphModelWorkflowObject, onErrorConnected: boolean, searchService: SearchService, searchResult?: SearchResult, highlightWorkflowRef?: string) {
         super(graphNode);
+        this.title = `${graphNode.refName}${graphNode.startPoint && graphNode.startPoint != 'Start' ? ':' + graphNode.startPoint : ''}${graphNode.agent ? '@' + graphNode.agent : ''}`;
         this.height = this.height === 0 ? (70 + (this.description.indexOf('+') == 0 ? 20 : 0)) : this.height;
-        this.width = this.width === 0 ? 56 : this.width;
+        this.width = this.width === 0 ? 56 + Math.max(this.title.length, (this.description.indexOf('+') == 0 ? this.description.length : 0)) * 5.5 : this.width;
         this.image = `callworkflow${graphNode.isLoop ? '-loop' : graphNode.agent && !onErrorConnected ? '-agent' : ''}${onErrorConnected ? '-error' : ''}`;
         this.imageheight = 56;
         this.imagewidth = 56;
-        this.title = `${graphNode.refName}${graphNode.startPoint && graphNode.startPoint != 'Start' ? ':' + graphNode.startPoint : ''}${graphNode.agent ? '@' + graphNode.agent : ''}`;
+        this.width += 8;
+        this.height += 8;
         this.x -= this.width / 2;
         this.y -= this.height / 2;
         this.hasMatch = searchResult ? searchService.match([
@@ -273,7 +254,7 @@ export interface SvgNode {
     width: number;
     x: number;
     y: number;
-    annotationText: SvgTSpan[];
+    annotationText: string;
     description: string;
     hasMatch: boolean;
     image: string;
@@ -282,6 +263,10 @@ export interface SvgNode {
     isAnnotation: boolean;
     modeldata: GraphModelAnnotationObject | GraphModelCElementObject | GraphModelDecisionObject | GraphModelEndObject | GraphModelProcessObject | GraphModelStartObject | GraphModelWorkflowObject;
     title: string;
+    tracing: {
+        traceSelf: boolean;
+        traceSuccessor: boolean;
+    };
     uuid: string;
 }
 

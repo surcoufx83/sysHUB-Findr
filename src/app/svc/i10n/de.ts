@@ -17,8 +17,7 @@ export const L10nDe: L10nLocale = {
         titles: {
             home: 'sysHUB Findr',
             searchOngoing: 'Suche läuft...',
-            resultView: 'Ergebnisansicht',
-            resultConfigView: 'Ergebnis (Konfig)'
+            resultView: 'Suche "[0]"',
         },
     },
     common: {
@@ -389,6 +388,7 @@ export const L10nDe: L10nLocale = {
         },
         process: {
             subject: ['Prozess', 'Loop-Prozess'],
+            deprecated: 'Dieser Prozess ist als veraltet markiert und sollte nicht mehr verwendet werden.',
         },
         shared: {
             agent: 'Agent',
