@@ -69,6 +69,7 @@ export type L10nLocale = {
     },
     navbar: {
         aboutLink: string,
+        aboutLinkWithVersion: string,
         cacheReload: {
             label: string,
             tooltip: string,

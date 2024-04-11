@@ -2,8 +2,8 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NavigationEnd, Router } from '@angular/router';
 import { fromUnixTime, isToday } from 'date-fns';
-import { DeviceDetectorService } from 'ngx-device-detector';
 import { Observable, Subscription } from 'rxjs';
+import { FindrVersion } from 'src/app/app.module';
 import { AppInitService } from 'src/app/svc/app-init.service';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
@@ -39,6 +39,7 @@ export class NavbarComponent implements OnDestroy, OnInit {
   searchProgress: number = 100;
   subs: Subscription[] = [];
   url = '/';
+  version: string = FindrVersion;
   webclientlink: string;
 
   searchForm = new FormGroup({

@@ -77,6 +77,7 @@ export const L10nDe: L10nLocale = {
     },
     navbar: {
         aboutLink: 'Über',
+        aboutLinkWithVersion: 'Über Findr [0]',
         cacheReload: {
             label: 'Cache wird aktualisiert',
             tooltip: 'Geänderte Datensätze werden vom Server geladen: [0]'

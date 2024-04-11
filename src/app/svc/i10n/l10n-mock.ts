@@ -77,6 +77,7 @@ export const MockL10n: L10nLocale = {
     },
     navbar: {
         aboutLink: 'mock-about',
+        aboutLinkWithVersion: 'mock-aboutLinkWithVersion',
         cacheReload: {
             label: 'mock-cacheReload',
             tooltip: 'mock-tooltip'

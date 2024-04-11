@@ -246,7 +246,7 @@
                     <li>
                         <a class="dropdown-item" [routerLink]="['/about']">
                             <i class="bi bi-info-circle me-2"></i>
-                            {{ l10nphrase.navbar.aboutLink }}
+                            {{ l10n(l10nphrase.navbar.aboutLinkWithVersion, [version]) }}
                         </a>
                     </li>
                     @if (promolink) {
