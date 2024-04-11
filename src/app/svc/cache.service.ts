@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { NetworkError, RestService, SyshubCategory, SyshubConfigItem, SyshubJobType, SyshubPSetItem, SyshubWorkflow, UnauthorizedError } from 'syshub-rest-module';
+import { NetworkError, RestService, SyshubCategory, SyshubConfigItem, SyshubJobType, SyshubPSetItem, SyshubServerInformation, SyshubWorkflow, UnauthorizedError } from 'syshub-rest-module';
 import { SearchConfig, SearchResult, SearchResultUuids, UserConfig, UuidModifiedTypeObject } from '../types';
 import { AppInitService } from './app-init.service';
 import { L10nService } from './i10n.service';
@@ -138,6 +138,12 @@ export class CacheService {
    * Subscribe to get the current search configuration and result.
    */
   public searchresult = this._searchresult.asObservable();
+
+  /** 
+   * Contains the server information provided by the backend which includes server version, system name, etc.
+   */
+  private serverInfo$ = new BehaviorSubject<SyshubServerInformation | null>(null);
+  public ServerInfo = this.serverInfo$.asObservable();
 
   /**
    * Object to keep track of the current modification time of objects.
@@ -369,6 +375,7 @@ export class CacheService {
   }
 
   private loadCache(): void {
+    this.loadServerInfo();
     this.loadSearchesCache();
     this.loadUserConfig();
     this.loadCategoriesCache();
@@ -391,6 +398,22 @@ export class CacheService {
     if (olddata != null) {
       this.searchhistory$.next(<{ [key: string]: [string, SearchResult] }>JSON.parse(olddata));
     }
+  }
+
+  private loadServerInfo(): void {
+    let olddata = localStorage.getItem('findr-serverinfo');
+    if (olddata != null) {
+      this.serverInfo$.next(<SyshubServerInformation>JSON.parse(olddata));
+    }
+    setTimeout(() => {
+      let sub = this.restapi.getServerInformation().subscribe((info) => {
+        if (!(info instanceof Error)) {
+          this.serverInfo$.next({ ...info });
+          localStorage.setItem('findr-serverinfo', JSON.stringify(info));
+        }
+        sub.unsubscribe();
+      });
+    }, 100);
   }
 
   loadSubscriptions(): void {

@@ -7,7 +7,8 @@ export type FindrEnvironment = {
     },
     app?: {
         baseUrl?: string,
-        disabledFunctions?: ('config' | 'jobtypes' | 'parameterset' | 'workflows' | 'certstore' | 'serverConfig' | 'serverInfo' | 'ippDevices' | 'users')[];
+        disabledFunctions?: ('config' | 'jobtypes' | 'parameterset' | 'workflows' | 'certstore' | 'serverConfig' | 'serverInfo' | 'ippDevices' | 'users')[],
+        displaySystemName?: boolean,
         promotionLink?: string,
         minPhraseLength?: number,
         useCache?: boolean,
