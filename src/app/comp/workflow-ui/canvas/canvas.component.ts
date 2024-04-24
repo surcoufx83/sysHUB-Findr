@@ -417,10 +417,6 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.drawPaths();
 
-    console.log(this.nodes)
-    console.log(this.graphModel.linkDataArray)
-    console.log(this.connectedNodes)
-
   }
 
   hoverNode(node: SvgElement, x: number, y: number, w: number): void {

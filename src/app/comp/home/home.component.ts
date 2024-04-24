@@ -1,3 +1,4 @@
+import { HttpStatusCode } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -99,7 +100,7 @@ export class HomeComponent implements OnDestroy, OnInit {
 
   ngOnInit(): void {
     this.propsService.resetPageTitle();
-    this.subs.push(this.restapi.getCurrentUser().subscribe((reply) => this.username = reply instanceof Error ? '' : reply.name));
+    this.subs.push(this.restapi.getCurrentUser((this.username == '')).subscribe((reply) => this.username = reply instanceof Error ? '' : reply == HttpStatusCode.NotModified ? this.username : reply.name));
     this.subs.push(this.restapi.isLoggedIn.subscribe((v) => this.loggedin = v));
     this.subs.push(this.cacheService.Categories.subscribe((categories) => this.categories = categories));
     this.subs.push(this.cacheService.userconfig.subscribe((uc) => {

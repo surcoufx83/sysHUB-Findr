@@ -1,7 +1,7 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { APP_BASE_HREF } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
-import { APP_INITIALIZER, Inject, NgModule, Optional } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -74,6 +74,7 @@ export function initAppFactory(svc: AppInitService) {
     CanvasComponent,
     CertstoreComponent,
     ConfigComponent,
+    ConfigMissingBarComponent,
     CopyButtonComponent,
     HelpComponent,
     HighlightPipe,
@@ -112,7 +113,6 @@ export function initAppFactory(svc: AppInitService) {
     UserComponent,
     WorkflowsComponent,
     WorkflowUiComponent,
-    ConfigMissingBarComponent,
   ],
   imports: [
     AppRoutingModule,

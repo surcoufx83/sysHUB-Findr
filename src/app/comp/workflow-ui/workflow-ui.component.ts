@@ -108,7 +108,7 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
     this.workflow = { ...tempworkflow };
 
     if (!this.sysHUB2022CompatibilityMode) {
-      this.subs.push(this.restapi.getWorkflowReferences(tempworkflow.uuid).subscribe((reply) => {
+      this.subs.push(this.restapi.getWorkflowReferences(tempworkflow.uuid, true).subscribe((reply) => {
         if (reply instanceof Error) {
           this.toastsService.addDangerToast({
             message: this.l10n(this.l10nphrase.api.errorCommon, [reply.message]),
@@ -119,7 +119,7 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
         }
         else {
           let temprefs: { [key: string]: SyshubWorkflowReferenceGroup } = {};
-          reply.forEach((ref) => {
+          (<SyshubWorkflowReference[]>reply).forEach((ref) => {
             if (!temprefs[ref.type])
               temprefs[ref.type] = { type: ref.type, items: [] };
             temprefs[ref.type].items.push(ref);
@@ -134,7 +134,7 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
         }
       }));
 
-      this.subs.push(this.restapi.getWorkflowVersions(tempworkflow.uuid).subscribe((reply) => {
+      this.subs.push(this.restapi.getWorkflowVersions(tempworkflow.uuid, true).subscribe((reply) => {
         if (reply instanceof Error) {
           this.toastsService.addDangerToast({
             message: this.l10n(this.l10nphrase.api.errorCommon, [reply.message]),
@@ -145,13 +145,13 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
         }
         else {
           // sort versions descending
-          this.versions = reply.sort((a, b) => a.major > b.major ? -1 : b.major > a.major ? 1 : a.minor > b.minor ? -1 : b.minor > a.minor ? 1 : 0);
+          this.versions = (<SyshubWorkflowVersion[]>reply).sort((a, b) => a.major > b.major ? -1 : b.major > a.major ? 1 : a.minor > b.minor ? -1 : b.minor > a.minor ? 1 : 0);
           this.ngOnInit_ReportProgress();
         }
       }));
     }
 
-    this.subs.push(this.restapi.getWorkflowModel(tempworkflow.uuid).subscribe((reply) => {
+    this.subs.push(this.restapi.getWorkflowModel(tempworkflow.uuid, true).subscribe((reply) => {
       if (reply instanceof Error) {
         this.toastsService.addDangerToast({
           message: this.l10n(this.l10nphrase.api.errorCommon, [reply.message]),
@@ -161,13 +161,13 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
         this.apiError = { ...reply };
       }
       else {
-        this.model = reply;
+        this.model = { ...<SyshubWorkflowModel>reply };
         this.ngOnInit_ReportProgress();
         this.propsService.setPageTitle(this.l10n(this.l10nphrase.workflowUi.title, [this.workflow?.name]))
       }
     }));
 
-    this.subs.push(this.restapi.getWorkflowStartpoints(tempworkflow.uuid).subscribe((reply) => {
+    this.subs.push(this.restapi.getWorkflowStartpoints(tempworkflow.uuid, true).subscribe((reply) => {
       if (reply instanceof Error) {
         this.toastsService.addDangerToast({
           message: this.l10n(this.l10nphrase.api.errorCommon, [reply.message]),
@@ -177,7 +177,7 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
         this.apiError = { ...reply };
       }
       else {
-        this.startpoints = <any>reply === null ? [] : reply;
+        this.startpoints = <any>reply === null ? [] : <string[]>reply;
         this.ngOnInit_ReportProgress();
       }
     }));

@@ -6,6 +6,8 @@ import { AppInitService } from './app-init.service';
 import { L10nService } from './i10n.service';
 import { L10nLocale } from './i10n/l10n-locale';
 import { ToastsService } from './toasts.service';
+import { HttpStatusCode } from '@angular/common/http';
+import { compress, decompress } from 'lz-string'
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +40,11 @@ export class CacheService {
   private config$: BehaviorSubject<SyshubConfigItem[]> = new BehaviorSubject<SyshubConfigItem[]>([]);
 
   /**
+   * Saves whether the config has already been initially loaded from the browser cache.
+   */
+  private configLoaded$ = false;
+
+  /**
    * Contains a subscribeable subject that is update after config has been reloaded and all recalculations have been done.
    */
   private configUpdated$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
@@ -68,6 +75,11 @@ export class CacheService {
   private jobtypes$: BehaviorSubject<SyshubJobType[]> = new BehaviorSubject<SyshubJobType[]>([]);
 
   /**
+   * Saves whether the jobtypes have already been initially loaded from the browser cache.
+   */
+  private jobtypesLoaded$ = false;
+
+  /**
    * Contains a subscribeable subject that is updated after job types have been reloaded and all recalculations have been done.
    */
   private jobtypesUpdated$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
@@ -91,6 +103,11 @@ export class CacheService {
    * Contains the parameter set items as an array in a subscribeable subject.
    */
   private parameterset$: BehaviorSubject<SyshubPSetItem[]> = new BehaviorSubject<SyshubPSetItem[]>([]);
+
+  /**
+   * Saves whether the parameterset has already been initially loaded from the browser cache.
+   */
+  private parametersetLoaded$ = false;
 
   /**
    * Contains a subscribeable subject that is updated after parameter set has been reloaded and all recalculations have been done.
@@ -171,6 +188,11 @@ export class CacheService {
   private workflows$: BehaviorSubject<SyshubWorkflow[]> = new BehaviorSubject<SyshubWorkflow[]>([]);
 
   /**
+   * Saves whether the workflows have already been initially loaded from the browser cache.
+   */
+  private workflowsLoaded$ = false;
+
+  /**
    * Contains a subscribable subject that is updated after workflows have been reloaded and all recalculations have been done.
    */
   private workflowsUpdated$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
@@ -232,8 +254,13 @@ export class CacheService {
     this.parameterset$.next([]);
     this.workflows$.next([]);
     this._searchresult.next(null);
-    localStorage.removeItem(this.appInitService.environment.storage?.categoriesKey ?? 'findr-syshub-cat');
+    sessionStorage.removeItem(this.appInitService.environment.storage?.categoriesKey ?? 'findr-syshub-cat');
+    sessionStorage.removeItem(this.appInitService.environment.storage?.configKey ?? 'findr-syshub-config');
+    sessionStorage.removeItem(this.appInitService.environment.storage?.jobtypesKey ?? 'findr-syshub-jobtypes');
+    sessionStorage.removeItem(this.appInitService.environment.storage?.parametersetKey ?? 'findr-syshub-parameterset');
+    sessionStorage.removeItem(this.appInitService.environment.storage?.workflowsKey ?? 'findr-syshub-workflow');
     localStorage.removeItem(this.appInitService.environment.storage?.searchconfigKey ?? 'findr-syshub-searchconfig');
+    localStorage.removeItem('findr-serverinfo');
     if (reload)
       this.loadCache();
   }
@@ -379,18 +406,42 @@ export class CacheService {
     this.loadSearchesCache();
     this.loadUserConfig();
     this.loadCategoriesCache();
-    this.reloadConfig();
-    this.reloadJobtypes();
-    this.reloadParameterset();
-    this.reloadWorkflows();
+    this.loadConfigCache();
+    this.loadJobtypesCache();
+    this.loadParametersetCache();
+    this.loadWorkflowCache();
   }
 
   private loadCategoriesCache(): void {
-    let olddata = localStorage.getItem(this.appInitService.environment.storage?.categoriesKey ?? 'findr-syshub-cat');
+    let olddata = sessionStorage.getItem(this.appInitService.environment.storage?.categoriesKey ?? 'findr-syshub-cat');
     if (olddata != null)
-      this.categories$.next(<SyshubCategory[]>JSON.parse(olddata));
-    this.reloadCategories();
+      this.categories$.next(<SyshubCategory[]>JSON.parse(decompress(olddata)));
     this.categoriesLoaded$ = true;
+    this.reloadCategories();
+  }
+
+  private loadConfigCache(): void {
+    let olddata = sessionStorage.getItem(this.appInitService.environment.storage?.configKey ?? 'findr-syshub-config');
+    if (olddata != null)
+      this.config$.next(<SyshubConfigItem[]>JSON.parse(decompress(olddata)));
+    this.configLoaded$ = true;
+    this.reloadConfig();
+  }
+
+  private loadJobtypesCache(): void {
+    let olddata = sessionStorage.getItem(this.appInitService.environment.storage?.jobtypesKey ?? 'findr-syshub-jobtypes');
+    if (olddata != null)
+      this.jobtypes$.next(<SyshubJobType[]>JSON.parse(decompress(olddata)));
+    this.jobtypesLoaded$ = true;
+    this.reloadJobtypes();
+  }
+
+  private loadParametersetCache(): void {
+    let olddata = sessionStorage.getItem(this.appInitService.environment.storage?.parametersetKey ?? 'findr-syshub-parameterset');
+    if (olddata != null)
+      this.parameterset$.next(<SyshubPSetItem[]>JSON.parse(decompress(olddata)));
+    this.parametersetLoaded$ = true;
+    this.reloadParameterset();
   }
 
   private loadSearchesCache(): void {
@@ -406,8 +457,8 @@ export class CacheService {
       this.serverInfo$.next(<SyshubServerInformation>JSON.parse(olddata));
     }
     setTimeout(() => {
-      let sub = this.restapi.getServerInformation().subscribe((info) => {
-        if (!(info instanceof Error)) {
+      let sub = this.restapi.getServerInformation(this.serverInfo$ == null).subscribe((info) => {
+        if (info != HttpStatusCode.NotModified && !(info instanceof Error)) {
           this.serverInfo$.next({ ...info });
           localStorage.setItem('findr-serverinfo', JSON.stringify(info));
         }
@@ -445,7 +496,7 @@ export class CacheService {
         indexed[cat.uuid] = i;
       });
       if (this.categoriesLoaded$ && this._userconfig.value.enableCache)
-        localStorage.setItem(this.appInitService.environment.storage?.categoriesKey ?? 'findr-syshub-cat', JSON.stringify(categories));
+        sessionStorage.setItem(this.appInitService.environment.storage?.categoriesKey ?? 'findr-syshub-cat', compress(JSON.stringify(categories)));
       this.categoryUuid2Index$ = indexed;
     });
   }
@@ -461,6 +512,8 @@ export class CacheService {
       this.configUuid2Ref$ = { ...indexed };
       this.configPath2Uuid$ = { ...paths };
       this.configUpdated$.next(Date.now());
+      if (this.configLoaded$)
+        sessionStorage.setItem(this.appInitService.environment.storage?.configKey ?? 'findr-syshub-config', compress(JSON.stringify(configitems)));
     });
   }
 
@@ -485,6 +538,8 @@ export class CacheService {
       jobtypes.forEach((type, i) => indexed[type.uuid] = i);
       this.jobtypeUuid2Index$ = indexed;
       this.jobtypesUpdated$.next(Date.now());
+      if (this.jobtypesLoaded$)
+        sessionStorage.setItem(this.appInitService.environment.storage?.jobtypesKey ?? 'findr-syshub-jobtypes', compress(JSON.stringify(jobtypes)));
     });
   }
 
@@ -499,6 +554,8 @@ export class CacheService {
       this.parametersetUuid2Ref$ = { ...indexed };
       this.parametersetPath2Uuid$ = { ...paths };
       this.parametersetUpdated$.next(Date.now());
+      if (this.parametersetLoaded$)
+        sessionStorage.setItem(this.appInitService.environment.storage?.parametersetKey ?? 'findr-syshub-parameterset', compress(JSON.stringify(parameterset)));
     });
   }
 
@@ -530,6 +587,8 @@ export class CacheService {
       });
       this.workflowUuid2Index$ = indexed;
       this.workflowsUpdated$.next(Date.now());
+      if (this.workflowsLoaded$)
+        sessionStorage.setItem(this.appInitService.environment.storage?.workflowsKey ?? 'findr-syshub-workflow', compress(JSON.stringify(workflows)));
     });
   }
 
@@ -544,6 +603,14 @@ export class CacheService {
     this.userconfigLoaded = true;
   }
 
+  private loadWorkflowCache(): void {
+    let olddata = sessionStorage.getItem(this.appInitService.environment.storage?.workflowsKey ?? 'findr-syshub-workflow');
+    if (olddata != null)
+      this.workflows$.next(<SyshubWorkflow[]>JSON.parse(decompress(olddata)));
+    this.workflowsLoaded$ = true;
+    this.reloadWorkflows();
+  }
+
   prepareSearch(search: SearchConfig): string {
     search.token = '' + Math.floor(Date.now() / 1000) / 1000;
     this._searchresult.next({ search: search });
@@ -554,12 +621,13 @@ export class CacheService {
     if (this.refreshingEntities[this.l10nphrase.result.categories.title] === true)
       return;
     this.setRefreshState(this.l10nphrase.result.categories.title, true);
-    this.restapi.getCategories().subscribe((reply) => {
+    this.restapi.getCategories(this.categories$.value.length == 0).subscribe((reply) => {
       if (reply instanceof Error) {
         this.handleReloadError(this.l10nphrase.result.categories.title, reply);
         return;
       }
-      this.categories$.next(reply.sort((a, b) => a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1));
+      if (reply != HttpStatusCode.NotModified)
+        this.categories$.next(reply.sort((a, b) => a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1));
       this.setRefreshState(this.l10nphrase.result.categories.title, false);
     });
   }
@@ -568,12 +636,13 @@ export class CacheService {
     if (this.refreshingEntities[this.l10nphrase.result.config.title] === true)
       return;
     this.setRefreshState(this.l10nphrase.result.config.title, true);
-    this.restapi.getConfigChildren('').subscribe((reply) => {
+    this.restapi.getConfigChildren('', undefined, this.config$.value.length == 0).subscribe((reply) => {
       if (reply instanceof Error) {
         this.handleReloadError(this.l10nphrase.result.config.title, reply);
         return;
       }
-      this.config$.next(this.reloadConfig_SortChilds(reply));
+      if (reply != HttpStatusCode.NotModified)
+        this.config$.next(this.reloadConfig_SortChilds(reply));
       this.setRefreshState(this.l10nphrase.result.config.title, false);
     });
   }
@@ -589,12 +658,13 @@ export class CacheService {
     if (this.refreshingEntities[this.l10nphrase.result.jobtype.title] === true)
       return;
     this.setRefreshState(this.l10nphrase.result.jobtype.title, true);
-    this.restapi.getJobTypes().subscribe((reply) => {
+    this.restapi.getJobTypes(this.jobtypes$.value.length == 0).subscribe((reply) => {
       if (reply instanceof Error) {
         this.handleReloadError(this.l10nphrase.result.jobtype.title, reply);
         return;
       }
-      this.jobtypes$.next([...reply].sort((a, b) => a.name > b.name ? 1 : -1));
+      if (reply != HttpStatusCode.NotModified)
+        this.jobtypes$.next([...reply].sort((a, b) => a.name > b.name ? 1 : -1));
       this.setRefreshState(this.l10nphrase.result.jobtype.title, false);
     });
   }
@@ -603,12 +673,13 @@ export class CacheService {
     if (this.refreshingEntities[this.l10nphrase.result.parameterset.title] === true)
       return;
     this.setRefreshState(this.l10nphrase.result.parameterset.title, true);
-    this.restapi.getPsetChildren('').subscribe((reply) => {
+    this.restapi.getPsetChildren('', undefined, this.parameterset$.value.length == 0).subscribe((reply) => {
       if (reply instanceof Error) {
         this.handleReloadError(this.l10nphrase.result.parameterset.title, reply);
         return;
       }
-      this.parameterset$.next(this.reloadParameterset_SortChilds(reply));
+      if (reply != HttpStatusCode.NotModified)
+        this.parameterset$.next(this.reloadParameterset_SortChilds(reply));
       this.setRefreshState(this.l10nphrase.result.parameterset.title, false);
     });
   }
@@ -624,12 +695,13 @@ export class CacheService {
     if (this.refreshingEntities[this.l10nphrase.result.workflow.title] === true)
       return;
     this.setRefreshState(this.l10nphrase.result.workflow.title, true);
-    this.restapi.getWorkflows({}).subscribe((reply) => {
+    this.restapi.getWorkflows({}, this.workflows$.value.length == 0).subscribe((reply) => {
       if (reply instanceof Error) {
         this.handleReloadError(this.l10nphrase.result.workflow.title, reply);
         return;
       }
-      this.workflows$.next([...reply].sort((a, b) => a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : b.name.toLocaleLowerCase() > a.name.toLocaleLowerCase() ? -1 : 0));
+      if (reply != HttpStatusCode.NotModified)
+        this.workflows$.next([...reply].sort((a, b) => a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : b.name.toLocaleLowerCase() > a.name.toLocaleLowerCase() ? -1 : 0));
       this.setRefreshState(this.l10nphrase.result.workflow.title, false);
     });
   }
