@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { NetworkError, RestService, SyshubCategory, SyshubConfigItem, SyshubJobType, SyshubPSetItem, SyshubServerInformation, SyshubWorkflow, UnauthorizedError } from 'syshub-rest-module';
+import { BehaviorSubject, forkJoin } from 'rxjs';
+import { NetworkError, RestService, SyshubCategory, SyshubConfigItem, SyshubJobType, SyshubPSetItem, SyshubServerInformation, SyshubWorkflow, SyshubWorkflowReference, SyshubWorkflowVersion, UnauthorizedError } from 'syshub-rest-module';
 import { SearchConfig, SearchResult, SearchResultUuids, UserConfig, UuidModifiedTypeObject } from '../types';
 import { AppInitService } from './app-init.service';
 import { L10nService } from './i10n.service';
@@ -162,6 +162,8 @@ export class CacheService {
   private serverInfo$ = new BehaviorSubject<SyshubServerInformation | null>(null);
   public ServerInfo = this.serverInfo$.asObservable();
 
+  private sysHUB2022CompatibilityMode: boolean;
+
   /**
    * Object to keep track of the current modification time of objects.
    */
@@ -193,6 +195,27 @@ export class CacheService {
   private workflowsLoaded$ = false;
 
   /**
+   * Contains the workflow references (key = workflow uuid) in a subscribable subject.
+   */
+  private workflowReferences$: BehaviorSubject<{ [key: string]: SyshubWorkflowReference[] }> = new BehaviorSubject<{ [key: string]: SyshubWorkflowReference[] }>({});
+  private workflowReferencesUpdated$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
+  public workflowReferencesUpdated = this.workflowReferencesUpdated$.asObservable();
+
+  /**
+   * Contains the workflow startpoints (key = workflow uuid) in a subscribable subject.
+   */
+  private workflowStartpoints$: BehaviorSubject<{ [key: string]: string[] }> = new BehaviorSubject<{ [key: string]: string[] }>({});
+  private workflowStartpointsUpdated$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
+  public workflowStartpointsUpdated = this.workflowStartpointsUpdated$.asObservable();
+
+
+  /**
+   * Contains the workflow versions (key = workflow uuid) in a subscribable subject.
+   */
+  private workflowVersions$: BehaviorSubject<{ [key: string]: SyshubWorkflowVersion[] }> = new BehaviorSubject<{ [key: string]: SyshubWorkflowVersion[] }>({});
+  private workflowVersionsUpdated$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
+  public workflowVersionsUpdated = this.workflowVersionsUpdated$.asObservable();
+  /**
    * Contains a subscribable subject that is updated after workflows have been reloaded and all recalculations have been done.
    */
   private workflowsUpdated$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
@@ -222,6 +245,7 @@ export class CacheService {
     private l10nService: L10nService,
     private restapi: RestService,
     private toastService: ToastsService,) {
+    this.sysHUB2022CompatibilityMode = this.appInitService.environment.api.version == 2;
     this._userconfig = new BehaviorSubject<UserConfig>({ enableCache: this.appInitService.environment.app?.useCache ?? true });
     this.userconfig = this._userconfig.asObservable();
     this.loadSubscriptions();
@@ -605,8 +629,16 @@ export class CacheService {
 
   private loadWorkflowCache(): void {
     let olddata = sessionStorage.getItem(this.appInitService.environment.storage?.workflowsKey ?? 'findr-syshub-workflow');
-    if (olddata != null)
+    if (olddata != null) {
       this.workflows$.next(<SyshubWorkflow[]>JSON.parse(decompress(olddata)));
+      let olddata2 = sessionStorage.getItem('findr-syshub-wfdata');
+      if (olddata2 != null) {
+        const tempwfdata = <WfAdditionalData>JSON.parse(decompress(olddata2));
+        this.workflowReferences$.next(tempwfdata.references);
+        this.workflowStartpoints$.next(tempwfdata.startpoints);
+        this.workflowVersions$.next(tempwfdata.versions);
+      }
+    }
     this.workflowsLoaded$ = true;
     this.reloadWorkflows();
   }
@@ -700,10 +732,96 @@ export class CacheService {
         this.handleReloadError(this.l10nphrase.result.workflow.title, reply);
         return;
       }
-      if (reply != HttpStatusCode.NotModified)
+      if (reply != HttpStatusCode.NotModified) {
         this.workflows$.next([...reply].sort((a, b) => a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : b.name.toLocaleLowerCase() > a.name.toLocaleLowerCase() ? -1 : 0));
+        this.reloadWorkflowAdditionalInfos(this.workflows$.value);
+      }
       this.setRefreshState(this.l10nphrase.result.workflow.title, false);
     });
+  }
+
+  private tempWfReferences: { [key: string]: SyshubWorkflowReference[] } = {};
+  private tempWfStartpoints: { [key: string]: string[] } = {};
+  private tempWfVersions: { [key: string]: SyshubWorkflowVersion[] } = {};
+  reloadWorkflowAdditionalInfos(workflows: SyshubWorkflow[], comeback: boolean = false): void {
+
+    if (!comeback) {
+      this.tempWfReferences = { ...this.workflowReferences$.value };
+      this.tempWfStartpoints = { ...this.workflowStartpoints$.value };
+      this.tempWfVersions = { ...this.workflowVersions$.value };
+      this.reloadWorkflowAdditionalInfoItem(workflows, 0)
+    }
+
+    else {
+      this.workflowReferences$.next({ ...this.tempWfReferences });
+      this.workflowStartpoints$.next({ ...this.tempWfStartpoints });
+      this.workflowVersions$.next({ ...this.tempWfVersions });
+      this.tempWfReferences = {};
+      this.tempWfStartpoints = {};
+      this.tempWfVersions = {};
+      sessionStorage.setItem('findr-syshub-wfdata', compress(JSON.stringify(<WfAdditionalData>{
+        references: this.workflowReferences$.value,
+        startpoints: this.workflowStartpoints$.value,
+        versions: this.workflowVersions$.value,
+      })));
+      this.workflowStartpointsUpdated$.next(Date.now());
+      if (!this.sysHUB2022CompatibilityMode) {
+        this.workflowReferencesUpdated$.next(Date.now());
+        this.workflowVersionsUpdated$.next(Date.now());
+      }
+    }
+
+  }
+
+  reloadWorkflowAdditionalInfoItem(workflows: SyshubWorkflow[], i: number): void {
+    if (workflows[i] == undefined) {
+      this.reloadWorkflowAdditionalInfos(workflows, true);
+      return;
+    }
+    if (!this.sysHUB2022CompatibilityMode) {
+      forkJoin([
+        this.restapi.getWorkflowReferences(workflows[i].uuid, (!this.tempWfReferences[workflows[i].uuid] || this.tempWfReferences[workflows[i].uuid].length == 0)),
+        this.restapi.getWorkflowStartpoints(workflows[i].uuid, (!this.tempWfStartpoints[workflows[i].uuid] || this.tempWfStartpoints[workflows[i].uuid].length == 0)),
+        this.restapi.getWorkflowVersions(workflows[i].uuid, (!this.tempWfVersions[workflows[i].uuid] || this.tempWfVersions[workflows[i].uuid].length == 0)),
+      ]).subscribe({
+        next: ([referencesReply, startpointsReply, versionsReply]) => {
+
+          if (referencesReply != HttpStatusCode.NotModified && !(referencesReply instanceof Error))
+            this.tempWfReferences[workflows[i].uuid] = [...referencesReply];
+
+          if (startpointsReply != HttpStatusCode.NotModified && !(startpointsReply instanceof Error))
+            this.tempWfStartpoints[workflows[i].uuid] = [...startpointsReply];
+
+          if (versionsReply != HttpStatusCode.NotModified && !(versionsReply instanceof Error))
+            this.tempWfVersions[workflows[i].uuid] = [...versionsReply];
+
+          this.reloadWorkflowAdditionalInfoItem(workflows, i + 1);
+        },
+        error: (err) => {
+          console.log(workflows[i].uuid, err);
+          this.reloadWorkflowAdditionalInfoItem(workflows, i + 1);
+        }
+      });
+    }
+    else {
+      // sysHUB 2022: do not query references or versions
+      forkJoin([
+        this.restapi.getWorkflowStartpoints(workflows[i].uuid, (!this.tempWfStartpoints[workflows[i].uuid] || this.tempWfStartpoints[workflows[i].uuid].length == 0)),
+      ]).subscribe({
+        next: ([startpointsReply]) => {
+
+          if (startpointsReply != HttpStatusCode.NotModified && !(startpointsReply instanceof Error))
+            this.tempWfStartpoints[workflows[i].uuid] = [...startpointsReply];
+
+          this.reloadWorkflowAdditionalInfoItem(workflows, i + 1);
+        },
+        error: (err) => {
+          console.log(workflows[i].uuid, err);
+          this.reloadWorkflowAdditionalInfoItem(workflows, i + 1);
+        }
+      });
+    }
+
   }
 
   private handleReloadError(entity: string, reply: Error): void {
@@ -770,4 +888,22 @@ export class CacheService {
     }
   }
 
+  workflowReferences(uuid: string): SyshubWorkflowReference[] {
+    return this.workflowReferences$.value[uuid] ?? [];
+  }
+
+  workflowStartpoints(uuid: string): string[] {
+    return this.workflowStartpoints$.value[uuid] ?? [];
+  }
+
+  workflowVersions(uuid: string): SyshubWorkflowVersion[] {
+    return this.workflowVersions$.value[uuid] ?? [];
+  }
+
+}
+
+export type WfAdditionalData = {
+  references: { [key: string]: SyshubWorkflowReference[] },
+  startpoints: { [key: string]: string[] },
+  versions: { [key: string]: SyshubWorkflowVersion[] },
 }
