@@ -98,6 +98,7 @@ export type UuidModifiedObject = {
 export type UserConfig = {
     enableCache: boolean,
     showMoreFilter?: boolean,
+    showPsetTreeInProcessNodes?: boolean,
     showUnmatchedItems?: boolean,
     hideJobtypePercentItems?: boolean,
     hideUnassignedRoles?: boolean,

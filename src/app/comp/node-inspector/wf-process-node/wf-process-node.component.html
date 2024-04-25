@@ -8,9 +8,16 @@
             <h5 class="mb-1" [innerHTML]="nodeItem.title | highlight: searchResult?.search?.phrase"></h5>
         </div>
         <div>
+            @if (parameterset || $any(nodeItem.modeldata).name == 'LoadParameterSet' || $any(nodeItem.modeldata).name ==
+            'LoadParameterSetFast') {
+            <button type="button" [ngClass]="{ 'btn btn-sm ps-2': true }" (click)="toggleShowPsetTree()">
+                <i
+                    [ngClass]="{ bi: true, 'bi-p-square-fill': showPsetTreeInProcessNodes, 'bi-p-square': !showPsetTreeInProcessNodes }"></i>
+            </button>
+            }
             <button type="button" [ngClass]="{ 'btn btn-sm ps-2': true, 'text-danger': isTracingMe }"
                 (click)="traceMe()">
-                <i class="bi bi-bezier"></i>
+                <i [ngClass]="{ bi: true, 'bi-bezier': !isTracingMe, 'bi-bezier2': isTracingMe }"></i>
             </button>
             <button type="button" class="btn btn-sm px-2" (click)="onChangeColor.emit()">
                 <i class="bi bi-palette-fill"></i>
@@ -34,7 +41,7 @@
         <code [innerHTML]="$any(nodeItem.modeldata).loopName | highlight: searchResult?.search?.phrase"></code>
     </p>
     }
-    @if (parameterset) {
+    @if ($any(nodeItem.modeldata).parameterSetUuid && parameterset) {
     <p class="mb-1">
         <strong>
             <i class="bi bi-p-square-fill me-1"></i>
@@ -75,3 +82,14 @@
         </tbody>
     </table>
 </div>
+@if (showPsetTreeInProcessNodes && parameterset) {
+<div class="card-header">
+    <h5 class="mb-1">{{ l10nphrase.workflowUi.process.referencedParametersetTitle }}: {{ parametersetPath }}</h5>
+</div>
+<div class="card-body p-0">
+    <ul class="treeview m-2">
+        <app-result-tree [tree]="[parameterset]" [treeUuids]="parametersetTreeUuids" [searchResult]="searchResult"
+            treetype="PSetItems"></app-result-tree>
+    </ul>
+</div>
+}

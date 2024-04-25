@@ -331,6 +331,7 @@ export type L10nLocale = {
         process: {
             subject: string[],
             deprecated: string,
+            referencedParametersetTitle: string,
         },
         shared: {
             agent: string,

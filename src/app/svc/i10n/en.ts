@@ -389,6 +389,7 @@ export const L10nEn: L10nLocale = {
         process: {
             subject: ['Process', 'Loop Process'],
             deprecated: 'This process is marked as deprecated and should no longer be used.',
+            referencedParametersetTitle: 'Referenced parameterset',
         },
         shared: {
             agent: 'Agent',

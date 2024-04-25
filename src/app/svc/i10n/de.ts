@@ -392,6 +392,7 @@ export const L10nDe: L10nLocale = {
         process: {
             subject: ['Prozess', 'Loop-Prozess'],
             deprecated: 'Dieser Prozess ist als veraltet markiert und sollte nicht mehr verwendet werden.',
+            referencedParametersetTitle: 'verwendetes Parameterset',
         },
         shared: {
             agent: 'Agent',

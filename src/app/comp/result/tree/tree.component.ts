@@ -15,8 +15,8 @@ export class TreeComponent implements OnInit {
 
   @Input({ required: true }) treetype!: 'ConfigItems' | 'PSetItems';
   @Input({ required: true }) tree: SyshubConfigItem[] | SyshubPSetItem[] = [];
-  @Input({ required: true }) treeUuids: { [key: string]: [path: string, defaultOpen: boolean, open: boolean] } = {};
-  @Input({ required: true }) searchResult!: SearchResult;
+  @Input() treeUuids?: { [key: string]: [path: string, defaultOpen: boolean, open: boolean] } = {};
+  @Input({ required: true }) searchResult?: SearchResult;
   matchedNodeUuids: string[] = [];
   nodesToggled: string[] = [];
 
@@ -34,7 +34,7 @@ export class TreeComponent implements OnInit {
   }
 
   isOpen(node: SyshubConfigItem | SyshubPSetItem): boolean {
-    if (this.treeUuids[node.uuid] == undefined || this.treeUuids[node.uuid][2] == undefined) {
+    if (this.treeUuids == undefined || this.treeUuids[node.uuid] == undefined || this.treeUuids[node.uuid][2] == undefined) {
       return false;
     }
     return this.treeUuids[node.uuid][2] || false;
@@ -46,13 +46,13 @@ export class TreeComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.treetype === 'ConfigItems')
-      this.searchResult.result?.config.forEach((item) => this.matchedNodeUuids.push(item.uuid));
+      this.searchResult?.result?.config.forEach((item) => this.matchedNodeUuids.push(item.uuid));
     else if (this.treetype === 'PSetItems')
-      this.searchResult.result?.parameterset.forEach((item) => this.matchedNodeUuids.push(item.uuid));
+      this.searchResult?.result?.parameterset.forEach((item) => this.matchedNodeUuids.push(item.uuid));
   }
 
   toggleNode(node: SyshubConfigItem | SyshubPSetItem): void {
-    if (this.treeUuids[node.uuid] == undefined || this.treeUuids[node.uuid][2] == undefined) {
+    if (this.treeUuids == undefined || this.treeUuids[node.uuid] == undefined || this.treeUuids[node.uuid][2] == undefined) {
       return;
     }
     this.treeUuids[node.uuid][2] = !this.treeUuids[node.uuid][2];

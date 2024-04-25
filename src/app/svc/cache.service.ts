@@ -864,6 +864,14 @@ export class CacheService {
     }
   }
 
+  toggleShowPsetTreeInProcessNodes(newvalue: boolean): void {
+    if (newvalue !== this._userconfig.value.showPsetTreeInProcessNodes) {
+      let obj: UserConfig = { ...this._userconfig.value };
+      obj.showPsetTreeInProcessNodes = newvalue;
+      this._userconfig.next(obj);
+    }
+  }
+
   toggleShowUnmatchedItems(newvalue: boolean): void {
     if (newvalue !== this._userconfig.value.showUnmatchedItems) {
       let obj: UserConfig = { ...this._userconfig.value };
