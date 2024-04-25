@@ -11,6 +11,7 @@ export type FindrEnvironment = {
         displaySystemName?: boolean,
         promotionLink?: string,
         minPhraseLength?: number,
+        unusedWorkflowBadge?: boolean,
         useCache?: boolean,
         webclientLink?: string,
     },

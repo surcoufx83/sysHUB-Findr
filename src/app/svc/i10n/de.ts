@@ -307,6 +307,8 @@ export const L10nDe: L10nLocale = {
                 In der Auflistung sind die Workflows farblich hervorgehoben, bei denen ein Treffer in den Metadaten oder dem Workflow ansich enthalten ist.
                 Anklicken eines Eintrags um die Details zu sehen oder auf das Flowchart-Icon um den Workflow anzuzeigen.
             `,
+            unused: 'ungenutzt',
+            unusedTitle: 'Der Workflow wird nicht referenziert und damit wahrscheinlich nicht verwendet.',
             nodeInspector: {
                 cacheable: 'Cache aktiv',
                 categoryName: 'Kategorie',

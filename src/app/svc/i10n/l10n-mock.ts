@@ -268,6 +268,8 @@ export const MockL10n: L10nLocale = {
         workflow: {
             title: 'mock-title',
             subtitle: 'mock-subtitle',
+            unused: 'mock-unused',
+            unusedTitle: 'mock-unusedTitle',
             nodeInspector: {
                 cacheable: 'mock-cacheable',
                 categoryName: 'mock-categoryName',

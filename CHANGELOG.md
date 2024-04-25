@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Findr version visible in dropdown menu and about page (#43)
 - The system name is now visible in the Findr if not `Base` (#44). This can be disabled via config.json file.
 - Findr will make use of server cache (if possible). This is based on the updated Rest module (https://www.npmjs.com/package/syshub-rest-module) and sysHUB 2024 with included Etag-functionality. This will also work if served via webapps (not Node JS live server) on a sysHUB 2023 server. For this to work, parameterset, config, categories, workflows and jobtypes are compressed and stored in sessionStorage (and though removed by closing the browser). Closes #23
+- Findr will show a small badge next to a workflow name in the workflow list (not workflow ui) if there's no reference for a workflow and if it's not the SystemWorkflow (#41). This feature can be disabled via config.json file.
 
 ### Changed
 

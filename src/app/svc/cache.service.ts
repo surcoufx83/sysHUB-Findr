@@ -208,13 +208,13 @@ export class CacheService {
   private workflowStartpointsUpdated$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
   public workflowStartpointsUpdated = this.workflowStartpointsUpdated$.asObservable();
 
-
   /**
    * Contains the workflow versions (key = workflow uuid) in a subscribable subject.
    */
   private workflowVersions$: BehaviorSubject<{ [key: string]: SyshubWorkflowVersion[] }> = new BehaviorSubject<{ [key: string]: SyshubWorkflowVersion[] }>({});
   private workflowVersionsUpdated$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
   public workflowVersionsUpdated = this.workflowVersionsUpdated$.asObservable();
+
   /**
    * Contains a subscribable subject that is updated after workflows have been reloaded and all recalculations have been done.
    */
@@ -898,6 +898,10 @@ export class CacheService {
 
   workflowVersions(uuid: string): SyshubWorkflowVersion[] {
     return this.workflowVersions$.value[uuid] ?? [];
+  }
+
+  workflowsWithoutReferences(): string[] {
+    return Object.keys(this.workflowReferences$.value).filter(key => this.workflowReferences$.value[key].length == 0);
   }
 
 }

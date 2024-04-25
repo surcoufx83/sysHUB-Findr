@@ -136,11 +136,15 @@ code {
 }
 
 .fs-7 {
-    font-size: 90%;
+    font-size: 90% !important;
 }
 
 .fs-8 {
-    font-size: 80%;
+    font-size: 80% !important;
+}
+
+.fs-9 {
+    font-size: 70% !important;
 }
 
 .interaction-reminder:hover::after {

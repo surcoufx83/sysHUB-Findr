@@ -256,6 +256,8 @@ export type L10nLocale = {
         workflow: {
             title: string,
             subtitle: string,
+            unused: string,
+            unusedTitle: string,
             nodeInspector: {
                 cacheable: string,
                 categoryName: string,
