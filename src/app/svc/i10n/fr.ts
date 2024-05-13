@@ -17,8 +17,7 @@ export const L10nFr: L10nLocale = {
         titles: {
             home: 'sysHUB Findr',
             searchOngoing: 'Recherche en cours...',
-            resultView: 'Vue des résultats',
-            resultConfigView: 'Résultat (Configuration)'
+            resultView: 'Recherche "[0]"',
         },
     },
     common: {
@@ -78,6 +77,7 @@ export const L10nFr: L10nLocale = {
     },
     navbar: {
         aboutLink: 'À propos',
+        aboutLinkWithVersion: 'À propos Findr [0]',
         cacheReload: {
             label: 'Mise à jour du cache',
             tooltip: 'Les enregistrements modifiés seront chargés depuis le serveur : [0]'
@@ -305,6 +305,8 @@ export const L10nFr: L10nLocale = {
                 Dans la liste, les flux de travail sont mis en évidence en couleur s'il y a une correspondance dans les métadonnées ou dans le flux de travail lui-même.
                 Cliquez sur une entrée pour voir les détails ou sur l'icône du diagramme de flux pour afficher le flux de travail.
             `,
+            unused: 'Non utilisé',
+            unusedTitle: 'Le workflow n\'est pas référencé et donc probablement pas utilisé.',
             nodeInspector: {
                 cacheable: 'Cache activé',
                 categoryName: 'Catégorie',
@@ -386,6 +388,8 @@ export const L10nFr: L10nLocale = {
         },
         process: {
             subject: ['Processus', 'Processus en boucle'],
+            deprecated: 'Ce processus est obsolète et ne doit plus être utilisé.',
+            referencedParametersetTitle: 'Paramètres référencés',
         },
         shared: {
             agent: 'Agent',

@@ -13,12 +13,11 @@ export const MockL10n: L10nLocale = {
         errorCommon: 'mock-errorCommon',
     },
     app: {
-        title: 'mock-title',
+        title: 'mock-Findr',
         titles: {
-            home: 'mock-home',
-            searchOngoing: 'mock-searchOngoing',
-            resultView: 'mock-resultView',
-            resultConfigView: 'mock-resultConfigView',
+            home: 'mock-sysHUB Findr',
+            searchOngoing: 'mock-Search ongoing...',
+            resultView: 'mock-Search "[0]"',
         },
     },
     common: {
@@ -78,6 +77,7 @@ export const MockL10n: L10nLocale = {
     },
     navbar: {
         aboutLink: 'mock-about',
+        aboutLinkWithVersion: 'mock-aboutLinkWithVersion',
         cacheReload: {
             label: 'mock-cacheReload',
             tooltip: 'mock-tooltip'
@@ -268,6 +268,8 @@ export const MockL10n: L10nLocale = {
         workflow: {
             title: 'mock-title',
             subtitle: 'mock-subtitle',
+            unused: 'mock-unused',
+            unusedTitle: 'mock-unusedTitle',
             nodeInspector: {
                 cacheable: 'mock-cacheable',
                 categoryName: 'mock-categoryName',
@@ -345,7 +347,9 @@ export const MockL10n: L10nLocale = {
             subject: 'mock-subject',
         },
         process: {
-            subject: ['mock-subject0', 'mock-subject1'],
+            subject: ['mock-process', 'mock-loopProcess'],
+            deprecated: 'mock-deprecated',
+            referencedParametersetTitle: 'mock-referencedParametersetTitle',
         },
         shared: {
             agent: 'mock-agent',

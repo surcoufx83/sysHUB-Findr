@@ -7,9 +7,11 @@ export type FindrEnvironment = {
     },
     app?: {
         baseUrl?: string,
-        disabledFunctions?: ('config' | 'jobtypes' | 'parameterset' | 'workflows' | 'certstore' | 'serverConfig' | 'serverInfo' | 'ippDevices' | 'users')[];
+        disabledFunctions?: ('config' | 'jobtypes' | 'parameterset' | 'workflows' | 'certstore' | 'serverConfig' | 'serverInfo' | 'ippDevices' | 'users')[],
+        displaySystemName?: boolean,
         promotionLink?: string,
         minPhraseLength?: number,
+        unusedWorkflowBadge?: boolean,
         useCache?: boolean,
         webclientLink?: string,
     },
@@ -96,6 +98,7 @@ export type UuidModifiedObject = {
 export type UserConfig = {
     enableCache: boolean,
     showMoreFilter?: boolean,
+    showPsetTreeInProcessNodes?: boolean,
     showUnmatchedItems?: boolean,
     hideJobtypePercentItems?: boolean,
     hideUnassignedRoles?: boolean,

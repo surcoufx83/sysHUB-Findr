@@ -1,3 +1,4 @@
+import { HttpStatusCode } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -5,6 +6,7 @@ import { AppInitService } from 'src/app/svc/app-init.service';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
+import { PagepropsService } from 'src/app/svc/pageprops.service';
 import { SearchService, defaultSearchConfig } from 'src/app/svc/search.service';
 import { ToastsService } from 'src/app/svc/toasts.service';
 import { SearchConfig } from 'src/app/types';
@@ -55,6 +57,7 @@ export class HomeComponent implements OnDestroy, OnInit {
     private searchService: SearchService,
     private cacheService: CacheService,
     private toastsService: ToastsService,
+    private propsService: PagepropsService,
   ) {
     this.currentLocale = l10nService.lang.length > 2 ? l10nService.lang.substring(0, 2) : l10nService.lang;
     this.disabledFunctions = appInitService.environment.app?.disabledFunctions ?? [];
@@ -96,7 +99,8 @@ export class HomeComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    this.subs.push(this.restapi.getCurrentUser().subscribe((reply) => this.username = reply instanceof Error ? '' : reply.name));
+    this.propsService.resetPageTitle();
+    this.subs.push(this.restapi.getCurrentUser((this.username == '')).subscribe((reply) => this.username = reply instanceof Error ? '' : reply == HttpStatusCode.NotModified ? this.username : reply.name));
     this.subs.push(this.restapi.isLoggedIn.subscribe((v) => this.loggedin = v));
     this.subs.push(this.cacheService.Categories.subscribe((categories) => this.categories = categories));
     this.subs.push(this.cacheService.userconfig.subscribe((uc) => {

@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 import { CacheService } from 'src/app/svc/cache.service';
 import { PagepropsService } from 'src/app/svc/pageprops.service';
+import { explodeParameters } from 'src/app/utils/syshub.helper';
 
 @Component({
   selector: 'app-node-inspector-workflow-process-node',
@@ -19,9 +20,14 @@ export class NodeInspectorWfProcessNodeComponent implements OnDestroy, OnInit {
   @Input({ required: true }) nodeItem!: SvgElement;
   @Output() onChangeColor = new EventEmitter<never>();
   @Input({ required: true }) searchResult?: SearchResult;
+  @Input({ required: true }) showPsetTreeInProcessNodes!: boolean;
 
   parameters: [string, string][] = [];
   parameterset?: SyshubPSetItem;
+  parametersetMaxDeep: number = 0;
+  parametersetPath: string = '';
+  parametersetTreeUuids: { [key: string]: [path: string, defaultOpen: boolean, open: boolean] } = {};
+  isTracingMe: boolean = false;
   moveNodeNextTo: { [key: string]: HTMLElement } = {};
   subs: Subscription[] = [];
 
@@ -57,9 +63,6 @@ export class NodeInspectorWfProcessNodeComponent implements OnDestroy, OnInit {
         this.parameters.push([key, kvpair.substring(key.length + 1)]);
       }
     });
-    if (obj.parameterSetUuid != null && obj.parameterSetUuid !== '') {
-      this.parameterset = this.cacheService.getPsetItemByUuid(obj.parameterSetUuid) ?? undefined;
-    }
     this.subs.push(this.propsService.NodesOpened.subscribe((node) => {
       if (node.type === 'PSetItems' && this.moveNodeNextTo[(<SyshubPSetItem>node.node).uuid]) {
         const nodelement = this.document.getElementById(node.id!);
@@ -70,14 +73,48 @@ export class NodeInspectorWfProcessNodeComponent implements OnDestroy, OnInit {
         }
       }
     }));
+    this.subs.push(this.propsService.TraceNode.subscribe((node) => {
+      this.isTracingMe = node?.uuid === this.nodeItem.uuid;
+    }));
+    if (obj.parameterSetUuid != null && obj.parameterSetUuid !== '') {
+      this.parameterset = this.cacheService.getPsetItemByUuid(obj.parameterSetUuid) ?? undefined;
+    }
+    else if (obj.name == 'LoadParameterSet' || obj.name == 'LoadParameterSetFast') {
+      let params = explodeParameters(obj.parameters);
+      this.parametersetMaxDeep = obj.name == 'LoadParameterSetFast' ? 1 : params['maxdeep'] ? +params['maxdeep'] : 999;
+      if (params['psname'] && params['psname'] != '') {
+        this.parameterset = this.cacheService.getPsetItemByPath(params['psname']) ?? undefined;
+      }
+    }
+    if (this.parameterset) {
+      this.ngOnInit_loopTree(this.parametersetTreeUuids, [this.parameterset], 0);
+    }
+  }
+
+  ngOnInit_loopTree(temppaths: { [key: string]: [path: string, defaultOpen: boolean, open: boolean] }, children: SyshubPSetItem[], level: number) {
+    children.forEach((item) => {
+      const tree = this.cacheService.getPsetTree(item.uuid, true);
+      if (level == 0)
+        this.parametersetPath = this.cacheService.getPsetTree(item.uuid, false);
+      const show = this.parametersetMaxDeep == 0 || level < this.parametersetMaxDeep;
+      temppaths[item.uuid] = [tree, show, show];
+      this.ngOnInit_loopTree(temppaths, item.children, level + 1);
+    })
   }
 
   selectNode(node: SyshubPSetItem, event: MouseEvent): void {
     this.propsService.inspect('PSetItems', node);
     const target = (<HTMLElement>event.target).parentElement?.parentElement?.parentElement?.parentElement?.parentElement
-    if (target) {
+    if (target)
       this.moveNodeNextTo[node.uuid] = target;
-    }
+  }
+
+  toggleShowPsetTree(): void {
+    this.cacheService.toggleShowPsetTreeInProcessNodes(!this.showPsetTreeInProcessNodes);
+  }
+
+  traceMe(): void {
+    this.propsService.TraceNode.next(this.isTracingMe ? undefined : this.nodeItem);
   }
 
 }

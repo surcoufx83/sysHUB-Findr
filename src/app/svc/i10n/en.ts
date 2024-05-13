@@ -16,9 +16,8 @@ export const L10nEn: L10nLocale = {
         title: 'Findr',
         titles: {
             home: 'sysHUB Findr',
-            searchOngoing: 'Search in progress...',
-            resultView: 'Result View',
-            resultConfigView: 'Result (Config)'
+            searchOngoing: 'Search ongoing...',
+            resultView: 'Search "[0]"',
         },
     },
     common: {
@@ -78,6 +77,7 @@ export const L10nEn: L10nLocale = {
     },
     navbar: {
         aboutLink: 'About',
+        aboutLinkWithVersion: 'About Findr [0]',
         cacheReload: {
             label: 'Cache is updating',
             tooltip: 'Changed records will be loaded from the server: [0]'
@@ -305,6 +305,8 @@ export const L10nEn: L10nLocale = {
                 In the list, workflows are highlighted in color if there is a match in the metadata or the workflow itself.
                 Click on an entry to see the details or on the flowchart icon to display the workflow.
             `,
+            unused: 'unused',
+            unusedTitle: 'The workflow is not referenced and therefore likely not used.',
             nodeInspector: {
                 cacheable: 'Cache active',
                 categoryName: 'Category',
@@ -386,6 +388,8 @@ export const L10nEn: L10nLocale = {
         },
         process: {
             subject: ['Process', 'Loop Process'],
+            deprecated: 'This process is marked as deprecated and should no longer be used.',
+            referencedParametersetTitle: 'Referenced parameterset',
         },
         shared: {
             agent: 'Agent',

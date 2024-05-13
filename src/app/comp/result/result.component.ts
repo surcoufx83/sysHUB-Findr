@@ -6,6 +6,7 @@ import { AppInitService } from 'src/app/svc/app-init.service';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
+import { PagepropsService } from 'src/app/svc/pageprops.service';
 import { SearchService } from 'src/app/svc/search.service';
 import { SearchResult, SearchResultCertStoreContent, SimpleKeyValue } from 'src/app/types';
 import { SyshubConfigItem, SyshubIppDevice, SyshubJobType, SyshubPSetItem, SyshubUserAccount, SyshubWorkflow } from 'syshub-rest-module';
@@ -44,6 +45,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     private l10nService: L10nService,
     private cacheService: CacheService,
     private searchService: SearchService,
+    private propsService: PagepropsService,
     private router: Router,
     private route: ActivatedRoute,
     @Inject(DOCUMENT) private document: Document) {
@@ -89,6 +91,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     this.showUnmatched = this.cacheService.showUnmatchedItems;
     this.subs.push(this.cacheService.searchresult.subscribe((result) => {
       this.ngOnInit_updateItems(result);
+      this.propsService.setPageTitle(this.l10n(this.l10nphrase.app.titles.resultView, [result?.search.phrase]));
     }));
     this.subs.push(this.route.queryParamMap.subscribe((map) => {
       if (map.has('t')) {

@@ -11,10 +11,10 @@
         @else {
         <i [ngClass]="['bi me-2', getIcon(item)]"></i>
         }
-        <span class="name" [innerHTML]="item.name | highlight: searchResult.search.phrase"></span>
+        <span class="name" [innerHTML]="item.name | highlight: searchResult?.search?.phrase ?? ''"></span>
         @if(item.value){
         <span class="mx-2">:</span>
-        <span class="value" [innerHTML]="item.value | highlight: searchResult.search.phrase"></span>
+        <span class="value" [innerHTML]="item.value | highlight: searchResult?.search?.phrase ?? ''"></span>
         }
     </div>
     @if (item.children.length > 0) {

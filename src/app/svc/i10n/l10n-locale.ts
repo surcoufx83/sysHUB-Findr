@@ -22,7 +22,6 @@ export type L10nLocale = {
             home: string,
             searchOngoing: string,
             resultView: string,
-            resultConfigView: string
         },
     },
     common: {
@@ -70,6 +69,7 @@ export type L10nLocale = {
     },
     navbar: {
         aboutLink: string,
+        aboutLinkWithVersion: string,
         cacheReload: {
             label: string,
             tooltip: string,
@@ -256,6 +256,8 @@ export type L10nLocale = {
         workflow: {
             title: string,
             subtitle: string,
+            unused: string,
+            unusedTitle: string,
             nodeInspector: {
                 cacheable: string,
                 categoryName: string,
@@ -328,6 +330,8 @@ export type L10nLocale = {
         },
         process: {
             subject: string[],
+            deprecated: string,
+            referencedParametersetTitle: string,
         },
         shared: {
             agent: string,

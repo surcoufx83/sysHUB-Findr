@@ -203,20 +203,20 @@ export class SearchService {
         return;
       }
       let certstore: { keystore: SyshubCertStoreItem[], truststore: SyshubCertStoreItem[] } = { keystore: [], truststore: [] };
-      this.restapi.getCertStoreItems('keystore').subscribe((store1) => {
+      this.restapi.getCertStoreItems('keystore', true).subscribe((store1) => {
         if (store1 instanceof Error) {
           subject.next(false);
           subject.complete();
           return;
         }
-        certstore.keystore = [...store1].sort((a, b) => a.certX509SubjectDN.toLocaleLowerCase() > b.certX509SubjectDN.toLocaleLowerCase() ? 1 : -1);
-        this.restapi.getCertStoreItems('truststore').subscribe((store2) => {
+        certstore.keystore = [...<SyshubCertStoreItem[]>store1].sort((a, b) => a.certX509SubjectDN.localeCompare(b.certX509SubjectDN));
+        this.restapi.getCertStoreItems('truststore', true).subscribe((store2) => {
           if (store2 instanceof Error) {
             subject.next(false);
             subject.complete();
             return;
           }
-          certstore.truststore = [...store2].sort((a, b) => a.certX509SubjectDN.toLocaleLowerCase() > b.certX509SubjectDN.toLocaleLowerCase() ? 1 : -1);
+          certstore.truststore = [...<SyshubCertStoreItem[]>store2].sort((a, b) => a.certX509SubjectDN.localeCompare(b.certX509SubjectDN));
           subject.next(certstore);
           subject.complete();
         });
@@ -233,13 +233,13 @@ export class SearchService {
         subject.complete();
         return;
       }
-      this.restapi.getDevices().subscribe((items) => {
+      this.restapi.getDevices(undefined, true).subscribe((items) => {
         if (items instanceof Error) {
           subject.next(false);
           subject.complete();
           return;
         }
-        subject.next(items);
+        subject.next(<SyshubIppDevice[]>items);
         subject.complete();
       });
     }, 1);
@@ -254,13 +254,13 @@ export class SearchService {
         subject.complete();
         return;
       }
-      this.restapi.getServerProperties().subscribe((items) => {
+      this.restapi.getServerProperties(true).subscribe((items) => {
         if (items instanceof Error) {
           subject.next(false);
           subject.complete();
           return;
         }
-        subject.next(items);
+        subject.next(<{ [key: string]: string }>items);
         subject.complete();
       });
     }, 1);
@@ -275,13 +275,13 @@ export class SearchService {
         subject.complete();
         return;
       }
-      this.restapi.getServerInformation().subscribe((items) => {
+      this.restapi.getServerInformation(true).subscribe((items) => {
         if (items instanceof Error) {
           subject.next(false);
           subject.complete();
           return;
         }
-        subject.next(items);
+        subject.next(<SyshubServerInformation>items);
         subject.complete();
       });
     }, 1);
@@ -296,13 +296,13 @@ export class SearchService {
         subject.complete();
         return;
       }
-      this.restapi.getUsers().subscribe((items) => {
+      this.restapi.getUsers(true).subscribe((items) => {
         if (items instanceof Error) {
           subject.next(false);
           subject.complete();
           return;
         }
-        subject.next(items);
+        subject.next(<SyshubUserAccount[]>items);
         subject.complete();
       });
     }, 1);
@@ -323,7 +323,7 @@ export class SearchService {
           subject.complete();
           return;
         }
-        subject.next(items);
+        subject.next(<SyshubRole[]>items);
         subject.complete();
       });
     }, 1);

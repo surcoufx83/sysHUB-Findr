@@ -93,6 +93,9 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
       }, 100);
     });
     this.subs.push(this.searchService.searchBusy.subscribe((state) => this.loaded = this.progress === 100 && this.workflow !== undefined));
+    this.subs.push(this.cacheService.workflowReferencesUpdated.subscribe((state) => { if (state != null) this.ngOnInit_LoadWfRefs() }));
+    this.subs.push(this.cacheService.workflowStartpointsUpdated.subscribe((state) => { if (state != null) this.ngOnInit_LoadWfStartpoints() }));
+    this.subs.push(this.cacheService.workflowVersionsUpdated.subscribe((state) => { if (state != null) this.ngOnInit_LoadWfVersions() }));
   }
 
   ngOnInit_LoadWf(): void {
@@ -104,54 +107,9 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
     if (this.workflow != undefined && JSON.stringify(this.workflow) === JSON.stringify(tempworkflow))
       return;
 
-    this.ngOnInit_ReportProgress();
     this.workflow = { ...tempworkflow };
 
-    if (!this.sysHUB2022CompatibilityMode) {
-      this.subs.push(this.restapi.getWorkflowReferences(tempworkflow.uuid).subscribe((reply) => {
-        if (reply instanceof Error) {
-          this.toastsService.addDangerToast({
-            message: this.l10n(this.l10nphrase.api.errorCommon, [reply.message]),
-            autohide: false
-          });
-          this.failedState = 'apiError';
-          this.apiError = { ...reply };
-        }
-        else {
-          let temprefs: { [key: string]: SyshubWorkflowReferenceGroup } = {};
-          reply.forEach((ref) => {
-            if (!temprefs[ref.type])
-              temprefs[ref.type] = { type: ref.type, items: [] };
-            temprefs[ref.type].items.push(ref);
-          });
-          let temprefs2 = Object.values(temprefs).sort((a, b) => a.type.toLocaleLowerCase() > b.type.toLocaleLowerCase() ? 1 : a.type.toLocaleLowerCase() < b.type.toLocaleLowerCase() ? -1 : 0);
-          temprefs2.forEach((group) => {
-            group.items = group.items.sort((a, b) => a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : a.name.toLocaleLowerCase() < b.name.toLocaleLowerCase() ? -1 : 0);
-            this.referencesCount += group.items.length;
-          });
-          this.references = [...temprefs2];
-          this.ngOnInit_ReportProgress();
-        }
-      }));
-
-      this.subs.push(this.restapi.getWorkflowVersions(tempworkflow.uuid).subscribe((reply) => {
-        if (reply instanceof Error) {
-          this.toastsService.addDangerToast({
-            message: this.l10n(this.l10nphrase.api.errorCommon, [reply.message]),
-            autohide: false
-          });
-          this.failedState = 'apiError';
-          this.apiError = { ...reply };
-        }
-        else {
-          // sort versions descending
-          this.versions = reply.sort((a, b) => a.major > b.major ? -1 : b.major > a.major ? 1 : a.minor > b.minor ? -1 : b.minor > a.minor ? 1 : 0);
-          this.ngOnInit_ReportProgress();
-        }
-      }));
-    }
-
-    this.subs.push(this.restapi.getWorkflowModel(tempworkflow.uuid).subscribe((reply) => {
+    this.subs.push(this.restapi.getWorkflowModel(tempworkflow.uuid, true).subscribe((reply) => {
       if (reply instanceof Error) {
         this.toastsService.addDangerToast({
           message: this.l10n(this.l10nphrase.api.errorCommon, [reply.message]),
@@ -161,46 +119,45 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
         this.apiError = { ...reply };
       }
       else {
-        this.model = reply;
-        this.ngOnInit_ReportProgress();
+        this.model = { ...<SyshubWorkflowModel>reply };
+        this.propsService.setPageTitle(this.l10n(this.l10nphrase.workflowUi.title, [this.workflow?.name]))
       }
     }));
 
-    this.subs.push(this.restapi.getWorkflowStartpoints(tempworkflow.uuid).subscribe((reply) => {
-      if (reply instanceof Error) {
-        this.toastsService.addDangerToast({
-          message: this.l10n(this.l10nphrase.api.errorCommon, [reply.message]),
-          autohide: false
-        });
-        this.failedState = 'apiError';
-        this.apiError = { ...reply };
-      }
-      else {
-        this.startpoints = <any>reply === null ? [] : reply;
-        this.ngOnInit_ReportProgress();
-      }
-    }));
+    this.ngOnInit_LoadWfRefs();
+    this.ngOnInit_LoadWfStartpoints();
+    this.ngOnInit_LoadWfVersions();
+
   }
 
-  progressDebounce: any;
-  private ngOnInit_ReportProgress(): void {
-    clearTimeout(this.progressDebounce);
-    this.progressDebounce = setTimeout(() => {
-      if (this.sysHUB2022CompatibilityMode) {
-        this.progress = Math.floor(((this.workflow != undefined ? 1 : 0) +
-          (this.startpoints != undefined ? 1 : 0) +
-          (this.model != undefined ? 1 : 0)) * 33.34);
-      } else {
-        this.progress = Math.floor(((this.workflow != undefined ? 1 : 0) +
-          (this.versions != undefined ? 1 : 0) +
-          (this.references != undefined ? 1 : 0) +
-          (this.startpoints != undefined ? 1 : 0) +
-          (this.model != undefined ? 1 : 0)) * 20);
-      }
-      this.searchService.setProgress(this.progress);
-      if (this.progress < 100)
-        this.ngOnInit_ReportProgress();
-    }, 100);
+  ngOnInit_LoadWfRefs(): void {
+    if (!this.workflow)
+      return
+    let refs = this.cacheService.workflowReferences(this.workflow.uuid);
+    let temprefs: { [key: string]: SyshubWorkflowReferenceGroup } = {};
+    refs.forEach((ref) => {
+      if (!temprefs[ref.type])
+        temprefs[ref.type] = { type: ref.type, items: [] };
+      temprefs[ref.type].items.push(ref);
+    });
+    let temprefs2 = Object.values(temprefs).sort((a, b) => a.type.toLocaleLowerCase() > b.type.toLocaleLowerCase() ? 1 : a.type.toLocaleLowerCase() < b.type.toLocaleLowerCase() ? -1 : 0);
+    temprefs2.forEach((group) => {
+      group.items = group.items.sort((a, b) => a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : a.name.toLocaleLowerCase() < b.name.toLocaleLowerCase() ? -1 : 0);
+      this.referencesCount += group.items.length;
+    });
+    this.references = [...temprefs2];
+  }
+
+  ngOnInit_LoadWfStartpoints(): void {
+    if (!this.workflow)
+      return
+    this.startpoints = this.cacheService.workflowStartpoints(this.workflow.uuid);
+  }
+
+  ngOnInit_LoadWfVersions(): void {
+    if (!this.workflow)
+      return
+    this.versions = this.cacheService.workflowVersions(this.workflow.uuid);
   }
 
   hoverNode(type: 'ConfigItems' | 'JobTypes' | 'PSetItems' | 'WorkflowItems', path: string, event: MouseEvent): void {

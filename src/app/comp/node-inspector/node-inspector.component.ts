@@ -7,6 +7,7 @@ import { SearchResult } from 'src/app/types';
 import { SyshubCertStoreItem, SyshubConfigItem, SyshubIppDevice, SyshubJobType, SyshubPSetItem, SyshubUserAccount, SyshubWorkflow } from 'syshub-rest-module';
 import { SvgElement } from '../workflow-ui/canvas/element';
 import { DOCUMENT } from '@angular/common';
+import { CacheService } from 'src/app/svc/cache.service';
 
 @Component({
   selector: 'app-node-inspector',
@@ -22,6 +23,7 @@ export class NodeInspectorComponent implements OnDestroy, OnInit {
 
   nodeCards: NodeInspectorItem[] = [];
   nodesAdded: string[] = [];
+  showPsetTreeInProcessNodes: boolean = true;
   zindex: number = 100;
 
   colorpalette = [
@@ -39,6 +41,7 @@ export class NodeInspectorComponent implements OnDestroy, OnInit {
 
   constructor(private l10nService: L10nService,
     private propsService: PagepropsService,
+    private cacheService: CacheService,
     @Inject(DOCUMENT) private document: Document,
   ) { }
 
@@ -56,9 +59,8 @@ export class NodeInspectorComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    this.subs.push(this.propsService.NodeInspectorItem.subscribe((request) => {
-      this.onInspectNewNodeItem(request);
-    }))
+    this.subs.push(this.propsService.NodeInspectorItem.subscribe((request) => this.onInspectNewNodeItem(request)));
+    this.subs.push(this.cacheService.userconfig.subscribe((cfg) => this.showPsetTreeInProcessNodes = cfg.showPsetTreeInProcessNodes ?? true));
   }
 
   onInspectNewNodeItem(request: NodeInspectorRequest): void {

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
+import { PagepropsService } from 'src/app/svc/pageprops.service';
 import { SearchService } from 'src/app/svc/search.service';
 import { SearchConfig } from 'src/app/types';
 
@@ -22,6 +23,7 @@ export class SearchComponent implements OnDestroy, OnInit {
 
   constructor(private l10nService: L10nService,
     private searchService: SearchService,
+    private propsService: PagepropsService,
     private router: Router) { }
 
   get l10nphrase(): L10nLocale {
@@ -51,6 +53,8 @@ export class SearchComponent implements OnDestroy, OnInit {
     this.subs.push(this.searchService.searchBusy.subscribe((busy) => {
       if (!this.searchConfig)
         return;
+      if (busy)
+        this.propsService.setPageTitle(this.l10nphrase.app.titles.searchOngoing);
       if (!busy && !this.busy)
         this.router.navigate(['/result'], { queryParams: { q: this.searchConfig.phrase, t: this.searchConfig.token } });
     }));

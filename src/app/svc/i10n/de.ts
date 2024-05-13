@@ -17,8 +17,7 @@ export const L10nDe: L10nLocale = {
         titles: {
             home: 'sysHUB Findr',
             searchOngoing: 'Suche läuft...',
-            resultView: 'Ergebnisansicht',
-            resultConfigView: 'Ergebnis (Konfig)'
+            resultView: 'Suche "[0]"',
         },
     },
     common: {
@@ -78,6 +77,7 @@ export const L10nDe: L10nLocale = {
     },
     navbar: {
         aboutLink: 'Über',
+        aboutLinkWithVersion: 'Über Findr [0]',
         cacheReload: {
             label: 'Cache wird aktualisiert',
             tooltip: 'Geänderte Datensätze werden vom Server geladen: [0]'
@@ -307,6 +307,8 @@ export const L10nDe: L10nLocale = {
                 In der Auflistung sind die Workflows farblich hervorgehoben, bei denen ein Treffer in den Metadaten oder dem Workflow ansich enthalten ist.
                 Anklicken eines Eintrags um die Details zu sehen oder auf das Flowchart-Icon um den Workflow anzuzeigen.
             `,
+            unused: 'ungenutzt',
+            unusedTitle: 'Der Workflow wird nicht referenziert und damit wahrscheinlich nicht verwendet.',
             nodeInspector: {
                 cacheable: 'Cache aktiv',
                 categoryName: 'Kategorie',
@@ -389,6 +391,8 @@ export const L10nDe: L10nLocale = {
         },
         process: {
             subject: ['Prozess', 'Loop-Prozess'],
+            deprecated: 'Dieser Prozess ist als veraltet markiert und sollte nicht mehr verwendet werden.',
+            referencedParametersetTitle: 'verwendetes Parameterset',
         },
         shared: {
             agent: 'Agent',

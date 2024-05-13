@@ -96,6 +96,7 @@
     }
     @case ('process') {
     <app-node-inspector-workflow-process-node [nodeItem]="$any(node.nodeitem)" [searchResult]="searchResult"
+        [showPsetTreeInProcessNodes]="showPsetTreeInProcessNodes"
         (onChangeColor)="node.color = (node.color == colorpalette.length - 1 ? 0 : node.color + 1)">
         <button type="button" class="btn btn-sm px-2" cdkDragHandle>
             <i class="bi bi-arrows-move"></i>

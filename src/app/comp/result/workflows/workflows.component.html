@@ -3,11 +3,19 @@
 <table class="table table-sm table-hover">
     <tbody>
         @for (item of workflows; track $index) {
-        <tr [ngClass]="showUnmatchedItems || workflowsMatched.includes(item.uuid) ? '' : 'd-none'">
+        <tr
+            [ngClass]="showUnmatchedItems || workflowsMatched.includes(item.uuid) ? 'align-middle' : 'd-none align-middle'">
             <td [ngClass]="{ 'cursor-pointer': true, 'text-success': workflowsMatched.includes(item.uuid)}">
                 <strong [innerHTML]="item.name | highlight: searchResult.search.phrase"
                     (mouseover)="hoverNode(item, $event)" (mouseout)="leaveNode(item)"
                     (click)="selectNode(item)"></strong>
+                @if (displayUnusedBadges && workflowsUnused.includes(item.uuid) && item.name != 'SystemWorkflow') {
+                <span class="badge text-bg-warning ms-2 fs-9" style="transform: translateY(-2px);"
+                    [attr.title]="l10nphrase.result.workflow.unusedTitle">
+                    <i class="bi bi-info-circle me-1"></i>
+                    {{ l10nphrase.result.workflow.unused }}
+                </span>
+                }
             </td>
             <td class="text-end">
                 <a target="_blank" [href]="'#workflow?uuid=' + item.uuid + '&t=' + searchResult.search.token">

@@ -1,7 +1,7 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { APP_BASE_HREF } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
-import { APP_INITIALIZER, Inject, NgModule, Optional } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -17,6 +17,7 @@ import { HelpComponent } from './comp/help/help.component';
 import { HomeComponent } from './comp/home/home.component';
 import { LoginComponent } from './comp/login/login.component';
 import { LogoutComponent } from './comp/logout/logout.component';
+import { ConfigMissingBarComponent } from './comp/main/config-missing-bar/config-missing-bar.component';
 import { MainComponent } from './comp/main/main.component';
 import { NavbarComponent } from './comp/main/navbar/navbar.component';
 import { ProgressbarComponent } from './comp/main/progressbar/progressbar.component';
@@ -59,7 +60,8 @@ import { SearchService } from './svc/search.service';
 import { ToastsService } from './svc/toasts.service';
 import { ToastsComponent } from './svc/toasts/toasts.component';
 import { HighlightPipe } from './utils/highlight.pipe';
-import { ConfigMissingBarComponent } from './comp/main/config-missing-bar/config-missing-bar.component';
+
+export const FindrVersion: string = '1.0.0-beta.5';
 
 export function initAppFactory(svc: AppInitService) {
   return () => svc.load();
@@ -72,6 +74,7 @@ export function initAppFactory(svc: AppInitService) {
     CanvasComponent,
     CertstoreComponent,
     ConfigComponent,
+    ConfigMissingBarComponent,
     CopyButtonComponent,
     HelpComponent,
     HighlightPipe,
@@ -110,7 +113,6 @@ export function initAppFactory(svc: AppInitService) {
     UserComponent,
     WorkflowsComponent,
     WorkflowUiComponent,
-    ConfigMissingBarComponent,
   ],
   imports: [
     AppRoutingModule,

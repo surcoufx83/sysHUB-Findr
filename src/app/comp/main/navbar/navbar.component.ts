@@ -2,8 +2,8 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NavigationEnd, Router } from '@angular/router';
 import { fromUnixTime, isToday } from 'date-fns';
-import { DeviceDetectorService } from 'ngx-device-detector';
 import { Observable, Subscription } from 'rxjs';
+import { FindrVersion } from 'src/app/app.module';
 import { AppInitService } from 'src/app/svc/app-init.service';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
@@ -38,7 +38,10 @@ export class NavbarComponent implements OnDestroy, OnInit {
   searchHistory?: Observable<{ [key: string]: [string, SearchResult] }>;
   searchProgress: number = 100;
   subs: Subscription[] = [];
+  systemName: string = 'Base';
+  systemNameDisplay: boolean = true;
   url = '/';
+  version: string = FindrVersion;
   webclientlink: string;
 
   searchForm = new FormGroup({
@@ -68,6 +71,7 @@ export class NavbarComponent implements OnDestroy, OnInit {
     this.locales = appInitService.environment.i10n?.locales ?? ['en', 'de', 'fr'];
     this.minPhraseLength = appInitService.environment.app?.minPhraseLength ?? 3;
     this.promolink = appInitService.environment.app?.promotionLink ?? '';
+    this.systemNameDisplay = appInitService.environment.app?.displaySystemName ?? true;
     this.webclientlink = appInitService.environment.app?.webclientLink ?? '';
     this.locales.forEach((locale) => {
       this.localesLocalized[locale] = this.l10nphrase.common.locales[locale] ?? locale;
@@ -103,6 +107,11 @@ export class NavbarComponent implements OnDestroy, OnInit {
     this.subs.push(this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.url = event.url;
+      }
+    }));
+    this.subs.push(this.cacheService.ServerInfo.subscribe((info) => {
+      if (info != null) {
+        this.systemName = info.systemName;
       }
     }));
     this.subs.push(this.searchService.searchBusy.subscribe((busy) => this.searchBusy = busy));

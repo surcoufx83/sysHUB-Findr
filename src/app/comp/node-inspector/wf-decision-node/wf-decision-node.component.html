@@ -8,6 +8,10 @@
             <h5 class="mb-0" [innerHTML]="nodeItem.title | highlight: searchResult?.search?.phrase"></h5>
         </div>
         <div>
+            <button type="button" [ngClass]="{ 'btn btn-sm ps-2': true, 'text-danger': isTracingMe }"
+                (click)="traceMe()">
+                <i class="bi bi-bezier"></i>
+            </button>
             <button type="button" class="btn btn-sm px-2" (click)="onChangeColor.emit()">
                 <i class="bi bi-palette-fill"></i>
             </button>

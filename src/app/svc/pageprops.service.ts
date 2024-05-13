@@ -5,6 +5,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { SyshubCertStoreItem, SyshubConfigItem, SyshubIppDevice, SyshubJobType, SyshubPSetItem, SyshubUserAccount, SyshubWorkflow } from 'syshub-rest-module';
 import { L10nService } from './i10n.service';
 import { SvgElement } from '../comp/workflow-ui/canvas/element';
+import { Title } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root'
@@ -20,58 +21,20 @@ export class PagepropsService {
   public NodeInspectorItem = this.nodeInspectorItem$.asObservable();
   public NodesOpened = new Subject<NodeInspectorRequest>();
   public NodesClosed = new Subject<NodeInspectorRequest>();
+  public TraceNode = new Subject<SvgElement | undefined>();
 
-  private pages: PageTitleItem[] = [
-    { pattern: new RegExp(/^\/$/), text: 'sysHUB Findr' },
-    { pattern: new RegExp(/^\/result/), i10n: 'app.titles.resultView' },
-    { pattern: new RegExp(/^\/search$/), i10n: 'app.titles.searchOngoing' },
-  ];
-  private _pagetitle: BehaviorSubject<string> = new BehaviorSubject<string>('sysHUB Findr');
+  private _pagetitle: BehaviorSubject<string> = new BehaviorSubject<string>(this.i10nService.locale.app.titles.home);
   public pagetitle = this._pagetitle.asObservable();
 
   constructor(
     private i10nService: L10nService,
     private router: Router,
     device: DeviceDetectorService,
+    titleService: Title
   ) {
-
     this.deviceType$ = device.isDesktop() ? 'desktop' : device.isMobile() ? 'mobile' : 'tablet';
-
+    this.pagetitle.subscribe((title) => titleService.setTitle(title));
     this.loadDefaultTheme();
-
-    this.router.events.subscribe(
-      (event: NavigationEvent) => {
-        if (event instanceof NavigationEnd) {
-          let found: boolean = false;
-          for (let i = 0; i < this.pages.length; i++) {
-            let page = this.pages[i];
-            let match = event.url.match(page.pattern);
-            if (match != null) {
-              if (page.text != undefined)
-                this._pagetitle.next(page.text);
-              else if (page.i10n != undefined) {
-                if (page.i10nargs == undefined)
-                  this._pagetitle.next(this.l10n(page.i10n));
-                else {
-                  let args: string[] = [];
-                  for (let i = 0; i < page.i10nargs.length; i++) {
-                    if (page.i10nargs[i].startsWith('match.'))
-                      args.push(match.groups![page.i10nargs[i].substring(6)]);
-                    else
-                      args.push(page.i10nargs[i]);
-                  }
-                  this._pagetitle.next(this.l10n(page.i10n, args));
-                }
-              }
-              found = true;
-              break;
-            }
-          }
-          if (!found)
-            this._pagetitle.next(event.url);
-        }
-      }
-    );
   }
 
   public applyTheme(theme: 'light' | 'dark' | null): void {
@@ -115,6 +78,14 @@ export class PagepropsService {
       return;
     }
     this.applyTheme(null);
+  }
+
+  public resetPageTitle(): void {
+    this._pagetitle.next(this.i10nService.locale.app.titles.home);
+  }
+
+  public setPageTitle(newTitle: string): void {
+    this._pagetitle.next(`${newTitle} - ${this.i10nService.locale.app.titles.home}`);
   }
 
 }

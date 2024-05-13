@@ -17,8 +17,10 @@
     "app": {
         "baseUrl": "/findr/",
         "disabledFunctions": [],
-        "promotionLink": "https://github.com/surcoufx83/sysHUB-Findr",
+        "displaySystemName": true,
         "minPhraseLength": 3,
+        "promotionLink": "https://github.com/surcoufx83/sysHUB-Findr",
+        "unusedWorkflowBadge": true,
         "useCache": true,
         "webclientLink": "/webclient"
     },

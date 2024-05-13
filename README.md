@@ -35,6 +35,7 @@ Die Konfiguration für ein Kundensystem erfolgt in der Datei `webapps\findr\asse
    2. In Zeile 5: `version` ändern in:
       - `2` = sysHUB 2022
       - `3` = sysHUB 2023
+      - `4` = sysHUB 2024
    3. Ab Zeile 6: `oauth` mit Zugangsdaten befüllen.
    4. Falls statt OAuth Basic auth verwendet werden soll, muss die Konfig angepasst werden gem. [der Vorgaben des Konnektors](https://github.com/surcoufx83/syshub-rest-module/tree/main/projects/syshub-rest-module#configuration).
    5. Zeile 19: `"disabledFunctions": [],`: Sollen nicht alle Suchfunktionen bereitstehen (z.B. nicht suchen in der server.properties), können die Themenbereiche kommasepariert eingetragen werden. Folgende Werte sind möglich:

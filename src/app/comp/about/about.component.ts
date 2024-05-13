@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FindrVersion } from 'src/app/app.module';
 import { L10nService } from 'src/app/svc/i10n.service';
 
 @Component({
@@ -9,6 +10,7 @@ import { L10nService } from 'src/app/svc/i10n.service';
 export class AboutComponent {
 
   currentLocale: string;
+  version: string = FindrVersion;
 
   constructor(
     l10nService: L10nService,
