@@ -115,11 +115,15 @@ code {
     }
 
     &.node-inspector {
-        overflow: auto;
+        /* overflow: auto; */
         resize: both;
         width: fit-content;
         min-width: 350px;
-        max-width: 860px;
+        max-width: 95vw;
+
+        .card-body {
+            overflow: auto;
+        }
 
         &[style*="height"] {
             max-height: unset;
