@@ -438,32 +438,52 @@ export class CacheService {
 
   private loadCategoriesCache(): void {
     let olddata = sessionStorage.getItem(this.appInitService.environment.storage?.categoriesKey ?? 'findr-syshub-cat');
-    if (olddata != null)
-      this.categories$.next(<SyshubCategory[]>JSON.parse(decompress(olddata)));
+    if (olddata != null) {
+      try {
+        this.categories$.next(<SyshubCategory[]>JSON.parse(decompress(olddata)));
+      } catch (error) {
+        console.error('Failed to decompress categories data:', error);
+      }
+    }
     this.categoriesLoaded$ = true;
     this.reloadCategories();
   }
 
   private loadConfigCache(): void {
     let olddata = sessionStorage.getItem(this.appInitService.environment.storage?.configKey ?? 'findr-syshub-config');
-    if (olddata != null)
-      this.config$.next(<SyshubConfigItem[]>JSON.parse(decompress(olddata)));
+    if (olddata != null) {
+      try {
+        this.jobtypes$.next(<SyshubJobType[]>JSON.parse(decompress(olddata)));
+      } catch (error) {
+        console.error('Failed to decompress config data:', error);
+      }
+    }
     this.configLoaded$ = true;
     this.reloadConfig();
   }
 
   private loadJobtypesCache(): void {
     let olddata = sessionStorage.getItem(this.appInitService.environment.storage?.jobtypesKey ?? 'findr-syshub-jobtypes');
-    if (olddata != null)
-      this.jobtypes$.next(<SyshubJobType[]>JSON.parse(decompress(olddata)));
+    if (olddata != null) {
+      try {
+        this.jobtypes$.next(<SyshubJobType[]>JSON.parse(decompress(olddata)));
+      } catch (error) {
+        console.error('Failed to decompress jobtypes data:', error);
+      }
+    }
     this.jobtypesLoaded$ = true;
     this.reloadJobtypes();
   }
 
   private loadParametersetCache(): void {
     let olddata = sessionStorage.getItem(this.appInitService.environment.storage?.parametersetKey ?? 'findr-syshub-parameterset');
-    if (olddata != null)
-      this.parameterset$.next(<SyshubPSetItem[]>JSON.parse(decompress(olddata)));
+    if (olddata != null) {
+      try {
+        this.parameterset$.next(<SyshubPSetItem[]>JSON.parse(decompress(olddata)));
+      } catch (error) {
+        console.error('Failed to decompress parameterset data:', error);
+      }
+    }
     this.parametersetLoaded$ = true;
     this.reloadParameterset();
   }
@@ -630,13 +650,17 @@ export class CacheService {
   private loadWorkflowCache(): void {
     let olddata = sessionStorage.getItem(this.appInitService.environment.storage?.workflowsKey ?? 'findr-syshub-workflow');
     if (olddata != null) {
-      this.workflows$.next(<SyshubWorkflow[]>JSON.parse(decompress(olddata)));
-      let olddata2 = sessionStorage.getItem('findr-syshub-wfdata');
-      if (olddata2 != null) {
-        const tempwfdata = <WfAdditionalData>JSON.parse(decompress(olddata2));
-        this.workflowReferences$.next(tempwfdata.references);
-        this.workflowStartpoints$.next(tempwfdata.startpoints);
-        this.workflowVersions$.next(tempwfdata.versions);
+      try {
+        this.workflows$.next(<SyshubWorkflow[]>JSON.parse(decompress(olddata)));
+        let olddata2 = sessionStorage.getItem('findr-syshub-wfdata');
+        if (olddata2 != null) {
+          const tempwfdata = <WfAdditionalData>JSON.parse(decompress(olddata2));
+          this.workflowReferences$.next(tempwfdata.references);
+          this.workflowStartpoints$.next(tempwfdata.startpoints);
+          this.workflowVersions$.next(tempwfdata.versions);
+        }
+      } catch (error) {
+        console.error('Failed to decompress parameterset data:', error);
       }
     }
     this.workflowsLoaded$ = true;

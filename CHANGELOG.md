@@ -10,16 +10,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - In the workflow presentation an additional hint is shown if a process or decision is marked as deprecated (#40)
-- The title of the browser tabs changes depending on the current view to make it easier working with multiple tabs / workflows (#38)
-- The workflow presentation allows tracing the path to an element. Therefore a new button has been implemented in decisions, processes, CElements and workflow calls. The selected node and all traces leading to it are highlighted in red (#42)
-- Findr version is visible in dropdown menu and about page (#43)
-- The system name is now visible in the Findr if not `Base` (#44). This can be disabled via config.json file.
+- The title of the browser tabs changes depending on the current view to make it easier working with multiple tabs and workflows (#38)
+- The workflow presentation allows tracing the path to an element. Therefore, a new button has been implemented in decisions, processes, CElements and workflow calls. The selected node and all traces leading to it are highlighted in red (#42)
+- The Findr version is visible in the dropdown menu and about page (#43)
+- The system name is now visible in the Findr if not `Base` (#44). This can be disabled via the config.json file.
 - Findr will make use of server cache (if possible). This is based on the updated Rest module (https://www.npmjs.com/package/syshub-rest-module) and sysHUB 2024 with included Etag-functionality. This will also work if served via webapps (not Node.js live server) on a sysHUB 2023 server. For this to work, parameterset, config, categories, workflows and jobtypes are compressed and stored in sessionStorage (and though removed by closing the browser). Closes #23
-- Findr will show a small badge next to a workflow name in the workflow list (not workflow ui) if there's no reference for a workflow and if it's not the SystemWorkflow (#41). This feature can be disabled via config.json file.
+- Findr will show a small badge next to a workflow name in the workflow list (not workflow ui) if there's no reference for a workflow and if it's not the SystemWorkflow (#41). This feature can be disabled via the config.json file.
 
 ### Changed
 
 - The workflow presentation has changed to native HTML as far as possible. Arrows remain svg elements.
+
 ## 1.0.0-beta.4 2024-03-05
 
 ### Added
