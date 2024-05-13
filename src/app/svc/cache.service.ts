@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, forkJoin } from 'rxjs';
-import { NetworkError, RestService, SyshubCategory, SyshubConfigItem, SyshubJobType, SyshubPSetItem, SyshubServerInformation, SyshubWorkflow, SyshubWorkflowReference, SyshubWorkflowVersion, UnauthorizedError } from 'syshub-rest-module';
+import { NetworkError, RestService, SyshubCategory, SyshubConfigItem, SyshubJobType, SyshubPSetItem, SyshubServerInformation, SyshubVersion, SyshubWorkflow, SyshubWorkflowReference, SyshubWorkflowVersion, UnauthorizedError } from 'syshub-rest-module';
 import { SearchConfig, SearchResult, SearchResultUuids, UserConfig, UuidModifiedTypeObject } from '../types';
 import { AppInitService } from './app-init.service';
 import { L10nService } from './i10n.service';
@@ -245,7 +245,7 @@ export class CacheService {
     private l10nService: L10nService,
     private restapi: RestService,
     private toastService: ToastsService,) {
-    this.sysHUB2022CompatibilityMode = this.appInitService.environment.api.version == 2;
+    this.sysHUB2022CompatibilityMode = this.appInitService.environment.api.version === SyshubVersion.sysHUB_2022;
     this._userconfig = new BehaviorSubject<UserConfig>({ enableCache: this.appInitService.environment.app?.useCache ?? true });
     this.userconfig = this._userconfig.asObservable();
     this.loadSubscriptions();
@@ -659,7 +659,7 @@ export class CacheService {
         return;
       }
       if (reply != HttpStatusCode.NotModified)
-        this.categories$.next(reply.sort((a, b) => a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1));
+        this.categories$.next(reply.sort((a, b) => a.name.localeCompare(b.name)));
       this.setRefreshState(this.l10nphrase.result.categories.title, false);
     });
   }
@@ -683,7 +683,7 @@ export class CacheService {
     items.forEach((cfg) => {
       cfg.children = this.reloadConfig_SortChilds(cfg.children);
     });
-    return items.sort((a, b) => a.name.toLocaleLowerCase() + (a.value?.toLocaleLowerCase() ?? '') > b.name.toLocaleLowerCase() + (b.value?.toLocaleLowerCase() ?? '') ? 1 : -1);
+    return items.sort((a, b) => a.name.localeCompare(b.name));
   }
 
   reloadJobtypes(): void {
@@ -696,7 +696,7 @@ export class CacheService {
         return;
       }
       if (reply != HttpStatusCode.NotModified)
-        this.jobtypes$.next([...reply].sort((a, b) => a.name > b.name ? 1 : -1));
+        this.jobtypes$.next([...reply].sort((a, b) => a.name.localeCompare(b.name)));
       this.setRefreshState(this.l10nphrase.result.jobtype.title, false);
     });
   }
@@ -733,7 +733,7 @@ export class CacheService {
         return;
       }
       if (reply != HttpStatusCode.NotModified) {
-        this.workflows$.next([...reply].sort((a, b) => a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : b.name.toLocaleLowerCase() > a.name.toLocaleLowerCase() ? -1 : 0));
+        this.workflows$.next([...reply].sort((a, b) => a.name.localeCompare(b.name)));
         this.reloadWorkflowAdditionalInfos(this.workflows$.value);
       }
       this.setRefreshState(this.l10nphrase.result.workflow.title, false);

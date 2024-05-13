@@ -209,14 +209,14 @@ export class SearchService {
           subject.complete();
           return;
         }
-        certstore.keystore = [...<SyshubCertStoreItem[]>store1].sort((a, b) => a.certX509SubjectDN.toLocaleLowerCase() > b.certX509SubjectDN.toLocaleLowerCase() ? 1 : -1);
+        certstore.keystore = [...<SyshubCertStoreItem[]>store1].sort((a, b) => a.certX509SubjectDN.localeCompare(b.certX509SubjectDN));
         this.restapi.getCertStoreItems('truststore', true).subscribe((store2) => {
           if (store2 instanceof Error) {
             subject.next(false);
             subject.complete();
             return;
           }
-          certstore.truststore = [...<SyshubCertStoreItem[]>store2].sort((a, b) => a.certX509SubjectDN.toLocaleLowerCase() > b.certX509SubjectDN.toLocaleLowerCase() ? 1 : -1);
+          certstore.truststore = [...<SyshubCertStoreItem[]>store2].sort((a, b) => a.certX509SubjectDN.localeCompare(b.certX509SubjectDN));
           subject.next(certstore);
           subject.complete();
         });

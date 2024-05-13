@@ -43,7 +43,6 @@ export class NodeInspectorWfWorkflowNodeComponent implements OnDestroy, OnInit {
 
   ngOnInit(): void {
     this.sub = this.propsService.TraceNode.subscribe((node) => {
-      console.log('this.propsService.TraceNode.subscribe', node, node?.uuid === this.nodeItem.uuid)
       this.isTracingMe = node?.uuid === this.nodeItem.uuid;
     });
   }

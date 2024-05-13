@@ -388,7 +388,7 @@ export const L10nFr: L10nLocale = {
         },
         process: {
             subject: ['Processus', 'Processus en boucle'],
-            deprecated: 'Ce processus est marqué comme obsolète et ne doit plus être utilisé.',
+            deprecated: 'Ce processus est obsolète et ne doit plus être utilisé.',
             referencedParametersetTitle: 'Paramètres référencés',
         },
         shared: {

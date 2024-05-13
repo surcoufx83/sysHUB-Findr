@@ -333,22 +333,19 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   trace(nodeToTrace: SvgElement | undefined): void {
-    if (this.traceNodeUuid != '') {
-      this.traceConnections = [];
-      this.nodes.forEach((node) => {
-        node.tracing = { traceSelf: false, traceSuccessor: false };
-      });
-    }
-    if (nodeToTrace == undefined)
-      return;
+    if (!nodeToTrace) return;
+
+    this.traceReset();
     this.traceNodeUuid = nodeToTrace.uuid;
+
     if (this.connectedNodes[nodeToTrace.uuid]) {
-      console.log(nodeToTrace);
-      console.log(this.connectedNodes[nodeToTrace.uuid]);
-      this.nodes[this.nodeUUids[nodeToTrace.uuid]].tracing.traceSelf = true;
-      this.nodes[this.nodeUUids[nodeToTrace.uuid]].tracing.traceSuccessor = false;
-      this.connectedNodes[nodeToTrace.uuid].incoming.forEach((i) => this.tracePath(i));
+      this.traceUpdateNode(nodeToTrace.uuid);
+      this.traceConnectedNodes(nodeToTrace.uuid);
     }
+  }
+
+  private traceConnectedNodes(nodeUuid: string): void {
+    this.connectedNodes[nodeUuid].incoming.forEach(i => this.tracePath(i));
   }
 
   tracePath(i: number) {
@@ -356,12 +353,22 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     this.traceConnections.push(i);
     if (this.connectedNodes[this.graphModel.linkDataArray[i].from]) {
-      console.log(i);
-      console.log(this.connectedNodes[this.graphModel.linkDataArray[i].from]);
       this.nodes[this.nodeUUids[this.graphModel.linkDataArray[i].from]].tracing.traceSelf = false;
       this.nodes[this.nodeUUids[this.graphModel.linkDataArray[i].from]].tracing.traceSuccessor = true;
       this.connectedNodes[this.graphModel.linkDataArray[i].from].incoming.forEach((i) => this.tracePath(i));
     }
+  }
+
+  private traceReset(): void {
+    this.traceConnections = [];
+    this.nodes.forEach(node => {
+      node.tracing = { traceSelf: false, traceSuccessor: false };
+    });
+  }
+
+  private traceUpdateNode(nodeUuid: string): void {
+    this.nodes[this.nodeUUids[nodeUuid]].tracing.traceSelf = true;
+    this.nodes[this.nodeUUids[nodeUuid]].tracing.traceSuccessor = false;
   }
 
   private renderPath(path: SvgPathPoint[]): string {
@@ -384,39 +391,43 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   render(): void {
-    if (this.workflowContainer == undefined) {
-      console.warn('WorkflowGui.render(): SVG Container #workflowSvgContainer not found in DOM. Waiting 50ms.');
-      setTimeout(() => {
-        this.render();
-      }, 50);
-      return;
+    if (this.workflowContainer === undefined) {
+      if (this.resizeTries < 10) { // Limit the number of retries to 10  
+        setTimeout(() => {
+          this.render();
+        }, 50);
+        this.resizeTries++; // Increment the retry counter  
+      } else {
+        console.warn('Failed to render: workflowContainer is not available after 10 attempts.');
+      }
     }
+    else {
 
-    this.graphModel.linkDataArray.forEach((connector, i) => {
-      if (connector.category != undefined && connector.category == 'error')
-        this.onErrorHandlerNodes.push(connector.to);
-      if (this.connectedNodes[connector.from] == undefined)
-        this.connectedNodes[connector.from] = { incoming: [], outgoing: [] };
-      if (this.connectedNodes[connector.to] == undefined)
-        this.connectedNodes[connector.to] = { incoming: [], outgoing: [] };
-      this.connectedNodes[connector.from].outgoing.push(i);
-      this.connectedNodes[connector.to].incoming.push(i);
-    });
+      this.graphModel.linkDataArray.forEach((connector, i) => {
+        if (connector.category != undefined && connector.category == 'error')
+          this.onErrorHandlerNodes.push(connector.to);
+        if (this.connectedNodes[connector.from] == undefined)
+          this.connectedNodes[connector.from] = { incoming: [], outgoing: [] };
+        if (this.connectedNodes[connector.to] == undefined)
+          this.connectedNodes[connector.to] = { incoming: [], outgoing: [] };
+        this.connectedNodes[connector.from].outgoing.push(i);
+        this.connectedNodes[connector.to].incoming.push(i);
+      });
 
-    this.graphModel.nodeDataArray.forEach((node) => {
-      const element = SvgElement.createElement(node, this.onErrorHandlerNodes.includes(node.key), this.searchService, this.searchResult, this.highlightWorkflowRef);
-      this.nodeUUids[element.uuid] = this.nodes.length;
-      this.nodes.push(element);
-      let right = element.x + element.width + 24;
-      let bottom = element.y + element.height + 24;
-      if (right > this.containerWidth)
-        this.containerWidth = right;
-      if (bottom > this.containerHeight)
-        this.containerHeight = bottom;
-    });
+      this.graphModel.nodeDataArray.forEach((node) => {
+        const element = SvgElement.createElement(node, this.onErrorHandlerNodes.includes(node.key), this.searchService, this.searchResult, this.highlightWorkflowRef);
+        this.nodeUUids[element.uuid] = this.nodes.length;
+        this.nodes.push(element);
+        let right = element.x + element.width + 24;
+        let bottom = element.y + element.height + 24;
+        if (right > this.containerWidth)
+          this.containerWidth = right;
+        if (bottom > this.containerHeight)
+          this.containerHeight = bottom;
+      });
 
-    this.drawPaths();
-
+      this.drawPaths();
+    }
   }
 
   hoverNode(node: SvgElement, x: number, y: number, w: number): void {

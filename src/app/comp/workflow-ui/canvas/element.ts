@@ -21,7 +21,7 @@ export class SvgElement implements SvgNode {
     isDeprecated: boolean = false;
     modeldata!: GraphModelAnnotationObject | GraphModelCElementObject | GraphModelDecisionObject | GraphModelEndObject | GraphModelProcessObject | GraphModelStartObject | GraphModelWorkflowObject;
     title: string = '';
-    tracing = { traceSelf: false, traceSuccessor: false, };
+    tracing = { traceSelf: false, traceSuccessor: false };
     uuid: string = '';
     z?: number = 0;
 
