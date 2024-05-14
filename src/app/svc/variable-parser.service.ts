@@ -74,7 +74,6 @@ export class VariableParserService {
     let modInput = this.applyModifier(process, paramName, input);
     let output: VariableExpression[] = this.searchMatchingBrakets(modInput);
     this.expressions[input] = output;
-    console.log(`parse(${process}, ${paramName}, ${input}): `, output);
     return output;
   }
 

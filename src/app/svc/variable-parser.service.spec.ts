@@ -37,17 +37,21 @@ const complexExpression: { [key: string]: any[] } = {
 }
 
 const modifiedExpression: { process: string, paramName: string, expression: string, expected: any[] }[] = [
-  { process: '', paramName: '', expression: 'foo', expected: [] },
   { process: '', paramName: '', expression: '{foo}', expected: [{ text: 'foo', varName: 'foo', objProperty: {} }] },
+  { process: '', paramName: '', expression: 'foo', expected: [] },
+  { process: '', paramName: 'dictname', expression: 'foo', expected: [{ text: 'foo', varName: 'foo', objProperty: {} }] },
+  { process: '', paramName: 'loopname', expression: 'foo', expected: [{ text: 'foolooparray', varName: 'foolooparray', objProperty: {} }] },
   { process: '', paramName: 'mapname', expression: 'foo', expected: [{ text: 'foo', varName: 'foo', objProperty: {} }] },
   { process: '', paramName: 'outdict', expression: 'foo', expected: [{ text: 'foo', varName: 'foo', objProperty: {} }] },
   { process: '', paramName: 'valuebyname', expression: 'foo', expected: [{ text: 'foo', varName: 'foo', objProperty: {} }] },
-  { process: '', paramName: 'loopname', expression: 'foo', expected: [{ text: 'foolooparray', varName: 'foolooparray', objProperty: {} }] },
-  { process: 'PushVarToDictionary', paramName: 'name', expression: 'foo', expected: [{ text: 'foo', varName: 'foo', objProperty: {} }] },
-  { process: 'PushVarToDictionary', paramName: 'loopname', expression: 'foo', expected: [{ text: 'foolooparray', varName: 'foolooparray', objProperty: {} }] },
-  { process: 'PushVarToDictionary', paramName: '', expression: 'foo', expected: [] },
   { process: 'bar', paramName: '', expression: 'foo', expected: [] },
   { process: 'bar', paramName: 'foo', expression: 'foo', expected: [] },
+  { process: 'CreateStructure', paramName: 'StructName', expression: 'foo', expected: [{ text: 'foo', varName: 'foo', objProperty: {} }] },
+  { process: 'JSONDecode', paramName: 'json', expression: 'foo', expected: [{ text: 'foo', varName: 'foo', objProperty: {} }] },
+  { process: 'JSONEncode', paramName: 'obj', expression: 'foo', expected: [{ text: 'foo', varName: 'foo', objProperty: {} }] },
+  { process: 'PushVarToDictionary', paramName: '', expression: 'foo', expected: [] },
+  { process: 'PushVarToDictionary', paramName: 'loopname', expression: 'foo', expected: [{ text: 'foolooparray', varName: 'foolooparray', objProperty: {} }] },
+  { process: 'PushVarToDictionary', paramName: 'name', expression: 'foo', expected: [{ text: 'foo', varName: 'foo', objProperty: {} }] },
 ]
 
 describe('VariableParserService', () => {
