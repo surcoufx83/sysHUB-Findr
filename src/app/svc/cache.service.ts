@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, forkJoin } from 'rxjs';
 import { NetworkError, RestService, SyshubCategory, SyshubConfigItem, SyshubJobType, SyshubPSetItem, SyshubServerInformation, SyshubVersion, SyshubWorkflow, SyshubWorkflowReference, SyshubWorkflowVersion, UnauthorizedError } from 'syshub-rest-module';
-import { SearchConfig, SearchResult, SearchResultUuids, UserConfig, UuidModifiedTypeObject } from '../types';
+import { SearchConfig, SearchResult, SearchResultUuids, UserConfig, UuidModifiedTypeObject, VariableExpression, VariableExpressionLocation, VariableProperty } from '../types';
 import { AppInitService } from './app-init.service';
 import { L10nService } from './i10n.service';
 import { L10nLocale } from './i10n/l10n-locale';
 import { ToastsService } from './toasts.service';
 import { HttpStatusCode } from '@angular/common/http';
 import { compress, decompress } from 'lz-string'
+import { VariableParserService } from './variable-parser.service';
 
 @Injectable({
   providedIn: 'root'
@@ -244,7 +245,8 @@ export class CacheService {
     private appInitService: AppInitService,
     private l10nService: L10nService,
     private restapi: RestService,
-    private toastService: ToastsService,) {
+    private toastService: ToastsService,
+    private varParserService: VariableParserService) {
     this.sysHUB2022CompatibilityMode = this.appInitService.environment.api.version === SyshubVersion.sysHUB_2022;
     this._userconfig = new BehaviorSubject<UserConfig>({ enableCache: this.appInitService.environment.app?.useCache ?? true });
     this.userconfig = this._userconfig.asObservable();
