@@ -1,14 +1,15 @@
+import { DOCUMENT } from '@angular/common';
 import { Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { SvgElement } from '../../workflow-ui/canvas/element';
-import { SearchResult, VariableExpression } from 'src/app/types';
+import { Subscription } from 'rxjs';
+import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
-import { GraphModelProcessObject, SyshubPSetItem } from 'syshub-rest-module';
-import { Subscription } from 'rxjs';
-import { DOCUMENT } from '@angular/common';
-import { CacheService } from 'src/app/svc/cache.service';
 import { PagepropsService } from 'src/app/svc/pageprops.service';
+import { VariableParserService } from 'src/app/svc/variable-parser.service';
+import { SearchResult, VariableExpression } from 'src/app/types';
 import { explodeParameters } from 'src/app/utils/syshub.helper';
+import { GraphModelProcessObject, SyshubPSetItem } from 'syshub-rest-module';
+import { SvgElement } from '../../workflow-ui/canvas/element';
 
 @Component({
   selector: 'app-node-inspector-workflow-process-node',
@@ -35,6 +36,7 @@ export class NodeInspectorWfProcessNodeComponent implements OnDestroy, OnInit {
     private l10nService: L10nService,
     private cacheService: CacheService,
     private propsService: PagepropsService,
+    private varParserService: VariableParserService,
     @Inject(DOCUMENT) private document: Document,
   ) { }
 
@@ -83,8 +85,7 @@ export class NodeInspectorWfProcessNodeComponent implements OnDestroy, OnInit {
       this.parameters.push([
         key,
         params[key],
-        []
-        //this.cacheService.extractVariablesFromString(obj.name, key, params[key])
+        this.varParserService.parse(obj.name, key, params[key])
       ]);
     });
     if (obj.name == 'LoadParameterSet' || obj.name == 'LoadParameterSetFast') {

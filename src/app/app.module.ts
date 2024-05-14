@@ -59,8 +59,8 @@ import { PagepropsService } from './svc/pageprops.service';
 import { SearchService } from './svc/search.service';
 import { ToastsService } from './svc/toasts.service';
 import { ToastsComponent } from './svc/toasts/toasts.component';
-import { HighlightPipe } from './utils/highlight.pipe';
 import { VariableParserService } from './svc/variable-parser.service';
+import { HighlightPipe } from './utils/highlight.pipe';
 
 export const FindrVersion: string = '1.0.0-beta.5';
 

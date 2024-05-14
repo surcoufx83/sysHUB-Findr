@@ -9,10 +9,14 @@ export class VariableParserService {
   private expressions: { [key: string]: VariableExpression[] } = {};
 
   private variableResolveModifier: { [key: string]: 'add-brackets' | 'add-looparray+brackets' } = {
+    '*|dictname': 'add-brackets',
+    '*|loopname': 'add-looparray+brackets',
     '*|mapname': 'add-brackets',
     '*|outdict': 'add-brackets',
     '*|valuebyname': 'add-brackets',
-    '*|loopname': 'add-looparray+brackets',
+    'CreateStructure|StructName': 'add-brackets',
+    'JSONDecode|json': 'add-brackets',
+    'JSONEncode|obj': 'add-brackets',
     'PushVarToDictionary|name': 'add-brackets',
   };
 
@@ -70,6 +74,7 @@ export class VariableParserService {
     let modInput = this.applyModifier(process, paramName, input);
     let output: VariableExpression[] = this.searchMatchingBrakets(modInput);
     this.expressions[input] = output;
+    console.log(`parse(${process}, ${paramName}, ${input}): `, output);
     return output;
   }
 
