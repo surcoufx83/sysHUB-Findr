@@ -110,3 +110,38 @@ export type UuidModifiedTypeObject = {
     path?: string,
     type: 'SyshubCategory' | 'SyshubConfigItem' | 'SyshubJobType' | 'SyshubPSetItem' | 'SyshubWorkflow',
 }
+
+export type VariableExpression = {
+    arrayIndex?: number,
+    objProperty?: VariableProperty,
+    refName?: string,
+    text: string,
+    varName: string,
+}
+
+export type VariableExpressionLocation = {
+    childs: VariableExpressionLocation[],
+    content: string,
+    endAt: number,
+    level: number,
+    parent?: number,
+    startAt: number,
+}
+
+export type VariableProperty = {
+    arrayIndex?: number,
+    objProperty?: VariableProperty,
+    refName?: string,
+    varName?: string,
+}
+
+export type VariableSet = {
+    custom: VariableSetItem[],
+    system: VariableSetItem[]
+};
+
+export type VariableSetItem = {
+    key: VariableProperty,
+    value: string,
+    enabled?: boolean,
+};

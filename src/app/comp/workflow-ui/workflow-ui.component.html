@@ -4,6 +4,102 @@
         <div class="d-flex align-items-center justify-content-between">
             <h1 class="mb-0">{{ l10n(l10nphrase.workflowUi.title, [workflow.name]) }}</h1>
             <div class="d-flex align-items-center">
+                <!-- custom variable definition -->
+                <div class="dropdown">
+                    <button type="button" class="btn btn-outline-secondary dropdown-toggle ms-2"
+                        data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                        <i class="bi bi-braces-asterisk me-md-1"></i>
+                        <span class="d-none d-md-inline">
+                            {{ l10n(l10nphrase.workflowUi.variablesDropdown.title[(variables.custom.length +
+                            variables.system.length) === 1 ? 0 : 1], [variables.custom.length +
+                            variables.system.length]) }}
+                        </span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end custom-dropdown dropdown-530">
+                        <li class="dropdown-item">
+                            <h5 class="mb-0">
+                                <i class="bi bi-person-lines-fill me-2"></i>
+                                {{ l10nphrase.workflowUi.variablesDropdown.customVariables }}
+                            </h5>
+                        </li>
+                        @for (varitem of variables.custom; track $index) {
+                        <li class="dropdown-item d-flex align-items-center">
+                            <div class="me-2">
+                                <i [ngClass]="{ bi: true, 'bi-toggle-on': varitem.enabled === true || varitem.enabled === undefined, 'bi-toggle-off': varitem.enabled === false}"
+                                    (click)="varitem.enabled = varitem.enabled === undefined ? false : !varitem.enabled; updateCustomVariables($index)"></i>
+                            </div>
+                            <div class="mx-2 flex-grow-1">
+                                <input type="text" class="w-100 form-control form-control-sm"
+                                    [id]="'wfvars-custom-name-' + $index" [name]="'wfvars-custom-name-' + $index"
+                                    [(ngModel)]="varitem.key.varName" (keyup)="updateCustomVariables($index)">
+                            </div>
+                            <div class="mx-2">=</div>
+                            <div class="mx-2 flex-grow-1">
+                                <input type="text" class="w-100 form-control form-control-sm"
+                                    [id]="'wfvars-custom-value-' + $index" [name]="'wfvars-custom-value-' + $index"
+                                    [(ngModel)]="varitem.value" (keyup)="updateCustomVariables($index)">
+                            </div>
+                            <div class="ms-2">
+                                <button class="btn btn-sm" [id]="'wfvars-custom-delete-' + $index"
+                                    [name]="'wfvars-custom-delete-' + $index" (click)="removeCustomVariables($index)">
+                                    <i class="bi bi-trash-fill"></i>
+                                </button>
+                            </div>
+                        </li>
+                        }
+                        <form
+                            (submit)="addCustomVariables(newVarName.value, newVarValue.value); newVarName.value = ''; newVarValue.value = ''; $event.preventDefault();">
+                            <li class="dropdown-item d-flex align-items-center">
+                                <div class="me-2">
+                                    <div style="width: 16px;"></div>
+                                </div>
+                                <div class="mx-2 flex-grow-1">
+                                    <input type="text" class="w-100 form-control form-control-sm" id="wfvars-new-name"
+                                        name="wfvars-new-name" #newVarName>
+                                </div>
+                                <div class="mx-2">=</div>
+                                <div class="mx-2 flex-grow-1">
+                                    <input type="text" class="w-100 form-control form-control-sm" id="wfvars-new-value"
+                                        name="wfvars-new-value" #newVarValue>
+                                </div>
+                                <div class="ms-2">
+                                    <button type="submit" class="btn btn-sm" id="wfvars-new-submit"
+                                        name="wfvars-new-submit">
+                                        <i class="bi bi-plus-circle"></i>
+                                    </button>
+                                </div>
+                            </li>
+                        </form>
+                        <li class="dropdown-item">
+                            <h5 class="mb-0">
+                                <i class="bi bi-list-stars me-2"></i>
+                                {{ l10nphrase.workflowUi.variablesDropdown.serverVariables }}
+                            </h5>
+                        </li>
+                        @for (varitem of variables.system; track $index) {
+                        <li class="dropdown-item d-flex align-items-center">
+                            <div class="me-2">
+                                <div style="width: 16px;"></div>
+                            </div>
+                            <div class="mx-2 flex-grow-1">
+                                <input type="text" class="w-100 form-control form-control-sm"
+                                    [id]="'wfvars-system-name-' + $index" [name]="'wfvars-system-name-' + $index"
+                                    [ngModel]="varitem.key.varName" disabled>
+                            </div>
+                            <div class="mx-2">=</div>
+                            <div class="mx-2 flex-grow-1">
+                                <input type="text" class="w-100 form-control form-control-sm"
+                                    [id]="'wfvars-system-value-' + $index" [name]="'wfvars-system-value-' + $index"
+                                    [ngModel]="varitem.value" disabled>
+                            </div>
+                            <div class="ms-2">
+                                <div style="width: 27px;"></div>
+                            </div>
+                        </li>
+                        }
+                    </ul>
+                </div>
+                <!-- custom variable definition -->
                 @if (versions && versions.length > 0) {
                 <div class="dropdown">
                     <button type="button" class="btn btn-outline-secondary dropdown-toggle ms-2"
@@ -157,7 +253,7 @@
     </section>
     <div style="margin-left: -24px; margin-right: -24px; margin-bottom: -48px;">
         <app-workflow-ui-canvas [graphModel]="model" [searchResult]="searchResult" [workflow]="workflow"
-            [highlightWorkflowRef]="highlightWorkflowRef"></app-workflow-ui-canvas>
+            [highlightWorkflowRef]="highlightWorkflowRef" [variables]="variables"></app-workflow-ui-canvas>
     </div>
 </article>
 }

@@ -343,6 +343,11 @@ export type L10nLocale = {
             subject: string[],
             threads: string,
         },
+        variablesDropdown: {
+            title: string[],
+            customVariables: string,
+            serverVariables: string,
+        },
         versionsDropdown: {
             title: string[],
             titleActiveVersion: string[],

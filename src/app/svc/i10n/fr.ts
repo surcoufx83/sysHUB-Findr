@@ -401,6 +401,11 @@ export const L10nFr: L10nLocale = {
             subject: ['Workflow', 'Workflow en boucle'],
             threads: 'Threads',
         },
+        variablesDropdown: {
+            title: ['mock-[0] Variable', 'mock-[0] Variables'],
+            customVariables: 'Variables personnalisées',
+            serverVariables: 'Variables du serveur'
+        },
         versionsDropdown: {
             title: ['[0] Version', '[0] Versions'],
             titleActiveVersion: ['actuelle : [0]', 'en cours : [0]'],

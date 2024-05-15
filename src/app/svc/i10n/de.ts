@@ -404,6 +404,11 @@ export const L10nDe: L10nLocale = {
             subject: ['Workflow', 'Loop-Workflow'],
             threads: 'Threads',
         },
+        variablesDropdown: {
+            title: ['[0] Variable', '[0] Variablen'],
+            customVariables: 'Eigene Variablen',
+            serverVariables: 'Servervariablen'
+        },
         versionsDropdown: {
             title: ['[0] Version', '[0] Versionen'],
             titleActiveVersion: ['aktuell: [0]', 'in Bearbeitung: [0]'],

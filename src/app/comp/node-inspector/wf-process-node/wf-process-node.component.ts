@@ -1,14 +1,15 @@
+import { DOCUMENT } from '@angular/common';
 import { Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { SvgElement } from '../../workflow-ui/canvas/element';
-import { SearchResult } from 'src/app/types';
+import { Subscription } from 'rxjs';
+import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
-import { GraphModelProcessObject, SyshubPSetItem } from 'syshub-rest-module';
-import { Subscription } from 'rxjs';
-import { DOCUMENT } from '@angular/common';
-import { CacheService } from 'src/app/svc/cache.service';
 import { PagepropsService } from 'src/app/svc/pageprops.service';
+import { VariableParserService } from 'src/app/svc/variable-parser.service';
+import { SearchResult, VariableExpression } from 'src/app/types';
 import { explodeParameters } from 'src/app/utils/syshub.helper';
+import { GraphModelProcessObject, SyshubPSetItem } from 'syshub-rest-module';
+import { SvgElement } from '../../workflow-ui/canvas/element';
 
 @Component({
   selector: 'app-node-inspector-workflow-process-node',
@@ -22,7 +23,7 @@ export class NodeInspectorWfProcessNodeComponent implements OnDestroy, OnInit {
   @Input({ required: true }) searchResult?: SearchResult;
   @Input({ required: true }) showPsetTreeInProcessNodes!: boolean;
 
-  parameters: [string, string][] = [];
+  parameters: [key: string, fulltext: string, variables: VariableExpression[]][] = [];
   parameterset?: SyshubPSetItem;
   parametersetMaxDeep: number = 0;
   parametersetPath: string = '';
@@ -35,6 +36,7 @@ export class NodeInspectorWfProcessNodeComponent implements OnDestroy, OnInit {
     private l10nService: L10nService,
     private cacheService: CacheService,
     private propsService: PagepropsService,
+    private varParserService: VariableParserService,
     @Inject(DOCUMENT) private document: Document,
   ) { }
 
@@ -56,13 +58,7 @@ export class NodeInspectorWfProcessNodeComponent implements OnDestroy, OnInit {
 
   ngOnInit(): void {
     const obj = (<GraphModelProcessObject>this.nodeItem.modeldata);
-    const parms = obj.parameters.split(';');
-    parms.forEach((kvpair) => {
-      if (kvpair != '') {
-        const key = kvpair.substring(0, kvpair.indexOf('='));
-        this.parameters.push([key, kvpair.substring(key.length + 1)]);
-      }
-    });
+    this.ngOnInit_extractParams(obj);
     this.subs.push(this.propsService.NodesOpened.subscribe((node) => {
       if (node.type === 'PSetItems' && this.moveNodeNextTo[(<SyshubPSetItem>node.node).uuid]) {
         const nodelement = this.document.getElementById(node.id!);
@@ -78,16 +74,25 @@ export class NodeInspectorWfProcessNodeComponent implements OnDestroy, OnInit {
     }));
     if (obj.parameterSetUuid != null && obj.parameterSetUuid !== '') {
       this.parameterset = this.cacheService.getPsetItemByUuid(obj.parameterSetUuid) ?? undefined;
+      if (this.parameterset)
+        this.ngOnInit_loopTree(this.parametersetTreeUuids, [this.parameterset], 0);
     }
-    else if (obj.name == 'LoadParameterSet' || obj.name == 'LoadParameterSetFast') {
-      let params = explodeParameters(obj.parameters);
+  }
+
+  ngOnInit_extractParams(obj: GraphModelProcessObject): void {
+    let params = explodeParameters(obj.parameters);
+    Object.keys(params).forEach((key) => {
+      this.parameters.push([
+        key,
+        params[key],
+        this.varParserService.parse(obj.name, key, params[key])
+      ]);
+    });
+    if (obj.name == 'LoadParameterSet' || obj.name == 'LoadParameterSetFast') {
       this.parametersetMaxDeep = obj.name == 'LoadParameterSetFast' ? 1 : params['maxdeep'] ? +params['maxdeep'] : 999;
       if (params['psname'] && params['psname'] != '') {
         this.parameterset = this.cacheService.getPsetItemByPath(params['psname']) ?? undefined;
       }
-    }
-    if (this.parameterset) {
-      this.ngOnInit_loopTree(this.parametersetTreeUuids, [this.parameterset], 0);
     }
   }
 

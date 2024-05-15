@@ -8,7 +8,7 @@ import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
 import { PagepropsService } from 'src/app/svc/pageprops.service';
 import { SearchService } from 'src/app/svc/search.service';
 import { ToastsService } from 'src/app/svc/toasts.service';
-import { SearchResult } from 'src/app/types';
+import { SearchResult, SimpleKeyValue, VariableSet } from 'src/app/types';
 import { RestService, SyshubConfigItem, SyshubJobType, SyshubPSetItem, SyshubWorkflow, SyshubWorkflowModel, SyshubWorkflowReference, SyshubWorkflowVersion } from 'syshub-rest-module';
 
 @Component({
@@ -32,6 +32,7 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
   startpoints?: string[];
   subs: Subscription[] = [];
   sysHUB2022CompatibilityMode: boolean = false;
+  variables: VariableSet = { custom: [], system: [] };
   versions?: SyshubWorkflowVersion[];
   workflow?: SyshubWorkflow;
   workflowUuid?: string;
@@ -46,6 +47,20 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
     private restapi: RestService,
   ) {
     this.sysHUB2022CompatibilityMode = initService.environment.api.version == 2;
+    let olddata = localStorage.getItem('findr-wfui-vars');
+    if (olddata) {
+      try {
+        this.variables = JSON.parse(olddata);
+      }
+      catch { }
+    }
+  }
+
+  addCustomVariables(name: string, value: string): void {
+    let tempvars = { ...this.variables };
+    tempvars.custom.push({ key: { varName: name }, value: value, enabled: true });
+    this.variables = { ...tempvars };
+    this.saveVariables();
   }
 
   getWorkflowByName(name: string): SyshubWorkflow | null {
@@ -96,6 +111,16 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
     this.subs.push(this.cacheService.workflowReferencesUpdated.subscribe((state) => { if (state != null) this.ngOnInit_LoadWfRefs() }));
     this.subs.push(this.cacheService.workflowStartpointsUpdated.subscribe((state) => { if (state != null) this.ngOnInit_LoadWfStartpoints() }));
     this.subs.push(this.cacheService.workflowVersionsUpdated.subscribe((state) => { if (state != null) this.ngOnInit_LoadWfVersions() }));
+    this.subs.push(this.cacheService.ConfigUpdated.subscribe((state) => {
+      if (state != null) {
+        const userVariables = this.cacheService.getConfigItemByPath('System/UserVariables', true);
+        if (userVariables != null) {
+          this.variables.system = [];
+          userVariables?.children.forEach((variableConfigItem) => this.variables.system.push({ key: { varName: variableConfigItem.name }, value: variableConfigItem.value, }));
+          this.variables.system.sort((a, b) => a.key.varName!.toLocaleLowerCase().localeCompare(b.key.varName!.toLocaleLowerCase()));
+        }
+      }
+    }));
   }
 
   ngOnInit_LoadWf(): void {
@@ -140,9 +165,9 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
         temprefs[ref.type] = { type: ref.type, items: [] };
       temprefs[ref.type].items.push(ref);
     });
-    let temprefs2 = Object.values(temprefs).sort((a, b) => a.type.toLocaleLowerCase() > b.type.toLocaleLowerCase() ? 1 : a.type.toLocaleLowerCase() < b.type.toLocaleLowerCase() ? -1 : 0);
+    let temprefs2 = Object.values(temprefs).sort((a, b) => a.type.toLocaleLowerCase().localeCompare(b.type.toLocaleLowerCase()));
     temprefs2.forEach((group) => {
-      group.items = group.items.sort((a, b) => a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : a.name.toLocaleLowerCase() < b.name.toLocaleLowerCase() ? -1 : 0);
+      group.items = group.items.sort((a, b) => a.name.toLocaleLowerCase().localeCompare(b.name.toLocaleLowerCase()));
       this.referencesCount += group.items.length;
     });
     this.references = [...temprefs2];
@@ -199,6 +224,19 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
     this.propsService.inspect(type, node, 'remove');
   }
 
+  removeCustomVariables(i: number): void {
+    if (!this.variables.custom[i])
+      return;
+    let tempvars = { ...this.variables };
+    tempvars.custom.splice(i, 1);
+    this.variables = { ...tempvars };
+    this.saveVariables();
+  }
+
+  saveVariables(): void {
+    localStorage.setItem('findr-wfui-vars', JSON.stringify(this.variables));
+  }
+
   selectNode(type: 'ConfigItems' | 'JobTypes' | 'PSetItems' | 'WorkflowItems', path: string): void {
     if (this.nodesCache[`${type}-${path}`] === undefined)
       return;
@@ -209,6 +247,18 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
       this.nodesToggled.push(node.uuid);
     else
       this.nodesToggled.splice(this.nodesToggled.indexOf(node.uuid, 1));
+  }
+
+  private updateCustomVariablesDebounce: any;
+  updateCustomVariables(i: number): void {
+    if (!this.variables.custom[i])
+      return;
+    clearTimeout(this.updateCustomVariablesDebounce);
+    this.updateCustomVariablesDebounce = setTimeout(() => {
+      let tempvars = { ...this.variables };
+      this.variables = { ...tempvars };
+      this.saveVariables();
+    }, 500);
   }
 
 }

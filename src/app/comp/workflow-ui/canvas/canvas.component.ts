@@ -1,26 +1,26 @@
-import { AfterViewInit, Component, ElementRef, HostListener, Inject, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { CacheService } from 'src/app/svc/cache.service';
+import { DOCUMENT } from '@angular/common';
+import { AfterViewInit, Component, ElementRef, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { L10nService } from 'src/app/svc/i10n.service';
+import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
+import { PagepropsService } from 'src/app/svc/pageprops.service';
+import { SearchService } from 'src/app/svc/search.service';
+import { SearchResult, VariableSet } from 'src/app/types';
 import { SyshubWorkflow, SyshubWorkflowModel } from 'syshub-rest-module';
 import { SvgElement } from './element';
-import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
-import { SearchService } from 'src/app/svc/search.service';
-import { SearchResult } from 'src/app/types';
-import { Subscription } from 'rxjs';
-import { DOCUMENT } from '@angular/common';
-import { PagepropsService } from 'src/app/svc/pageprops.service';
 
 @Component({
   selector: 'app-workflow-ui-canvas',
   templateUrl: './canvas.component.html',
   styleUrl: './canvas.component.scss'
 })
-export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
+export class CanvasComponent implements AfterViewInit, OnChanges, OnDestroy, OnInit {
 
   @Input({ required: true }) workflow!: SyshubWorkflow;
   @Input({ required: true }) graphModel!: SyshubWorkflowModel;
   @Input({ required: true }) searchResult?: SearchResult;
   @Input({ required: true }) highlightWorkflowRef!: string;
+  @Input({ required: true }) variables!: VariableSet;
   @ViewChild('workflowContainer') workflowContainer!: ElementRef;
 
   containerHeight: number = 100;
@@ -32,17 +32,48 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   nodeUUids: { [key: string]: number } = {};
   nodesToggled: string[] = [];
   hoverpath?: number;
+  rendered: boolean = false;
   private resizeTries: number = 0;
   subs: Subscription[] = [];
 
   traceConnections: number[] = [];
   traceNodeUuid: string = '';
   connectedNodes: { [key: string]: { incoming: number[], outgoing: number[] } } = {};
+  customConnections: string[] = [];
 
   constructor(private l10nService: L10nService,
     private searchService: SearchService,
     @Inject(DOCUMENT) private document: Document,
     private propsService: PagepropsService,) { }
+
+  private addCallWorkflowConnections(): void {
+    this.graphModel.nodeDataArray.forEach((node1) => {
+      if (node1.category == 'workflow' && node1.refUuid == this.graphModel.modelData.uuid) {
+        this.graphModel.nodeDataArray.forEach((node2) => {
+          let templabel = node1.startPoint;
+          if (templabel.includes('{')) {
+            this.variables.custom.forEach((variable) => {
+              if (variable.enabled === undefined || variable.enabled === true)
+                templabel = templabel.replace(`{${variable.key.varName}}`, variable.value)
+            });
+            this.variables.system.forEach((variable) => {
+              if (variable.enabled === undefined || variable.enabled === true)
+                templabel = templabel.replace(`{${variable.key.varName}}`, variable.value)
+            });
+          }
+          if (node2.category == 'start' && node2.label == templabel) {
+            this.graphModel.linkDataArray.push({
+              from: node1.key,
+              fromPort: 'r',
+              to: node2.key,
+              toPort: 't'
+            });
+            this.customConnections.push(`${node1.key}-${node2.key}`);
+          }
+        });
+      }
+    });
+  }
 
   private calculateCubicPath(path: SvgPathPoint[], pointFrom: Point, portFrom: string, pointTo: Point, elementTo: HTMLImageElement): void {
     let intersections: Point[] = [];
@@ -293,8 +324,20 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
 
   }
 
-  hasOwnProperty(obj: any, propname: string): boolean {
+  isAdditionalConnector(from: string, to: string): boolean {
+    return this.customConnections.includes(`${from}-${to}`);
+  }
+
+  hasProperty(obj: any, propname: string): boolean {
     return Object.getOwnPropertyNames(obj).includes(propname);
+  }
+
+  hoverNode(node: SvgElement, x: number, y: number, w: number): void {
+    y += 56;
+    const placement = x > ((this.document.defaultView?.innerWidth ?? 1080) / 1.66) ? 'left' : 'right';
+    if (node.modeldata.category != 'start' && node.modeldata.category != 'end' && node.modeldata.category != 'annotation') {
+      this.propsService.inspect('SvgNode', node, 'show', { left: (placement == 'right' ? x + w + 64 : undefined), right: (placement == 'left' ? ((this.document.defaultView?.innerWidth ?? 1080) - (x) + w) : undefined), top: y });
+    }
   }
 
   get l10nphrase(): L10nLocale {
@@ -305,6 +348,14 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     return this.l10nService.ln(phrase, params);
   }
 
+  leaveNode(node: SvgElement): void {
+    if (this.nodesToggled.includes(node.modeldata.key))
+      return;
+    if (node.modeldata.category != 'start' && node.modeldata.category != 'end' && node.modeldata.category != 'annotation') {
+      this.propsService.inspect('SvgNode', node, 'remove');
+    }
+  }
+
   matchPhrase(value: string | number | null): boolean {
     return this.searchResult ? this.searchService.match(value, this.searchResult.search) : false;
   }
@@ -313,6 +364,20 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     setTimeout(() => {
       this.render();
     }, 1);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!this.rendered)
+      return;
+    if (Object.keys(changes).includes('variables')) {
+      for (let i = this.graphModel.linkDataArray.length - 1; i >= 0; i--) {
+        if (this.customConnections.includes(`${this.graphModel.linkDataArray[i].from}-${this.graphModel.linkDataArray[i].to}`)) {
+          this.graphModel.linkDataArray.splice(i, 1);
+        }
+      }
+      this.customConnections = [];
+      this.render(true);
+    }
   }
 
   ngOnDestroy(): void {
@@ -329,46 +394,57 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     }));
     this.subs.push(this.propsService.TraceNode.subscribe((node) => {
       this.trace(node);
-    }))
+    }));
   }
 
-  trace(nodeToTrace: SvgElement | undefined): void {
-    if (!nodeToTrace) return;
-
-    this.traceReset();
-    this.traceNodeUuid = nodeToTrace.uuid;
-
-    if (this.connectedNodes[nodeToTrace.uuid]) {
-      this.traceUpdateNode(nodeToTrace.uuid);
-      this.traceConnectedNodes(nodeToTrace.uuid);
+  render(rerender: boolean = false): void {
+    if (this.workflowContainer === undefined) {
+      if (this.resizeTries < 10) { // Limit the number of retries to 10  
+        setTimeout(() => {
+          this.render();
+        }, 50);
+        this.resizeTries++; // Increment the retry counter  
+      } else {
+        console.warn('Failed to render: workflowContainer is not available after 10 attempts.');
+      }
     }
-  }
+    else {
 
-  private traceConnectedNodes(nodeUuid: string): void {
-    this.connectedNodes[nodeUuid].incoming.forEach(i => this.tracePath(i));
-  }
+      this.onErrorHandlerNodes = [];
+      this.breakpoints = [];
+      this.addCallWorkflowConnections();
 
-  tracePath(i: number) {
-    if (!this.graphModel.linkDataArray[i] || this.traceConnections.includes(i))
-      return;
-    this.traceConnections.push(i);
-    if (this.connectedNodes[this.graphModel.linkDataArray[i].from]) {
-      this.nodes[this.nodeUUids[this.graphModel.linkDataArray[i].from]].tracing.traceSelf = false;
-      this.nodes[this.nodeUUids[this.graphModel.linkDataArray[i].from]].tracing.traceSuccessor = true;
-      this.connectedNodes[this.graphModel.linkDataArray[i].from].incoming.forEach((i) => this.tracePath(i));
+      this.graphModel.linkDataArray.forEach((connector, i) => {
+        if (connector.category != undefined && connector.category == 'error')
+          this.onErrorHandlerNodes.push(connector.to);
+        if (this.connectedNodes[connector.from] == undefined)
+          this.connectedNodes[connector.from] = { incoming: [], outgoing: [] };
+        if (this.connectedNodes[connector.to] == undefined)
+          this.connectedNodes[connector.to] = { incoming: [], outgoing: [] };
+        this.connectedNodes[connector.from].outgoing.push(i);
+        this.connectedNodes[connector.to].incoming.push(i);
+      });
+
+      if (!rerender) {
+        this.graphModel.nodeDataArray.forEach((node) => {
+          const element = SvgElement.createElement(node, this.onErrorHandlerNodes.includes(node.key), this.searchService, this.searchResult, this.highlightWorkflowRef);
+          this.nodeUUids[element.uuid] = this.nodes.length;
+          this.nodes.push(element);
+          let right = element.x + element.width + 24;
+          let bottom = element.y + element.height + 24;
+          if (right > this.containerWidth)
+            this.containerWidth = right;
+          if (bottom > this.containerHeight)
+            this.containerHeight = bottom;
+        });
+      }
+
+      setTimeout(() => {
+        this.drawPaths();
+        this.rendered = true;
+      }, 10);
+
     }
-  }
-
-  private traceReset(): void {
-    this.traceConnections = [];
-    this.nodes.forEach(node => {
-      node.tracing = { traceSelf: false, traceSuccessor: false };
-    });
-  }
-
-  private traceUpdateNode(nodeUuid: string): void {
-    this.nodes[this.nodeUUids[nodeUuid]].tracing.traceSelf = true;
-    this.nodes[this.nodeUUids[nodeUuid]].tracing.traceSuccessor = false;
   }
 
   private renderPath(path: SvgPathPoint[]): string {
@@ -390,68 +466,56 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     return elements.join(' ');
   }
 
-  render(): void {
-    if (this.workflowContainer === undefined) {
-      if (this.resizeTries < 10) { // Limit the number of retries to 10  
-        setTimeout(() => {
-          this.render();
-        }, 50);
-        this.resizeTries++; // Increment the retry counter  
-      } else {
-        console.warn('Failed to render: workflowContainer is not available after 10 attempts.');
-      }
-    }
-    else {
-
-      this.graphModel.linkDataArray.forEach((connector, i) => {
-        if (connector.category != undefined && connector.category == 'error')
-          this.onErrorHandlerNodes.push(connector.to);
-        if (this.connectedNodes[connector.from] == undefined)
-          this.connectedNodes[connector.from] = { incoming: [], outgoing: [] };
-        if (this.connectedNodes[connector.to] == undefined)
-          this.connectedNodes[connector.to] = { incoming: [], outgoing: [] };
-        this.connectedNodes[connector.from].outgoing.push(i);
-        this.connectedNodes[connector.to].incoming.push(i);
-      });
-
-      this.graphModel.nodeDataArray.forEach((node) => {
-        const element = SvgElement.createElement(node, this.onErrorHandlerNodes.includes(node.key), this.searchService, this.searchResult, this.highlightWorkflowRef);
-        this.nodeUUids[element.uuid] = this.nodes.length;
-        this.nodes.push(element);
-        let right = element.x + element.width + 24;
-        let bottom = element.y + element.height + 24;
-        if (right > this.containerWidth)
-          this.containerWidth = right;
-        if (bottom > this.containerHeight)
-          this.containerHeight = bottom;
-      });
-
-      this.drawPaths();
-    }
-  }
-
-  hoverNode(node: SvgElement, x: number, y: number, w: number): void {
-    y += 56;
-    const placement = x > ((this.document.defaultView?.innerWidth ?? 1080) / 1.66) ? 'left' : 'right';
-    if (node.modeldata.category != 'start' && node.modeldata.category != 'end' && node.modeldata.category != 'annotation') {
-      this.propsService.inspect('SvgNode', node, 'show', { left: (placement == 'right' ? x + w + 64 : undefined), right: (placement == 'left' ? ((this.document.defaultView?.innerWidth ?? 1080) - (x) + w) : undefined), top: y });
-    }
-  }
-
-  leaveNode(node: SvgElement): void {
-    if (this.nodesToggled.includes(node.modeldata.key))
-      return;
-    if (node.modeldata.category != 'start' && node.modeldata.category != 'end' && node.modeldata.category != 'annotation') {
-      this.propsService.inspect('SvgNode', node, 'remove');
-    }
-  }
-
   selectNode(node: SvgElement): void {
     if (node.modeldata.category != 'start' && node.modeldata.category != 'end' && node.modeldata.category != 'annotation') {
       if (!this.nodesToggled.includes(node.modeldata.key))
         this.nodesToggled.push(node.modeldata.key);
       else
         this.nodesToggled.splice(this.nodesToggled.indexOf(node.modeldata.key, 1));
+    }
+  }
+
+  trace(nodeToTrace: SvgElement | undefined): void {
+    this.traceReset();
+    if (!nodeToTrace) return;
+
+    this.traceNodeUuid = nodeToTrace.uuid;
+
+    if (this.connectedNodes[nodeToTrace.uuid]) {
+      this.traceUpdateNode(nodeToTrace.uuid);
+      this.traceConnectedNodes(nodeToTrace.uuid);
+    }
+  }
+
+  private traceConnectedNodes(nodeUuid: string): void {
+    this.connectedNodes[nodeUuid].incoming.forEach(i => this.tracePath(i));
+  }
+
+  tracePath(i: number) {
+    if (!this.graphModel.linkDataArray[i] || this.traceConnections.includes(i))
+      return;
+    this.traceConnections.push(i);
+    this.traceWorkflowElement(i);
+  }
+
+  private traceReset(): void {
+    this.traceConnections = [];
+    this.nodes.forEach(node => {
+      node.tracing = { traceSelf: false, traceSuccessor: false };
+    });
+  }
+
+  private traceUpdateNode(nodeUuid: string): void {
+    this.nodes[this.nodeUUids[nodeUuid]].tracing.traceSelf = true;
+    this.nodes[this.nodeUUids[nodeUuid]].tracing.traceSuccessor = false;
+  }
+
+  private traceWorkflowElement(pathIndex: number): void {
+    if (this.connectedNodes[this.graphModel.linkDataArray[pathIndex].from]) {
+      let fromnode = this.nodes[this.nodeUUids[this.graphModel.linkDataArray[pathIndex].from]];
+      fromnode.tracing.traceSelf = false;
+      fromnode.tracing.traceSuccessor = true;
+      this.connectedNodes[this.graphModel.linkDataArray[pathIndex].from].incoming.forEach((i) => this.tracePath(i));
     }
   }
 

@@ -143,9 +143,32 @@ Wie auch im sysHUB Client sind die Eigenschaften thematisch gruppiert (Klassifiz
 
 Ein Klick auf den Link Workflow öffnen oder das entsprechende Icon in einem der Eigenschaftsfenster öffnet den Workflow Viewer in einem neuen Browser-Tab. Treffer sind auch hier grün hervorgehoben. Je nach sysHUB-Version stehen rechts über dem Workflow noch Dropdowns zur Verfügung, die Workflow Versionen und Workflow Referenzen auflisten. Mauszeiger über eines der Workflow-Elemente (nicht bei Start, Ende, Notiz) öffnet auch hier das Eigenschaften-Fenster und per Klick kann es auch wieder angepinnt werden.
 
+Gestrichelte Linien innerhalb eines Workflows markieren den Aufruf eines Startpoints im gleichen Workflow. Sofern in dem Workflow-Aufruf Startpunkte durch Variablennamen definiert sind (z.B. `Search_{topics_loopobject}`) wird versucht, diesen Namen aufzulösen. Dafür werden die im Server konfigurierten Uservariablen (im Findr als Servervariablen bezeichnet) sowie eigene Findr-Anwender-spezifische Variablen (siehe [Abschnitt Variablen im Workflow Viewer](#variablen-im-workflow-viewer)).
+
 Wird ein Workflow als Referenz geöffnet, werden zusätzlich die Startpunkte die den referenzierten Workflow aufrufen, gelb hervorgehoben (siehe folgender Screenshot).
 
 ![Workflowdesigner mit Treffern in der Desktop-Ansicht](docs/workflow-ref-desktop.png)
+
+<br clear="all"/>
+
+### Variablen im Workflow Viewer
+
+<img align="left" src="docs/workflow-variables-desktop.png" alt="Dropdown Variablen">
+Im oberen, rechten Bereich des Fensters gibt es ein Dropdown zum Verwalten von Variablen. In dieser Liste werden Eigene Variablen und Systemvariablen angezeigt. Diese Variablen werden verwendet, um sysHUB Variablen `{...}` "auflösen" zu können, also mit einem Wert zu belegen. Das ist zum Beispiel dann erforderlich, wenn ein Workflow-Startpunkt aufgerufen wird, dessen Name durch eine Variable definiert ist.
+
+**Eigene Variablen** sind lokal im Browser definiert und gelten nur für den Benutzer, der diese auch anlegt. Diese werden im Browsercache gespeichert und können direkt im Dropdown hinzugefügt, geändert und gelöscht werden.
+
+**Servervariablen** (im sysHUB Server als Uservariablen bezeichnet) werden automatisch vom Server abgerufen und auch automatisch aktualisiert. Diese sind nicht veränderbar und werden nur zur Information angezeigt.
+
+<br clear="all"/>
+
+### Tracing von Prozessen
+
+Im Tooltip eines Prozesses oder Workflowaufrufs kann über das kleine Icon links neben der Farbpalette das Tracing aktiviert werden. In diesem Modus wird der Pfad bis zu diesem Prozess farbig hervorgehoben
+
+<img src="docs/workflow-tracing-desktop.png" alt="Nachverfolgung des Ablaufs bis zu einem Prozess">
+
+<br clear="all"/>
 
 ## Suchhistorie
 <img align="left" src="docs/history-dropdown.png" alt="Wechsel zu einem vorherigen Suchergebnis">

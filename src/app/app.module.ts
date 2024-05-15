@@ -59,6 +59,7 @@ import { PagepropsService } from './svc/pageprops.service';
 import { SearchService } from './svc/search.service';
 import { ToastsService } from './svc/toasts.service';
 import { ToastsComponent } from './svc/toasts/toasts.component';
+import { VariableParserService } from './svc/variable-parser.service';
 import { HighlightPipe } from './utils/highlight.pipe';
 
 export const FindrVersion: string = '1.0.0-beta.5';
@@ -129,6 +130,7 @@ export function initAppFactory(svc: AppInitService) {
   providers: [
     { provide: APP_BASE_HREF, useValue: '/' },
     { provide: AppInitService, multi: false },
+    { provide: VariableParserService, multi: false },
     { provide: APP_INITIALIZER, useFactory: initAppFactory, deps: [AppInitService], multi: true },
     { provide: Settings, multi: false, useFactory: (initService: AppInitService) => new Settings(initService.environment?.api), deps: [AppInitService] },
     { provide: RestService, multi: false, deps: [Settings, HttpClient] },

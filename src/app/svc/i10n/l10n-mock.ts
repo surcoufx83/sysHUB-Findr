@@ -361,6 +361,11 @@ export const MockL10n: L10nLocale = {
             subject: ['mock-subject0', 'mock-subject1'],
             threads: 'mock-threads',
         },
+        variablesDropdown: {
+            title: ['mock-title0', 'mock-title1'],
+            customVariables: 'mock-customVariables',
+            serverVariables: 'mock-serverVariables'
+        },
         versionsDropdown: {
             title: ['mock-title0', 'mock-title1'],
             titleActiveVersion: ['mock-titleActiveVersion0', 'mock-titleActiveVersion1'],

@@ -30,7 +30,7 @@
                 node.description.substring(1).trim() }}
             </p>
             }
-            @if(hasOwnProperty(node.modeldata, 'loopName')) {
+            @if(hasProperty(node.modeldata, 'loopName')) {
             <p class="position-absolute top-0 start-0 bg-opacity-75 bg-body px-1 rounded">{{
                 $any(node.modeldata).loopName.trim() }}
             </p>
@@ -63,8 +63,9 @@
         @for (connection of graphModel.linkDataArray; track connection; let i = $index) {
         <path [id]="'path-' + i" [attr.i]="i" [ngClass]="[connection.category ?? 'common', 'connector-path']"
             [attr.marker-end]="traceConnections.includes(i) ? 'url(#arrowtrace)' : hoverpath == i ? 'url(#arrowred)' : 'url(#arrow)'"
-            [attr.data-trace-path]="traceConnections.includes(i)" (mousemove)="hoverpath = i"
-            (mouseleave)="hoverpath = undefined"></path>
+            [attr.data-trace-path]="traceConnections.includes(i)"
+            [attr.stroke-dasharray]="isAdditionalConnector(connection.from, connection.to) ? '8,5' : 'none'"
+            (mousemove)="hoverpath = i" (mouseleave)="hoverpath = undefined"></path>
         }
         @for (item of breakpoints; track $index) {
         <image [attr.x]="item.x" [attr.y]="item.y" width="18" height="18" href="/findr/assets/syshub/breakpoint.svg">
