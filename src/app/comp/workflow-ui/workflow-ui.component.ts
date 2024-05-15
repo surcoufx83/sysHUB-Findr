@@ -140,9 +140,9 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
         temprefs[ref.type] = { type: ref.type, items: [] };
       temprefs[ref.type].items.push(ref);
     });
-    let temprefs2 = Object.values(temprefs).sort((a, b) => a.type.toLocaleLowerCase() > b.type.toLocaleLowerCase() ? 1 : a.type.toLocaleLowerCase() < b.type.toLocaleLowerCase() ? -1 : 0);
+    let temprefs2 = Object.values(temprefs).sort((a, b) => a.type.toLocaleLowerCase().localeCompare(b.type.toLocaleLowerCase()));
     temprefs2.forEach((group) => {
-      group.items = group.items.sort((a, b) => a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : a.name.toLocaleLowerCase() < b.name.toLocaleLowerCase() ? -1 : 0);
+      group.items = group.items.sort((a, b) => a.name.toLocaleLowerCase().localeCompare(b.name.toLocaleLowerCase()));
       this.referencesCount += group.items.length;
     });
     this.references = [...temprefs2];
