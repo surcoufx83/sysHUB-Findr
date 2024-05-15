@@ -276,6 +276,7 @@ export class CacheService {
     this.config$.next([]);
     this.jobtypes$.next([]);
     this.parameterset$.next([]);
+    this.serverInfo$.next(null);
     this.workflows$.next([]);
     this._searchresult.next(null);
     sessionStorage.removeItem(this.appInitService.environment.storage?.categoriesKey ?? 'findr-syshub-cat');
@@ -293,7 +294,12 @@ export class CacheService {
     return this.categoryUuid2Index$[uuid] != undefined ? this.categories$.value[this.categoryUuid2Index$[uuid]] : null;
   }
 
-  getConfigItemByPath(path: string): SyshubConfigItem | null {
+  getConfigItemByPath(path: string, applyNamedSystem: boolean = false): SyshubConfigItem | null {
+    if (applyNamedSystem && this.serverInfo$.value) {
+      const out = this.getConfigItemByPath(`NamedSystems/${this.serverInfo$.value.systemName}/${path}`);
+      if (out !== null)
+        return out;
+    }
     return this.configPath2Uuid$[path] ? this.getConfigItemByUuid(this.configPath2Uuid$[path]) : null;
   }
 
@@ -453,7 +459,7 @@ export class CacheService {
     let olddata = sessionStorage.getItem(this.appInitService.environment.storage?.configKey ?? 'findr-syshub-config');
     if (olddata != null) {
       try {
-        this.jobtypes$.next(<SyshubJobType[]>JSON.parse(decompress(olddata)));
+        this.config$.next(<SyshubConfigItem[]>JSON.parse(decompress(olddata)));
       } catch (error) {
         console.error('Failed to decompress config data:', error);
       }

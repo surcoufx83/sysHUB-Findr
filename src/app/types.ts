@@ -90,6 +90,27 @@ export type SimpleKeyValue = {
     value: any
 }
 
+export type UuidModifiedObject = {
+    uuid: string,
+    modifiedtime: string,
+}
+
+export type UserConfig = {
+    enableCache: boolean,
+    showMoreFilter?: boolean,
+    showPsetTreeInProcessNodes?: boolean,
+    showUnmatchedItems?: boolean,
+    hideJobtypePercentItems?: boolean,
+    hideUnassignedRoles?: boolean,
+}
+
+export type UuidModifiedTypeObject = {
+    uuid: string,
+    modifiedtime: number | string | null,
+    path?: string,
+    type: 'SyshubCategory' | 'SyshubConfigItem' | 'SyshubJobType' | 'SyshubPSetItem' | 'SyshubWorkflow',
+}
+
 export type VariableExpression = {
     arrayIndex?: number,
     objProperty?: VariableProperty,
@@ -114,23 +135,13 @@ export type VariableProperty = {
     varName?: string,
 }
 
-export type UuidModifiedObject = {
-    uuid: string,
-    modifiedtime: string,
-}
+export type VariableSet = {
+    custom: VariableSetItem[],
+    system: VariableSetItem[]
+};
 
-export type UserConfig = {
-    enableCache: boolean,
-    showMoreFilter?: boolean,
-    showPsetTreeInProcessNodes?: boolean,
-    showUnmatchedItems?: boolean,
-    hideJobtypePercentItems?: boolean,
-    hideUnassignedRoles?: boolean,
-}
-
-export type UuidModifiedTypeObject = {
-    uuid: string,
-    modifiedtime: number | string | null,
-    path?: string,
-    type: 'SyshubCategory' | 'SyshubConfigItem' | 'SyshubJobType' | 'SyshubPSetItem' | 'SyshubWorkflow',
-}
+export type VariableSetItem = {
+    key: VariableProperty,
+    value: string,
+    enabled?: boolean,
+};
