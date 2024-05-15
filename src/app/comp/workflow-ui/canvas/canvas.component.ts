@@ -1,14 +1,15 @@
 import { AfterViewInit, Component, ElementRef, HostListener, Inject, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
-import { SyshubWorkflow, SyshubWorkflowModel } from 'syshub-rest-module';
-import { SvgElement } from './element';
+import { GraphModelWorkflowObject, SyshubWorkflow, SyshubWorkflowModel } from 'syshub-rest-module';
+import { StartElement, SvgElement, WorkflowElement } from './element';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
 import { SearchService } from 'src/app/svc/search.service';
 import { SearchResult } from 'src/app/types';
 import { Subscription } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 import { PagepropsService } from 'src/app/svc/pageprops.service';
+import { SyshubWorkflowReferenceGroup } from '../workflow-ui.component';
 
 @Component({
   selector: 'app-workflow-ui-canvas',
@@ -297,12 +298,28 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     return Object.getOwnPropertyNames(obj).includes(propname);
   }
 
+  hoverNode(node: SvgElement, x: number, y: number, w: number): void {
+    y += 56;
+    const placement = x > ((this.document.defaultView?.innerWidth ?? 1080) / 1.66) ? 'left' : 'right';
+    if (node.modeldata.category != 'start' && node.modeldata.category != 'end' && node.modeldata.category != 'annotation') {
+      this.propsService.inspect('SvgNode', node, 'show', { left: (placement == 'right' ? x + w + 64 : undefined), right: (placement == 'left' ? ((this.document.defaultView?.innerWidth ?? 1080) - (x) + w) : undefined), top: y });
+    }
+  }
+
   get l10nphrase(): L10nLocale {
     return this.l10nService.locale;
   }
 
   l10n(phrase: string, params: any[] = []) {
     return this.l10nService.ln(phrase, params);
+  }
+
+  leaveNode(node: SvgElement): void {
+    if (this.nodesToggled.includes(node.modeldata.key))
+      return;
+    if (node.modeldata.category != 'start' && node.modeldata.category != 'end' && node.modeldata.category != 'annotation') {
+      this.propsService.inspect('SvgNode', node, 'remove');
+    }
   }
 
   matchPhrase(value: string | number | null): boolean {
@@ -330,64 +347,6 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subs.push(this.propsService.TraceNode.subscribe((node) => {
       this.trace(node);
     }))
-  }
-
-  trace(nodeToTrace: SvgElement | undefined): void {
-    if (!nodeToTrace) return;
-
-    this.traceReset();
-    this.traceNodeUuid = nodeToTrace.uuid;
-
-    if (this.connectedNodes[nodeToTrace.uuid]) {
-      this.traceUpdateNode(nodeToTrace.uuid);
-      this.traceConnectedNodes(nodeToTrace.uuid);
-    }
-  }
-
-  private traceConnectedNodes(nodeUuid: string): void {
-    this.connectedNodes[nodeUuid].incoming.forEach(i => this.tracePath(i));
-  }
-
-  tracePath(i: number) {
-    if (!this.graphModel.linkDataArray[i] || this.traceConnections.includes(i))
-      return;
-    this.traceConnections.push(i);
-    if (this.connectedNodes[this.graphModel.linkDataArray[i].from]) {
-      this.nodes[this.nodeUUids[this.graphModel.linkDataArray[i].from]].tracing.traceSelf = false;
-      this.nodes[this.nodeUUids[this.graphModel.linkDataArray[i].from]].tracing.traceSuccessor = true;
-      this.connectedNodes[this.graphModel.linkDataArray[i].from].incoming.forEach((i) => this.tracePath(i));
-    }
-  }
-
-  private traceReset(): void {
-    this.traceConnections = [];
-    this.nodes.forEach(node => {
-      node.tracing = { traceSelf: false, traceSuccessor: false };
-    });
-  }
-
-  private traceUpdateNode(nodeUuid: string): void {
-    this.nodes[this.nodeUUids[nodeUuid]].tracing.traceSelf = true;
-    this.nodes[this.nodeUUids[nodeUuid]].tracing.traceSuccessor = false;
-  }
-
-  private renderPath(path: SvgPathPoint[]): string {
-    let elements: string[] = [];
-    path.forEach((element) => {
-      switch (element.cmd) {
-        case 'l':
-        case 'L':
-        case 'm':
-        case 'M':
-          elements.push(`${element.cmd} ${element.x},${element.y}`);
-          break;
-        case 'c':
-        case 'C':
-          elements.push(`${element.cmd} ${element.cs!.x},${element.cs!.y},${element.cs!.x},${element.cs!.y},${element.x},${element.y}`);
-          break;
-      }
-    });
-    return elements.join(' ');
   }
 
   render(): void {
@@ -430,20 +389,23 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  hoverNode(node: SvgElement, x: number, y: number, w: number): void {
-    y += 56;
-    const placement = x > ((this.document.defaultView?.innerWidth ?? 1080) / 1.66) ? 'left' : 'right';
-    if (node.modeldata.category != 'start' && node.modeldata.category != 'end' && node.modeldata.category != 'annotation') {
-      this.propsService.inspect('SvgNode', node, 'show', { left: (placement == 'right' ? x + w + 64 : undefined), right: (placement == 'left' ? ((this.document.defaultView?.innerWidth ?? 1080) - (x) + w) : undefined), top: y });
-    }
-  }
-
-  leaveNode(node: SvgElement): void {
-    if (this.nodesToggled.includes(node.modeldata.key))
-      return;
-    if (node.modeldata.category != 'start' && node.modeldata.category != 'end' && node.modeldata.category != 'annotation') {
-      this.propsService.inspect('SvgNode', node, 'remove');
-    }
+  private renderPath(path: SvgPathPoint[]): string {
+    let elements: string[] = [];
+    path.forEach((element) => {
+      switch (element.cmd) {
+        case 'l':
+        case 'L':
+        case 'm':
+        case 'M':
+          elements.push(`${element.cmd} ${element.x},${element.y}`);
+          break;
+        case 'c':
+        case 'C':
+          elements.push(`${element.cmd} ${element.cs!.x},${element.cs!.y},${element.cs!.x},${element.cs!.y},${element.x},${element.y}`);
+          break;
+      }
+    });
+    return elements.join(' ');
   }
 
   selectNode(node: SvgElement): void {
@@ -452,6 +414,57 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
         this.nodesToggled.push(node.modeldata.key);
       else
         this.nodesToggled.splice(this.nodesToggled.indexOf(node.modeldata.key, 1));
+    }
+  }
+
+  trace(nodeToTrace: SvgElement | undefined): void {
+    if (!nodeToTrace) return;
+
+    this.traceReset();
+    this.traceNodeUuid = nodeToTrace.uuid;
+
+    if (this.connectedNodes[nodeToTrace.uuid]) {
+      this.traceUpdateNode(nodeToTrace.uuid);
+      this.traceConnectedNodes(nodeToTrace.uuid);
+    }
+  }
+
+  private traceConnectedNodes(nodeUuid: string): void {
+    this.connectedNodes[nodeUuid].incoming.forEach(i => this.tracePath(i));
+  }
+
+  tracePath(i: number) {
+    if (!this.graphModel.linkDataArray[i] || this.traceConnections.includes(i))
+      return;
+    this.traceConnections.push(i);
+    this.traceWorkflowElement(i);
+  }
+
+  private traceReset(): void {
+    this.traceConnections = [];
+    this.nodes.forEach(node => {
+      node.tracing = { traceSelf: false, traceSuccessor: false };
+    });
+  }
+
+  private traceUpdateNode(nodeUuid: string): void {
+    this.nodes[this.nodeUUids[nodeUuid]].tracing.traceSelf = true;
+    this.nodes[this.nodeUUids[nodeUuid]].tracing.traceSuccessor = false;
+  }
+
+  private traceWorkflowElement(pathIndex: number): void {
+    if (this.connectedNodes[this.graphModel.linkDataArray[pathIndex].from]) {
+      let fromnode = this.nodes[this.nodeUUids[this.graphModel.linkDataArray[pathIndex].from]];
+      fromnode.tracing.traceSelf = false;
+      fromnode.tracing.traceSuccessor = true;
+      this.connectedNodes[this.graphModel.linkDataArray[pathIndex].from].incoming.forEach((i) => this.tracePath(i));
+      if (fromnode instanceof StartElement) {
+        this.nodes.forEach((node) => {
+          if (node instanceof WorkflowElement && (<GraphModelWorkflowObject>node.modeldata).startPoint == fromnode.title) {
+            this.traceConnectedNodes(node.uuid)
+          }
+        })
+      }
     }
   }
 
