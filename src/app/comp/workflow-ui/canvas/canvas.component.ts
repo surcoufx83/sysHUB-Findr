@@ -412,6 +412,7 @@ export class CanvasComponent implements AfterViewInit, OnChanges, OnDestroy, OnI
 
       this.onErrorHandlerNodes = [];
       this.breakpoints = [];
+      this.connectedNodes = {};
       this.addCallWorkflowConnections();
 
       this.graphModel.linkDataArray.forEach((connector, i) => {
@@ -442,6 +443,7 @@ export class CanvasComponent implements AfterViewInit, OnChanges, OnDestroy, OnI
       setTimeout(() => {
         this.drawPaths();
         this.rendered = true;
+        this.trace(this.traceNodeUuid);
       }, 10);
 
     }
@@ -475,15 +477,14 @@ export class CanvasComponent implements AfterViewInit, OnChanges, OnDestroy, OnI
     }
   }
 
-  trace(nodeToTrace: SvgElement | undefined): void {
+  trace(nodeToTrace?: SvgElement | string): void {
     this.traceReset();
-    if (!nodeToTrace) return;
-
-    this.traceNodeUuid = nodeToTrace.uuid;
-
-    if (this.connectedNodes[nodeToTrace.uuid]) {
-      this.traceUpdateNode(nodeToTrace.uuid);
-      this.traceConnectedNodes(nodeToTrace.uuid);
+    if (!nodeToTrace || nodeToTrace === '')
+      return;
+    this.traceNodeUuid = typeof nodeToTrace === 'string' ? nodeToTrace : nodeToTrace.uuid;
+    if (this.connectedNodes[this.traceNodeUuid]) {
+      this.traceUpdateNode(this.traceNodeUuid);
+      this.traceConnectedNodes(this.traceNodeUuid);
     }
   }
 
@@ -515,7 +516,7 @@ export class CanvasComponent implements AfterViewInit, OnChanges, OnDestroy, OnI
       let fromnode = this.nodes[this.nodeUUids[this.graphModel.linkDataArray[pathIndex].from]];
       fromnode.tracing.traceSelf = false;
       fromnode.tracing.traceSuccessor = true;
-      this.connectedNodes[this.graphModel.linkDataArray[pathIndex].from].incoming.forEach((i) => this.tracePath(i));
+      this.traceConnectedNodes(this.graphModel.linkDataArray[pathIndex].from);
     }
   }
 
