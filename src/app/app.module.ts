@@ -62,7 +62,7 @@ import { ToastsComponent } from './svc/toasts/toasts.component';
 import { VariableParserService } from './svc/variable-parser.service';
 import { HighlightPipe } from './utils/highlight.pipe';
 
-export const FindrVersion: string = '1.0.0-beta.5';
+export const FindrVersion: string = '1.0.0-beta.6';
 
 export function initAppFactory(svc: AppInitService) {
   return () => svc.load();
