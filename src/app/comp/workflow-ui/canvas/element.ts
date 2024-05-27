@@ -35,7 +35,7 @@ export class SvgElement implements SvgNode {
         }
         this.title = graphNode.label ?? '';
         if (Object.getOwnPropertyNames(graphNode).includes('name')) {
-            this.title = (<GraphModelDecisionObject | GraphModelProcessObject>graphNode).name;
+            this.title = (<GraphModelDecisionObject | GraphModelProcessObject>graphNode).name ?? '';
         }
         this.uuid = graphNode.key;
         this.modeldata = graphNode;
