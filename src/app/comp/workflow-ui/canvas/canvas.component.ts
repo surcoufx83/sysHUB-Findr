@@ -477,13 +477,11 @@ export class CanvasComponent implements AfterViewInit, OnChanges, OnDestroy, OnI
     }
   }
 
-  trace(nodeToTrace: SvgElement | string | undefined): void {
+  trace(nodeToTrace?: SvgElement | string): void {
     this.traceReset();
     if (!nodeToTrace || nodeToTrace === '')
       return;
-
     this.traceNodeUuid = typeof nodeToTrace === 'string' ? nodeToTrace : nodeToTrace.uuid;
-
     if (this.connectedNodes[this.traceNodeUuid]) {
       this.traceUpdateNode(this.traceNodeUuid);
       this.traceConnectedNodes(this.traceNodeUuid);
