@@ -31,6 +31,7 @@ export type FindrEnvironment = {
         userdataKey?: string,
         workflowsKey?: string,
     },
+    '$schema'?: string
 }
 
 export type SearchConfig = {
