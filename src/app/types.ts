@@ -1,7 +1,7 @@
-import { BasicRestSettings, OAuthRestSettings, SyshubCategory, SyshubCertStoreItem, SyshubIppDevice, SyshubRole, SyshubServerInformation, SyshubUserAccount } from "syshub-rest-module";
+import { ApikeyRestSettings, BasicRestSettings, OAuthRestSettings, SyshubCategory, SyshubCertStoreItem, SyshubIppDevice, SyshubRole, SyshubServerInformation, SyshubUserAccount } from "syshub-rest-module";
 
 export type FindrEnvironment = {
-    api: BasicRestSettings | OAuthRestSettings,
+    api: ApikeyRestSettings | BasicRestSettings | OAuthRestSettings,
     appInitializationFailure?: {
         configStatusCode: number,
     },
@@ -9,8 +9,8 @@ export type FindrEnvironment = {
         baseUrl?: string,
         disabledFunctions?: ('config' | 'jobtypes' | 'parameterset' | 'workflows' | 'certstore' | 'serverConfig' | 'serverInfo' | 'ippDevices' | 'users')[],
         displaySystemName?: boolean,
-        promotionLink?: string,
         minPhraseLength?: number,
+        promotionLink?: string,
         unusedWorkflowBadge?: boolean,
         useCache?: boolean,
         webclientLink?: string,
