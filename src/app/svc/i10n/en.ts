@@ -46,10 +46,11 @@ export const L10nEn: L10nLocale = {
         welcomeSubtitleUser: 'Hello [0], what would you like to find today?',
         welcomeTitle: 'sysHUBFindr',
         disabledFindr: {
-            description: 'Findr requires a specific configuration for searching and displaying results.',
+            description: 'Findr requires a specific configuration for search and result display.',
             documentationLink: 'See Readme on Github',
+            apikeyNotSupported: 'The authentication type API-Key is not supported in Findr. The API-Key login only allows public scope, but Findr also requires private.',
             missingConfigFile: 'The configuration file was not found.',
-            missingScope: 'Parameter syshub.oauth.scope is not configured correctly',
+            missingScope: 'Parameter syshub.oauth.scope is not correctly configured',
             title: 'Findr disabled!',
         },
     },

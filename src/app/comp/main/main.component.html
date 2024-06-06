@@ -1,8 +1,17 @@
 @if (missingConfig) {
-<app-config-missing-bar></app-config-missing-bar>
+<app-config-invalid>
+    {{ l10nphrase.home.disabledFindr.missingConfigFile }}
+</app-config-invalid>
+}
+@else if (authType == undefined || authType == 'apikey') {
+<app-config-invalid>
+    {{ l10nphrase.home.disabledFindr.apikeyNotSupported }}
+</app-config-invalid>
 }
 @else if (missingScope) {
-<app-scope-warning-bar></app-scope-warning-bar>
+<app-config-invalid>
+    {{ l10nphrase.home.disabledFindr.missingScope }}
+</app-config-invalid>
 }
 @else {
 <app-navbar></app-navbar>

@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - The `config.json` templates in the `assets/config` folder have been updated to the latest requirements and a README file has been added ([#57](https://github.com/surcoufx83/sysHUB-Findr/issues/57)).
 - Improved localization for the "Workflow has no references" badge.
+- Logout button will be hidden if user is automatically loggedin by basic auth with hardcoded credentials ([#56](https://github.com/surcoufx83/sysHUB-Findr/issues/56)).
 
 ### Fixed
 

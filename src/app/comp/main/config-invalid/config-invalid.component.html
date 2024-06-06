@@ -1,10 +1,10 @@
-<nav class="navbar navbar-expand-lg bg-primary py-5 vh-100">
+<nav class="navbar navbar-expand-lg bg-primary py-5 vh-100" style="z-index: 99999;">
     <div class="container-fluid flex-column">
         <h1 class="me-2 mb-4">{{ l10nphrase.home.disabledFindr.title }}</h1>
         <span class="text-center">
             {{ l10nphrase.home.disabledFindr.description }}
             <br />
-            {{ l10nphrase.home.disabledFindr.missingScope }}
+            <ng-content></ng-content>
             <br />
             <a class="text-reset" target="_blank"
                 href="https://github.com/surcoufx83/sysHUB-Findr?tab=readme-ov-file#konfiguration">
