@@ -76,7 +76,7 @@ importers:
         version: 7.8.1
       syshub-rest-module:
         specifier: ^5.2.1
-        version: 5.2.1(@angular/common@17.3.10(@angular/core@17.3.10(rxjs@7.8.1)(zone.js@0.14.6))(rxjs@7.8.1))(@angular/core@17.3.10(rxjs@7.8.1)(zone.js@0.14.6))
+        version: link:../syshub-rest-module/dist/syshub-rest-module
       titleize:
         specifier: ^4.0.0
         version: 4.0.0
@@ -4112,12 +4112,6 @@ packages:
   symbol-observable@4.0.0:
     resolution: {integrity: sha512-b19dMThMV4HVFynSAM1++gBHAbk2Tc/osgLIBZMKsyqh34jb2e8Os7T6ZW/Bt3pJFdBTd2JwAnAAEQV7rSNvcQ==}
     engines: {node: '>=0.10'}
-
-  syshub-rest-module@5.2.1:
-    resolution: {integrity: sha512-dOhbd6Uf5HgcmvMU8A7fakODA6dSe36vKL00rVrqP+hZnwUDvubVFJPtfN3SxVFZXgM7qF8QNsllEOJs9Kb3fA==}
-    peerDependencies:
-      '@angular/common': ^17
-      '@angular/core': ^17
 
   tapable@2.2.1:
     resolution: {integrity: sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==}
@@ -9096,12 +9090,6 @@ snapshots:
   supports-preserve-symlinks-flag@1.0.0: {}
 
   symbol-observable@4.0.0: {}
-
-  syshub-rest-module@5.2.1(@angular/common@17.3.10(@angular/core@17.3.10(rxjs@7.8.1)(zone.js@0.14.6))(rxjs@7.8.1))(@angular/core@17.3.10(rxjs@7.8.1)(zone.js@0.14.6)):
-    dependencies:
-      '@angular/common': 17.3.10(@angular/core@17.3.10(rxjs@7.8.1)(zone.js@0.14.6))(rxjs@7.8.1)
-      '@angular/core': 17.3.10(rxjs@7.8.1)(zone.js@0.14.6)
-      tslib: 2.6.2
 
   tapable@2.2.1: {}
 
