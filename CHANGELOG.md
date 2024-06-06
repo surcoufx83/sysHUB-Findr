@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 1.0.0-beta.6 (Unreleased)
 
-Nothing changed yet. This is a placeholder for the next release.
+### Added
+
+- A JSON Schema for validating the `config.json` file has been added to the `json-schema/1.0.0` folder.
+
+### Changed
+
+- The `config.json` templates in the `assets/config` folder have been updated to the latest requirements and a README file has been added. 
 
 ## 1.0.0-beta.5 2024-05-27
 
