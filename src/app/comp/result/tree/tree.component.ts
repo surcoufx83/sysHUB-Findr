@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
@@ -11,7 +12,7 @@ import { SyshubConfigItem, SyshubPSetItem } from 'syshub-rest-module';
   templateUrl: './tree.component.html',
   styleUrl: './tree.component.scss'
 })
-export class TreeComponent implements OnInit {
+export class TreeComponent implements OnDestroy, OnInit {
 
   @Input({ required: true }) treetype!: 'ConfigItems' | 'PSetItems';
   @Input({ required: true }) tree: SyshubConfigItem[] | SyshubPSetItem[] = [];
@@ -19,6 +20,7 @@ export class TreeComponent implements OnInit {
   @Input({ required: true }) searchResult?: SearchResult;
   matchedNodeUuids: string[] = [];
   nodesToggled: string[] = [];
+  nodeXPressSub?: Subscription;
 
   constructor(private l10nService: L10nService,
     private cacheService: CacheService,
@@ -44,11 +46,21 @@ export class TreeComponent implements OnInit {
     return this.l10nService.ln(phrase, params);
   }
 
+  ngOnDestroy(): void {
+    this.nodeXPressSub?.unsubscribe();
+  }
+
   ngOnInit(): void {
     if (this.treetype === 'ConfigItems')
       this.searchResult?.result?.config.forEach((item) => this.matchedNodeUuids.push(item.uuid));
     else if (this.treetype === 'PSetItems')
       this.searchResult?.result?.parameterset.forEach((item) => this.matchedNodeUuids.push(item.uuid));
+    this.nodeXPressSub = this.propsService.NodesClosed.subscribe((request) => {
+      if (request[1] === true && 'uuid' in request[0].node && this.nodesToggled.includes(request[0].node.uuid)) {
+        // Handle X-press in tooltip manually
+        this.nodesToggled.splice(this.nodesToggled.indexOf(request[0].node.uuid, 1));
+      }
+    });
   }
 
   toggleNode(node: SyshubConfigItem | SyshubPSetItem): void {

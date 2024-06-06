@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
@@ -12,13 +13,14 @@ import { SyshubUserAccount } from 'syshub-rest-module';
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
 })
-export class UserComponent implements OnInit {
+export class UserComponent implements OnDestroy, OnInit {
 
   nodesToggled: string[] = [];
   @Input({ required: true }) searchResult!: SearchResult;
   @Input({ required: true }) showUnmatchedItems!: boolean;
   user: SyshubUserAccount[] = [];
   userMatched: string[] = [];
+  nodeXPressSub?: Subscription;
 
   constructor(private l10nService: L10nService,
     private cacheService: CacheService,
@@ -37,6 +39,10 @@ export class UserComponent implements OnInit {
     return this.l10nService.ln(phrase, params);
   }
 
+  ngOnDestroy(): void {
+    this.nodeXPressSub?.unsubscribe();
+  }
+
   ngOnInit(): void {
     if (this.searchResult!.result?.system?.users === undefined || this.searchResult!.result?.system?.users === null || this.searchResult!.result?.system?.users === false)
       return;
@@ -44,6 +50,12 @@ export class UserComponent implements OnInit {
     this.user.forEach((u) => {
       if (this.searchService.matchUser(u, this.searchResult.search))
         this.userMatched.push(u.uuid);
+    });
+    this.nodeXPressSub = this.propsService.NodesClosed.subscribe((request) => {
+      if (request[1] === true && 'uuid' in request[0].node && this.nodesToggled.includes(request[0].node.uuid)) {
+        // Handle X-press in tooltip manually
+        this.nodesToggled.splice(this.nodesToggled.indexOf(request[0].node.uuid, 1));
+      }
     });
   }
 

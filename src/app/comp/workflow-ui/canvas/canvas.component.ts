@@ -386,9 +386,9 @@ export class CanvasComponent implements AfterViewInit, OnChanges, OnDestroy, OnI
 
   ngOnInit(): void {
     this.subs.push(this.propsService.NodesClosed.subscribe((node) => {
-      if (node.type != 'SvgNode')
+      if (node[0].type != 'SvgNode')
         return;
-      let i = this.nodesToggled.indexOf((<SvgElement>node.node).modeldata.key);
+      let i = this.nodesToggled.indexOf((<SvgElement>node[0].node).modeldata.key);
       if (i > -1)
         this.nodesToggled.splice(i, 1);
     }));

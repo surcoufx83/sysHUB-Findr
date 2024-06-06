@@ -50,6 +50,12 @@ export class JobtypesComponent implements OnDestroy, OnInit {
         return;
       this.jobtypes = jobtypes.sort((a, b) => a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1);
     }));
+    this.subs.push(this.propsService.NodesClosed.subscribe((request) => {
+      if (request[1] === true && 'uuid' in request[0].node && this.nodesToggled.includes(request[0].node.uuid)) {
+        // Handle X-press in tooltip manually
+        this.nodesToggled.splice(this.nodesToggled.indexOf(request[0].node.uuid, 1));
+      }
+    }));
   }
 
   hoverNode(node: SyshubJobType, event: MouseEvent): void {
