@@ -1,6 +1,7 @@
 import { ApikeyRestSettings, BasicRestSettings, OAuthRestSettings, SyshubCategory, SyshubCertStoreItem, SyshubIppDevice, SyshubRole, SyshubServerInformation, SyshubUserAccount } from "syshub-rest-module";
 
 export type FindrEnvironment = {
+    '$schema'?: string,
     api: ApikeyRestSettings | BasicRestSettings | OAuthRestSettings,
     appInitializationFailure?: {
         configStatusCode: number,
@@ -30,8 +31,7 @@ export type FindrEnvironment = {
         userconfigKey?: string,
         userdataKey?: string,
         workflowsKey?: string,
-    },
-    '$schema'?: string
+    }
 }
 
 export type SearchConfig = {

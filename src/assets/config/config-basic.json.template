@@ -1,0 +1,33 @@
+{
+    "$schema": "../../../json-schema/1.0.0/schema",
+    "api": {
+        "host": "/",
+        "version": 3,
+        "basic": {
+            "enabled": true,
+            "requiresLogin": true,
+            "username": "",
+            "password": "",
+            "provider": "<api server name>",
+            "scope": "public+private"
+        },
+        "options": {
+            "autoLogoutOn401": true,
+            "useEtags": true
+        },
+        "throwErrors": false
+    },
+    "app": {
+        "baseUrl": "/findr/",
+        "disabledFunctions": [],
+        "displaySystemName": true,
+        "minPhraseLength": 3,
+        "promotionLink": "https://github.com/surcoufx83/sysHUB-Findr",
+        "unusedWorkflowBadge": true,
+        "useCache": true,
+        "webclientLink": "/webclient"
+    },
+    "i10n": {
+        "fallback": "de"
+    }
+}
