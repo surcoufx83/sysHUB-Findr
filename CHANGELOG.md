@@ -13,7 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- The `config.json` templates in the `assets/config` folder have been updated to the latest requirements and a README file has been added. 
+- The `config.json` templates in the `assets/config` folder have been updated to the latest requirements and a README file has been added ([#57](https://github.com/surcoufx83/sysHUB-Findr/issues/57))
+
+### Fixed
+
+- Error in tooltips fixed: If a tooltip was closed with the `X` button and then reopened via mouse-over over the original element, it was not automatically hidden on mouse-out ([#58](https://github.com/surcoufx83/sysHUB-Findr/issues/58)).
 
 ## 1.0.0-beta.5 2024-05-27
 
