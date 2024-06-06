@@ -305,7 +305,7 @@ export const L10nEn: L10nLocale = {
                 In the list, workflows are highlighted in color if there is a match in the metadata or the workflow itself.
                 Click on an entry to see the details or on the flowchart icon to display the workflow.
             `,
-            unused: 'unused',
+            unused: 'no references',
             unusedTitle: 'The workflow is not referenced and therefore likely not used.',
             nodeInspector: {
                 cacheable: 'Cache active',

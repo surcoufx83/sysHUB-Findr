@@ -305,7 +305,7 @@ export const L10nFr: L10nLocale = {
                 Dans la liste, les flux de travail sont mis en évidence en couleur s'il y a une correspondance dans les métadonnées ou dans le flux de travail lui-même.
                 Cliquez sur une entrée pour voir les détails ou sur l'icône du diagramme de flux pour afficher le flux de travail.
             `,
-            unused: 'Non utilisé',
+            unused: 'aucune référence',
             unusedTitle: 'Le workflow n\'est pas référencé et donc probablement pas utilisé.',
             nodeInspector: {
                 cacheable: 'Cache activé',
