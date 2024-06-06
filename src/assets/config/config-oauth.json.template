@@ -19,6 +19,7 @@
         "baseUrl": "/findr/",
         "disabledFunctions": [],
         "displaySystemName": true,
+        "loadDictionaryWorkflow": "c0a80a838fee1340818fee0340340000",
         "minPhraseLength": 3,
         "promotionLink": "https://github.com/surcoufx83/sysHUB-Findr",
         "unusedWorkflowBadge": true,

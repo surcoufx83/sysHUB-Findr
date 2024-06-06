@@ -5,6 +5,9 @@
         "FindrEnvironment": {
             "type": "object",
             "properties": {
+                "$schema": {
+                    "type": "string"
+                },
                 "api": {
                     "anyOf": [
                         {
@@ -56,6 +59,9 @@
                         "displaySystemName": {
                             "type": "boolean"
                         },
+                        "loadDictionaryWorkflow": {
+                            "type": "string"
+                        },
                         "minPhraseLength": {
                             "type": "number"
                         },
@@ -102,6 +108,9 @@
                         "configKey": {
                             "type": "string"
                         },
+                        "dictionaryKey": {
+                            "type": "string"
+                        },
                         "jobtypesKey": {
                             "type": "string"
                         },
@@ -128,9 +137,6 @@
                         }
                     },
                     "additionalProperties": false
-                },
-                "$schema": {
-                    "type": "string"
                 }
             },
             "required": [

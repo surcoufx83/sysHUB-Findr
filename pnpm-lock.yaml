@@ -75,8 +75,8 @@ importers:
         specifier: ^7.8.1
         version: 7.8.1
       syshub-rest-module:
-        specifier: ^5.2.1
-        version: 5.2.1(@angular/common@17.3.11(@angular/core@17.3.11(rxjs@7.8.1)(zone.js@0.14.6))(rxjs@7.8.1))(@angular/core@17.3.11(rxjs@7.8.1)(zone.js@0.14.6))
+        specifier: ^5.3.0
+        version: 5.3.0(@angular/common@17.3.11(@angular/core@17.3.11(rxjs@7.8.1)(zone.js@0.14.6))(rxjs@7.8.1))(@angular/core@17.3.11(rxjs@7.8.1)(zone.js@0.14.6))
       titleize:
         specifier: ^4.0.0
         version: 4.0.0
@@ -2305,8 +2305,8 @@ packages:
   ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
 
-  electron-to-chromium@1.4.791:
-    resolution: {integrity: sha512-6FlqP0NSWvxFf1v+gHu+LCn5wjr1pmkj5nPr7BsxPnj41EDR4EWhK/KmQN0ytHUqgTR1lkpHRYxvHBLZFQtkKw==}
+  electron-to-chromium@1.4.792:
+    resolution: {integrity: sha512-rkg5/N3L+Y844JyfgPUyuKK0Hk0efo3JNxUDKvz3HgP6EmN4rNGhr2D8boLsfTV/hGo7ZGAL8djw+jlg99zQyA==}
 
   elkjs@0.9.3:
     resolution: {integrity: sha512-f/ZeWvW/BCXbhGEf1Ujp29EASo/lk1FDnETgNKwJrsVvGZhUWCZyg3xLJjAsxfOmt8KjswHmI5EwCQcPMpOYhQ==}
@@ -4113,8 +4113,8 @@ packages:
     resolution: {integrity: sha512-b19dMThMV4HVFynSAM1++gBHAbk2Tc/osgLIBZMKsyqh34jb2e8Os7T6ZW/Bt3pJFdBTd2JwAnAAEQV7rSNvcQ==}
     engines: {node: '>=0.10'}
 
-  syshub-rest-module@5.2.1:
-    resolution: {integrity: sha512-dOhbd6Uf5HgcmvMU8A7fakODA6dSe36vKL00rVrqP+hZnwUDvubVFJPtfN3SxVFZXgM7qF8QNsllEOJs9Kb3fA==}
+  syshub-rest-module@5.3.0:
+    resolution: {integrity: sha512-wdO5CMqabm6zLPftkJqFZmJiXD05HFwhEuttZtO4tQTfMggkgYNWdtDIdTH4ffwzKzRa3hsWxQwQUJk+UOMAxA==}
     peerDependencies:
       '@angular/common': ^17
       '@angular/core': ^17
@@ -6472,7 +6472,7 @@ snapshots:
   browserslist@4.23.0:
     dependencies:
       caniuse-lite: 1.0.30001629
-      electron-to-chromium: 1.4.791
+      electron-to-chromium: 1.4.792
       node-releases: 2.0.14
       update-browserslist-db: 1.0.16(browserslist@4.23.0)
 
@@ -7059,7 +7059,7 @@ snapshots:
 
   ee-first@1.1.1: {}
 
-  electron-to-chromium@1.4.791: {}
+  electron-to-chromium@1.4.792: {}
 
   elkjs@0.9.3:
     optional: true
@@ -9166,7 +9166,7 @@ snapshots:
 
   symbol-observable@4.0.0: {}
 
-  syshub-rest-module@5.2.1(@angular/common@17.3.11(@angular/core@17.3.11(rxjs@7.8.1)(zone.js@0.14.6))(rxjs@7.8.1))(@angular/core@17.3.11(rxjs@7.8.1)(zone.js@0.14.6)):
+  syshub-rest-module@5.3.0(@angular/common@17.3.11(@angular/core@17.3.11(rxjs@7.8.1)(zone.js@0.14.6))(rxjs@7.8.1))(@angular/core@17.3.11(rxjs@7.8.1)(zone.js@0.14.6)):
     dependencies:
       '@angular/common': 17.3.11(@angular/core@17.3.11(rxjs@7.8.1)(zone.js@0.14.6))(rxjs@7.8.1)
       '@angular/core': 17.3.11(rxjs@7.8.1)(zone.js@0.14.6)

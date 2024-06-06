@@ -10,12 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - A JSON Schema for validating the `config.json` file has been added to the `json-schema/1.0.0` folder.
+- A new workflow "Findr query dictionary" (`c0a80a838fee1340818fee0340340000`) has been added to the ppk that contains only Start and End without any processing in between. This workflow is used for a new functionality to retrieve dictionary variables that are server-generated in workflows and not part of the user variables. Those are used as server variables in the workflow UI. The functionality is enabled by adding the line `"loadDictionaryWorkflow": "c0a80a838fee1340818fee0340340000",` into the `"app"` property of the `config.json` file. As long as this is missing or empty, the user variables from the config will be used. This completes the issue reported as [#51](https://github.com/surcoufx83/sysHUB-Findr/issues/51).
 
 ### Changed
 
 - The `config.json` templates in the `assets/config` folder have been updated to the latest requirements and a README file has been added ([#57](https://github.com/surcoufx83/sysHUB-Findr/issues/57)).
 - Improved localization for the "Workflow has no references" badge.
 - Logout button will be hidden if user is automatically loggedin by basic auth with hardcoded credentials ([#56](https://github.com/surcoufx83/sysHUB-Findr/issues/56)).
+- The ppk in the release package has been updated to 1.0.0-beta.6 ([#51](https://github.com/surcoufx83/sysHUB-Findr/issues/51)).
 
 ### Fixed
 

@@ -29,6 +29,7 @@ In the same folder as this README, you will find three template files: `config-a
     - `ippDevices`
     - `users`
   - **displaySystemName** (boolean): Whether to display the system name.
+  - **loadDictionaryWorkflow** (string): A workflow uuid that is executed to retrieve dictionary variables.
   - **minPhraseLength** (number): Minimum phrase length for certain operations.
   - **promotionLink** (string): URL for promotions.
   - **unusedWorkflowBadge** (boolean): Whether to show badges for unused workflows.
@@ -53,10 +54,14 @@ In the same folder as this README, you will find three template files: `config-a
 
 ### API Settings
 
-#### ApikeyRestSettings
+#### ApikeyRestSettings **(do not use)**
+
+API key authentication is available from sysHUB 2024.
+This method is currently not supported in Findr as we need access to protected Rest API endpoints that are not accessible to API key logins.
 
 - **host** (string): The API host.
-- **version** (number): The API version. Options: `1`, `2`, `3`, `4`.
+- **version** (number): The API version. Options: 
+  - `4` = sysHUB 2024
 - **apiKey** (string): The API key.
 - **provider** (string): The provider name.
 - **options**: Additional options.
@@ -70,10 +75,14 @@ In the same folder as this README, you will find three template files: `config-a
 #### BasicRestSettings
 
 - **host** (string): The API host.
-- **version** (number): The API version. Options: `1`, `2`, `3`, `4`.
+- **version** (number): The API version. Options: 
+  - `1` = sysHUB 2021
+  - `2` = sysHUB 2022
+  - `3` = sysHUB 2023 (**default**)
+  - `4` = sysHUB 2024
 - **basic**: Basic connection settings.
   - **enabled** (boolean): Must be `true`.
-  - **requiresLogin** (boolean): Whether login is required.
+  - **requiresLogin** (boolean): Whether login is required. If true, this makes `username` and `password` optional. This is not yet supported in Findr.
   - **username** (string): Username for basic auth.
   - **password** (string): Password for basic auth.
   - **provider** (string): The provider name.
@@ -84,7 +93,11 @@ In the same folder as this README, you will find three template files: `config-a
 #### OAuthRestSettings
 
 - **host** (string): The API host.
-- **version** (number): The API version. Options: `1`, `2`, `3`, `4`.
+- **version** (number): The API version. Options: 
+  - `1` = sysHUB 2021
+  - `2` = sysHUB 2022
+  - `3` = sysHUB 2023 (**default**)
+  - `4` = sysHUB 2024
 - **oauth**: OAuth connection settings.
   - **enabled** (boolean): Must be `true`.
   - **clientId** (string): OAuth client ID.
@@ -100,7 +113,7 @@ In the same folder as this README, you will find three template files: `config-a
 {
   "api": {
     "host": "https://api.example.com",
-    "version": 2,
+    "version": 3,
     "apiKey": "your_api_key",
     "provider": "example_provider",
     "options": {
@@ -119,6 +132,7 @@ In the same folder as this README, you will find three template files: `config-a
     "baseUrl": "https://app.example.com",
     "disabledFunctions": ["config", "users"],
     "displaySystemName": true,
+    "loadDictionaryWorkflow": "c0a80a838fed1172818fed8172ff0000",
     "minPhraseLength": 3,
     "promotionLink": "https://promo.example.com",
     "unusedWorkflowBadge": false,

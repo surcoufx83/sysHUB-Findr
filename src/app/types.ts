@@ -10,6 +10,7 @@ export type FindrEnvironment = {
         baseUrl?: string,
         disabledFunctions?: ('config' | 'jobtypes' | 'parameterset' | 'workflows' | 'certstore' | 'serverConfig' | 'serverInfo' | 'ippDevices' | 'users')[],
         displaySystemName?: boolean,
+        loadDictionaryWorkflow?: string,
         minPhraseLength?: number,
         promotionLink?: string,
         unusedWorkflowBadge?: boolean,
@@ -23,6 +24,7 @@ export type FindrEnvironment = {
     storage?: {
         categoriesKey?: string,
         configKey?: string,
+        dictionaryKey?: string,
         jobtypesKey?: string,
         l10nKey?: string,
         parametersetKey?: string,

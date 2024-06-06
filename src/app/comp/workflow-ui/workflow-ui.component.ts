@@ -39,7 +39,7 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
 
   constructor(private l10nService: L10nService,
     private cacheService: CacheService,
-    initService: AppInitService,
+    private initService: AppInitService,
     private propsService: PagepropsService,
     private searchService: SearchService,
     private route: ActivatedRoute,
@@ -111,16 +111,25 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
     this.subs.push(this.cacheService.workflowReferencesUpdated.subscribe((state) => { if (state != null) this.ngOnInit_LoadWfRefs() }));
     this.subs.push(this.cacheService.workflowStartpointsUpdated.subscribe((state) => { if (state != null) this.ngOnInit_LoadWfStartpoints() }));
     this.subs.push(this.cacheService.workflowVersionsUpdated.subscribe((state) => { if (state != null) this.ngOnInit_LoadWfVersions() }));
-    this.subs.push(this.cacheService.ConfigUpdated.subscribe((state) => {
-      if (state != null) {
-        const userVariables = this.cacheService.getConfigItemByPath('System/UserVariables', true);
-        if (userVariables != null) {
-          this.variables.system = [];
-          userVariables?.children.forEach((variableConfigItem) => this.variables.system.push({ key: { varName: variableConfigItem.name }, value: variableConfigItem.value, }));
-          this.variables.system.sort((a, b) => a.key.varName!.toLocaleLowerCase().localeCompare(b.key.varName!.toLocaleLowerCase()));
+    if (this.initService.environment.app?.loadDictionaryWorkflow === undefined || this.initService.environment.app?.loadDictionaryWorkflow === '') {
+      // load variables from config tree if not loading from dictionary
+      this.subs.push(this.cacheService.ConfigUpdated.subscribe((state) => {
+        if (state != null) {
+          const userVariables = this.cacheService.getConfigItemByPath('System/UserVariables', true);
+          if (userVariables != null) {
+            this.variables.system = [];
+            userVariables?.children.forEach((variableConfigItem) => this.variables.system.push({ key: { varName: variableConfigItem.name }, value: variableConfigItem.value, }));
+            this.variables.system.sort((a, b) => a.key.varName!.toLocaleLowerCase().localeCompare(b.key.varName!.toLocaleLowerCase()));
+          }
         }
-      }
-    }));
+      }));
+    } else {
+      // load variables as result from a workflow calls dictionary
+      this.subs.push(this.cacheService.DictionaryVariables.subscribe((vars) => {
+        this.variables.system = Object.entries(vars).map(([key, value]) => ({ key: { varName: key }, value: `${value}`, enabled: !Array.isArray(value) || typeof value !== 'object' }));
+        this.variables.system.sort((a, b) => a.key.varName!.toLocaleLowerCase().localeCompare(b.key.varName!.toLocaleLowerCase()));
+      }));
+    }
   }
 
   ngOnInit_LoadWf(): void {

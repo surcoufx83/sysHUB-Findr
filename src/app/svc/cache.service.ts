@@ -1,7 +1,7 @@
 import { HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { compress, decompress } from 'lz-string';
-import { BehaviorSubject, forkJoin } from 'rxjs';
+import { BehaviorSubject, Subscription, first, forkJoin } from 'rxjs';
 import { NetworkError, RestService, SyshubCategory, SyshubConfigItem, SyshubJobType, SyshubPSetItem, SyshubServerInformation, SyshubVersion, SyshubWorkflow, SyshubWorkflowReference, SyshubWorkflowVersion, UnauthorizedError } from 'syshub-rest-module';
 import { SearchConfig, SearchResult, SearchResultUuids, UserConfig, UuidModifiedTypeObject } from '../types';
 import { AppInitService } from './app-init.service';
@@ -68,6 +68,30 @@ export class CacheService {
    * Saves the config path with its uuid for each config item.
    */
   private configPath2Uuid$: { [key: string]: string } = {};
+
+  /**
+   * Contains a subscribeable subject that includes dictionary variables (key-value-pairs). This requires a workflow uuid configured
+   * in Findr configuration app.loadDictionaryWorkflow, e.g. "c0a80a838fed1172818fed8172ff0000" for the workflow "Findr query dictionary".
+   * This workflow is part of the ppk package included in the Findr installation files.
+   */
+  private dictionaryVariables$: BehaviorSubject<{ [key: string]: any }> = new BehaviorSubject<{ [key: string]: any }>({});
+
+  /**
+   * Contains a subscribeable subject that includes dictionary variables (key-value-pairs). This requires a workflow uuid configured
+   * in Findr configuration app.loadDictionaryWorkflow, e.g. "c0a80a838fed1172818fed8172ff0000" for the workflow "Findr query dictionary".
+   * This workflow is part of the ppk package included in the Findr installation files.
+   */
+  public DictionaryVariables = this.dictionaryVariables$.asObservable();
+
+  /**
+  * Contains a subscribeable subject that is update after dictionary variables have been changed.
+  */
+  private dictionaryVariablesUpdated$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
+
+  /**
+  * Contains a subscribeable subject that is update after dictionary variables have been changed.
+  */
+  public DictionaryVariablesUpdated = this.dictionaryVariablesUpdated$.asObservable();
 
   /**
    * Contains the job types as an array in a subscribeable subject.
@@ -274,6 +298,7 @@ export class CacheService {
   private clearInternal(reload?: boolean): void {
     this.categories$.next([]);
     this.config$.next([]);
+    this.dictionaryVariables$.next({});
     this.jobtypes$.next([]);
     this.parameterset$.next([]);
     this.serverInfo$.next(null);
@@ -281,6 +306,7 @@ export class CacheService {
     this._searchresult.next(null);
     sessionStorage.removeItem(this.appInitService.environment.storage?.categoriesKey ?? 'findr-syshub-cat');
     sessionStorage.removeItem(this.appInitService.environment.storage?.configKey ?? 'findr-syshub-config');
+    sessionStorage.removeItem(this.appInitService.environment.storage?.dictionaryKey ?? 'findr-syshub-dictionary');
     sessionStorage.removeItem(this.appInitService.environment.storage?.jobtypesKey ?? 'findr-syshub-jobtypes');
     sessionStorage.removeItem(this.appInitService.environment.storage?.parametersetKey ?? 'findr-syshub-parameterset');
     sessionStorage.removeItem(this.appInitService.environment.storage?.workflowsKey ?? 'findr-syshub-workflow');
@@ -440,6 +466,7 @@ export class CacheService {
     this.loadJobtypesCache();
     this.loadParametersetCache();
     this.loadWorkflowCache();
+    this.loadDictionaryCache();
   }
 
   private loadCategoriesCache(): void {
@@ -466,6 +493,20 @@ export class CacheService {
     }
     this.configLoaded$ = true;
     this.reloadConfig();
+  }
+
+  private loadDictionaryCache(): void {
+    if (!this.appInitService.environment.app?.loadDictionaryWorkflow)
+      return;
+    let olddata = sessionStorage.getItem(this.appInitService.environment.storage?.dictionaryKey ?? 'findr-syshub-dictionary');
+    if (olddata != null) {
+      try {
+        this.dictionaryVariables$.next(<{ [key: string]: any }>JSON.parse(decompress(olddata)));
+      } catch (error) {
+        console.error('Failed to decompress dictionaryVariables data:', error);
+      }
+    }
+    this.reloadDictionary();
   }
 
   private loadJobtypesCache(): void {
@@ -529,6 +570,7 @@ export class CacheService {
     })
     this.loadSubscriptions_Categories();
     this.loadSubscriptions_Config();
+    this.loadSubscriptions_Dictionary();
     this.loadSubscriptions_Jobtypes();
     this.loadSubscriptions_PSet();
     this.loadSubscriptions_Workflows();
@@ -580,6 +622,13 @@ export class CacheService {
       this.loadSubscriptions_ConfigItem(child, indexed, paths, path === '' ? cfg.name : `${path}/${cfg.name}`);
     });
     cfg.children = cfg.children.sort((a, b) => a.type == 'Group/Folder' && b.type != 'Group/Folder' ? -1 : b.type == 'Group/Folder' && a.type != 'Group/Folder' ? 1 : a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1);
+  }
+
+  loadSubscriptions_Dictionary(): void {
+    this.DictionaryVariables.subscribe((dictionary) => {
+      this.dictionaryVariablesUpdated$.next(Date.now());
+      sessionStorage.setItem(this.appInitService.environment.storage?.dictionaryKey ?? 'findr-syshub-dictionary', compress(JSON.stringify(dictionary)));
+    });
   }
 
   loadSubscriptions_Jobtypes(): void {
@@ -714,6 +763,37 @@ export class CacheService {
       cfg.children = this.reloadConfig_SortChilds(cfg.children);
     });
     return items.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  reloadDictionary(): void {
+    if (!this.appInitService.environment.app?.loadDictionaryWorkflow || this.refreshingEntities['dictionaryVariables'] === true)
+      return;
+    this.setRefreshState('dictionaryVariables', true);
+    let tempsub = this.restapi.runWorkflow(this.appInitService.environment.app.loadDictionaryWorkflow, false).subscribe((reply) => {
+      if (reply instanceof Error || reply[1] !== HttpStatusCode.Created) {
+        this.handleReloadError('dictionaryVariables', reply instanceof Error ? reply : null, false, tempsub)
+        return;
+      }
+      const match = reply[0].match(/^\/v3\/workflows\/execute\/(?<uuid>[A-Z0-9\-]*)/);
+      if (!match || !match.groups || !match.groups['uuid']) {
+        this.handleReloadError('dictionaryVariables', null, false, tempsub)
+        return;
+      }
+
+      tempsub.unsubscribe();
+
+      setTimeout(() => {
+        tempsub = this.restapi.getWorkflowExecution(match.groups!['uuid'], true, '%').subscribe((reply) => {
+          if (reply instanceof Error || reply === HttpStatusCode.NotModified || reply.dictionary === null || reply.status != 'COMPLETED') {
+            this.handleReloadError('dictionaryVariables', reply instanceof Error ? reply : null, false, tempsub)
+            return;
+          }
+          this.dictionaryVariables$.next({ ...reply.dictionary });
+          tempsub.unsubscribe();
+          this.setRefreshState('dictionaryVariables', false);
+        });
+      }, 100);
+    });
   }
 
   reloadJobtypes(): void {
@@ -854,12 +934,13 @@ export class CacheService {
 
   }
 
-  private handleReloadError(entity: string, reply: Error): void {
-    if (!(reply instanceof UnauthorizedError))
+  private handleReloadError(entity: string, reply: Error | null, showToast: boolean = true, sub?: Subscription): void {
+    if (showToast && reply !== null && !(reply instanceof UnauthorizedError))
       this.toastService.addDangerToast({
         message: this.l10n((reply instanceof NetworkError) ? this.l10nphrase.api.failed.serverUnavailable : this.l10nphrase.api.errorCommon, [reply.message])
       });
     this.setRefreshState(entity, false);
+    sub?.unsubscribe();
   }
 
   private setRefreshState(entity: string, isbusy: boolean) {
