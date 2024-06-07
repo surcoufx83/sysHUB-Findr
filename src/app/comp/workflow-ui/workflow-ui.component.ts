@@ -111,6 +111,10 @@ export class WorkflowUiComponent implements OnDestroy, OnInit {
     this.subs.push(this.cacheService.workflowReferencesUpdated.subscribe((state) => { if (state != null) this.ngOnInit_LoadWfRefs() }));
     this.subs.push(this.cacheService.workflowStartpointsUpdated.subscribe((state) => { if (state != null) this.ngOnInit_LoadWfStartpoints() }));
     this.subs.push(this.cacheService.workflowVersionsUpdated.subscribe((state) => { if (state != null) this.ngOnInit_LoadWfVersions() }));
+    this.ngOnInit_LoadVariables();
+  }
+
+  ngOnInit_LoadVariables(): void {
     if (this.initService.environment.app?.loadDictionaryWorkflow === undefined || this.initService.environment.app?.loadDictionaryWorkflow === '') {
       // load variables from config tree if not loading from dictionary
       this.subs.push(this.cacheService.ConfigUpdated.subscribe((state) => {
