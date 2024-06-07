@@ -57,7 +57,7 @@ In the same folder as this README, you will find three template files: `config-a
 #### ApikeyRestSettings **(do not use)**
 
 API key authentication is available from sysHUB 2024.
-This method is currently not supported in Findr as we need access to protected Rest API endpoints that are not accessible to API key logins.
+This method is currently not supported in Findr as we need access to protected Rest API endpoints that are inaccessible to API key logins.
 
 - **host** (string): The API host.
 - **version** (number): The API version. Options: 
