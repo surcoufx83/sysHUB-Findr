@@ -54,13 +54,13 @@ In the same folder as this README, you will find three template files: `config-a
 
 ### API Settings
 
-#### ApikeyRestSettings **(do not use)**
+#### ApikeyRestSettings **(Currently Unsupported in Findr)**
 
 API key authentication is available from sysHUB 2024.
 This method is currently not supported in Findr as we need access to protected Rest API endpoints that are inaccessible to API key logins.
 
 - **host** (string): The API host.
-- **version** (number): The API version. Options: 
+- **version** (number): The API version. Options:
   - `4` = sysHUB 2024
 - **apiKey** (string): The API key.
 - **provider** (string): The provider name.
@@ -75,7 +75,7 @@ This method is currently not supported in Findr as we need access to protected R
 #### BasicRestSettings
 
 - **host** (string): The API host.
-- **version** (number): The API version. Options: 
+- **version** (number): The API version. Options:
   - `1` = sysHUB 2021
   - `2` = sysHUB 2022
   - `3` = sysHUB 2023 (**default**)
@@ -93,7 +93,7 @@ This method is currently not supported in Findr as we need access to protected R
 #### OAuthRestSettings
 
 - **host** (string): The API host.
-- **version** (number): The API version. Options: 
+- **version** (number): The API version. Options:
   - `1` = sysHUB 2021
   - `2` = sysHUB 2022
   - `3` = sysHUB 2023 (**default**)
