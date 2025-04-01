@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { compress, decompress } from 'lz-string';
 import { BehaviorSubject, Subscription, first, forkJoin } from 'rxjs';
 import { NetworkError, RestService, SyshubCategory, SyshubConfigItem, SyshubJobType, SyshubPSetItem, SyshubServerInformation, SyshubVersion, SyshubWorkflow, SyshubWorkflowReference, SyshubWorkflowVersion, UnauthorizedError } from 'syshub-rest-module';
-import { SearchConfig, SearchResult, SearchResultUuids, UserConfig, UuidModifiedTypeObject } from '../types';
+import { ConfigType, ConfigTypeMapping, SearchConfig, SearchResult, SearchResultUuids, UserConfig, UuidModifiedTypeObject } from '../types';
 import { AppInitService } from './app-init.service';
 import { L10nService } from './i10n.service';
 import { L10nLocale } from './i10n/l10n-locale';
@@ -389,6 +389,10 @@ export class CacheService {
     if (item.parent == null)
       return item.name + (includeUuids ? `[${item.uuid}]` : '');
     return `${this.getPsetTree(item.parent, includeUuids)} / ${item.name}` + (includeUuids ? `[${item.uuid}]` : '');
+  }
+
+  getType(type: string): ConfigType {
+    return ConfigTypeMapping[type] ?? ConfigType.Unknown;
   }
 
   getWorkflow(uuid: string): SyshubWorkflow | null {

@@ -36,6 +36,33 @@ export type FindrEnvironment = {
     }
 }
 
+export enum ConfigType {
+    Boolean = 66,
+    CronExpression = 99,
+    File = 70,
+    FileSystemPath = 112,
+    Folder = 102,
+    Integer = 73,
+    Password = 80,
+    Roles = 82,
+    String = 83,
+    WorkflowUuid = 87,
+    Unknown = 0,
+}
+
+export const ConfigTypeMapping: { [key: string]: ConfigType } = {
+    'Boolean': ConfigType.Boolean,
+    'Cron Expression': ConfigType.CronExpression,
+    'File': ConfigType.File,
+    'FileSystem Path': ConfigType.FileSystemPath,
+    'Group/Folder': ConfigType.Folder,
+    'Integer': ConfigType.Integer,
+    'Password': ConfigType.Password,
+    'Roles': ConfigType.Roles,
+    'String': ConfigType.String,
+    'Workflow-UUID': ConfigType.WorkflowUuid,
+}
+
 export type SearchConfig = {
     phrase: string,
     token: string,
