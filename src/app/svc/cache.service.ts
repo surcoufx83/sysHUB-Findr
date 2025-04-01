@@ -566,6 +566,9 @@ export class CacheService {
     this.restapi.isLoggedIn.subscribe((state) => {
       if (state === false && this.userIsLoggedin$ === true) {
         this.clearInternal(false);
+        setTimeout(() => {
+          location.reload();
+        }, 5);
       }
       this.userIsLoggedin$ = state;
       if (state === true) {
