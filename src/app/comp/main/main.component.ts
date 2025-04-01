@@ -3,6 +3,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AppInitService } from 'src/app/svc/app-init.service';
 import { CacheService } from 'src/app/svc/cache.service';
+import { L10nService } from 'src/app/svc/i10n.service';
+import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
 import { SearchResult } from 'src/app/types';
 import { OAuthRestSettings } from 'syshub-rest-module';
 
@@ -13,6 +15,7 @@ import { OAuthRestSettings } from 'syshub-rest-module';
 })
 export class MainComponent implements OnDestroy, OnInit {
 
+  authType: 'basic' | 'apikey' | 'oauth' | undefined;
   missingConfig: boolean;
   missingScope: boolean;
   searchResult?: SearchResult;
@@ -21,9 +24,27 @@ export class MainComponent implements OnDestroy, OnInit {
   constructor(
     appInitService: AppInitService,
     private cacheService: CacheService,
+    private l10nService: L10nService,
   ) {
     this.missingConfig = appInitService.environment.appInitializationFailure?.configStatusCode !== HttpStatusCode.Ok;
-    this.missingScope = Object.keys(appInitService.environment.api).includes('basic') === true ? false : ((<OAuthRestSettings>appInitService.environment.api).oauth.scope !== 'private+public' && (<OAuthRestSettings>appInitService.environment.api).oauth.scope !== 'public+private');
+    if ('basic' in appInitService.environment.api) {
+      this.missingScope = !appInitService.environment.api.basic.scope ? true : appInitService.environment.api.basic.scope !== 'private+public' && appInitService.environment.api.basic.scope !== 'public+private';
+      this.authType = 'basic';
+    }
+    else if ('apikey' in appInitService.environment.api) {
+      this.missingScope = true;
+      this.authType = 'apikey';
+    }
+    else if ('oauth' in appInitService.environment.api) {
+      this.missingScope = (<OAuthRestSettings>appInitService.environment.api).oauth.scope !== 'private+public' && (<OAuthRestSettings>appInitService.environment.api).oauth.scope !== 'public+private';
+      this.authType = 'oauth';
+    }
+    else
+      this.missingScope = true;
+  }
+
+  get l10nphrase(): L10nLocale {
+    return this.l10nService.locale;
   }
 
   ngOnDestroy(): void {

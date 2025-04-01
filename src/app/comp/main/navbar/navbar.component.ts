@@ -37,6 +37,7 @@ export class NavbarComponent implements OnDestroy, OnInit {
   searchFocus: boolean = false;
   searchHistory?: Observable<{ [key: string]: [string, SearchResult] }>;
   searchProgress: number = 100;
+  showLogout: boolean = true;
   subs: Subscription[] = [];
   systemName: string = 'Base';
   systemNameDisplay: boolean = true;
@@ -73,6 +74,8 @@ export class NavbarComponent implements OnDestroy, OnInit {
     this.promolink = appInitService.environment.app?.promotionLink ?? '';
     this.systemNameDisplay = appInitService.environment.app?.displaySystemName ?? true;
     this.webclientlink = appInitService.environment.app?.webclientLink ?? '';
+    if ('apikey' in appInitService.environment.api || ('basic' in appInitService.environment.api && !appInitService.environment.api.basic.requiresLogin))
+      this.showLogout = false;
     this.locales.forEach((locale) => {
       this.localesLocalized[locale] = this.l10nphrase.common.locales[locale] ?? locale;
     });

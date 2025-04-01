@@ -48,6 +48,7 @@ export const MockL10n: L10nLocale = {
         disabledFindr: {
             description: 'mock-disabledFindr-description',
             documentationLink: 'mock-documentationLink',
+            apikeyNotSupported: 'mock-apikeyNotSupported',
             missingConfigFile: 'mock-missingConfigFile',
             missingScope: 'mock-missingScope',
             title: 'mock-disabledFindr-title',

@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
 import { PagepropsService } from 'src/app/svc/pageprops.service';
@@ -11,13 +12,14 @@ import { SyshubIppDevice } from 'syshub-rest-module';
   templateUrl: './ippdevice.component.html',
   styleUrl: './ippdevice.component.scss'
 })
-export class IppdeviceComponent implements OnInit {
+export class IppdeviceComponent implements OnDestroy, OnInit {
 
   devices: SyshubIppDevice[] = [];
   devicesMatched: string[] = [];
   nodesToggled: string[] = [];
   @Input({ required: true }) searchResult!: SearchResult;
   @Input({ required: true }) showUnmatchedItems!: boolean;
+  nodeXPressSub?: Subscription;
 
   constructor(private l10nService: L10nService,
     private searchService: SearchService,
@@ -31,6 +33,11 @@ export class IppdeviceComponent implements OnInit {
     return this.l10nService.ln(phrase, params);
   }
 
+  ngOnDestroy(): void {
+    this.nodeXPressSub?.unsubscribe();
+  }
+
+
   ngOnInit(): void {
     if (this.searchResult!.result?.system?.ippDevices === undefined || this.searchResult!.result?.system?.ippDevices === null || this.searchResult!.result?.system?.ippDevices === false)
       return;
@@ -38,6 +45,12 @@ export class IppdeviceComponent implements OnInit {
     this.devices.forEach((d) => {
       if (this.searchService.matchIppDevice(d, this.searchResult.search))
         this.devicesMatched.push(d.name);
+    });
+    this.nodeXPressSub = this.propsService.NodesClosed.subscribe((request) => {
+      if (request[1] === true && 'name' in request[0].node && this.nodesToggled.includes(request[0].node.name)) {
+        // Handle X-press in tooltip manually
+        this.nodesToggled.splice(this.nodesToggled.indexOf(request[0].node.name, 1));
+      }
     });
   }
 

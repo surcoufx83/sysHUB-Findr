@@ -48,6 +48,7 @@ export const L10nDe: L10nLocale = {
         disabledFindr: {
             description: 'Der Findr benötigt zur Suche und zur Ergebnisdarstellung eine bestimmte Konfiguration.',
             documentationLink: 'Siehe Readme auf Github',
+            apikeyNotSupported: 'Der Authentifizierungstyp API-Key wird im Findr nicht unterstützt. Die API-Key-Anmeldung erlaubt nur public scope, der Findr erfordert aber auch private.',
             missingConfigFile: 'Die Konfigurationsdatei wurde nicht gefunden.',
             missingScope: 'Parameter syshub.oauth.scope ist nicht korrekt konfiguriert',
             title: 'Findr deaktiviert!',
@@ -307,7 +308,7 @@ export const L10nDe: L10nLocale = {
                 In der Auflistung sind die Workflows farblich hervorgehoben, bei denen ein Treffer in den Metadaten oder dem Workflow ansich enthalten ist.
                 Anklicken eines Eintrags um die Details zu sehen oder auf das Flowchart-Icon um den Workflow anzuzeigen.
             `,
-            unused: 'ungenutzt',
+            unused: 'keine Referenzen',
             unusedTitle: 'Der Workflow wird nicht referenziert und damit wahrscheinlich nicht verwendet.',
             nodeInspector: {
                 cacheable: 'Cache aktiv',

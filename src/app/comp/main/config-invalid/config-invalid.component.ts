@@ -3,11 +3,11 @@ import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
 
 @Component({
-  selector: 'app-scope-warning-bar',
-  templateUrl: './scope-warning-bar.component.html',
-  styleUrl: './scope-warning-bar.component.scss'
+  selector: 'app-config-invalid',
+  templateUrl: './config-invalid.component.html',
+  styleUrl: './config-invalid.component.scss'
 })
-export class ScopeWarningBarComponent {
+export class ConfigInvalidComponent {
 
   constructor(private l10nService: L10nService) { }
 

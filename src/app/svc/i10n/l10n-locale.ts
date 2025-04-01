@@ -48,6 +48,7 @@ export type L10nLocale = {
         disabledFindr: {
             title: string,
             description: string,
+            apikeyNotSupported: string,
             missingConfigFile: string,
             missingScope: string,
             documentationLink: string,

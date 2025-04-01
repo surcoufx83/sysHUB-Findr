@@ -58,6 +58,12 @@ export class WorkflowsComponent implements OnDestroy, OnInit {
     if (this.displayUnusedBadges)
       this.subs.push(this.cacheService.workflowReferencesUpdated.subscribe(() => this.workflowsUnused = [...this.cacheService.workflowsWithoutReferences()]));
     this.searchResult.result?.workflows.forEach((item) => this.workflowsMatched.push(item.uuid));
+    this.subs.push(this.propsService.NodesClosed.subscribe((request) => {
+      if (request[1] === true && 'uuid' in request[0].node && this.nodesToggled.includes(request[0].node.uuid)) {
+        // Handle X-press in tooltip manually
+        this.nodesToggled.splice(this.nodesToggled.indexOf(request[0].node.uuid, 1));
+      }
+    }));
   }
 
   hoverNode(node: SyshubWorkflow, event: MouseEvent): void {

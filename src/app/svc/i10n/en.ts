@@ -46,10 +46,11 @@ export const L10nEn: L10nLocale = {
         welcomeSubtitleUser: 'Hello [0], what would you like to find today?',
         welcomeTitle: 'sysHUBFindr',
         disabledFindr: {
-            description: 'Findr requires a specific configuration for searching and displaying results.',
+            description: 'Findr requires a specific configuration for search and result display.',
             documentationLink: 'See Readme on Github',
+            apikeyNotSupported: 'The authentication type API-Key is not supported in Findr. The API-Key login only allows public scope, but Findr also requires private.',
             missingConfigFile: 'The configuration file was not found.',
-            missingScope: 'Parameter syshub.oauth.scope is not configured correctly',
+            missingScope: 'Parameter syshub.oauth.scope is not correctly configured',
             title: 'Findr disabled!',
         },
     },
@@ -305,7 +306,7 @@ export const L10nEn: L10nLocale = {
                 In the list, workflows are highlighted in color if there is a match in the metadata or the workflow itself.
                 Click on an entry to see the details or on the flowchart icon to display the workflow.
             `,
-            unused: 'unused',
+            unused: 'no references',
             unusedTitle: 'The workflow is not referenced and therefore likely not used.',
             nodeInspector: {
                 cacheable: 'Cache active',

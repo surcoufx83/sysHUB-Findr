@@ -1,6 +1,6 @@
+import { HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FindrEnvironment } from '../types';
-import { HttpStatusCode } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -9,8 +9,6 @@ export class AppInitService {
 
   public environment!: FindrEnvironment;
   public loading: boolean = true;
-
-  constructor() { }
 
   load() {
     return new Promise<boolean>((resolve) => {

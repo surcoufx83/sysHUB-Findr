@@ -1,0 +1,328 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$ref": "#/definitions/FindrEnvironment",
+    "definitions": {
+        "FindrEnvironment": {
+            "type": "object",
+            "properties": {
+                "$schema": {
+                    "type": "string"
+                },
+                "api": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/ApikeyRestSettings"
+                        },
+                        {
+                            "$ref": "#/definitions/BasicRestSettings"
+                        },
+                        {
+                            "$ref": "#/definitions/OAuthRestSettings"
+                        }
+                    ]
+                },
+                "appInitializationFailure": {
+                    "type": "object",
+                    "properties": {
+                        "configStatusCode": {
+                            "type": "number"
+                        }
+                    },
+                    "required": [
+                        "configStatusCode"
+                    ],
+                    "additionalProperties": false
+                },
+                "app": {
+                    "type": "object",
+                    "properties": {
+                        "baseUrl": {
+                            "type": "string"
+                        },
+                        "disabledFunctions": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "config",
+                                    "jobtypes",
+                                    "parameterset",
+                                    "workflows",
+                                    "certstore",
+                                    "serverConfig",
+                                    "serverInfo",
+                                    "ippDevices",
+                                    "users"
+                                ]
+                            }
+                        },
+                        "displaySystemName": {
+                            "type": "boolean"
+                        },
+                        "loadDictionaryWorkflow": {
+                            "type": "string"
+                        },
+                        "minPhraseLength": {
+                            "type": "number"
+                        },
+                        "promotionLink": {
+                            "type": "string"
+                        },
+                        "unusedWorkflowBadge": {
+                            "type": "boolean"
+                        },
+                        "useCache": {
+                            "type": "boolean"
+                        },
+                        "webclientLink": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "i10n": {
+                    "type": "object",
+                    "properties": {
+                        "fallback": {
+                            "type": "string",
+                            "enum": [
+                                "de",
+                                "en"
+                            ]
+                        },
+                        "locales": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "storage": {
+                    "type": "object",
+                    "properties": {
+                        "categoriesKey": {
+                            "type": "string"
+                        },
+                        "configKey": {
+                            "type": "string"
+                        },
+                        "dictionaryKey": {
+                            "type": "string"
+                        },
+                        "jobtypesKey": {
+                            "type": "string"
+                        },
+                        "l10nKey": {
+                            "type": "string"
+                        },
+                        "parametersetKey": {
+                            "type": "string"
+                        },
+                        "searchconfigKey": {
+                            "type": "string"
+                        },
+                        "tokenKey": {
+                            "type": "string"
+                        },
+                        "userconfigKey": {
+                            "type": "string"
+                        },
+                        "userdataKey": {
+                            "type": "string"
+                        },
+                        "workflowsKey": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            },
+            "required": [
+                "api"
+            ],
+            "additionalProperties": false
+        },
+        "ApikeyRestSettings": {
+            "type": "object",
+            "properties": {
+                "host": {
+                    "type": "string"
+                },
+                "version": {
+                    "$ref": "#/definitions/SyshubVersion"
+                },
+                "apiKey": {
+                    "type": "string"
+                },
+                "provider": {
+                    "type": "string"
+                },
+                "options": {
+                    "$ref": "#/definitions/RestOptionsSettings"
+                },
+                "scope": {
+                    "type": "string",
+                    "const": "public"
+                },
+                "throwErrors": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "host",
+                "apiKey",
+                "provider"
+            ],
+            "additionalProperties": false
+        },
+        "SyshubVersion": {
+            "type": "number",
+            "enum": [
+                1,
+                2,
+                3,
+                4
+            ]
+        },
+        "RestOptionsSettings": {
+            "type": "object",
+            "properties": {
+                "autoConnect": {
+                    "type": "boolean"
+                },
+                "autoLogoutOn401": {
+                    "type": "boolean"
+                },
+                "autoLogoutTimer": {
+                    "type": "number"
+                },
+                "useEtags": {
+                    "type": "boolean"
+                }
+            },
+            "additionalProperties": false
+        },
+        "BasicRestSettings": {
+            "type": "object",
+            "properties": {
+                "host": {
+                    "type": "string"
+                },
+                "version": {
+                    "$ref": "#/definitions/SyshubVersion"
+                },
+                "basic": {
+                    "$ref": "#/definitions/BasicConnectionSettings"
+                },
+                "options": {
+                    "$ref": "#/definitions/RestOptionsSettings"
+                },
+                "throwErrors": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "host",
+                "basic"
+            ],
+            "additionalProperties": false
+        },
+        "BasicConnectionSettings": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "const": true
+                },
+                "requiresLogin": {
+                    "type": "boolean"
+                },
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "provider": {
+                    "type": "string"
+                },
+                "scope": {
+                    "type": "string",
+                    "enum": [
+                        "private",
+                        "public",
+                        "private+public",
+                        "public+private"
+                    ]
+                }
+            },
+            "required": [
+                "enabled",
+                "username",
+                "password",
+                "provider"
+            ],
+            "additionalProperties": false
+        },
+        "OAuthRestSettings": {
+            "type": "object",
+            "properties": {
+                "host": {
+                    "type": "string"
+                },
+                "version": {
+                    "$ref": "#/definitions/SyshubVersion"
+                },
+                "oauth": {
+                    "$ref": "#/definitions/OAuthConnectionSettings"
+                },
+                "options": {
+                    "$ref": "#/definitions/RestOptionsSettings"
+                },
+                "throwErrors": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "host",
+                "oauth"
+            ],
+            "additionalProperties": false
+        },
+        "OAuthConnectionSettings": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "const": true
+                },
+                "clientId": {
+                    "type": "string"
+                },
+                "clientSecret": {
+                    "type": "string"
+                },
+                "scope": {
+                    "type": "string",
+                    "enum": [
+                        "private",
+                        "public",
+                        "private+public",
+                        "public+private"
+                    ]
+                },
+                "storeKey": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "enabled",
+                "clientId",
+                "clientSecret"
+            ],
+            "additionalProperties": false
+        }
+    }
+}

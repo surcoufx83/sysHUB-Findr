@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.0.0-beta.6 (Unreleased)
+
+### Added
+
+- A JSON Schema for validating the `config.json` file has been added to the `json-schema/1.0.0` folder.
+- A new workflow "Findr query dictionary" (`c0a80a838fee1340818fee0340340000`) has been added to the ppk that contains only Start and End, without any processing in between. This workflow is used for a new functionality to retrieve dictionary variables that are server-generated in workflows and not part of the user variables. Those are used as server variables in the workflow UI. The functionality is enabled by adding the line `"loadDictionaryWorkflow": "c0a80a838fee1340818fee0340340000",` into the `"app"` property of the `config.json` file. As long as this is missing or empty, the user variables from the config will be used. This completes the issue reported as [#51](https://github.com/surcoufx83/sysHUB-Findr/issues/51).
+
+### Changed
+
+- The `config.json` templates in the `assets/config` folder have been updated to the latest requirements and a README file has been added ([#57](https://github.com/surcoufx83/sysHUB-Findr/issues/57)).
+- Improved localization for the "Workflow has no references" badge.
+- Logout button will be hidden if the user is automatically logged in by basic auth with hardcoded credentials ([#56](https://github.com/surcoufx83/sysHUB-Findr/issues/56)).
+
+### Fixed
+
+- Error in tooltips fixed: If a tooltip was closed with the `X` button and then reopened via mouse-over over the original element, it was not automatically hidden on mouse-out ([#58](https://github.com/surcoufx83/sysHUB-Findr/issues/58)).
+
 ## 1.0.0-beta.5 2024-05-27
 
 ### Added

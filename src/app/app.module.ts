@@ -17,11 +17,10 @@ import { HelpComponent } from './comp/help/help.component';
 import { HomeComponent } from './comp/home/home.component';
 import { LoginComponent } from './comp/login/login.component';
 import { LogoutComponent } from './comp/logout/logout.component';
-import { ConfigMissingBarComponent } from './comp/main/config-missing-bar/config-missing-bar.component';
+import { ConfigInvalidComponent } from './comp/main/config-invalid/config-invalid.component';
 import { MainComponent } from './comp/main/main.component';
 import { NavbarComponent } from './comp/main/navbar/navbar.component';
 import { ProgressbarComponent } from './comp/main/progressbar/progressbar.component';
-import { ScopeWarningBarComponent } from './comp/main/scope-warning-bar/scope-warning-bar.component';
 import { ToolbarComponent } from './comp/main/toolbar/toolbar.component';
 import { NodeInspectorCertstoreNodeComponent } from './comp/node-inspector/certstore-node/certstore-node.component';
 import { CopyButtonComponent } from './comp/node-inspector/common/copy-button/copy-button.component';
@@ -62,7 +61,7 @@ import { ToastsComponent } from './svc/toasts/toasts.component';
 import { VariableParserService } from './svc/variable-parser.service';
 import { HighlightPipe } from './utils/highlight.pipe';
 
-export const FindrVersion: string = '1.0.0-beta.5';
+export const FindrVersion: string = '1.0.0-beta.6';
 
 export function initAppFactory(svc: AppInitService) {
   return () => svc.load();
@@ -75,7 +74,7 @@ export function initAppFactory(svc: AppInitService) {
     CanvasComponent,
     CertstoreComponent,
     ConfigComponent,
-    ConfigMissingBarComponent,
+    ConfigInvalidComponent,
     CopyButtonComponent,
     HelpComponent,
     HighlightPipe,
@@ -103,7 +102,6 @@ export function initAppFactory(svc: AppInitService) {
     ParametersetComponent,
     ProgressbarComponent,
     ResultComponent,
-    ScopeWarningBarComponent,
     SearchComponent,
     ServerinfoComponent,
     ServerpropsComponent,

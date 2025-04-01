@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { CacheService } from 'src/app/svc/cache.service';
 import { L10nService } from 'src/app/svc/i10n.service';
 import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
@@ -12,13 +13,14 @@ import { SyshubCertStoreItem } from 'syshub-rest-module';
   templateUrl: './certstore.component.html',
   styleUrl: './certstore.component.scss'
 })
-export class CertstoreComponent implements OnInit {
+export class CertstoreComponent implements OnDestroy, OnInit {
 
   certstore: SearchResultCertStoreContent = { keystore: [], truststore: [] };
   itemsMatched: { keystore: string[], truststore: string[] } = { keystore: [], truststore: [] };
   nodesToggled: string[] = [];
   @Input({ required: true }) searchResult!: SearchResult;
   @Input({ required: true }) showUnmatchedItems!: boolean;
+  nodeXPressSub?: Subscription;
 
   constructor(private l10nService: L10nService,
     private searchService: SearchService,
@@ -30,6 +32,10 @@ export class CertstoreComponent implements OnInit {
 
   l10n(phrase: string, params: any[] = []) {
     return this.l10nService.ln(phrase, params);
+  }
+
+  ngOnDestroy(): void {
+    this.nodeXPressSub?.unsubscribe();
   }
 
   ngOnInit(): void {
@@ -44,6 +50,12 @@ export class CertstoreComponent implements OnInit {
     this.certstore.truststore.forEach((cert) => {
       if (this.searchService.matchCertStoreItem(cert, this.searchResult.search))
         this.itemsMatched.truststore.push(cert.certX509SubjectDN);
+    });
+    this.nodeXPressSub = this.propsService.NodesClosed.subscribe((request) => {
+      if (request[1] === true && 'certX509SubjectDN' in request[0].node && this.nodesToggled.includes(request[0].node.certX509SubjectDN)) {
+        // Handle X-press in tooltip manually
+        this.nodesToggled.splice(this.nodesToggled.indexOf(request[0].node.certX509SubjectDN, 1));
+      }
     });
   }
 

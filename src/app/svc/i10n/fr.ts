@@ -47,10 +47,11 @@ export const L10nFr: L10nLocale = {
         welcomeTitle: 'sysHUBFindr',
         disabledFindr: {
             description: 'Findr nécessite une configuration spécifique pour la recherche et l\'affichage des résultats.',
-            documentationLink: 'Voir Readme sur Github',
-            missingConfigFile: 'Le fichier de configuration n\'a pas été trouvé.',
-            missingScope: 'Le paramètre syshub.oauth.scope n\'est pas configuré correctement',
-            title: 'Findr désactivé !',
+            documentationLink: 'Voir le Readme sur Github',
+            apikeyNotSupported: "Le type d'authentification API-Key n'est pas supporté dans Findr. La connexion par API-Key permet uniquement un scope public, mais Findr nécessite également un scope privé.",
+            missingConfigFile: 'Le fichier de configuration est introuvable.',
+            missingScope: 'Le paramètre syshub.oauth.scope est mal configuré',
+            title: 'Findr désactivé!',
         },
     },
     login: {
@@ -305,7 +306,7 @@ export const L10nFr: L10nLocale = {
                 Dans la liste, les flux de travail sont mis en évidence en couleur s'il y a une correspondance dans les métadonnées ou dans le flux de travail lui-même.
                 Cliquez sur une entrée pour voir les détails ou sur l'icône du diagramme de flux pour afficher le flux de travail.
             `,
-            unused: 'Non utilisé',
+            unused: 'aucune référence',
             unusedTitle: 'Le workflow n\'est pas référencé et donc probablement pas utilisé.',
             nodeInspector: {
                 cacheable: 'Cache activé',

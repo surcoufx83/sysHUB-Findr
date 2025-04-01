@@ -1,7 +1,8 @@
-import { BasicRestSettings, OAuthRestSettings, SyshubCategory, SyshubCertStoreItem, SyshubIppDevice, SyshubRole, SyshubServerInformation, SyshubUserAccount } from "syshub-rest-module";
+import { ApikeyRestSettings, BasicRestSettings, OAuthRestSettings, SyshubCategory, SyshubCertStoreItem, SyshubIppDevice, SyshubRole, SyshubServerInformation, SyshubUserAccount } from "syshub-rest-module";
 
 export type FindrEnvironment = {
-    api: BasicRestSettings | OAuthRestSettings,
+    '$schema'?: string,
+    api: ApikeyRestSettings | BasicRestSettings | OAuthRestSettings,
     appInitializationFailure?: {
         configStatusCode: number,
     },
@@ -9,8 +10,9 @@ export type FindrEnvironment = {
         baseUrl?: string,
         disabledFunctions?: ('config' | 'jobtypes' | 'parameterset' | 'workflows' | 'certstore' | 'serverConfig' | 'serverInfo' | 'ippDevices' | 'users')[],
         displaySystemName?: boolean,
-        promotionLink?: string,
+        loadDictionaryWorkflow?: string,
         minPhraseLength?: number,
+        promotionLink?: string,
         unusedWorkflowBadge?: boolean,
         useCache?: boolean,
         webclientLink?: string,
@@ -22,6 +24,7 @@ export type FindrEnvironment = {
     storage?: {
         categoriesKey?: string,
         configKey?: string,
+        dictionaryKey?: string,
         jobtypesKey?: string,
         l10nKey?: string,
         parametersetKey?: string,
@@ -30,7 +33,34 @@ export type FindrEnvironment = {
         userconfigKey?: string,
         userdataKey?: string,
         workflowsKey?: string,
-    },
+    }
+}
+
+export enum ConfigType {
+    Boolean = 66,
+    CronExpression = 99,
+    File = 70,
+    FileSystemPath = 112,
+    Folder = 102,
+    Integer = 73,
+    Password = 80,
+    Roles = 82,
+    String = 83,
+    WorkflowUuid = 87,
+    Unknown = 0,
+}
+
+export const ConfigTypeMapping: { [key: string]: ConfigType } = {
+    'Boolean': ConfigType.Boolean,
+    'Cron Expression': ConfigType.CronExpression,
+    'File': ConfigType.File,
+    'FileSystem Path': ConfigType.FileSystemPath,
+    'Group/Folder': ConfigType.Folder,
+    'Integer': ConfigType.Integer,
+    'Password': ConfigType.Password,
+    'Roles': ConfigType.Roles,
+    'String': ConfigType.String,
+    'Workflow-UUID': ConfigType.WorkflowUuid,
 }
 
 export type SearchConfig = {

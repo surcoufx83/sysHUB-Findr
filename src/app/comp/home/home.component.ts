@@ -9,7 +9,7 @@ import { L10nLocale } from 'src/app/svc/i10n/l10n-locale';
 import { PagepropsService } from 'src/app/svc/pageprops.service';
 import { SearchService, defaultSearchConfig } from 'src/app/svc/search.service';
 import { ToastsService } from 'src/app/svc/toasts.service';
-import { SearchConfig } from 'src/app/types';
+import { ConfigTypeMapping, SearchConfig } from 'src/app/types';
 import { RestService, SyshubCategory } from 'syshub-rest-module';
 
 @Component({
@@ -19,6 +19,7 @@ import { RestService, SyshubCategory } from 'syshub-rest-module';
 })
 export class HomeComponent implements OnDestroy, OnInit {
 
+  configTypeFilterAvailable = Object.keys(ConfigTypeMapping);
   currentLocale: string;
   disabledFunctions: ('config' | 'jobtypes' | 'parameterset' | 'workflows' | 'certstore' | 'serverConfig' | 'serverInfo' | 'ippDevices' | 'users')[] = [];
   enableCache: boolean = true;

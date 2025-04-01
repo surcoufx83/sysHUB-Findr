@@ -132,17 +132,6 @@ export class NodeInspectorComponent implements OnDestroy, OnInit {
       this.propsService.NodesOpened.next(request);
     }, 2);
 
-    /* setTimeout(() => {
-      if (content.type == 'SvgNode') {
-        let element = this.document.getElementById(nodeid);
-        if (!element)
-          return;
-        element.style.left = `${Math.floor((<SvgElement>node).x + (<SvgElement>node).width * 2 + 16)}px`;
-        element.style.top = `${(<SvgElement>node).y + 48}px`;
-      }
-      this.propsService.NodesOpened.next({ id: nodeid, type: type, node: node });
-    }, 1); */
-
   }
 
   onReopenNode(nodeid: string) {
@@ -156,15 +145,15 @@ export class NodeInspectorComponent implements OnDestroy, OnInit {
     for (let i = 0; i < this.nodesAdded.length; i++) {
       if (this.nodesAdded[i] === nodeid) {
         this.nodesAdded.splice(i, 1);
-        this.nodeCards.forEach((node) => {
-          if (node.id === nodeid)
-            setTimeout(() => {
-              node.dispose = true;
-              if (manual === true) {
-                this.propsService.NodesClosed.next(node.request);
-              }
-            }, 1);
-        });
+        for (let i = 0; i < this.nodeCards.length; i++) {
+          if (nodeid !== this.nodeCards[i].id || this.nodeCards[i].dispose === true)
+            continue;
+          setTimeout(() => {
+            this.nodeCards[i].dispose = true;
+            if (manual === true)
+              this.propsService.NodesClosed.next([this.nodeCards[i].request, manual]);
+          }, 1);
+        }
         return;
       }
     }
